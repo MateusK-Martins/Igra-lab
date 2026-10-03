@@ -1,3 +1,0 @@
-# Architecture parameters belong here.
-# The model source defines component composition; values that experiments vary
-# must be read from this file rather than embedded in training code.
