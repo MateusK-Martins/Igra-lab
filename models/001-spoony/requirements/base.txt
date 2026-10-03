@@ -1,5 +1,6 @@
 # Direct, CPU-independent dependencies for development and training support.
 # Versions are pinned after a verified local installation.
+datasets==5.0.1
 pytest==9.1.1
 ruff==0.16.10
 tensorboard==2.21.0
