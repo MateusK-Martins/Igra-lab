@@ -12,8 +12,8 @@ configuration, tests, documentation, and recorded results.
 | --- | --- |
 | `main` | Mature, validated model releases. |
 | `develop` | Integration branch for work that is still developing. |
-| `model-template` | Generic project conventions shared by model templates. |
-| `model-template/<family>` | Reusable scaffold for one architecture family. |
+| `template/base` | Generic project conventions shared by model templates. |
+| `template/<family>` | Reusable scaffold for one architecture family. |
 | `model/<id>-<name>` | Development branch for one independent model. |
 | `release/<id>-<name>-v<version>` | Candidate used for first full runs, benchmarks, and result recording. |
 
@@ -21,8 +21,8 @@ Branches are kept as project history and are not deleted.
 
 ## Template hierarchy
 
-`model-template` defines the universal project contract. A family template,
-such as `model-template/decoder-transformer`, adds the files and workflows
+`template/base` defines the universal project contract. A family template,
+such as `template/decoder-transformer`, adds the files and workflows
 needed by that architecture family.
 
 A new model branch starts from its applicable family template. It copies the
@@ -31,7 +31,7 @@ another model directory or use a live external shared-library dependency.
 
 When an improvement is shown to be reusable, it is deliberately brought from a
 model into its family template. If it applies to every architecture family, it
-can then be brought into `model-template`. Existing models are updated only
+can then be brought into `template/base`. Existing models are updated only
 when that update is intentionally chosen.
 
 ## Model layout
@@ -68,7 +68,7 @@ experimented with.
 ## Promotion flow
 
 ```text
-model-template/<family>
+template/<family>
         └── model/<id>-<name>
                 └── develop
                         └── release/<id>-<name>-v<version>
