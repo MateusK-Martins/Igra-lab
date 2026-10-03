@@ -1,0 +1,20 @@
+# Local Python environment
+.venv/
+
+# Environment secrets and machine-specific values
+.env
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Training artifacts and local data
+data/
+checkpoints/
+wandb/
+tensorboard/
+*.pt
+*.pth
+*.safetensors

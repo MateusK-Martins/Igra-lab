@@ -1,0 +1,9 @@
+[project]
+name = "spoony"
+version = "0.0.0"
+description = "Spoony, an independent decoder-only Transformer experiment"
+requires-python = ">=3.13,<3.14"
+dependencies = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
