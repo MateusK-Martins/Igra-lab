@@ -1,2 +1,2 @@
 class ConfigError(Exception):
-    """Raised when a Spoony configuration is invalid."""
+    """Raised when a model configuration is invalid."""
