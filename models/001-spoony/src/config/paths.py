@@ -36,11 +36,6 @@ def _path_inside_project(directory: str, relative_path: str) -> Path:
     return path
 
 
-def config_path(relative_path: str) -> Path:
-    """Resolve a path inside configs/."""
-    return _path_inside_project("configs", relative_path)
-
-
 def data_path(relative_path: str) -> Path:
     """Resolve a path inside data/."""
     return _path_inside_project("data", relative_path)

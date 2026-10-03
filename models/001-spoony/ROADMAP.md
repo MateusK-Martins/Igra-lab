@@ -9,8 +9,8 @@ does not define the project’s long-term scope.
 
 ## Project rules
 
-- Every experiment choice belongs in a configuration file or environment
-  variable, not hidden in Python source.
+- Every experiment choice belongs in an explicit frozen dataclass, constructed
+  by a named preset function. It is never hidden in training code.
 - Each model directory remains self-contained.
 - Large datasets, checkpoints, local environments, event logs, and secrets are
   never committed.
@@ -26,9 +26,6 @@ does not define the project’s long-term scope.
 models/001-spoony/
 ├── assets/
 │   └── tokenizers/
-├── configs/
-│   ├── data/
-│   └── train/
 ├── data/
 │   ├── manifests/
 │   ├── raw/
@@ -56,29 +53,22 @@ models/001-spoony/
 
 ## Configuration
 
-The target configuration files are:
+Configuration is Python, using frozen dataclasses. The dataclasses are the
+typed contracts, and named functions build complete experiment settings:
 
 ```text
-configs/
-├── model.toml
-├── tokenizer.toml
-├── eval.toml
-├── generation.toml
-├── data/
-│   ├── tinystories.toml
-│   └── sft-example.toml
-└── train/
-    ├── pretrain.local.toml
-    ├── pretrain.cloud.toml
-    ├── sft.local.toml
-    └── sft.cloud.toml
+src/config/
+├── types.py       # Dataclasses and their validation rules
+├── presets.py     # Named local, cloud, and benchmark configurations
+└── snapshot.py    # Save a resolved configuration as JSON
 ```
 
-The configuration system must validate types and ranges, combine the selected
-files into one resolved configuration, and save that resolved configuration in
-every run directory and checkpoint.
+`dataclasses.replace` creates a deliberate variation of a preset without a
+custom merge language. Constructors validate types and ranges immediately. A
+run saves its final configuration as `resolved-config.json` in both its run
+directory and checkpoints.
 
-Local and cloud training differ through configuration, not separate training
+Local and cloud training differ through named presets, not separate training
 implementations.
 
 ## Data system
@@ -183,7 +173,7 @@ Final RMSNorm
 Vocabulary projection
 ```
 
-`model.toml` controls vocabulary size, context length, model width, layer
+`ModelConfig` controls vocabulary size, context length, model width, layer
 count, attention heads, key/value heads, feed-forward multiplier, dropout,
 RoPE theta, embedding tying, attention implementation, and dtype.
 
@@ -300,14 +290,10 @@ scripts/
 └── inspect_run.py
 ```
 
-Target commands:
-
-```bash
-python scripts/prepare_data.py --config configs/data/tinystories.toml
-python scripts/train_pretrain.py --config configs/train/pretrain.local.toml
-python scripts/generate.py --checkpoint checkpoints/latest
-python scripts/train_sft.py --config configs/train/sft.local.toml
-```
+Each script imports a named preset explicitly. For example, a local
+pretraining entry point will call `local_pretraining()` from
+`src.config.presets`; cloud runs call `cloud_pretraining()`. Scripts may offer
+a `--preset` name only after there are several stable presets to select.
 
 ## Tests
 
@@ -348,13 +334,13 @@ results/
 ├── pretraining/
 │   └── run-<id>/
 │       ├── summary.json
-│       ├── resolved-config.toml
+│       ├── resolved-config.json
 │       ├── samples.md
 │       └── charts/
 └── sft/
     └── run-<id>/
         ├── summary.json
-        ├── resolved-config.toml
+        ├── resolved-config.json
         └── evaluation.md
 ```
 
@@ -403,7 +389,7 @@ Spoony and then intentionally promoted to `template/decoder-transformer`.
 
 ## Build order
 
-1. Build and test the configuration loader and schema.
+1. Build and test typed dataclass configuration contracts and presets.
 2. Add the TinyStories manifest and source adapter.
 3. Implement document-aware preparation, BPE artifact generation, and token
    serialization.

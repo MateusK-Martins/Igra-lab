@@ -1,4 +1,4 @@
-"""Train, save, and use Spoony's byte-level BPE tokenizer."""
+"""Train, save, and use a byte-level BPE tokenizer."""
 
 from collections.abc import Iterable, Sequence
 from pathlib import Path

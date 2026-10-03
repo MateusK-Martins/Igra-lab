@@ -1,4 +1,4 @@
-"""Tests for Spoony's byte-level BPE tokenizer."""
+"""Tests for the byte-level BPE tokenizer."""
 
 import pytest
 
@@ -9,8 +9,8 @@ from src.data.tokenizer import ByteLevelBPETokenizer
 def tokenizer() -> ByteLevelBPETokenizer:
     return ByteLevelBPETokenizer.train(
         [
-            "Spoony learns language from repeated patterns.",
-            "Olá, mundo! Spoony aprende padrões de linguagem.",
+            "A model learns language from repeated patterns.",
+            "Olá, mundo! Um modelo aprende padrões de linguagem.",
             "🤖 model language model language model",
         ],
         target_vocab_size=320,

@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from src.config.errors import ConfigError
-from src.config.paths import config_path, find_project_root
+from src.config.paths import data_path, find_project_root
 
 
 def test_finds_model_root_from_nested_directory() -> None:
@@ -15,16 +15,16 @@ def test_finds_model_root_from_nested_directory() -> None:
     assert (root / "src").is_dir()
 
 
-def test_resolves_existing_tokenizer_config() -> None:
-    path = config_path("tokenizer/bpe-4k.toml")
+def test_resolves_data_path_inside_model_project() -> None:
+    path = data_path("processed/tinystories")
 
-    assert path.is_file()
-    assert path.name == "bpe-4k.toml"
+    assert path.name == "tinystories"
+    assert path.parent.name == "processed"
 
 
 def test_rejects_path_outside_project() -> None:
     with pytest.raises(ConfigError, match="escapes"):
-        config_path("../../outside-model")
+        data_path("../../outside-model")
 
 
 def test_fails_when_no_project_root_exists(tmp_path: Path) -> None:

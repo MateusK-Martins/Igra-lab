@@ -32,7 +32,8 @@ first implementation is added.
 ## Directory contract
 
 - `src/model.py` defines the architecture for this model.
-- `configs/` holds every experiment choice.
+- `src/config/types.py` defines the typed configuration contracts.
+- `src/config/presets.py` holds named, reviewable experiment configurations.
 - `src/data/`, `src/training/`, `src/evaluation/`, and `src/inference/` hold
   separate stages of the model lifecycle.
 - `tests/` contains tests that run without a full training job.
