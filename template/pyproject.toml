@@ -1,0 +1,9 @@
+[project]
+name = "replace-with-model-package-name"
+version = "0.0.0"
+description = "Independent decoder Transformer experiment in Igra-lab"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
