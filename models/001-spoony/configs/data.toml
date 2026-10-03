@@ -1,7 +1,8 @@
 [tokenizer]
-kind = "utf8-byte"
-encoding = "utf-8"
-vocab_size = 256
+kind = "byte-level-bpe"
+target_vocab_size = 4096
+min_frequency = 2
+special_tokens = ["<|unk|>", "<|eot|>"]
 
 [chunking]
 context_length = 128
