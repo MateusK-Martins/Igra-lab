@@ -1,0 +1,1 @@
+"""Spoony source package."""

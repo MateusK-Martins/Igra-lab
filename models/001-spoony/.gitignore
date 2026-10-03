@@ -11,7 +11,7 @@ __pycache__/
 .mypy_cache/
 
 # Training artifacts and local data
-data/
+/data/
 checkpoints/
 wandb/
 tensorboard/

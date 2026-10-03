@@ -1,1 +1,7 @@
-# Dataset, tokenizer, split, and preprocessing parameters belong here.
+[tokenizer]
+kind = "utf8-byte"
+encoding = "utf-8"
+vocab_size = 256
+
+# Dataset, split, and preprocessing parameters will be added after selecting
+# Spoony's first training corpus.
