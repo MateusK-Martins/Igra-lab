@@ -5,8 +5,9 @@ from unittest.mock import patch
 
 import pytest
 
+from src.config.types import TokenizerConfig
 from src.data.pipeline import DataSet, DataSetPipe
-from src.data.prepare import DataProcessor
+from src.data.prepare import DataProcessor, train_tokenizer
 from src.data.schemas import DocumentManifest
 from src.data.serialization import DocumentOffset, TokenStore
 from src.data.tokenizer import ByteLevelBPETokenizer
@@ -132,3 +133,42 @@ def test_invalid_split_creates_no_files(processor) -> None:
     with pytest.raises(ValueError, match="Split"):
         processor.process_split("test")
     assert not processor.output_directory.exists()
+
+
+def test_train_tokenizer_consumes_only_train_and_pipe_can_be_reused(processor) -> None:
+    config = TokenizerConfig(300, 1, ("<|unk|>", "<|eot|>"))
+    training_source = processor.dataset_pipe.datasets[0].source
+    validation_source = processor.dataset_pipe.datasets[1].source
+    real_train = ByteLevelBPETokenizer.train
+    received_texts = []
+
+    def capture_training(texts, **settings):
+        received_texts.extend(texts)
+        return real_train(received_texts, **settings)
+
+    with (
+        patch.object(training_source, "read", wraps=training_source.read) as train_read,
+        patch.object(
+            validation_source, "read", wraps=validation_source.read
+        ) as valid_read,
+        patch(
+            "src.data.prepare.ByteLevelBPETokenizer.train",
+            side_effect=capture_training,
+        ) as train,
+    ):
+        tokenizer = train_tokenizer(processor.dataset_pipe, config)
+        assert received_texts == list(training_source.texts)
+        train_read.assert_called_once()
+        valid_read.assert_not_called()
+        assert train.call_args.kwargs == {
+            "target_vocab_size": config.target_vocab_size,
+            "min_frequency": config.min_frequency,
+            "special_tokens": config.special_tokens,
+        }
+
+        repeated = list(processor.dataset_pipe.documents("train"))
+        assert [document.text for document in repeated] == received_texts
+        assert train_read.call_count == 2
+        valid_read.assert_not_called()
+
+    assert tokenizer.decode(tokenizer.encode(received_texts[0])) == received_texts[0]

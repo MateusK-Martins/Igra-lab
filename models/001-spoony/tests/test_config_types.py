@@ -3,7 +3,7 @@
 import pytest
 
 from src.config.errors import ConfigError
-from src.config.types import ChunkingConfig, TokenizerConfig
+from src.config.types import ChunkingConfig, DataLoaderConfig, TokenizerConfig
 
 
 def test_tokenizer_config_accepts_valid_values() -> None:
@@ -61,3 +61,39 @@ def test_chunking_config_rejects_non_positive_values(
 ) -> None:
     with pytest.raises(ConfigError):
         ChunkingConfig(context_length=context_length, stride=stride)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("batch_size", 0),
+        ("batch_size", True),
+        ("batch_size", 1.5),
+        ("num_workers", -1),
+        ("num_workers", True),
+        ("shuffle", "true"),
+        ("pin_memory", 1),
+        ("drop_last", None),
+        ("seed", -1),
+        ("seed", 2**64),
+        ("seed", True),
+    ],
+)
+def test_loader_config_rejects_invalid_settings(field, value) -> None:
+    settings = {
+        "batch_size": 8,
+        "shuffle": True,
+        "num_workers": 0,
+        "pin_memory": False,
+        "drop_last": False,
+        "seed": 42,
+    }
+    settings[field] = value
+    with pytest.raises(ConfigError, match=field):
+        DataLoaderConfig(**settings)
+
+
+def test_loader_config_accepts_zero_workers_and_seed_boundaries() -> None:
+    for seed in (0, 2**64 - 1):
+        config = DataLoaderConfig(1, False, 0, False, False, seed)
+        assert config.num_workers == 0
