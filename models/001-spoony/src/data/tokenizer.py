@@ -2,18 +2,34 @@
 
 from collections.abc import Iterable, Sequence
 from pathlib import Path
+from typing import Protocol
 
-from tokenizers import Tokenizer
+from tokenizers import Tokenizer as HFTokenizer
 from tokenizers.decoders import ByteLevel as ByteLevelDecoder
 from tokenizers.models import BPE
 from tokenizers.pre_tokenizers import ByteLevel as ByteLevelPreTokenizer
 from tokenizers.trainers import BpeTrainer
 
 
+class Tokenizer(Protocol):
+    """Common interface for an already trained tokenizer."""
+
+    @property
+    def vocab_size(self) -> int: ...
+
+    def encode(self, text: str) -> list[int]: ...
+
+    def decode(self, token_ids: Iterable[int]) -> str: ...
+
+    def token_to_id(self, token: str) -> int: ...
+
+    def save(self, path: Path) -> None: ...
+
+
 class ByteLevelBPETokenizer:
     """A reversible BPE tokenizer built from UTF-8 byte-level pieces."""
 
-    def __init__(self, tokenizer: Tokenizer) -> None:
+    def __init__(self, tokenizer: HFTokenizer) -> None:
         self._tokenizer = tokenizer
 
     @property
@@ -38,7 +54,7 @@ class ByteLevelBPETokenizer:
         if not special_tokens:
             raise ValueError("special_tokens must include an unknown token")
 
-        tokenizer = Tokenizer(BPE(unk_token=special_tokens[0]))
+        tokenizer = HFTokenizer(BPE(unk_token=special_tokens[0]))
         tokenizer.pre_tokenizer = ByteLevelPreTokenizer(add_prefix_space=False)
         tokenizer.decoder = ByteLevelDecoder()
 
@@ -75,4 +91,4 @@ class ByteLevelBPETokenizer:
     @classmethod
     def load(cls, path: Path) -> "ByteLevelBPETokenizer":
         """Load a tokenizer previously saved with :meth:`save`."""
-        return cls(Tokenizer.from_file(str(path)))
+        return cls(HFTokenizer.from_file(str(path)))
