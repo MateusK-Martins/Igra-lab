@@ -4,13 +4,27 @@ Spoony is a small, independently runnable decoder Transformer. Its size is
 chosen for fast local training, but its data, training, evaluation, cloud, and
 supervised fine-tuning systems must use scalable research-quality contracts.
 
-TinyStories is the first pretraining corpus used to validate the system. It
-does not define the project’s long-term scope.
+TinyStories is a candidate for the first pretraining experiment. No corpus is
+configured yet; data contracts and preparation have been tested with fake
+sources before choosing a real source.
+
+## Current progress
+
+Data source composition, BPE preparation, token storage, disk-backed windows,
+DataLoaders, and declarative assembly are implemented. Model composition
+includes embeddings, Linear, SwiGLU, Sequential, Repeat, residual wrappers, and
+head tying. The latest verification passed 146 tests on CPU.
+
+Still missing: a configured corpus, editable model architecture, attention,
+normalization, positional encoding, training, checkpoint orchestration,
+evaluation, generation, and SFT. The following lifecycle sections describe
+targets unless explicitly identified as implemented.
 
 ## Project rules
 
-- Every experiment choice belongs in an explicit frozen dataclass, constructed
-  by a named preset function. It is never hidden in training code.
+- Every experiment choice belongs in explicit Python dataclass configuration
+  under `configs/`. Definition classes and implementation code stay under
+  `src/`. There is no configuration parser or generic merge framework.
 - Each model directory remains self-contained.
 - Large datasets, checkpoints, local environments, event logs, and secrets are
   never committed.
@@ -24,10 +38,11 @@ does not define the project’s long-term scope.
 
 ```text
 models/001-spoony/
-├── assets/
-│   └── tokenizers/
+├── configs/
+│   ├── data/
+│   ├── tokenizers/
+│   └── model/           # Upcoming architecture declaration
 ├── data/
-│   ├── manifests/
 │   ├── raw/
 │   ├── processed/
 │   └── cache/
@@ -53,8 +68,8 @@ models/001-spoony/
 
 ## Configuration
 
-Configuration is Python, using frozen dataclasses. The dataclasses are the
-typed contracts, and named functions build complete experiment settings:
+Configuration is Python using dataclasses. The dataclasses are typed contracts;
+editable modules instantiate them:
 
 ```text
 src/config/
@@ -63,18 +78,20 @@ src/config/
 
 configs/
 ├── data/
-│   └── datasets.py    # Selected sources and manifests
+│   ├── datasets.py    # Selected sources and manifests
+│   └── dataloader.py  # Chunking and batch settings
 └── tokenizers/
     └── preparation.py # Tokenizer settings and output directory
 ```
 
-`dataclasses.replace` creates a deliberate variation of a preset without a
-custom merge language. Constructors validate types and ranges immediately. A
-run saves its final configuration as `resolved-config.json` in both its run
-directory and checkpoints.
+`dataclasses.replace` can create variations without a custom merge language.
+Constructors validate settings. A JSON snapshot helper exists for JSON-compatible
+dataclass fields; Path-containing and model definitions need a serialization
+policy before full run snapshots are integrated. Saving resolved settings in
+run directories and checkpoints remains a training-system requirement.
 
-Local and cloud training differ through named presets, not separate training
-implementations.
+Local and cloud training will differ through editable settings while sharing
+the same training implementation.
 
 ## Data system
 
@@ -84,7 +101,7 @@ Source modules:
 src/data/
 ├── schemas.py
 ├── sources.py
-├── split.py
+├── pipeline.py
 ├── tokenizer.py
 ├── prepare.py
 ├── serialization.py
@@ -96,20 +113,24 @@ Responsibilities:
 
 - `schemas.py`: validated document and metadata structures.
 - `sources.py`: download or stream a declared source.
-- `split.py`: deterministic document-level train and validation splits.
+- `pipeline.py`: DataSet binds a DocumentManifest to a Source; DataSetPipe
+  traverses selected splits in declared dataset order.
 - `tokenizer.py`: train, save, load, encode, and decode BPE.
-- `prepare.py`: source to split to tokenizer to serialized token artifacts.
+- `prepare.py`: train BPE from train documents only, then encode each selected
+  split with a trained tokenizer and write artifacts through TokenStore.
 - `serialization.py`: efficient local read and write of prepared token data.
 - `chunker.py`: next-token windows from a token stream.
 - `dataloader.py`: batches, shuffling, workers, and pinned memory.
 
-Dataset manifests live in `data/manifests/` and record the source, revision,
-license, citation, expected checksum when available, split policy, document
-field, language, sample limit, and deterministic sampling seed.
+Dataset definitions live in `configs/data/datasets.py`. Each DataSet represents
+one internal split. DocumentManifest declares name, language, text field,
+split, license, and citation. HuggingFaceSource owns the external dataset ID,
+revision, source split, and streaming setting. A source must provide a fresh,
+stable traversal each time read() is called.
 
-The initial TinyStories adapter should use the official training and validation
-splits. For a source without a supplied validation split, split by document
-before training the tokenizer.
+The source adapter is generic, not TinyStories-specific. For a corpus without
+supplied validation data, deterministic document splitting must be added before
+training the tokenizer. That splitting mechanism is not implemented yet.
 
 ## Tokenizer
 
@@ -131,15 +152,27 @@ Never use validation documents to train BPE.
 The tokenizer artifact is stored under:
 
 ```text
-assets/tokenizers/<tokenizer-id>/
+data/processed/<preparation-id>/
 ├── tokenizer.json
-└── metadata.json
+├── train/
+│   ├── tokens.bin
+│   ├── documents.jsonl
+│   └── metadata.json
+└── validation/
+    ├── tokens.bin
+    ├── documents.jsonl
+    └── metadata.json
 ```
 
-Metadata records the target and actual vocabulary sizes, special-token IDs,
-training-manifest hash, training-document count, library version, and Git
-commit. The model always uses the actual vocabulary size learned by the
-tokenizer artifact.
+Tokens are little-endian uint32 IDs. Each document ends with the configured
+end token; JSONL offsets preserve its interval with an exclusive end. Split
+metadata records format version, dtype, document count, token count, and the
+tokenizer file's SHA-256. DataProcessor verifies the same tokenizer is used for
+both splits. Additional source/configuration provenance is future work.
+
+The model uses the tokenizer's actual vocabulary size. Prepared artifacts are
+ignored by Git; small selected tokenizer artifacts may later be attached to
+releases.
 
 ## Transformer model
 
@@ -147,18 +180,19 @@ Target modules:
 
 ```text
 src/model/
-├── config.py
-├── embeddings.py
+├── definitions.py      # Implemented block protocols and dataclasses
+├── assembler.py        # Implemented Model validation and assemble()
+├── composition.py      # Implemented residual wrapping and build_block()
+├── language_model.py   # Implemented embedding -> body -> logits
+├── feedforward.py      # Implemented SwiGLU
 ├── rope.py
 ├── normalization.py
 ├── attention.py
-├── feedforward.py
-├── transformer.py
 ├── cache.py
 └── initialization.py
 ```
 
-The architecture is a decoder-only Transformer:
+The planned architecture is a decoder-only Transformer:
 
 ```text
 Token embeddings
@@ -178,9 +212,11 @@ Final RMSNorm
 Vocabulary projection
 ```
 
-`ModelConfig` controls vocabulary size, context length, model width, layer
-count, attention heads, key/value heads, feed-forward multiplier, dropout,
-RoPE theta, embedding tying, attention implementation, and dtype.
+The upcoming `configs/model/architecture.py` will compose definitions with
+explicit widths and component settings. Model includes the tokenizer,
+embedding, body blocks, and LM head. Definitions own build(); the assembler
+validates dimensions recursively and wraps residuals at their declared scope.
+Repeat constructs fresh parameters per occurrence. See MODEL_ASSEMBLY.md.
 
 Implement standard multi-head attention first, while keeping `n_kv_heads` in
 the configuration so grouped-query attention can be enabled later. Prefer
@@ -353,7 +389,7 @@ raw data, processed token arrays, or TensorBoard event files.
 
 ## Cloud scaling
 
-The same training code supports local and cloud runs:
+The planned training code will support local and cloud runs:
 
 ```text
 Local RTX 4050       Cloud GPU
@@ -393,13 +429,13 @@ Spoony and then intentionally promoted to `template/decoder-transformer`.
 
 ## Build order
 
-1. Build and test typed dataclass configuration contracts and presets.
-2. Add the TinyStories manifest and source adapter.
-3. Implement document-aware preparation, BPE artifact generation, and token
-   serialization.
-4. Add DataLoader construction.
-5. Implement model configuration and embeddings.
-6. Implement RMSNorm, RoPE, attention, SwiGLU, and Transformer blocks.
+1. Completed: typed dataclass contracts and editable configuration folders.
+2. Completed: generic sources, per-split DataSet, and DataSetPipe.
+3. Completed: train-only BPE training, preparation, and token serialization.
+4. Completed: disk-backed windows and configured DataLoader construction.
+5. Completed: declarative assembly, embeddings, head tying, and SwiGLU.
+6. Next: define attention execution context, then RMSNorm, RoPE, causal attention,
+   and the editable Transformer architecture. Configure a corpus before real runs.
 7. Add shape and causal-mask tests.
 8. Implement the pretraining loop.
 9. Run a one-batch overfit test.

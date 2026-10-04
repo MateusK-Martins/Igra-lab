@@ -58,12 +58,21 @@ configuration, dataset version, hardware, and important metrics.
 
 Training code must not hide experiment choices in source. Batch size, learning
 rate, precision, context length, dataset paths, tokenizer settings, checkpoint
-locations, logging, and hardware choices belong in configuration files or
-environment variables.
+locations, logging, and hardware choices belong in editable Python dataclass
+instances under the model's `configs/` directory. Dataclass definitions and
+validation code belong under `src/`; there is no experiment configuration
+parser or generic dictionary merge layer. Environment variables are for
+credentials and environment integration when needed.
 
-The model definition may explicitly describe its architecture and composition.
-Its numeric parameters still come from configuration whenever they should be
-experimented with.
+The model definition explicitly describes architecture and composition using
+typed block definitions. Each block owns build(), while the assembler validates
+connections and applies residual wrappers. Dataset definitions belong in
+`configs/data/`, tokenizer preparation settings in `configs/tokenizers/`, and
+the upcoming editable architecture in `configs/model/`.
+
+Templates may lag behind a model's implementation until reusable changes are
+intentionally promoted. Their scaffold is not a live dependency of existing
+models.
 
 ## Promotion flow
 

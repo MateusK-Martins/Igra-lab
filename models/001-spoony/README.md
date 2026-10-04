@@ -25,15 +25,46 @@ added only after selecting the cloud GPU and its compatible CUDA build.
 
 ## Status
 
-The model architecture, tokenizer, data source, and first training
-configuration are intentionally undecided. They will be documented before the
-first implementation is added.
+Implemented and tested:
+
+- Byte-level BPE training, persistence, and a generic tokenizer protocol.
+- Source, DataSet, and DataSetPipe contracts with one dataset per split.
+- Train-only tokenizer training, document encoding, and end-of-document tokens.
+- Binary token storage, document offsets, and tokenizer hashes.
+- Disk-backed next-token windows and seeded PyTorch DataLoaders.
+- Declarative model validation and assembly with Sequential, Repeat, residuals,
+  embeddings, Linear, SwiGLU, and an optionally tied LM head.
+
+No real corpus is selected: `configs/data/datasets.py` defines an empty pipe.
+Attention, RMSNorm, positional encoding, a final architecture configuration,
+training, evaluation, and SFT remain to be implemented. Linear/SwiGLU assembly
+tests establish the machinery; they are not a complete Transformer.
+
+See [ROADMAP.md](ROADMAP.md) and [MODEL_ASSEMBLY.md](MODEL_ASSEMBLY.md) for the
+remaining work and composition contracts.
+
+## Commands
+
+Run from this model directory with its virtual environment activated:
+
+```bash
+python -m pytest -q
+ruff check src configs scripts tests
+ruff format --check src configs scripts tests
+python -m scripts.prepare_data
+```
+
+Preparation requires train datasets to be defined first. It trains BPE, saves
+the tokenizer, and processes train and validation. Existing split artifacts
+are rejected rather than overwritten; select a fresh output directory for a
+new preparation.
 
 ## Directory contract
 
-- `src/model.py` defines the architecture for this model.
+- `src/model/` defines block contracts, construction, and the runtime model.
 - `src/config/types.py` defines the typed configuration contracts.
 - `configs/data/` holds dataset definitions.
+- `configs/data/dataloader.py` holds window and train/validation batch settings.
 - `configs/tokenizers/` holds tokenizer preparation settings.
 - `src/data/`, `src/training/`, `src/evaluation/`, and `src/inference/` hold
   separate stages of the model lifecycle.

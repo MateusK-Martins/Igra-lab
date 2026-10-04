@@ -5,8 +5,10 @@ Transformer language model. Copy it into `models/<id>-<name>/` when creating a
 new model branch, then replace placeholders with model-specific values.
 
 The template deliberately contains no production model implementation yet.
-The first implementation will establish the public contracts for training,
-evaluation, inference, configuration, and results.
+The independently developed model now has data preparation and declarative
+assembly machinery. Those changes have not yet been promoted into this
+scaffold. Treat the files here as placeholders rather than the current model
+implementation.
 
 ## Environment
 
@@ -26,8 +28,11 @@ added only after selecting the cloud GPU and its compatible CUDA build.
 
 ## Directory contract
 
-- `src/model.py` defines the architecture for this model.
-- `configs/` holds every experiment choice.
+- `src/model.py` is the current scaffold's architecture placeholder. The model
+  implementation has replaced it with a `src/model/` package.
+- `configs/` is reserved for editable Python dataclass configurations. Legacy
+  configuration placeholders in this scaffold must be replaced when the
+  current model's configuration conventions are promoted.
 - `src/data/`, `src/training/`, `src/evaluation/`, and `src/inference/` hold
   separate stages of the model lifecycle.
 - `tests/` contains tests that run without a full training job.
