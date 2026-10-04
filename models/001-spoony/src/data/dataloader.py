@@ -1,9 +1,12 @@
+from pathlib import Path
+
 import torch
 from torch import Tensor
 from torch.utils.data import DataLoader
 
-from src.config.types import DataLoaderConfig
+from src.config.types import ChunkingConfig, DataLoaderConfig
 from src.data.chunker import StoredTokenSequenceDataset
+from src.data.serialization import TokenStore
 
 
 def build_dataloader(
@@ -21,3 +24,19 @@ def build_dataloader(
         drop_last=config.drop_last,
         generator=generator,
     )
+
+
+def build_split_dataloader(
+    split_directory: Path,
+    chunking_config: ChunkingConfig,
+    loader_config: DataLoaderConfig,
+) -> DataLoader[tuple[Tensor, Tensor]]:
+    store = TokenStore(split_directory)
+
+    dataset = StoredTokenSequenceDataset(
+        store=store,
+        context_length=chunking_config.context_length,
+        stride=chunking_config.stride,
+    )
+
+    return build_dataloader(dataset, loader_config)

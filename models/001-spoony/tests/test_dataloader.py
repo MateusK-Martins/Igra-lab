@@ -3,9 +3,9 @@ from dataclasses import replace
 import pytest
 import torch
 
-from src.config.types import DataLoaderConfig
+from src.config.types import ChunkingConfig, DataLoaderConfig
 from src.data.chunker import StoredTokenSequenceDataset
-from src.data.dataloader import build_dataloader
+from src.data.dataloader import build_dataloader, build_split_dataloader
 from src.data.serialization import TokenStore
 
 
@@ -44,3 +44,19 @@ def test_shuffle_is_repeatable_and_keeps_all_examples(dataset) -> None:
     torch.testing.assert_close(first, second)
     assert sorted(first[:, 0].tolist()) == list(range(0, 40, 4))
     assert first[:, 0].tolist() != list(range(0, 40, 4))
+
+
+def test_split_builder_connects_saved_tokens_and_configuration(tmp_path) -> None:
+    store = TokenStore(tmp_path / "train")
+    store.write_documents([("test", list(range(13)))], tokenizer_sha256="test")
+    loader = build_split_dataloader(
+        store.directory,
+        ChunkingConfig(context_length=4, stride=4),
+        config(batch_size=2),
+    )
+    batches = list(loader)
+    assert len(batches) == 2
+    torch.testing.assert_close(batches[0][0], torch.arange(8).reshape(2, 4))
+    torch.testing.assert_close(batches[0][1], torch.arange(1, 9).reshape(2, 4))
+    torch.testing.assert_close(batches[1][0], torch.tensor([[8, 9, 10, 11]]))
+    torch.testing.assert_close(batches[1][1], torch.tensor([[9, 10, 11, 12]]))
