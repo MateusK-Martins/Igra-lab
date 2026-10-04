@@ -142,7 +142,7 @@ Snapshots are disk persistence, not a live disk cache.
 
 ## Verification and remaining work
 
-The full suite passed 199 tests on 2026-10-04. Tests cover normalization and its
+The full suite passed 200 tests on 2026-10-04. Tests cover normalization and its
 gradients/dtypes, expanded order, parameter independence, leaf residuals, head
 tying, model save/load, cache IDs, storage writes/snapshots, and forwarding.
 The forwarding test substitutes attention's forward; it does not verify real
@@ -154,7 +154,6 @@ projection, and writes of new K/V. window_size=0 means unrestricted causal
 history; positive values will bound visibility, independently of storage capacity.
 Read old history before overwriting circular buffers.
 
-Known cache issue: first write into a definition-created empty entry can accept
-keys and values with different dtypes. That state cannot pass snapshot-load
-validation. Add dtype agreement validation and regression coverage before
-integrating attention writes.
+CacheStorage.write() requires matching K/V dtypes before modifying an entry.
+A regression test checks that rejection leaves empty buffers/count/pointer
+unchanged and that a subsequent valid write can be saved and restored.

@@ -55,16 +55,16 @@ Read history before overwriting bounded buffers. Use GQA from the outset.
 window_size=0 means unrestricted causal history; positive values bound attention
 visibility independently of retained storage capacity.
 
-Known bug confirmed during review: first write into an empty generated entry
-accepts K/V of different dtypes, but load() rejects that saved state. Add dtype
-agreement validation and a regression test when resuming cache correctness work.
+CacheStorage.write() rejects mismatched K/V dtypes before buffer initialization
+or writes. Regression coverage checks unchanged state after rejection, then a
+valid write and snapshot restoration.
 
 Flattening changed body state-dictionary paths. Same-definition round trips are
 tested; migration of old nested state dictionaries is not implemented.
 
 ## Verification
 
-199 tests passed on 2026-10-04. Full Ruff lint and format checks passed.
+200 tests passed on 2026-10-04. Full Ruff lint and format checks passed.
 Coverage includes RMSNorm numerical behavior/gradients, expanded composition
 order, independent parameters, residuals, tying, cache identities, circular and
 unlimited storage, snapshot continuation, CPU/CUDA restoration, and forwarding.

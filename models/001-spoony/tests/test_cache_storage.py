@@ -4,6 +4,36 @@ import torch
 from src.model.cache_storage import CacheEntry, CacheStorage
 
 
+def test_first_write_rejects_mismatched_dtypes_without_mutating_entry(tmp_path):
+    entry = CacheEntry(
+        "layer", False, torch.empty(0, 2, 0, 3), torch.empty(0, 2, 0, 3), 0, 0
+    )
+    storage = CacheStorage([entry], torch.device("cpu"), torch.device("cpu"))
+    original_keys, original_values = entry.keys, entry.values
+    keys = torch.ones(1, 2, 4, 3, dtype=torch.float32)
+    values = torch.ones(1, 2, 4, 3, dtype=torch.float64)
+
+    with pytest.raises(ValueError, match="Keys and values must have matching dtypes"):
+        storage.write("layer", keys, values)
+
+    assert entry.keys is original_keys
+    assert entry.values is original_values
+    assert entry.count == 0
+    assert entry.pointer == 0
+
+    # A rejected write must not prevent a valid first write and snapshot restore.
+    values = values.to(keys.dtype)
+    storage.write("layer", keys, values)
+    path = tmp_path / "cache.pt"
+    storage.save(path)
+    restored = CacheStorage.load(
+        path, storage_device=torch.device("cpu"), read_device=torch.device("cpu")
+    )
+    torch.testing.assert_close(restored.read_all("layer").keys, keys)
+    torch.testing.assert_close(restored.read_all("layer").values, values)
+    assert restored.step("layer") == 4
+
+
 @pytest.mark.parametrize("capacity", [1, 2, 5])
 @pytest.mark.parametrize(
     "chunk_sizes", [(0, 1, 2, 7, 0, 13), (5, 5, 5), (1, 1, 1, 1, 1, 1)]

@@ -43,7 +43,7 @@ No real corpus is selected: `configs/data/datasets.py` defines an empty pipe.
 GQA definitions, projections, and head reshaping exist, but attention has no
 output yet and does not use the forwarded cache. RoPE, masks, SDPA, a final
 architecture configuration, training, evaluation, and SFT remain pending.
-The latest suite passed 199 tests; these establish the implemented machinery,
+The latest suite passed 200 tests; these establish the implemented machinery,
 not a complete Transformer. See MODEL_ASSEMBLY.md for current limitations.
 
 See [ROADMAP.md](ROADMAP.md) and [MODEL_ASSEMBLY.md](MODEL_ASSEMBLY.md) for the

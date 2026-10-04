@@ -15,7 +15,7 @@ DataLoaders, and declarative assembly are implemented. Model composition
 includes embeddings, Linear, SwiGLU, RMSNorm, expanded Sequential/Repeat
 definitions, leaf residuals, and head tying. Assembly returns a flat ModuleList
 runtime and cache entries. External KV storage, snapshots, IDs, and optional
-cache forwarding are implemented. The latest verification passed 199 tests.
+cache forwarding are implemented. The latest verification passed 200 tests.
 
 Still missing: a configured corpus, editable model architecture, attention,
 positional encoding, training, checkpoint orchestration,

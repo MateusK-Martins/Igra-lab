@@ -130,6 +130,9 @@ class CacheStorage:
         if keys.shape != values.shape:
             raise ValueError("Keys and values must have matching shapes")
 
+        if keys.dtype != values.dtype:
+            raise ValueError("Keys and values must have matching dtypes")
+
         # Definition-created entries acquire batch size and dtype on first write.
         if entry.count == 0 and entry.keys.shape[0] == 0:
             if (keys.shape[1], keys.shape[3]) != (
