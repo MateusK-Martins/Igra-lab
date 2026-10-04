@@ -4,14 +4,18 @@ import json
 
 import pytest
 
-from src.config.presets import tinystories_v2
 from src.config.snapshot import save_config_snapshot
+from src.config.types import ChunkingConfig, DataConfig, TokenizerConfig
 
 
 def test_saves_resolved_dataclass_configuration(tmp_path) -> None:
     path = tmp_path / "run" / "resolved-config.json"
 
-    save_config_snapshot(tinystories_v2(), path)
+    config = DataConfig(
+        tokenizer=TokenizerConfig(4096, 2, ("<|unk|>", "<|eot|>")),
+        chunking=ChunkingConfig(128, 128),
+    )
+    save_config_snapshot(config, path)
 
     assert json.loads(path.read_text(encoding="utf-8")) == {
         "chunking": {"context_length": 128, "stride": 128},

@@ -5,10 +5,23 @@ from collections.abc import Iterator, Sequence
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
+from src.config.types import TokenizerConfig
 from src.data.pipeline import DataSetPipe
 from src.data.schemas import Split
 from src.data.serialization import TokenStore, TokenStoreSummary
-from src.data.tokenizer import Tokenizer
+from src.data.tokenizer import ByteLevelBPETokenizer, Tokenizer
+
+
+def train_tokenizer(
+    dataset_pipe: DataSetPipe, config: TokenizerConfig
+) -> ByteLevelBPETokenizer:
+    """Train BPE from a fresh traversal of train documents only."""
+    return ByteLevelBPETokenizer.train(
+        (document.text for document in dataset_pipe.documents("train")),
+        target_vocab_size=config.target_vocab_size,
+        min_frequency=config.min_frequency,
+        special_tokens=config.special_tokens,
+    )
 
 
 class DataProcessor:

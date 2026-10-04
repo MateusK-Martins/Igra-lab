@@ -1,6 +1,7 @@
 """Typed, immutable configuration contracts for a decoder language model."""
 
 from dataclasses import dataclass
+from pathlib import Path
 
 from src.config.errors import ConfigError
 
@@ -44,3 +45,14 @@ class DataConfig:
 
     tokenizer: TokenizerConfig
     chunking: ChunkingConfig
+
+
+@dataclass(frozen=True)
+class PreparationConfig:
+    tokenizer: TokenizerConfig
+    output_directory: Path
+    end_of_document_token: str
+
+    def __post_init__(self) -> None:
+        if self.end_of_document_token not in self.tokenizer.special_tokens:
+            raise ConfigError("End-of-document token must be a tokenizer special token")

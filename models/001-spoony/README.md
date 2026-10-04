@@ -33,7 +33,8 @@ first implementation is added.
 
 - `src/model.py` defines the architecture for this model.
 - `src/config/types.py` defines the typed configuration contracts.
-- `src/config/presets.py` holds named, reviewable experiment configurations.
+- `configs/data/` holds dataset definitions.
+- `configs/tokenizers/` holds tokenizer preparation settings.
 - `src/data/`, `src/training/`, `src/evaluation/`, and `src/inference/` hold
   separate stages of the model lifecycle.
 - `tests/` contains tests that run without a full training job.

@@ -59,8 +59,13 @@ typed contracts, and named functions build complete experiment settings:
 ```text
 src/config/
 ├── types.py       # Dataclasses and their validation rules
-├── presets.py     # Named local, cloud, and benchmark configurations
 └── snapshot.py    # Save a resolved configuration as JSON
+
+configs/
+├── data/
+│   └── datasets.py    # Selected sources and manifests
+└── tokenizers/
+    └── preparation.py # Tokenizer settings and output directory
 ```
 
 `dataclasses.replace` creates a deliberate variation of a preset without a
@@ -290,10 +295,9 @@ scripts/
 └── inspect_run.py
 ```
 
-Each script imports a named preset explicitly. For example, a local
-pretraining entry point will call `local_pretraining()` from
-`src.config.presets`; cloud runs call `cloud_pretraining()`. Scripts may offer
-a `--preset` name only after there are several stable presets to select.
+Each script imports its configuration explicitly from the relevant folder
+under `configs/`. Dataset definitions live in `configs/data/` and tokenizer
+preparation settings live in `configs/tokenizers/`.
 
 ## Tests
 
