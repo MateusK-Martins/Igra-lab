@@ -1,23 +1,12 @@
-# Declarative model assembly guide
+# Declarative model assembly
 
-This document defines how to declare, validate, and assemble a language model.
-It covers the implemented composition machinery. SwiGLU is implemented;
-attention, normalization, and positional encoding remain upcoming work.
+Model settings are Python dataclass definitions. Editable architecture settings
+will live in `configs/model/architecture.py`; no final architecture is configured
+yet. Importing settings must not download data or train a tokenizer.
 
-Current status: definition protocols, recursive validation, composition,
-assembly, weight tying, forward/backward, and state-dictionary round trips are
-tested. No editable architecture file or final Transformer exists yet.
+## Current API
 
-Use the numbered steps below to resume pair programming. Complete one step,
-review its behavior, and then proceed to the next.
-
-## Agreed declaration
-
-The editable model definition belongs in `configs/model/architecture.py`.
-It is ordinary Python using dataclass definitions, with no external parser.
-
-Working declaration syntax using implemented classes and an already trained
-tokenizer (this is a composition example, not a Transformer architecture):
+Supply an already trained tokenizer when constructing the definition:
 
 ```python
 definition = Model(
@@ -27,10 +16,7 @@ definition = Model(
         Repeat(
             times=3,
             blocks=[
-                Sequential(
-                    blocks=[Linear(256, 512), Linear(512, 256)],
-                    residual=True,
-                ),
+                RMSNorm(input_features=256, eps=1e-6),
                 SwiGLU(
                     input_features=256,
                     hidden_features=688,
@@ -42,262 +28,133 @@ definition = Model(
     ],
     lm_head=LMHead(input_features=256, tie_to_embedding=True),
 )
-
-model = assemble(definition)
+model, cache_entries = definition.assemble()
+logits = model(token_ids)
 ```
 
-`Model` describes the architecture; `LanguageModel` is the constructed
-`torch.nn.Module`. Importing a configuration must not download data or train
-a tokenizer. A trained tokenizer is supplied or explicitly loaded when the
-definition is created.
+This runnable composition example exercises normalization and feed-forward
+blocks. It is not a Transformer: attention computation is still unfinished.
+The former module-level `assemble(definition)` function has been replaced by
+`Model.assemble()`.
 
-## Shape contracts
+Definitions use plain names. Custom runtime modules use `Impl`: ModelImpl,
+ResidualImpl, LinearImpl, SwiGLUImpl, RMSNormImpl, and GQAAttentionImpl.
+Embedding and LM head use standard PyTorch modules.
 
-Every ordinary block has positive integer `input_features` and
-`output_features`, plus a boolean `residual` parameter. Blocks transform the
-last dimension while preserving batch and sequence dimensions:
+## Definition contract
+
+`BlockDefinition` exposes `input_features`, `output_features`, `residual`, and:
+
+- `build()` returns a fresh, unwrapped runtime module.
+- `cache(layer_id)` returns a CacheEntry or None.
+- `unpack()` returns the leaf definitions in execution order.
+
+Concrete definitions inherit the protocol to reuse its default `cache()`
+(returning None) and `unpack()` (returning `[self]`). A structurally compatible
+custom definition must supply these methods itself if it does not inherit them.
+Its runtime module must accept `forward(x, *, cache=None)`.
+
+Feature dimensions and repeat counts must be positive integers; booleans are
+rejected. Leaves validate their component settings at construction.
+
+## Expansion and validation
+
+Sequential recursively concatenates its children's unpacked definitions.
+Repeat does the same for each repetition:
 
 ```text
-[B, T, input_features] -> [B, T, output_features]
+[A, Repeat(2, [B, Sequential([C, D])]), E]
+    -> [A, B, C, D, B, C, D, E]
 ```
 
-A standalone block may change its feature width. The assembler checks that
-its neighbors can connect; it must not silently insert projections.
+Expansion reuses definition objects, but assembly builds fresh runtime modules
+and parameters for every occurrence. Neither composition builds a runtime group;
+calling its `build()` raises TypeError. Empty compositions are rejected, including
+when a child list is cleared after construction and the model is revalidated.
 
-The embedding is a special boundary:
+Model.validate() walks the expanded sequence and checks positive widths,
+boolean residuals, neighboring widths, residual compatibility, and connections
+to embedding and LM head. Errors name expanded indexes such as `blocks[3]`.
+Repeat-boundary compatibility follows from those neighboring-width checks.
+Constructor validation runs immediately; assembly revalidates before building.
+An empty model body may connect embedding directly to the head.
+
+Sequential and Repeat serve as declaration groups only. Their existing
+`residual` fields are not applied by expansion; use residuals on leaf blocks.
+The former residuals around whole composition groups are no longer supported.
+
+## Construction and execution
+
+Model.assemble() enumerates the expanded leaves, collects `cache(block_id)`,
+and calls `build_block(block, block_id)`. build_block assigns IDs to modules
+implementing `assign_id(int)` before applying the leaf's residual wrapper.
+The constructed modules are registered in a flat nn.ModuleList.
+
+The runtime model embeds token IDs, explicitly iterates through that list, and
+projects the final hidden states to vocabulary logits:
 
 ```text
-integer token IDs [B, T] -> vectors [B, T, embedding.output_features]
+IDs [B, T] -> embedding [B, T, D] -> body -> logits [B, T, V]
 ```
 
-Its vocabulary dimension is obtained from `definition.tokenizer.vocab_size`.
-It does not have an ordinary vector `input_features` field.
+Each ordinary block transforms the last dimension while preserving batch and
+sequence dimensions. ResidualImpl computes `x + branch(x, cache=cache)` and
+rejects unequal input/output shapes. No automatic projection is inserted.
+Input-rank and context-limit checks are not implemented yet.
 
-The LM head is the other special boundary:
+The tokenizer supplies the actual vocabulary size. A bias-free tied head shares
+the embedding's Parameter object and requires matching widths. Rebuilding from
+the same definition before loading a state dictionary restores that relationship.
+Flattening changes body parameter paths compared with the previous nested
+runtime: old state dictionaries require an explicit migration.
 
-```text
-hidden states [B, T, lm_head.input_features] -> logits [B, T, vocab_size]
-```
-
-Its resolved output size must equal the tokenizer's actual vocabulary size.
-Do not substitute the requested BPE vocabulary size for the actual learned
-size. Forward returns logits; loss calculation belongs to training code.
-
-## Composition rules
-
-### Sequential
-
-`Sequential(blocks=[...], residual=False)` executes children in order.
-Its input width is the first child's input width and its output width is the
-last child's output width. These are derived properties, not duplicated
-editable fields. Empty sequential compositions are rejected initially.
-
-For every adjacent pair:
-
-```text
-left.output_features == right.input_features
-```
-
-### Repeat
-
-`Repeat(times=N, blocks=[...], residual=False)` repeats the complete child
-sequence N times, in place. N must be a positive integer; children must be
-non-empty.
-
-For example:
-
-```text
-[A, Repeat(3, [B, C]), D] -> [A, B1, C1, B2, C2, B3, C3, D]
-```
-
-Each occurrence constructs fresh modules and parameters. Reusing a definition
-does not imply sharing weights. Besides checking each child sequence, check
-the connection from its last output to its first input when N > 1.
-
-The repetition boundary uses its first child's input width and final child's
-output width. A width-changing sequence can repeat once; repeating it more
-than once requires compatible boundary widths.
-
-### Residual
-
-Residual is an exposed parameter on leaf blocks and composition definitions.
-Its behavior is:
+## External cache
 
 ```python
-output = input + branch(input)
+storage = CacheStorage(
+    cache_entries,
+    storage_device=torch.device("cpu"),
+    read_device=torch.device("cuda"),
+)
+logits = model(token_ids, cache=storage)
 ```
 
-Therefore its input and output widths must match. The branch must also
-preserve batch and sequence dimensions. No automatic residual projection is
-introduced.
+The model does not retain storage. It passes the same optional instance to every
+body block; residuals forward it to their branch. LinearImpl, RMSNormImpl, and
+SwiGLUImpl accept and ignore it. GQAAttentionImpl accepts it, but does not yet
+read or write it because its attention calculation is unfinished.
 
-A residual on Sequential wraps that complete sequence. A residual on Repeat
-wraps all repetitions together. Residuals on children wrap individual children.
-Repeat.build() constructs a runtime sequence directly; it preserves nested
-wrappers rather than flattening away their scopes. Embedding and LM head are boundary components
-without a residual option.
+GQA IDs are `GQAAttentionImpl-{expanded_index}`. Each occurrence creates its own
+entry with K/V shape `[0, kv_heads, 0, head_features]`, count=0, pointer=0, and
+bounded=False. First write establishes batch size and dtype. Assembly supplies
+no batch size or storage capacity. Bounded storage can instead be constructed
+with explicit preallocated entries; attention visibility is a separate setting.
 
-### LM head weight tying
+CacheStorage supports unlimited append or circular bounded writes, chronological
+reads, device transfers, and plain-dictionary snapshots. count tracks all tokens
+written; pointer is the next physical write slot. read_all returns a read result
+with pointer=0, transferring tensors to read_device. Returned tensors can share
+storage and should be treated as read-only.
 
-If `tie_to_embedding=True`, the head's input width must equal the embedding's
-output width. The head and embedding use the same actual Parameter object,
-with shape `[vocab_size, embedding_width]`. Copying values is not weight tying.
+save() writes detached CPU tensors and physical state. load() uses
+weights_only=True, validates entries, and restores on caller-selected devices.
+Snapshots are disk persistence, not a live disk cache.
 
-The first implementation uses a bias-free head. Register the shared parameter
-before constructing the optimizer, and ensure initialization does not reset
-the same shared weight twice. Saving and reloading must restore the tying.
+## Verification and remaining work
 
-## Code organization
+The full suite passed 199 tests on 2026-10-04. Tests cover normalization and its
+gradients/dtypes, expanded order, parameter independence, leaf residuals, head
+tying, model save/load, cache IDs, storage writes/snapshots, and forwarding.
+The forwarding test substitutes attention's forward; it does not verify real
+attention output or causal masking.
 
-```text
-configs/model/
-    architecture.py       # Editable model declaration
+GQA currently has Q/K/V/output projections and head reshaping. It still needs
+positions, RoPE, history reads, causal/window masks, SDPA, output reshaping and
+projection, and writes of new K/V. window_size=0 means unrestricted causal
+history; positive values will bound visibility, independently of storage capacity.
+Read old history before overwriting circular buffers.
 
-src/model/
-    __init__.py
-    definitions.py        # Block/boundary protocols and concrete definitions
-    assembler.py          # Model declaration, recursive validation, assemble()
-    composition.py        # Residual module and build_block() helper
-    feedforward.py        # Runtime SwiGLU feed-forward module
-    language_model.py     # Public PyTorch model and forward boundary
-
-tests/
-    test_model_definitions.py
-    test_model_validation.py
-    test_model_composition.py
-    test_model_assembly.py
-    test_swiglu.py
-```
-
-The old `src/model.py` placeholder has been replaced by this package. The
-`configs/model/architecture.py` file is planned. Component modules are added
-as their internals are implemented.
-
-Definitions satisfy structural protocols and own a build() method that returns
-a fresh PyTorch branch. The assembler reads the protocol fields for validation,
-recognizes Sequential and Repeat for recursive checks, and uses build_block()
-to apply residual wrappers. No component registry is required.
-
-## Numbered implementation steps
-
-### 1. Define the declaration dataclasses
-
-Status: completed, using separate boundary protocols and BlockDefinition.
-
-Create the model package and `definitions.py`. Define Model, Embedding,
-LMHead, Sequential, Repeat, and a minimal ordinary block contract. Use frozen
-dataclasses for settings and accept the agreed list-based composition syntax.
-Do not mutate those child lists during assembly.
-
-Do not invent attention internals yet. Use a simple Linear definition when
-we need a concrete block to exercise the machinery.
-
-Check positive integer dimensions, boolean residual settings, positive repeat
-counts, and non-empty compositions. Explicitly reject booleans as dimensions
-or repeat counts, because Python treats bool as a subtype of int.
-
-### 2. Resolve composition dimensions
-
-Status: completed through Sequential/Repeat properties and recursive validation.
-
-Implement recursive input/output feature resolution. Leaf dimensions are
-declared; Sequential and Repeat dimensions are derived from their children.
-The tokenizer supplies vocabulary dimensions at model boundaries.
-
-Test nested compositions and avoid allocating PyTorch modules during this step.
-
-### 3. Validate the whole model
-
-Status: completed in Model.validate() and Model.validate_blocks(). Constructor
-validation runs immediately and assemble() repeats it before allocating weights.
-
-Walk the definition recursively. Validate every neighboring connection,
-repeat boundary, and residual width. Connect the embedding to the first body
-block, then the final body output to the LM head. An empty Model.blocks list
-may connect embedding directly to the head, although child compositions must
-not be empty.
-
-Verify tying dimensions and final vocabulary width. Error messages should name
-the definition path and expected/actual widths, for example:
-
-```text
-blocks[0].blocks[1]: expected input_features=256, received 512
-```
-
-Tests must include valid width changes, invalid neighbors, invalid residuals,
-invalid repeated boundaries, and incompatible tied heads.
-
-### 4. Expand Repeat without changing the declaration
-
-Status: completed directly in Repeat.build(); a separate expansion-plan module
-is not needed. It calls build_block() for each child on each repetition and
-returns nn.Sequential. Nested groups remain registered modules, preserving
-residual scopes. Each build() creates independent parameters. Settings and
-child lists are not modified during construction.
-
-### 5. Implement runtime composition
-
-Status: sequential execution and residual wrapping completed and tested.
-Attention execution context is still to be designed.
-
-Create sequential execution with registered child modules (`ModuleList` or
-equivalent), and a residual wrapper. Test them with small deterministic Linear
-modules. Parameters must appear in `model.parameters()` and state dictionaries.
-
-Define how execution context travels through compositions. Attention will
-need positions and masks: choose one shared forward convention and pass that
-context consistently. Do not store per-batch masks in architecture settings.
-
-### 6. Build components and assemble the wrapper
-
-Status: completed for current components in assemble() and LanguageModel.
-
-Implement assembly by calling each definition's build() through build_block().
-Construct a fresh module per occurrence, then wrap residual branches at the
-declared scope. Build the
-embedding and vocabulary head using the tokenizer's actual vocab size.
-
-LanguageModel.forward maps token IDs `[B, T]` to logits `[B, T, V]` through
-embedding, body, and head. Explicit input-rank and context-limit checks are not
-implemented yet. Linear and SwiGLU exercise construction before attention.
-
-### 7. Implement and verify weight tying
-
-Status: completed; save/load tests rebuild from the definition before loading
-the state dictionary, which restores the declared shared parameter relationship.
-
-Assign the embedding Parameter to the head when requested. Test object identity,
-gradient flow, independent weights when tying is disabled, and save/load
-restoration. Check repeated body blocks have distinct Parameter objects.
-
-### 8. Add the editable architecture file
-
-Status: pending. Keep imports free of downloads or tokenizer training.
-
-Create `configs/model/architecture.py` using the agreed declaration. Provide
-the trained tokenizer explicitly when creating the definition, so importing
-the file is possible before a tokenizer artifact exists. Keep numeric choices
-in the editable definition and use named variables for shared dimensions.
-
-The runnable entry point explicitly loads the tokenizer, creates the definition,
-and calls assemble. The builder does not import experiment configurations.
-
-### 9. Verify the composition machinery end to end
-
-Status: completed for implemented components. Extend coverage as attention and
-its execution context are added.
-
-Use a tiny test tokenizer and small tensors. Verify logits shape, backward
-gradients, module registration, repeat independence, residual behavior, tying,
-and meaningful validation errors. Tests need no corpus download or GPU.
-
-The current checks pass. Next implement the remaining Transformer components
-and their block definitions, then declare a full architecture.
-
-## Later decisions
-
-Component-specific settings, normalization placement, positional encoding,
-attention masking, cache support, and initialization policy must be designed
-when implementing their corresponding modules. Arbitrary graphs, projected
-residuals, and parameter sharing beyond embedding/head tying are extensions,
-not requirements for this first assembler.
+Known cache issue: first write into a definition-created empty entry can accept
+keys and values with different dtypes. That state cannot pass snapshot-load
+validation. Add dtype agreement validation and regression coverage before
+integrating attention writes.

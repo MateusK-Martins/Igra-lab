@@ -12,11 +12,13 @@ sources before choosing a real source.
 
 Data source composition, BPE preparation, token storage, disk-backed windows,
 DataLoaders, and declarative assembly are implemented. Model composition
-includes embeddings, Linear, SwiGLU, Sequential, Repeat, residual wrappers, and
-head tying. The latest verification passed 146 tests on CPU.
+includes embeddings, Linear, SwiGLU, RMSNorm, expanded Sequential/Repeat
+definitions, leaf residuals, and head tying. Assembly returns a flat ModuleList
+runtime and cache entries. External KV storage, snapshots, IDs, and optional
+cache forwarding are implemented. The latest verification passed 199 tests.
 
 Still missing: a configured corpus, editable model architecture, attention,
-normalization, positional encoding, training, checkpoint orchestration,
+positional encoding, training, checkpoint orchestration,
 evaluation, generation, and SFT. The following lifecycle sections describe
 targets unless explicitly identified as implemented.
 
@@ -184,11 +186,11 @@ src/model/
 ├── assembler.py        # Implemented Model validation and assemble()
 ├── composition.py      # Implemented residual wrapping and build_block()
 ├── language_model.py   # Implemented embedding -> body -> logits
-├── feedforward.py      # Implemented SwiGLU
+├── feedforward.py      # Implemented SwiGLU and cache-compatible Linear
 ├── rope.py
-├── normalization.py
-├── attention.py
-├── cache.py
+├── stability.py        # Implemented RMSNorm
+├── attention.py        # GQA projections/reshaping; calculation pending
+├── cache_storage.py    # Implemented KV storage and snapshots
 └── initialization.py
 ```
 
@@ -197,11 +199,9 @@ The planned architecture is a decoder-only Transformer:
 ```text
 Token embeddings
     ↓
-RoPE positional encoding
-    ↓
 Repeated Transformer blocks
     ├── RMSNorm
-    ├── causal self-attention
+    ├── causal GQA self-attention with RoPE on Q/K
     ├── residual connection
     ├── RMSNorm
     ├── SwiGLU feed-forward network
@@ -215,13 +215,14 @@ Vocabulary projection
 The upcoming `configs/model/architecture.py` will compose definitions with
 explicit widths and component settings. Model includes the tokenizer,
 embedding, body blocks, and LM head. Definitions own build(); the assembler
-validates dimensions recursively and wraps residuals at their declared scope.
-Repeat constructs fresh parameters per occurrence. See MODEL_ASSEMBLY.md.
+expands groups before validating adjacent dimensions and wraps leaf residuals.
+Repeat builds fresh parameters per occurrence; group residuals are not applied.
+Model.assemble() returns (ModelImpl, cache_entries). See MODEL_ASSEMBLY.md.
 
-Implement standard multi-head attention first, while keeping `n_kv_heads` in
-the configuration so grouped-query attention can be enabled later. Prefer
-PyTorch scaled dot-product attention with a readable fallback for research and
-debugging.
+Use GQA from the outset with PyTorch scaled dot-product attention. Current
+definitions declare num_query_heads, num_kv_heads, head_features, and window_size.
+RoPE rotates Q/K inside attention. Cache capacity and attention visibility are
+separate; positions, masking, computation, and cache reads/writes remain pending.
 
 ## Pretraining
 
@@ -433,9 +434,10 @@ Spoony and then intentionally promoted to `template/decoder-transformer`.
 2. Completed: generic sources, per-split DataSet, and DataSetPipe.
 3. Completed: train-only BPE training, preparation, and token serialization.
 4. Completed: disk-backed windows and configured DataLoader construction.
-5. Completed: declarative assembly, embeddings, head tying, and SwiGLU.
-6. Next: define attention execution context, then RMSNorm, RoPE, causal attention,
-   and the editable Transformer architecture. Configure a corpus before real runs.
+5. Completed: expanded assembly, embeddings, head tying, SwiGLU, RMSNorm,
+   KV storage/snapshots, per-layer IDs, and external cache forwarding.
+6. Next: finish RoPE, causal GQA, and attention cache reads/writes, then declare
+   the editable Transformer architecture. Configure a corpus before real runs.
 7. Add shape and causal-mask tests.
 8. Implement the pretraining loop.
 9. Run a one-batch overfit test.

@@ -33,12 +33,18 @@ Implemented and tested:
 - Binary token storage, document offsets, and tokenizer hashes.
 - Disk-backed next-token windows and seeded PyTorch DataLoaders.
 - Declarative model validation and assembly with Sequential, Repeat, residuals,
-  embeddings, Linear, SwiGLU, and an optionally tied LM head.
+  embeddings, Linear, SwiGLU, RMSNorm, and an optionally tied LM head.
+- Expanded leaf assembly into a ModuleList, per-occurrence IDs, and external
+  cache-entry collection through `definition.assemble()`.
+- Bounded/unbounded KV storage, device transfers, snapshot save/load, and
+  optional cache forwarding through runtime blocks.
 
 No real corpus is selected: `configs/data/datasets.py` defines an empty pipe.
-Attention, RMSNorm, positional encoding, a final architecture configuration,
-training, evaluation, and SFT remain to be implemented. Linear/SwiGLU assembly
-tests establish the machinery; they are not a complete Transformer.
+GQA definitions, projections, and head reshaping exist, but attention has no
+output yet and does not use the forwarded cache. RoPE, masks, SDPA, a final
+architecture configuration, training, evaluation, and SFT remain pending.
+The latest suite passed 199 tests; these establish the implemented machinery,
+not a complete Transformer. See MODEL_ASSEMBLY.md for current limitations.
 
 See [ROADMAP.md](ROADMAP.md) and [MODEL_ASSEMBLY.md](MODEL_ASSEMBLY.md) for the
 remaining work and composition contracts.

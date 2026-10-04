@@ -50,8 +50,10 @@ def test_rejects_invalid_boundary_values(component, field, value) -> None:
 def test_rejects_invalid_custom_block_values(field, value) -> None:
     attributes = {"input_features": 4, "output_features": 4, "residual": False}
     attributes[field] = value
+    block = SimpleNamespace(**attributes)
+    block.unpack = lambda: [block]
     with pytest.raises(ValueError, match=field):
-        make_model(blocks=[SimpleNamespace(**attributes)])
+        make_model(blocks=[block])
 
 
 def test_rejects_non_boolean_tying() -> None:
@@ -90,46 +92,35 @@ def test_repeat_rejects_invalid_counts(times) -> None:
         make_model(blocks=[Repeat(times, [Linear(4, 4)])])
 
 
-@pytest.mark.parametrize("block", [Repeat(1, []), Repeat(2, [Repeat(1, [])])])
-def test_repeat_rejects_empty_children_before_property_access(block) -> None:
+@pytest.mark.parametrize(
+    "factory",
+    [
+        lambda: Repeat(1, []),
+        lambda: Repeat(2, [Repeat(1, [])]),
+        lambda: Sequential([]),
+        lambda: Repeat(2, [Sequential([])]),
+    ],
+)
+def test_empty_compositions_are_rejected_at_construction(factory) -> None:
     with pytest.raises(ValueError, match="must not be empty"):
-        make_model(blocks=[block])
+        factory()
 
 
-def test_repeat_checks_internal_neighbors_and_repetition_boundary() -> None:
-    with pytest.raises(ValueError, match=r"blocks\[0\].blocks\[1\]"):
+def test_flattened_connections_and_repetition_boundary() -> None:
+    with pytest.raises(ValueError, match=r"blocks\[1\]"):
         make_model(blocks=[Repeat(2, [Linear(4, 8), Linear(4, 4)])])
-    with pytest.raises(ValueError, match="repeat output"):
+    with pytest.raises(ValueError, match="previous component"):
         make_model(blocks=[Repeat(2, [Linear(4, 8)])], lm_head=LMHead(8))
-
-
-def test_repeat_checks_its_residual_and_revalidates_mutated_children() -> None:
-    with pytest.raises(ValueError, match="residual"):
-        make_model(blocks=[Repeat(1, [Linear(4, 8)], True)], lm_head=LMHead(8))
-    with pytest.raises(ValueError, match="boolean"):
-        make_model(blocks=[Repeat(1, [Linear(4, 4)], residual=1)])
-    repeat = Repeat(2, [Linear(4, 4)])
-    model = make_model(blocks=[repeat])
-    repeat.blocks.clear()
-    with pytest.raises(ValueError, match="must not be empty"):
-        model.validate()
-
-
-def test_sequential_validates_nested_connections_and_residual() -> None:
-    make_model(
-        blocks=[
-            Sequential([Linear(4, 8), Repeat(2, [Linear(8, 8)]), Linear(8, 4)], True)
-        ]
-    )
-    with pytest.raises(ValueError, match=r"blocks\[0\].blocks\[1\]"):
+    with pytest.raises(ValueError, match=r"blocks\[1\]"):
         make_model(blocks=[Sequential([Linear(4, 8), Linear(4, 4)])])
-    with pytest.raises(ValueError, match="residual"):
-        make_model(blocks=[Sequential([Linear(4, 8)], True)], lm_head=LMHead(8))
 
 
 @pytest.mark.parametrize(
-    "block", [Sequential([]), Repeat(2, [Sequential([])]), Sequential([Repeat(1, [])])]
+    "factory", [lambda: Repeat(2, [Linear(4, 4)]), lambda: Sequential([Linear(4, 4)])]
 )
-def test_empty_nested_compositions_are_rejected(block) -> None:
+def test_revalidation_rejects_mutated_empty_children(factory) -> None:
+    group = factory()
+    model = make_model(blocks=[group])
+    group.blocks.clear()
     with pytest.raises(ValueError, match="must not be empty"):
-        make_model(blocks=[block])
+        model.validate()
