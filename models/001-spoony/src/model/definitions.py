@@ -8,6 +8,7 @@ from torch import nn
 from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheEntry
 from src.model.feedforward import LinearImpl, SwiGLUImpl
+from src.model.position import PositionRotation
 from src.model.stability import RMSNormImpl
 
 
@@ -265,8 +266,8 @@ class GQAAttention(BlockDefinition):
     head_features: int
     window_size: int
     dropout: float
+    position_rotation: PositionRotation
     bias: bool = False
-
     residual: bool = False
 
     def __post_init__(self) -> None:
@@ -305,6 +306,7 @@ class GQAAttention(BlockDefinition):
             self.window_size,
             self.dropout,
             self.bias,
+            self.position_rotation,
         )
 
     def cache(self, layer_id: int) -> CacheEntry:

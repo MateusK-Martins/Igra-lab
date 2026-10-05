@@ -1,11 +1,9 @@
+import torch
 from torch import Tensor, nn
+from torch.nn import functional as F
 
 from src.model.cache_storage import CacheStorage
-
-
-def _positive_integer(value: int, name: str) -> None:
-    if type(value) is not int or value <= 0:
-        raise ValueError(f"{name} must be a positive integer")
+from src.model.position import PositionRotation
 
 
 class GQAAttentionImpl(nn.Module):
@@ -19,6 +17,7 @@ class GQAAttentionImpl(nn.Module):
         window_size: int,
         dropout: float,
         bias: bool,
+        position_rotation: PositionRotation,
     ) -> None:
         super().__init__()
         self.input_features = input_features
@@ -29,6 +28,7 @@ class GQAAttentionImpl(nn.Module):
         self.window_size = window_size
         self.dropout = dropout
         self.bias = bias
+        self.position_rotation = position_rotation
         self.layer_id = ""
 
         self.q_proj = nn.Linear(
@@ -61,6 +61,14 @@ class GQAAttentionImpl(nn.Module):
     def forward(self, x: Tensor, *, cache: CacheStorage | None = None) -> Tensor:
         batch_size, sequence_length, _ = x.shape
 
+        start_position = 0 if cache is None else cache.step(self.layer_id)
+
+        positions = torch.arange(
+            start_position,
+            start_position + sequence_length,
+            device=x.device,
+        )
+
         q = self.q_proj(x)
         k = self.k_proj(x)
         v = self.v_proj(x)
@@ -85,3 +93,49 @@ class GQAAttentionImpl(nn.Module):
             self.num_kv_heads,
             self.head_features,
         ).transpose(1, 2)
+
+        q = self.position_rotation(q, positions)
+        k = self.position_rotation(k, positions)
+
+        if cache is not None:
+            cache.write(self.layer_id, k, v)
+            entry = cache.read_all(self.layer_id)
+
+            k = entry.keys
+            v = entry.values
+
+            key_start_position = entry.count - k.shape[2]
+        else:
+            key_start_position = start_position
+
+        key_positions = torch.arange(
+            key_start_position,
+            key_start_position + k.shape[2],
+            device=q.device,
+        )
+
+        query_positions = positions[:, None]
+        retained_positions = key_positions[None, :]
+
+        attention_mask = retained_positions <= query_positions
+
+        if self.window_size > 0:
+            attention_mask &= retained_positions > query_positions - self.window_size
+
+        attended = F.scaled_dot_product_attention(
+            q,
+            k,
+            v,
+            attn_mask=attention_mask,
+            dropout_p=self.dropout if self.training else 0.0,
+            is_causal=False,
+            enable_gqa=True,
+        )
+
+        attended = attended.transpose(1, 2).reshape(
+            batch_size,
+            sequence_length,
+            self.num_query_heads * self.head_features,
+        )
+
+        return self.out_proj(attended)

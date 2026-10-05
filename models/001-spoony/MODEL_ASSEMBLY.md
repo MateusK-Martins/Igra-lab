@@ -32,8 +32,8 @@ model, cache_entries = definition.assemble()
 logits = model(token_ids)
 ```
 
-This runnable composition example exercises normalization and feed-forward
-blocks. It is not a Transformer: attention computation is still unfinished.
+This composition example exercises normalization and feed-forward blocks.
+GQA is implemented, but the final Transformer architecture is not configured.
 The former module-level `assemble(definition)` function has been replaced by
 `Model.assemble()`.
 
@@ -121,8 +121,9 @@ logits = model(token_ids, cache=storage)
 
 The model does not retain storage. It passes the same optional instance to every
 body block; residuals forward it to their branch. LinearImpl, RMSNormImpl, and
-SwiGLUImpl accept and ignore it. GQAAttentionImpl accepts it, but does not yet
-read or write it because its attention calculation is unfinished.
+SwiGLUImpl accept and ignore it. GQAAttentionImpl computes positions from the
+pre-write count, rotates new Q/K, writes new K/V, and then reads retained history.
+It derives absolute key positions from the post-write count and retained length.
 
 GQA IDs are `GQAAttentionImpl-{expanded_index}`. Each occurrence creates its own
 entry with K/V shape `[0, kv_heads, 0, head_features]`, count=0, pointer=0, and
@@ -140,20 +141,59 @@ save() writes detached CPU tensors and physical state. load() uses
 weights_only=True, validates entries, and restores on caller-selected devices.
 Snapshots are disk persistence, not a live disk cache.
 
+## Positional rotation and attention
+
+GQAAttention requires a PositionRotation callable before the default bias and
+residual fields. Bind RoPE's base explicitly in architecture settings:
+
+```python
+from functools import partial
+from src.model.position import rope
+
+rotation = partial(rope, base=10000.0)
+attention = GQAAttention(
+    input_features=256, output_features=256,
+    num_query_heads=8, num_kv_heads=2, head_features=32,
+    window_size=128, dropout=0.0, position_rotation=rotation,
+    residual=True,
+)
+```
+
+The callable accepts (x, positions) and preserves [B, H, T, D], device and dtype.
+RoPE rotates adjacent pairs and requires positive even D. Its base must be finite
+and positive; FP16/BF16 arithmetic is promoted to float32 and cast back. Positions
+are supplied by attention, with the cache's total count as the starting offset.
+Cached keys are already rotated; only new keys are rotated on each call.
+
+Attention constructs an explicit boolean [query_tokens, retained_tokens] mask.
+True permits attention when key_position <= query_position and, for positive
+window_size W, key_position > query_position - W. W includes the current token;
+zero means unrestricted causal history. SDPA uses enable_gqa=True,
+is_causal=False, and zero dropout in evaluation. Heads are merged before out_proj.
+
+Write-before-read is the chosen cache policy. Unlimited caches reproduce full
+uncached execution across chunks. Bounded caches reproduce windowed execution
+for single-token calls when capacity covers the attention window. Multi-token
+writes may overwrite context needed by earlier queries; oversized chunks can
+leave earlier queries with no permitted keys. Tests intentionally cover this
+post-write retention behavior. Fully masked queries produce zero attention
+branches on the tested backend; out_proj bias and residuals can still contribute.
+No automatic chunking or history preservation is implemented.
+
 ## Verification and remaining work
 
-The full suite passed 200 tests on 2026-10-04. Tests cover normalization and its
-gradients/dtypes, expanded order, parameter independence, leaf residuals, head
-tying, model save/load, cache IDs, storage writes/snapshots, and forwarding.
-The forwarding test substitutes attention's forward; it does not verify real
-attention output or causal masking.
-
-GQA currently has Q/K/V/output projections and head reshaping. It still needs
-positions, RoPE, history reads, causal/window masks, SDPA, output reshaping and
-projection, and writes of new K/V. window_size=0 means unrestricted causal
-history; positive values will bound visibility, independently of storage capacity.
-Read old history before overwriting circular buffers.
+The full suite passed 260 tests on 2026-10-04, including CUDA checks on the local
+machine. Reference tests independently calculate GQA scores and gradients.
+Coverage also includes RoPE scalar rotations, norms, relative-position behavior,
+chunk offsets/dtypes/gradients, future-token isolation, exact window boundaries,
+evaluation dropout, snapshot continuation, and real repeated-model cached logits.
+CUDA attention is checked with CPU storage and CUDA reads.
 
 CacheStorage.write() requires matching K/V dtypes before modifying an entry.
-A regression test checks that rejection leaves empty buffers/count/pointer
-unchanged and that a subsequent valid write can be saved and restored.
+Regression coverage checks rejection without mutation and subsequent valid
+write/save/load. Cached tests run under no_grad; bounded training/backpropagation
+through mutable cache buffers is not covered. Training normally uses cache=None.
+
+Next work is the editable Transformer architecture, corpus configuration, and
+training integration. Input-rank/context-limit validation, migration of old nested
+state dictionaries, and optimization of explicit masks remain future work.

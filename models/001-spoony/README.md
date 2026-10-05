@@ -40,11 +40,13 @@ Implemented and tested:
   optional cache forwarding through runtime blocks.
 
 No real corpus is selected: `configs/data/datasets.py` defines an empty pipe.
-GQA definitions, projections, and head reshaping exist, but attention has no
-output yet and does not use the forwarded cache. RoPE, masks, SDPA, a final
-architecture configuration, training, evaluation, and SFT remain pending.
-The latest suite passed 200 tests; these establish the implemented machinery,
-not a complete Transformer. See MODEL_ASSEMBLY.md for current limitations.
+GQA attention now computes output using injected positional rotation, explicit
+causal/window masks, SDPA, and the output projection. RoPE is a configurable
+function bound with `functools.partial`. Cached calls write new rotated K/V
+before reading retained history. Bounded chunks can discard context for earlier
+queries; see MODEL_ASSEMBLY.md for that behavior.
+A final architecture configuration, training, evaluation, and SFT remain pending.
+The latest suite passed 260 tests, including real attention and cached execution.
 
 See [ROADMAP.md](ROADMAP.md) and [MODEL_ASSEMBLY.md](MODEL_ASSEMBLY.md) for the
 remaining work and composition contracts.

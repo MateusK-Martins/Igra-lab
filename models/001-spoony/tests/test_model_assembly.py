@@ -1,4 +1,5 @@
 import io
+from functools import partial
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -7,6 +8,7 @@ import torch
 
 from src.model.assembler import Model
 from src.model.definitions import Embedding, LMHead, Repeat, Sequential, SwiGLU
+from src.model.position import rope
 
 
 def definition(tied=True):
@@ -64,7 +66,9 @@ def test_assembly_collects_cache_entries_for_each_attention_occurrence() -> None
     from src.model.cache_storage import CacheStorage
     from src.model.definitions import GQAAttention
 
-    attention = GQAAttention(4, 4, 2, 1, 2, 0, 0.0)
+    attention = GQAAttention(
+        4, 4, 2, 1, 2, 0, 0.0, position_rotation=partial(rope, base=10000.0)
+    )
     recipe = Model(
         SimpleNamespace(vocab_size=13),
         Embedding(4),

@@ -15,10 +15,11 @@ DataLoaders, and declarative assembly are implemented. Model composition
 includes embeddings, Linear, SwiGLU, RMSNorm, expanded Sequential/Repeat
 definitions, leaf residuals, and head tying. Assembly returns a flat ModuleList
 runtime and cache entries. External KV storage, snapshots, IDs, and optional
-cache forwarding are implemented. The latest verification passed 200 tests.
+cache forwarding are implemented. The latest verification passed 260 tests.
 
-Still missing: a configured corpus, editable model architecture, attention,
-positional encoding, training, checkpoint orchestration,
+GQA, injected RoPE, causal/window masks, and cached execution are implemented.
+Still missing: a configured corpus, editable model architecture,
+training, checkpoint orchestration,
 evaluation, generation, and SFT. The following lifecycle sections describe
 targets unless explicitly identified as implemented.
 
@@ -187,9 +188,9 @@ src/model/
 ├── composition.py      # Implemented residual wrapping and build_block()
 ├── language_model.py   # Implemented embedding -> body -> logits
 ├── feedforward.py      # Implemented SwiGLU and cache-compatible Linear
-├── rope.py
+├── position.py         # PositionRotation protocol and RoPE function
 ├── stability.py        # Implemented RMSNorm
-├── attention.py        # GQA projections/reshaping; calculation pending
+├── attention.py        # GQA, RoPE injection, masks, SDPA, cache writes/reads
 ├── cache_storage.py    # Implemented KV storage and snapshots
 └── initialization.py
 ```
@@ -221,8 +222,10 @@ Model.assemble() returns (ModelImpl, cache_entries). See MODEL_ASSEMBLY.md.
 
 Use GQA from the outset with PyTorch scaled dot-product attention. Current
 definitions declare num_query_heads, num_kv_heads, head_features, and window_size.
-RoPE rotates Q/K inside attention. Cache capacity and attention visibility are
-separate; positions, masking, computation, and cache reads/writes remain pending.
+RoPE rotates Q/K inside attention through the PositionRotation callable. Cache
+capacity and attention visibility are separate. Execution writes new K/V before
+reading history; bounded chunks may lose earlier queries' context. See the assembly
+guide for the tested semantics.
 
 ## Pretraining
 
@@ -436,9 +439,10 @@ Spoony and then intentionally promoted to `template/decoder-transformer`.
 4. Completed: disk-backed windows and configured DataLoader construction.
 5. Completed: expanded assembly, embeddings, head tying, SwiGLU, RMSNorm,
    KV storage/snapshots, per-layer IDs, and external cache forwarding.
-6. Next: finish RoPE, causal GQA, and attention cache reads/writes, then declare
-   the editable Transformer architecture. Configure a corpus before real runs.
-7. Add shape and causal-mask tests.
+6. Completed: injected RoPE, causal/windowed GQA, SDPA, and cache writes/reads.
+7. Completed: attention reference/gradient, causal isolation, window, cache,
+   and real-model tests. Next: declare the editable Transformer architecture
+   and configure a corpus before real runs.
 8. Implement the pretraining loop.
 9. Run a one-batch overfit test.
 10. Run a TinyStories smoke run.

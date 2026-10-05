@@ -1,3 +1,4 @@
+from functools import partial
 from types import SimpleNamespace
 
 import pytest
@@ -6,11 +7,22 @@ from src.model.assembler import Model
 from src.model.attention import GQAAttentionImpl
 from src.model.composition import ResidualImpl, build_block
 from src.model.definitions import Embedding, GQAAttention, Linear, LMHead, Repeat
+from src.model.position import rope
 
 
 @pytest.mark.parametrize("residual", [False, True])
 def test_repeated_attention_ids_match_cache_entries(residual):
-    attention = GQAAttention(4, 4, 2, 1, 2, 0, 0.0, residual=residual)
+    attention = GQAAttention(
+        4,
+        4,
+        2,
+        1,
+        2,
+        0,
+        0.0,
+        position_rotation=partial(rope, base=10000.0),
+        residual=residual,
+    )
     recipe = Model(
         SimpleNamespace(vocab_size=7),
         Embedding(4),

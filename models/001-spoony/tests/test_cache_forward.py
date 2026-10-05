@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from functools import partial
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -19,6 +20,7 @@ from src.model.definitions import (
     Sequential,
     SwiGLU,
 )
+from src.model.position import rope
 
 
 class RecorderImpl(nn.Module):
@@ -85,7 +87,19 @@ def test_attention_receives_storage_through_model(residual):
     model, entries = Model(
         SimpleNamespace(vocab_size=7),
         Embedding(4),
-        [GQAAttention(4, 4, 2, 1, 2, 0, 0.0, residual=residual)],
+        [
+            GQAAttention(
+                4,
+                4,
+                2,
+                1,
+                2,
+                0,
+                0.0,
+                position_rotation=partial(rope, base=10000.0),
+                residual=residual,
+            )
+        ],
         LMHead(4),
     ).assemble()
     cache = CacheStorage(entries, torch.device("cpu"), torch.device("cpu"))
