@@ -15,11 +15,13 @@ DataLoaders, and declarative assembly are implemented. Model composition
 includes embeddings, Linear, SwiGLU, RMSNorm, expanded Sequential/Repeat
 definitions, leaf residuals, and head tying. Assembly returns a flat ModuleList
 runtime and cache entries. External KV storage, snapshots, IDs, and optional
-cache forwarding are implemented. The latest verification passed 260 tests.
+cache forwarding are implemented. The latest verification passed 323 tests.
 
 GQA, injected RoPE, causal/window masks, and cached execution are implemented.
-Still missing: a configured corpus, editable model architecture,
-training, checkpoint orchestration,
+The editable four-layer architecture, next-token loss, AdamW builder, and
+warmup/cosine scheduler are implemented. Next: mixed precision and the training
+step. Build the infrastructure before selecting a corpus or starting training.
+Still missing: a configured corpus, training loop, checkpoint orchestration,
 evaluation, generation, and SFT. The following lifecycle sections describe
 targets unless explicitly identified as implemented.
 
@@ -44,7 +46,8 @@ models/001-spoony/
 ├── configs/
 │   ├── data/
 │   ├── tokenizers/
-│   └── model/           # Upcoming architecture declaration
+│   ├── model/           # Implemented build_model(tokenizer)
+│   └── training/        # Optimizer and scheduler settings
 ├── data/
 │   ├── raw/
 │   ├── processed/
@@ -83,8 +86,13 @@ configs/
 ├── data/
 │   ├── datasets.py    # Selected sources and manifests
 │   └── dataloader.py  # Chunking and batch settings
-└── tokenizers/
-    └── preparation.py # Tokenizer settings and output directory
+├── tokenizers/
+│   └── preparation.py # Tokenizer settings and output directory
+├── model/
+│   └── model.py       # Architecture factory receiving a trained tokenizer
+└── training/
+    ├── optimizer.py   # AdamW settings
+    └── scheduler.py   # Warmup/cosine settings
 ```
 
 `dataclasses.replace` can create variations without a custom merge language.
@@ -191,30 +199,28 @@ src/model/
 ├── position.py         # PositionRotation protocol and RoPE function
 ├── stability.py        # Implemented RMSNorm
 ├── attention.py        # GQA, RoPE injection, masks, SDPA, cache writes/reads
-├── cache_storage.py    # Implemented KV storage and snapshots
-└── initialization.py
+└── cache_storage.py    # Implemented KV storage and snapshots
 ```
 
-The planned architecture is a decoder-only Transformer:
+The configured architecture is a decoder-only Transformer:
 
 ```text
 Token embeddings
     ↓
-Repeated Transformer blocks
+Four Transformer blocks
+    ├── causal GQA with RoPE on Q/K + residual
     ├── RMSNorm
-    ├── causal GQA self-attention with RoPE on Q/K
-    ├── residual connection
-    ├── RMSNorm
-    ├── SwiGLU feed-forward network
-    └── residual connection
+    ├── SwiGLU + residual
+    └── RMSNorm
     ↓
-Final RMSNorm
-    ↓
-Vocabulary projection
+Vocabulary projection tied to token embeddings
 ```
 
-The upcoming `configs/model/architecture.py` will compose definitions with
-explicit widths and component settings. Model includes the tokenizer,
+`configs/model/model.py` exposes `build_model(tokenizer)` with width 256,
+8 query heads, 2 KV heads, head width 32, attention window 128, dropout zero,
+RoPE base 10000, SwiGLU hidden width 688, and RMSNorm epsilon 1e-6. At vocabulary
+4096, it has 3,819,520 unique parameters. Default PyTorch initialization is used.
+Model includes the supplied trained tokenizer,
 embedding, body blocks, and LM head. Definitions own build(); the assembler
 expands groups before validating adjacent dimensions and wraps leaf residuals.
 Repeat builds fresh parameters per occurrence; group residuals are not applied.
@@ -233,12 +239,11 @@ Target modules:
 
 ```text
 src/training/
-├── seed.py
 ├── state.py
-├── loss.py
-├── optimizer.py
-├── scheduler.py
-├── precision.py
+├── loss.py         # Implemented mean next-token cross-entropy
+├── optimizer.py    # Implemented configurable AdamW builder
+├── scheduler.py    # Implemented warmup/cosine LambdaLR
+├── precision.py    # Next: FP32/BF16/FP16 and scaling
 ├── distributed.py
 ├── checkpoint.py
 ├── logging.py
@@ -246,17 +251,29 @@ src/training/
 └── train.py
 ```
 
-Required capabilities:
+Implemented components:
 
-- AdamW.
-- Warmup and cosine learning-rate schedule.
+- `scripts/__init__.py` sets `torch.manual_seed(42)`; DataLoaders use their
+  configured generators. There is no separate seed module.
+- Loss reshapes `[B, T, V]` logits and already shifted `[B, T]` targets.
+- Validated AdamW settings: positive finite LR/epsilon, nonnegative finite
+  decay, and two finite betas in `[0, 1)`. One group applies decay to all weights.
+- Validated scheduler settings: positive total updates, warmup in
+  `[0, total_steps)`, and finite minimum LR ratio in `[0, 1]`.
+- Scheduler construction sets the first LR; warmup rises linearly, cosine
+  reaches the floor on the final planned update, and further steps stay there.
+  Without warmup, the first update uses the base LR. Resume tests rebuild with
+  identical settings and load both optimizer/scheduler state dictionaries.
+
+Still required:
+
 - Gradient clipping and gradient accumulation.
 - Configurable FP16 or BF16 mixed precision.
 - Gradient scaler when FP16 is selected.
 - TensorBoard metrics.
 - Periodic validation loss, perplexity, and fixed-prompt generation.
 - Checkpoint creation and exact resume.
-- Deterministic seeds for Python, PyTorch CPU, CUDA, and DataLoader workers.
+- RNG state capture/restoration for reproducible checkpoint continuation.
 - One-GPU local mode and `torchrun` distributed mode.
 
 A checkpoint contains model, optimizer, scheduler, scaler, step, consumed
@@ -337,7 +354,8 @@ scripts/
 
 Each script imports its configuration explicitly from the relevant folder
 under `configs/`. Dataset definitions live in `configs/data/` and tokenizer
-preparation settings live in `configs/tokenizers/`.
+preparation settings live in `configs/tokenizers/`. Importing `scripts` applies
+the PyTorch seed. Only `prepare_data.py` currently exists as a runnable script.
 
 ## Tests
 
@@ -441,13 +459,14 @@ Spoony and then intentionally promoted to `template/decoder-transformer`.
    KV storage/snapshots, per-layer IDs, and external cache forwarding.
 6. Completed: injected RoPE, causal/windowed GQA, SDPA, and cache writes/reads.
 7. Completed: attention reference/gradient, causal isolation, window, cache,
-   and real-model tests. Next: declare the editable Transformer architecture
-   and configure a corpus before real runs.
-8. Implement the pretraining loop.
-9. Run a one-batch overfit test.
-10. Run a TinyStories smoke run.
-11. Add resume, validation, generation, and benchmark reporting.
-12. Create the first release candidate.
-13. Implement the SFT schema, chat template, masking, and SFT loop.
-14. Run a small SFT experiment.
-15. Promote stable reusable components to the decoder template.
+   real-model tests, and the configured four-layer architecture.
+8. Completed: script-level PyTorch seed, loss, validated AdamW settings, and
+   warmup/cosine scheduling with boundary and state-restoration tests.
+9. Next: mixed precision, then the training step with accumulation and clipping.
+10. Build the pretraining loop, checkpoint/resume, validation, and reporting.
+11. Configure a corpus and run a one-batch overfit test.
+12. Run a small corpus smoke run; TinyStories remains a candidate.
+13. Add generation and benchmark reporting, then create a release candidate.
+14. Implement the SFT schema, chat template, masking, and SFT loop.
+15. Run a small SFT experiment.
+16. Promote stable reusable components to the decoder template.

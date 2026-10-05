@@ -67,8 +67,9 @@ credentials and environment integration when needed.
 The model definition explicitly describes architecture and composition using
 typed block definitions. Each block owns build(), while the assembler validates
 connections and applies residual wrappers. Dataset definitions belong in
-`configs/data/`, tokenizer preparation settings in `configs/tokenizers/`, and
-the upcoming editable architecture in `configs/model/`.
+`configs/data/`, tokenizer preparation settings in `configs/tokenizers/`,
+editable architecture in `configs/model/`, and optimizer/scheduler settings in
+`configs/training/`.
 
 Templates may lag behind a model's implementation until reusable changes are
 intentionally promoted. Their scaffold is not a live dependency of existing

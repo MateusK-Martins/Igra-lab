@@ -1,8 +1,8 @@
 # Declarative model assembly
 
 Model settings are Python dataclass definitions. Editable architecture settings
-will live in `configs/model/architecture.py`; no final architecture is configured
-yet. Importing settings must not download data or train a tokenizer.
+live in `configs/model/model.py`, exposing `build_model(tokenizer)`. Importing
+settings does not build the model, download data, or train a tokenizer.
 
 ## Current API
 
@@ -33,7 +33,12 @@ logits = model(token_ids)
 ```
 
 This composition example exercises normalization and feed-forward blocks.
-GQA is implemented, but the final Transformer architecture is not configured.
+The configured decoder uses four repetitions of residual GQA, RMSNorm,
+residual SwiGLU, and RMSNorm, all at width 256. Its attention has eight query
+heads, two KV heads, head width 32, window 128, dropout zero, and RoPE base 10000;
+SwiGLU hidden width is 688. The LM head is tied to the embedding. Calling
+`build_model(tokenizer)` returns the assembled model and four fresh cache entries
+with IDs at expanded indexes 0, 4, 8, and 12.
 The former module-level `assemble(definition)` function has been replaced by
 `Model.assemble()`.
 
@@ -152,9 +157,14 @@ from src.model.position import rope
 
 rotation = partial(rope, base=10000.0)
 attention = GQAAttention(
-    input_features=256, output_features=256,
-    num_query_heads=8, num_kv_heads=2, head_features=32,
-    window_size=128, dropout=0.0, position_rotation=rotation,
+    input_features=256,
+    output_features=256,
+    num_query_heads=8,
+    num_kv_heads=2,
+    head_features=32,
+    window_size=128,
+    dropout=0.0,
+    position_rotation=rotation,
     residual=True,
 )
 ```
@@ -182,18 +192,22 @@ No automatic chunking or history preservation is implemented.
 
 ## Verification and remaining work
 
-The full suite passed 260 tests on 2026-10-04, including CUDA checks on the local
+The full suite passed 323 tests on 2026-10-04, including CUDA checks on the local
 machine. Reference tests independently calculate GQA scores and gradients.
 Coverage also includes RoPE scalar rotations, norms, relative-position behavior,
 chunk offsets/dtypes/gradients, future-token isolation, exact window boundaries,
 evaluation dropout, snapshot continuation, and real repeated-model cached logits.
 CUDA attention is checked with CPU storage and CUDA reads.
+Configured-model tests also cover a saved/loaded tokenizer, loss gradients,
+independent parameters/cache entries, cached logits across the 128-token window
+boundary, and state-dictionary restoration with tied weights.
 
 CacheStorage.write() requires matching K/V dtypes before modifying an entry.
 Regression coverage checks rejection without mutation and subsequent valid
 write/save/load. Cached tests run under no_grad; bounded training/backpropagation
 through mutable cache buffers is not covered. Training normally uses cache=None.
 
-Next work is the editable Transformer architecture, corpus configuration, and
-training integration. Input-rank/context-limit validation, migration of old nested
-state dictionaries, and optimization of explicit masks remain future work.
+Next work is mixed precision and training integration, followed by corpus
+configuration when infrastructure is ready. Input-rank/context-limit validation,
+migration of old nested state dictionaries, and optimization of explicit masks
+remain future work.

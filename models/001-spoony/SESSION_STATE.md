@@ -1,14 +1,16 @@
 # Pair-programming continuation — 2026-10-04
 
 Branch: model/001-spoony. This checkpoint includes RMSNorm, model assembly
-refactoring, external cache storage, and cache forwarding. Read current code
+refactoring, external cache storage, cache forwarding, configured architecture,
+and initial training components. Read current code
 before guiding edits; preserve subsequent user changes.
 
 ## Current implementation
 
 The data pipeline, tokenizer, disk-backed windows, DataLoaders, embeddings,
-SwiGLU, RMSNorm, leaf residuals, and head tying are implemented. No real corpus,
-final architecture, or training loop is configured. Attention is implemented.
+SwiGLU, RMSNorm, leaf residuals, head tying, and attention are implemented. The
+small decoder architecture is configured. No real corpus or training loop is
+configured.
 
 Model definitions inherit protocols with default cache() and unpack() methods.
 Sequential/Repeat unpack recursively into leaf definitions; they no longer build
@@ -72,14 +74,48 @@ CacheStorage.write() rejects mismatched K/V dtypes before mutation. Cached tests
 use no_grad; bounded cached backpropagation is not tested. Training uses no cache.
 Flattening changed state-dictionary paths; old nested migration remains pending.
 
-Next: declare configs/model/architecture.py with the trained tokenizer supplied
-explicitly, then select a corpus and proceed toward training. No final numeric
-architecture choices have been agreed yet.
+## Configured model and training infrastructure
+
+configs/model/model.py exposes build_model(tokenizer), returning (model, entries).
+It receives a trained tokenizer; loading/preparation belongs to the calling
+script. Architecture: width 256, four layers of residual GQA -> RMSNorm ->
+residual SwiGLU -> RMSNorm. GQA uses 8 query heads, 2 KV heads, head width 32,
+window 128, dropout 0, partial(rope, base=10000.0). SwiGLU hidden width 688;
+RMSNorm epsilon 1e-6; head tied to embedding. Four cache IDs have expanded indexes
+0, 4, 8, 12. Vocabulary 4096 gives 3,819,520 unique parameters.
+
+The user chose default PyTorch initialization and torch.manual_seed(42) directly
+in scripts/__init__.py. Do not add an initializer or seed abstraction. Importing
+scripts sets the PyTorch seed; DataLoaders have separate configured generators.
+
+src/training/loss.py implements mean next-token cross-entropy without another
+target shift. optimizer.py constructs AdamW over model.parameters() using
+validated OptimizerConfig. All parameters receive the declared weight decay;
+tied weights are deduplicated by PyTorch. scheduler.py constructs LambdaLR from
+validated SchedulerConfig, with positive first-update warmup LR, cosine decay
+to the floor on the final planned update, and a constant floor afterwards.
+Without warmup the first update uses base LR, even for total_steps=1.
+Editable configs/training values are provisional: LR 3e-4, betas (0.9, 0.95),
+epsilon 1e-8, decay 0.01; warmup 100, total 1000, minimum LR ratio 0.1.
+
+Scheduler construction sets the initial LR. Step it after successful optimizer
+updates only. Resume rebuilds both objects with the same settings, then loads
+both state dictionaries; LambdaLR does not save the closure's configuration.
+
+Next agreed step: src/training/precision.py for FP32/BF16/FP16 execution, then
+the training step with accumulation and clipping. FP16 requires GradScaler;
+if it skips an optimizer update, the scheduler must not advance. The user wants
+infrastructure completed before selecting a corpus or starting training.
 
 ## Verification
 
-260 tests passed on 2026-10-04, including CUDA tests. Full Ruff checks passed.
+323 tests passed on 2026-10-04, including CUDA tests. Ruff lint and formatting
+checks passed for src, configs, scripts, and tests.
 New tests cover explicit GQA output/gradient reference, causal/window isolation,
 RoPE scalar reference/norms/offsets/dtypes/gradients, dropout, cached snapshots,
 bounded write-first semantics, real repeated-model logits, and CUDA attention
 with CPU storage. Existing identity/forwarding/assembly tests now supply RoPE.
+Configured architecture adds five integration tests. Optimizer settings add
+32 validation cases; scheduler adds 26 tests for rates, boundaries, parameter
+groups, and restoration of optimizer/scheduler state with matching updates.
+Mixed precision and a full training/checkpoint loop are not yet tested or built.
