@@ -130,16 +130,26 @@ a partial epoch without changing training RNG. Saving occurs after successful
 updates and their validation/logging; epoch boundaries are normalized first.
 See CHECKPOINTS.md for the API and constraints.
 
-Next agreed step: the runnable training script, including a resolved settings
-manifest with tokenizer/dataset hashes and Git revision, and writer cleanup.
+The manifest builder/saver in src/training/manifest.py is implemented. It checks
+split tokenizer hashes and token/document storage, hashes prepared artifacts and
+Python source (including uncommitted edits), and records Git/environment details.
+Pass the complete manifest as checkpoint settings. save_manifest preserves an
+identical existing record and rejects a different run. JSON normalization is
+shared with checkpoints through src/config/snapshot.py. See CHECKPOINTS.md.
+
+Next agreed step: finish the user's scripts/train.py, connect the manifest,
+checkpoint loading, writer cleanup, and train_loop. RunConfig and the first
+half of that script are user work in progress; the manifest commit leaves them
+uncommitted. Exclude resume_from from checkpoint settings.
 Infrastructure comes before corpus selection or training runs. Resume requires
 deterministic data/collation and num_workers=0. A persistent-overflow stopping
 policy remains unimplemented; the loop stops by successful updates.
 
 ## Verification
 
-424 tests passed on 2026-10-10, including CUDA tests. Ruff lint and formatting
-checks passed for src, configs, scripts, and tests.
+440 tests passed on 2026-10-10, including CUDA tests. Ruff lint and formatting
+checks passed for the manifest-related changes. The user's partial training
+script has not yet been completed or verified as a runnable entry point.
 New tests cover explicit GQA output/gradient reference, causal/window isolation,
 RoPE scalar reference/norms/offsets/dtypes/gradients, dropout, cached snapshots,
 bounded write-first semantics, real repeated-model logits, and CUDA attention
@@ -157,3 +167,7 @@ Another 33 cases cover logging and checkpoint/resume: scalar values/steps,
 TensorBoard purging after resume, exact shuffled/dropout continuation within and
 across epochs on CPU and CUDA, scaler restoration, periodic/final saves, atomic
 write failures, and rejection of incompatible settings/loaders/state.
+
+16 manifest cases cover stable serialization, uncommitted code changes, same-size
+data changes, tokenizer mismatch, invalid/missing artifacts, safe manifest reuse,
+and checkpoint rejection when data identity changes.

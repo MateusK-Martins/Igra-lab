@@ -15,7 +15,7 @@ DataLoaders, and declarative assembly are implemented. Model composition
 includes embeddings, Linear, SwiGLU, RMSNorm, expanded Sequential/Repeat
 definitions, leaf residuals, and head tying. Assembly returns a flat ModuleList
 runtime and cache entries. External KV storage, snapshots, IDs, and optional
-cache forwarding are implemented. The latest verification passed 424 tests.
+cache forwarding are implemented. The latest verification passed 440 tests.
 
 GQA, injected RoPE, causal/window masks, and cached execution are implemented.
 The editable four-layer architecture, next-token loss, AdamW builder, and
@@ -102,9 +102,9 @@ configs/
 
 `dataclasses.replace` can create variations without a custom merge language.
 Constructors validate settings. Checkpoints normalize dataclasses and Paths to
-JSON-compatible settings. The training script still needs to assemble a complete
-manifest, including a serializable model recipe and dataset/tokenizer identities,
-and save it in the run directory.
+JSON-compatible settings. The manifest builder records code/model source hashes,
+artifact hashes, resolved settings and the execution environment. The training script still needs to call
+it and save the manifest in the run directory.
 
 Local and cloud training will differ through editable settings while sharing
 the same training implementation.
@@ -283,7 +283,7 @@ Implemented components:
 Still required:
 
 - Runnable one-GPU training script connecting the implemented components.
-- Run manifest with resolved settings, tokenizer/dataset hashes, and Git revision.
+- Connect the implemented manifest builder/saver to the training script.
 - Fixed-prompt generation during training.
 - `torchrun` distributed mode.
 
@@ -293,8 +293,8 @@ data and num_workers=0. See [CHECKPOINTS.md](CHECKPOINTS.md).
 
 A checkpoint contains model, optimizer, scheduler, scaler, counters, epoch
 cursor, random-number-generator states, loader signatures, and caller-supplied
-settings. The training script still needs to assemble the complete settings
-manifest, including tokenizer/dataset hashes and Git commit.
+settings. The manifest builder supplies artifact/code hashes, Git revision,
+resolved settings and environment details; script integration remains pending.
 
 ## Evaluation and generation
 

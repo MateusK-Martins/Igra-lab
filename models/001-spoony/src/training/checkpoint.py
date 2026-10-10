@@ -1,9 +1,8 @@
 """Checkpoints between optimizer updates, for deterministic map-style data."""
 
-import json
 import os
 import tempfile
-from dataclasses import asdict, is_dataclass
+from dataclasses import asdict
 from pathlib import Path
 
 import torch
@@ -12,20 +11,8 @@ from torch.optim import Optimizer
 from torch.optim.lr_scheduler import LambdaLR
 from torch.utils.data import BatchSampler, DataLoader, RandomSampler, SequentialSampler
 
+from src.config.snapshot import normalize_settings
 from src.training.state import TrainingState
-
-
-def _json_default(value):
-    if is_dataclass(value) and not isinstance(value, type):
-        return asdict(value)
-    if isinstance(value, Path):
-        return str(value)
-    raise TypeError(f"Unsupported checkpoint setting: {type(value).__name__}")
-
-
-def _settings(settings: dict[str, object]) -> dict:
-    # Plain JSON-compatible values also remain compatible with weights_only=True.
-    return json.loads(json.dumps(settings, default=_json_default, allow_nan=False))
 
 
 def loader_signature(loader: DataLoader) -> dict:
@@ -111,7 +98,7 @@ def save_checkpoint(
     _validate_state(state, train_loader)
     payload = {
         "format_version": 1,
-        "settings": _settings(settings),
+        "settings": normalize_settings(settings),
         "model": model.state_dict(),
         "model_training": model.training,
         "optimizer": optimizer.state_dict(),
@@ -163,7 +150,7 @@ def load_checkpoint(
         or payload["format_version"] != 1
     ):
         raise ValueError("Unsupported checkpoint format_version")
-    if payload["settings"] != _settings(settings):
+    if payload["settings"] != normalize_settings(settings):
         raise ValueError("Checkpoint settings do not match this run")
     for name, loader in (
         ("train_loader", train_loader),

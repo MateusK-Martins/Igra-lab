@@ -90,6 +90,52 @@ prefetch, and distributed resume are outside this implementation. Exact tests
 compare uninterrupted and resumed runs in the same environment; they do not
 promise identical results across hardware or PyTorch versions.
 
-The runnable training script and complete run-manifest construction are the
-next integration step. Automatic interruption saves, checkpoint retention, and
+`src/training/manifest.py` now provides `build_manifest()` and `save_manifest()`.
+The builder checks both splits against the tokenizer's SHA-256, validates token
+storage/document offsets, hashes all three files per split, and records the Git
+commit plus Python source hashes under `src/`, `configs/model/`, and `scripts/`.
+This captures uncommitted code edits too. Python, PyTorch, CUDA and GPU identities
+are recorded. Hashing streams files rather than loading token stores into RAM.
+
+In `scripts/train.py`, after constructing the components, build the manifest:
+
+```python
+from src.config.paths import project_root
+from src.training.manifest import build_manifest, save_manifest
+
+manifest = build_manifest(
+    project_directory=project_root(),
+    data_directory=data_directory,
+    settings={
+        "optimizer": optimizer_config,
+        "scheduler": scheduler_config,
+        "precision": precision_config,
+        "training": training_config,
+        "chunking": chunking_config,
+        "train_loader": train_loader_config,
+        "validation_loader": validation_loader_config,
+        "device": run_config.device,
+    },
+)
+```
+
+Use this complete dictionary as `settings` in `load_checkpoint()` and as
+`checkpoint_settings` in `train_loop()`. After successful checkpoint loading
+(or for a new run), call:
+
+```python
+save_manifest(manifest, logging_config.directory.parent / "manifest.json")
+```
+
+An identical existing manifest is kept; a different one raises without
+replacing it. Select fresh output directories for a different run. Do not put
+`run_config.resume_from` into settings: choosing a checkpoint is an invocation
+action, not a change to the training recipe. The manifest contains no timestamps.
+Exact comparison also requires the same Git commit and recorded environment;
+even a documentation-only commit changes the manifest. The code and prepared
+artifacts must stay unchanged while training. Source hashes record the model
+recipe as code; they do not serialize the block definition objects.
+
+The runnable training script still needs to connect these helpers, loading,
+writer cleanup, and the loop. Automatic interruption saves, checkpoint retention, and
 persistent-overflow stopping are not implemented.

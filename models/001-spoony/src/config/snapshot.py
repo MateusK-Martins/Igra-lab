@@ -15,3 +15,16 @@ def save_config_snapshot(config: object, path: Path) -> None:
         json.dumps(asdict(config), indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
+
+
+def _json_default(value):
+    if is_dataclass(value) and not isinstance(value, type):
+        return asdict(value)
+    if isinstance(value, Path):
+        return str(value)
+    raise TypeError(f"Unsupported setting: {type(value).__name__}")
+
+
+def normalize_settings(settings: dict[str, object]) -> dict:
+    """Convert dataclasses/Paths to finite, JSON-compatible checkpoint values."""
+    return json.loads(json.dumps(settings, default=_json_default, allow_nan=False))

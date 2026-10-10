@@ -54,7 +54,7 @@ before reading retained history. Bounded chunks can discard context for earlier
 queries; see MODEL_ASSEMBLY.md for that behavior.
 The runnable training script, generation,
 and SFT remain pending. Infrastructure is being built before choosing a corpus or
-starting training. The latest suite passed 424 tests.
+starting training. The latest suite passed 440 tests.
 
 See [ROADMAP.md](ROADMAP.md) and [MODEL_ASSEMBLY.md](MODEL_ASSEMBLY.md) for the
 remaining work and composition contracts.

@@ -192,7 +192,7 @@ No automatic chunking or history preservation is implemented.
 
 ## Verification and remaining work
 
-The full suite passed 424 tests on 2026-10-10, including CUDA checks on the local
+The full suite passed 440 tests on 2026-10-10, including CUDA checks on the local
 machine. Reference tests independently calculate GQA scores and gradients.
 Coverage also includes RoPE scalar rotations, norms, relative-position behavior,
 chunk offsets/dtypes/gradients, future-token isolation, exact window boundaries,
