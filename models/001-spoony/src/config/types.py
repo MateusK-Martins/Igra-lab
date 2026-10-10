@@ -145,6 +145,7 @@ class PrecisionConfig:
 class TrainingConfig:
     accumulation_steps: int
     max_grad_norm: float
+    validation_interval: int
 
     def __post_init__(self) -> None:
         if type(self.accumulation_steps) is not int or self.accumulation_steps <= 0:
@@ -156,3 +157,6 @@ class TrainingConfig:
             or self.max_grad_norm <= 0
         ):
             raise ConfigError("max_grad_norm must be finite and positive")
+
+        if type(self.validation_interval) is not int or self.validation_interval <= 0:
+            raise ConfigError("validation_interval must be a positive integer")

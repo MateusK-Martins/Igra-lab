@@ -52,9 +52,9 @@ causal/window masks, SDPA, and the output projection. RoPE is a configurable
 function bound with `functools.partial`. Cached calls write new rotated K/V
 before reading retained history. Bounded chunks can discard context for earlier
 queries; see MODEL_ASSEMBLY.md for that behavior.
-Periodic validation/logging integration, checkpoint orchestration, generation,
+Logging integration, checkpoint orchestration, generation,
 and SFT remain pending. Infrastructure is being built before choosing a corpus or
-starting training. The latest suite passed 379 tests.
+starting training. The latest suite passed 391 tests.
 
 See [ROADMAP.md](ROADMAP.md) and [MODEL_ASSEMBLY.md](MODEL_ASSEMBLY.md) for the
 remaining work and composition contracts.
@@ -142,8 +142,9 @@ a GradScaler enabled only for CUDA FP16. BF16 is the current editable mode.
 steps the scheduler only after an actual optimizer update. FP16 overflow tests
 verify skipped updates and subsequent recovery.
 
-`TrainingConfig` declares accumulation_steps and max_grad_norm (currently 1 and
-1.0). `train_loop()` groups DataLoader batches, processes partial groups, restarts
+`TrainingConfig` declares accumulation_steps, max_grad_norm, and
+validation_interval (currently 1, 1.0, and 100). `train_loop()` groups DataLoader
+batches, processes partial groups, restarts
 epochs, and returns TrainingState. Counters track successful updates, consumed
 batches/tokens, completed epochs, and the last training loss. The model must be
 on the target device before constructing the optimizer. Pass the scheduler
@@ -151,5 +152,8 @@ configuration's total_steps as the loop limit.
 
 `validate()` uses eval mode and no_grad, computes token-weighted mean loss and
 perplexity, and restores the previous model mode, including on failure. It does
-not use a cache or optimizer. It is not yet called by the loop. Next: configure
-its update interval and connect validation and logging, then checkpoint/resume.
+not use a cache or optimizer. The loop receives a separate validation_loader
+and validates after each configured interval of successful updates and after
+the final update. Counters advance before the interval check, and skipped
+updates do not repeat validation. TrainingState stores the latest validation
+loss and perplexity. Next: logging, then checkpoint/resume.

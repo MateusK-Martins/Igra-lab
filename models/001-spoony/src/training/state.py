@@ -8,3 +8,5 @@ class TrainingState:
     tokens: int = 0
     completed_epochs: int = 0
     last_loss: float | None = None
+    last_validation_loss: float | None = None
+    last_validation_perplexity: float | None = None

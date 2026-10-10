@@ -192,7 +192,7 @@ No automatic chunking or history preservation is implemented.
 
 ## Verification and remaining work
 
-The full suite passed 379 tests on 2026-10-10, including CUDA checks on the local
+The full suite passed 391 tests on 2026-10-10, including CUDA checks on the local
 machine. Reference tests independently calculate GQA scores and gradients.
 Coverage also includes RoPE scalar rotations, norms, relative-position behavior,
 chunk offsets/dtypes/gradients, future-token isolation, exact window boundaries,
@@ -207,7 +207,7 @@ Regression coverage checks rejection without mutation and subsequent valid
 write/save/load. Cached tests run under no_grad; bounded training/backpropagation
 through mutable cache buffers is not covered. Training normally uses cache=None.
 
-Next work is periodic validation/logging and checkpoint integration, followed
+Next work is logging and checkpoint integration, followed
 by corpus configuration when infrastructure is ready. Input-rank/context-limit validation,
 migration of old nested state dictionaries, and optimization of explicit masks
 remain future work.

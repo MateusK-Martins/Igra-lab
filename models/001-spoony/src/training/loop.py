@@ -10,11 +10,13 @@ from torch.utils.data import DataLoader
 from src.config.types import TrainingConfig
 from src.training.state import TrainingState
 from src.training.step import train_step
+from src.training.validation import validate
 
 
 def train_loop(
     model: nn.Module,
     train_loader: DataLoader,
+    validation_loader: DataLoader,
     optimizer: Optimizer,
     scheduler: LambdaLR,
     context: AbstractContextManager,
@@ -56,6 +58,20 @@ def train_loop(
             state.batches += len(batches)
             state.tokens += sum(targets.numel() for _, targets in batches)
             state.updates += int(did_update)
+
+            if did_update and (
+                state.updates % config.validation_interval == 0
+                or state.updates == total_steps
+            ):
+                validation_loss, perplexity = validate(
+                    model=model,
+                    loader=validation_loader,
+                    context=context,
+                    device=device,
+                )
+
+                state.last_validation_loss = validation_loss
+                state.last_validation_perplexity = perplexity
 
             if len(batches) < config.accumulation_steps:
                 break

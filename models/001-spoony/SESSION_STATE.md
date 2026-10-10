@@ -105,8 +105,9 @@ both state dictionaries; LambdaLR does not save the closure's configuration.
 PrecisionConfig selects fp32/bf16/fp16; configs/training/precision.py selects
 bf16. build_precision returns a reusable context and scaler (enabled only for
 CUDA FP16). CPU FP16 is rejected; CUDA availability/BF16 support are checked.
-TrainingConfig validates accumulation_steps and max_grad_norm; current values
-are 1 and 1.0. train_step accumulates token-weighted loss gradients, unscales,
+TrainingConfig validates accumulation_steps, max_grad_norm, and
+validation_interval; current values are 1, 1.0, and 100. train_step accumulates
+token-weighted loss gradients, unscales,
 clips, updates the scaler/optimizer, and advances the scheduler only if an
 update occurred. With the scaler disabled, nonfinite gradients raise before
 updating weights.
@@ -117,14 +118,19 @@ tokens, completed_epochs, last_loss. Consumed data counts include skipped update
 validate computes token-weighted mean loss/perplexity with no_grad and eval,
 restoring the prior mode in finally. Overflowing perplexity returns infinity.
 
-Next agreed step: connect periodic validation and logging to the loop, then
+The loop now takes a separate validation_loader and validates at each configured
+successful-update interval and at the final update, once. Counters advance
+before checking the interval; skips do not repeat evaluation. TrainingState
+stores last_validation_loss and last_validation_perplexity.
+
+Next agreed step: logging in the loop, then
 checkpoint/resume and the runnable training script. Infrastructure comes before
 corpus selection or training runs. Exact resume and persistent-overflow stopping
 policy are not implemented; the loop currently stops by successful updates.
 
 ## Verification
 
-379 tests passed on 2026-10-10, including CUDA tests. Ruff lint and formatting
+391 tests passed on 2026-10-10, including CUDA tests. Ruff lint and formatting
 checks passed for src, configs, scripts, and tests.
 New tests cover explicit GQA output/gradient reference, causal/window isolation,
 RoPE scalar reference/norms/offsets/dtypes/gradients, dropout, cached snapshots,
@@ -137,5 +143,6 @@ Another 44 tests cover precision, accumulation/clipping, FP16 overflow/recovery,
 configured-model CUDA updates, loop groups/epochs/counters and skipped updates.
 12 validation tests cover token weighting, dropout/no_grad, parameter/gradient
 preservation, mode restoration on success/failure, perplexity overflow, and
-CPU/CUDA precision modes. Periodic validation and checkpoint integration remain
-pending.
+CPU/CUDA precision modes. Another 12 cases cover periodic/final validation,
+skipped updates at interval boundaries, and invalid validation intervals.
+Logging and checkpoint integration remain pending.

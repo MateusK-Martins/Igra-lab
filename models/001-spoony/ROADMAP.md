@@ -15,14 +15,14 @@ DataLoaders, and declarative assembly are implemented. Model composition
 includes embeddings, Linear, SwiGLU, RMSNorm, expanded Sequential/Repeat
 definitions, leaf residuals, and head tying. Assembly returns a flat ModuleList
 runtime and cache entries. External KV storage, snapshots, IDs, and optional
-cache forwarding are implemented. The latest verification passed 379 tests.
+cache forwarding are implemented. The latest verification passed 391 tests.
 
 GQA, injected RoPE, causal/window masks, and cached execution are implemented.
 The editable four-layer architecture, next-token loss, AdamW builder, and
 warmup/cosine scheduler, mixed precision, accumulation/clipping, training loop,
-and standalone validation are implemented. Next: periodic validation/logging.
+and periodic validation are implemented. Next: logging integration.
 Build the infrastructure before selecting a corpus or starting training.
-Still missing: a configured corpus, periodic validation/logging, checkpoint
+Still missing: a configured corpus, logging, checkpoint
 orchestration, generation, and SFT. The following lifecycle sections describe
 targets unless explicitly identified as implemented.
 
@@ -273,13 +273,14 @@ Implemented components:
 - Token-weighted accumulation, clipping after unscale, and successful-update-only
   scheduler advancement, with overflow/recovery tests.
 - Loop grouping, partial groups, epoch restart, and training counters.
-- Standalone validation loss/perplexity, preserving model mode and gradients.
+- Validation loss/perplexity, preserving model mode and gradients, integrated
+  at configured successful-update intervals and after the final update.
 
 Still required:
 
-- Periodic validation and logging integration in the loop.
+- Logging integration in the loop.
 - TensorBoard metrics.
-- Periodic validation loss, perplexity, and fixed-prompt generation.
+- Fixed-prompt generation during training.
 - Checkpoint creation and exact resume.
 - RNG state capture/restoration for reproducible checkpoint continuation.
 - One-GPU local mode and `torchrun` distributed mode.
@@ -471,8 +472,8 @@ Spoony and then intentionally promoted to `template/decoder-transformer`.
 8. Completed: script-level PyTorch seed, loss, validated AdamW settings, and
    warmup/cosine scheduling with boundary and state-restoration tests.
 9. Completed: mixed precision, accumulation/clipping, loop counters and traversal,
-   and standalone validation loss/perplexity.
-10. Next: periodic validation/logging, then checkpoint/resume and the training script.
+   and periodic validation loss/perplexity.
+10. Next: logging, then checkpoint/resume and the training script.
 11. Configure a corpus and run a one-batch overfit test.
 12. Run a small corpus smoke run; TinyStories remains a candidate.
 13. Add generation and benchmark reporting, then create a release candidate.
