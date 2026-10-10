@@ -46,6 +46,18 @@ def build_manifest(
         for path in (store.tokens_path, store.documents_path, store.metadata_path):
             artifacts[path.relative_to(data_directory).as_posix()] = file_sha256(path)
 
+    return build_artifact_manifest(
+        project_directory=project_directory,
+        settings=resolved_settings,
+        artifacts=artifacts,
+    )
+
+
+def build_artifact_manifest(
+    *, project_directory: Path, settings: dict[str, object], artifacts: dict[str, str]
+) -> dict:
+    """Record explicit artifact hashes, settings, code and environment for a run."""
+    resolved_settings = normalize_settings(settings)
     commit = subprocess.run(
         ["git", "-C", str(project_directory), "rev-parse", "HEAD"],
         check=True,

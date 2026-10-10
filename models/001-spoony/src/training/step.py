@@ -6,7 +6,7 @@ from torch import Tensor, nn
 from torch.optim import Optimizer
 from torch.optim.lr_scheduler import LambdaLR
 
-from src.training.loss import next_token_loss
+from src.training.loss import next_token_loss, supervised_token_count
 
 
 def train_step(
@@ -19,7 +19,8 @@ def train_step(
     device: torch.device,
     max_grad_norm: float,
 ) -> tuple[float, bool]:
-    total_tokens = sum(targets.numel() for _, targets in batches)
+    token_counts = [supervised_token_count(targets) for _, targets in batches]
+    total_tokens = sum(token_counts)
 
     if total_tokens == 0:
         raise ValueError("Training step requires target tokens")
@@ -30,7 +31,9 @@ def train_step(
     optimizer.zero_grad(set_to_none=True)
     mean_loss = torch.zeros((), device=device)
 
-    for inputs, targets in batches:
+    for (inputs, targets), tokens in zip(batches, token_counts, strict=True):
+        if tokens == 0:
+            continue
         inputs = inputs.to(device)
         targets = targets.to(device)
 
@@ -38,7 +41,7 @@ def train_step(
             logits = model(inputs)
             loss = next_token_loss(logits, targets)
 
-        weighted_loss = loss * (targets.numel() / total_tokens)
+        weighted_loss = loss * (tokens / total_tokens)
         scaler.scale(weighted_loss).backward()
         mean_loss += weighted_loss.detach()
 

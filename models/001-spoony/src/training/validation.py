@@ -5,7 +5,7 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader
 
-from src.training.loss import next_token_loss
+from src.training.loss import next_token_loss, supervised_token_count
 
 
 @torch.no_grad()
@@ -23,6 +23,9 @@ def validate(
 
     try:
         for inputs, targets in loader:
+            tokens = supervised_token_count(targets)
+            if tokens == 0:
+                continue
             inputs = inputs.to(device)
             targets = targets.to(device)
 
@@ -30,7 +33,6 @@ def validate(
                 logits = model(inputs)
                 loss = next_token_loss(logits, targets)
 
-            tokens = targets.numel()
             total_loss += loss.double() * tokens
             total_tokens += tokens
     finally:

@@ -204,3 +204,16 @@ def training_iterator(loader: DataLoader, state: TrainingState):
         if cuda_rng:
             torch.cuda.set_rng_state_all(cuda_rng)
     return iterator
+
+
+def load_model_weights(path: Path, *, model: nn.Module, tokenizer_path: Path) -> None:
+    """Start a new stage from weights, without restoring optimizer/RNG/counters."""
+    from src.training.manifest import file_sha256
+
+    payload = torch.load(path, map_location="cpu", weights_only=True)
+    if not isinstance(payload, dict) or payload.get("format_version") != 1:
+        raise ValueError("Unsupported checkpoint format_version")
+    expected = payload.get("settings", {}).get("artifacts", {}).get("tokenizer.json")
+    if expected != file_sha256(tokenizer_path):
+        raise ValueError("Tokenizer does not match the initialization checkpoint")
+    model.load_state_dict(payload["model"])
