@@ -184,3 +184,16 @@ class CheckpointConfig:
             raise ConfigError("directory must be a Path")
         if type(self.interval) is not int or self.interval <= 0:
             raise ConfigError("interval must be a positive integer")
+
+
+@dataclass(frozen=True)
+class RunConfig:
+    device: Literal["cpu", "cuda"]
+    resume_from: Path | None = None
+
+    def __post_init__(self) -> None:
+        if self.device not in ("cpu", "cuda"):
+            raise ConfigError("device must be cpu or cuda")
+
+        if self.resume_from is not None and not isinstance(self.resume_from, Path):
+            raise ConfigError("resume_from must be a Path or None")

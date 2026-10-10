@@ -136,6 +136,8 @@ even a documentation-only commit changes the manifest. The code and prepared
 artifacts must stay unchanged while training. Source hashes record the model
 recipe as code; they do not serialize the block definition objects.
 
-The runnable training script still needs to connect these helpers, loading,
-writer cleanup, and the loop. Automatic interruption saves, checkpoint retention, and
+`scripts/train.py` connects these helpers, optional checkpoint loading, writer
+cleanup, and the loop. Set `configs/training/run.py` resume_from to a checkpoint
+Path and run `.venv/bin/python -m scripts.train` from the model directory.
+Automatic interruption saves, checkpoint retention, and
 persistent-overflow stopping are not implemented.

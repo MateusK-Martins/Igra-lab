@@ -137,19 +137,24 @@ Pass the complete manifest as checkpoint settings. save_manifest preserves an
 identical existing record and rejects a different run. JSON normalization is
 shared with checkpoints through src/config/snapshot.py. See CHECKPOINTS.md.
 
-Next agreed step: finish the user's scripts/train.py, connect the manifest,
-checkpoint loading, writer cleanup, and train_loop. RunConfig and the first
-half of that script are user work in progress; the manifest commit leaves them
-uncommitted. Exclude resume_from from checkpoint settings.
+scripts/train.py now connects the trained tokenizer, split loaders, model/device,
+optimizer, scheduler, precision, manifest, optional checkpoint loading and the
+training loop. configs/training/run.py selects device/resume_from through
+RunConfig. Manifest persistence follows successful resume compatibility checks;
+writer creation follows manifest persistence. The writer is closed in finally.
+resume_from is excluded from checkpoint settings.
+
+Next agreed step: controlled one-batch overfit verification, then real corpus
+configuration/preparation and a short smoke run. No real training was launched
+while implementing/testing the script.
 Infrastructure comes before corpus selection or training runs. Resume requires
 deterministic data/collation and num_workers=0. A persistent-overflow stopping
 policy remains unimplemented; the loop stops by successful updates.
 
 ## Verification
 
-440 tests passed on 2026-10-10, including CUDA tests. Ruff lint and formatting
-checks passed for the manifest-related changes. The user's partial training
-script has not yet been completed or verified as a runnable entry point.
+450 tests passed on 2026-10-10, including CUDA tests. Ruff lint and formatting
+checks passed for src, configs, scripts, and tests.
 New tests cover explicit GQA output/gradient reference, causal/window isolation,
 RoPE scalar reference/norms/offsets/dtypes/gradients, dropout, cached snapshots,
 bounded write-first semantics, real repeated-model logits, and CUDA attention
@@ -171,3 +176,9 @@ write failures, and rejection of incompatible settings/loaders/state.
 16 manifest cases cover stable serialization, uncommitted code changes, same-size
 data changes, tokenizer mismatch, invalid/missing artifacts, safe manifest reuse,
 and checkpoint rejection when data identity changes.
+
+10 script/config cases cover real prepared tokenizer/token-store loading,
+fresh training/logging/checkpoint output, exact interrupted/resumed continuation
+with shuffle/dropout, writer cleanup on errors, failed resume without output
+creation, and RunConfig validation. These use a tiny fixture model; convergence
+of the configured model remains untested.

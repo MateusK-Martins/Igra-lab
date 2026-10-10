@@ -15,16 +15,17 @@ DataLoaders, and declarative assembly are implemented. Model composition
 includes embeddings, Linear, SwiGLU, RMSNorm, expanded Sequential/Repeat
 definitions, leaf residuals, and head tying. Assembly returns a flat ModuleList
 runtime and cache entries. External KV storage, snapshots, IDs, and optional
-cache forwarding are implemented. The latest verification passed 440 tests.
+cache forwarding are implemented. The latest verification passed 450 tests.
 
 GQA, injected RoPE, causal/window masks, and cached execution are implemented.
 The editable four-layer architecture, next-token loss, AdamW builder, and
 warmup/cosine scheduler, mixed precision, accumulation/clipping, training loop,
 periodic validation, TensorBoard logging, and checkpoint/resume are implemented.
-Next: the runnable training script and run metadata.
+The local training script and run metadata are implemented.
+Next: controlled one-batch overfit verification, then a corpus smoke run.
 Build the infrastructure before selecting a corpus or starting training.
-Still missing: a configured corpus, training-script orchestration and run
-metadata, generation, SFT, and distributed training. The following lifecycle
+Still missing: a configured corpus, overfit/smoke experiments, generation, SFT,
+and distributed training. The following lifecycle
 sections describe targets unless explicitly identified as implemented.
 
 ## Project rules
@@ -103,8 +104,8 @@ configs/
 `dataclasses.replace` can create variations without a custom merge language.
 Constructors validate settings. Checkpoints normalize dataclasses and Paths to
 JSON-compatible settings. The manifest builder records code/model source hashes,
-artifact hashes, resolved settings and the execution environment. The training script still needs to call
-it and save the manifest in the run directory.
+artifact hashes, resolved settings and the execution environment. The training
+script builds it, checks checkpoint compatibility, and saves it in the run directory.
 
 Local and cloud training will differ through editable settings while sharing
 the same training implementation.
@@ -282,8 +283,7 @@ Implemented components:
 
 Still required:
 
-- Runnable one-GPU training script connecting the implemented components.
-- Connect the implemented manifest builder/saver to the training script.
+- Controlled one-batch overfit verification and a real corpus smoke run.
 - Fixed-prompt generation during training.
 - `torchrun` distributed mode.
 
@@ -294,7 +294,8 @@ data and num_workers=0. See [CHECKPOINTS.md](CHECKPOINTS.md).
 A checkpoint contains model, optimizer, scheduler, scaler, counters, epoch
 cursor, random-number-generator states, loader signatures, and caller-supplied
 settings. The manifest builder supplies artifact/code hashes, Git revision,
-resolved settings and environment details; script integration remains pending.
+resolved settings and environment details; scripts/train.py connects these
+components and closes the writer on success/failure.
 
 ## Evaluation and generation
 
@@ -371,7 +372,8 @@ scripts/
 Each script imports its configuration explicitly from the relevant folder
 under `configs/`. Dataset definitions live in `configs/data/` and tokenizer
 preparation settings live in `configs/tokenizers/`. Importing `scripts` applies
-the PyTorch seed. Only `prepare_data.py` currently exists as a runnable script.
+the PyTorch seed. `prepare_data.py` and `train.py` are runnable. Training expects existing prepared
+artifacts; it does not prepare or download data.
 
 ## Tests
 
@@ -480,9 +482,8 @@ Spoony and then intentionally promoted to `template/decoder-transformer`.
    warmup/cosine scheduling with boundary and state-restoration tests.
 9. Completed: mixed precision, accumulation/clipping, loop counters and traversal,
    and periodic validation loss/perplexity.
-10. Logging and checkpoint/resume are implemented. Next: the training script
-    and run manifest.
-11. Configure a corpus and run a one-batch overfit test.
+10. Completed: logging, checkpoint/resume, run manifests and the local training script.
+11. Next: a controlled one-batch overfit test, then configure/prepare a corpus.
 12. Run a small corpus smoke run; TinyStories remains a candidate.
 13. Add generation and benchmark reporting, then create a release candidate.
 14. Implement the SFT schema, chat template, masking, and SFT loop.

@@ -13,4 +13,5 @@ model assembly, windowed GQA with RoPE, RMSNorm, and external KV caching. A smal
 four-layer decoder is configured. Next-token loss, AdamW construction, and a
 warmup/cosine scheduler, mixed precision, accumulation/clipping, training loop,
 periodic validation, TensorBoard logging, and checkpoint/resume are implemented.
-The runnable training script is next; no real corpus or training run is configured yet.
+The training script connects preparation artifacts, run manifests, logging and
+checkpoint resume. No real corpus or training run is configured yet.

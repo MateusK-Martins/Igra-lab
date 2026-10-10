@@ -52,9 +52,9 @@ causal/window masks, SDPA, and the output projection. RoPE is a configurable
 function bound with `functools.partial`. Cached calls write new rotated K/V
 before reading retained history. Bounded chunks can discard context for earlier
 queries; see MODEL_ASSEMBLY.md for that behavior.
-The runnable training script, generation,
-and SFT remain pending. Infrastructure is being built before choosing a corpus or
-starting training. The latest suite passed 440 tests.
+The runnable training script connects the components, with tested fresh-run and
+resume paths. Generation and SFT remain pending. No real corpus training has
+been performed. The latest suite passed 450 tests.
 
 See [ROADMAP.md](ROADMAP.md) and [MODEL_ASSEMBLY.md](MODEL_ASSEMBLY.md) for the
 remaining work and composition contracts.
@@ -162,4 +162,43 @@ loss and perplexity. TensorBoard records training loss, the LR used for the upda
 consumed tokens, validation loss, and perplexity. Logging settings live in
 `configs/training/training.py`; checkpoint settings live in
 `configs/training/checkpoint.py`. See [CHECKPOINTS.md](CHECKPOINTS.md) for saving
-and resuming. The runnable training script is next.
+and resuming. `scripts/train.py` connects these components.
+
+
+## Local training workflow
+
+1. Define train and validation sources in `configs/data/datasets.py`, and select
+   the preparation directory/tokenizer settings in `configs/tokenizers/preparation.py`.
+   Run `.venv/bin/python -m scripts.prepare_data` once. It trains BPE on train
+   documents and writes tokenizer.json plus both processed splits. Existing
+   preparation artifacts are rejected instead of overwritten.
+2. Review `configs/model/model.py`, `configs/data/dataloader.py`, and
+   `configs/training/`. `run.py` selects CPU/CUDA and an optional checkpoint;
+   precision, optimizer, scheduler, accumulation, validation, logging, and
+   checkpoint settings live in their existing files. Use matching fresh logging
+   and checkpoint directories for a new experiment.
+3. Run `.venv/bin/python -m scripts.train` from the model directory. The script
+   loads the saved tokenizer and splits, builds precision/model/optimizer/scheduler,
+   and computes the manifest. The model is moved before optimizer construction.
+   Training uses no KV cache.
+4. The script loads a checkpoint if `run_config.resume_from` is set, using the
+   manifest to check compatibility. It then saves/compares `manifest.json` in
+   the logging directory's parent, creates the TensorBoard writer, and calls
+   `train_loop()` until `scheduler_config.total_steps` successful updates.
+   The writer is closed in `finally`, including after training errors.
+5. Inspect TensorBoard with
+   `.venv/bin/tensorboard --logdir results/pretraining/local/tensorboard`.
+   Checkpoints are under
+   `results/pretraining/local/checkpoints/` by default. Validation, logging, and
+   checkpoints follow their configured update intervals and the final update.
+6. To resume, set `resume_from` to a checkpoint Path and rerun the same command.
+   Keep the recipe, prepared artifacts, recorded code/Git revision/environment,
+   and output directories compatible. The script restores training/RNG/data
+   state and hides TensorBoard events beyond the restored step. `resume_from`
+   itself is excluded from the manifest settings.
+
+No prepared real corpus is configured yet. The next verification step is a
+controlled one-batch overfit experiment, followed by corpus selection/preparation
+and a short smoke run. Integration tests currently use a tiny model with real
+prepared artifacts and the real loop; they do not establish convergence of the
+configured four-layer model.
