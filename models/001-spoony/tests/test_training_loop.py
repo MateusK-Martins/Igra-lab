@@ -1,12 +1,14 @@
 from contextlib import nullcontext
-from unittest.mock import patch
+from pathlib import Path
+from unittest.mock import MagicMock, call, patch
 
 import pytest
 import torch
 from torch.utils.data import DataLoader, TensorDataset
+from torch.utils.tensorboard import SummaryWriter
 
 from src.config.errors import ConfigError
-from src.config.types import SchedulerConfig, TrainingConfig
+from src.config.types import LoggingConfig, SchedulerConfig, TrainingConfig
 from src.training.loop import train_loop
 from src.training.scheduler import build_scheduler
 from src.training.state import TrainingState
@@ -32,6 +34,8 @@ def setup_loop(samples=5, batch_size=1):
         "context": nullcontext(),
         "scaler": torch.amp.GradScaler("cpu", enabled=False),
         "device": torch.device("cpu"),
+        "writer": MagicMock(spec=SummaryWriter),
+        "logging_config": LoggingConfig(Path("unused-test-logs"), 10),
     }
 
 
@@ -77,7 +81,14 @@ def test_loop_stops_at_successful_update_limit(
             **args, config=TrainingConfig(accumulation, 1.0, 100), total_steps=total
         )
     assert state == TrainingState(
-        total, expected_batches, expected_batches * 3, expected_epochs, 2.0, 1.5, 4.5
+        total,
+        expected_batches,
+        expected_batches * 3,
+        expected_epochs,
+        2.0,
+        1.5,
+        4.5,
+        expected_batches % 5,
     )
 
 
@@ -92,7 +103,7 @@ def test_skipped_update_counts_consumed_data_but_not_successful_updates():
     ):
         state = train_loop(**args, config=TrainingConfig(2, 1.0, 100), total_steps=3)
     assert step.call_count == 4
-    assert state == TrainingState(3, 7, 21, 1, 0.5, 1.5, 4.5)
+    assert state == TrainingState(3, 7, 21, 1, 0.5, 1.5, 4.5, 2)
 
 
 @pytest.mark.parametrize("total_steps", [0, -1, True, 1.5])
@@ -195,3 +206,38 @@ def test_validation_does_not_repeat_on_skips_at_interval_boundary():
 def test_training_config_rejects_invalid_validation_interval(interval):
     with pytest.raises(ConfigError, match="validation_interval"):
         TrainingConfig(1, 1.0, interval)
+
+
+def test_logging_records_used_lr_and_independent_validation_intervals():
+    args = setup_loop()
+    args["logging_config"] = LoggingConfig(Path("unused-test-logs"), 2)
+    with patch("src.training.loop.validate", return_value=(1.5, 4.5)):
+        state = train_loop(**args, config=TrainingConfig(1, 1.0, 3), total_steps=5)
+    calls = args["writer"].add_scalar.call_args_list
+    for tag in ("train/loss", "train/learning_rate", "train/tokens"):
+        assert [c.args[2] for c in calls if c.args[0] == tag] == [2, 4, 5]
+    for tag in ("validation/loss", "validation/perplexity"):
+        assert [c.args[2] for c in calls if c.args[0] == tag] == [3, 5]
+    actual_lr = [c.args[1] for c in calls if c.args[0] == "train/learning_rate"]
+    factor = args["scheduler"].lr_lambdas[0]
+    assert actual_lr == pytest.approx([0.01 * factor(i) for i in (1, 3, 4)])
+    assert [c.args[1] for c in calls if c.args[0] == "train/tokens"] == [6, 12, 15]
+    args["writer"].close.assert_not_called()
+    assert state.updates == 5
+
+
+def test_skipped_updates_do_not_repeat_logs_at_interval_boundary():
+    args = setup_loop()
+    args["logging_config"] = LoggingConfig(Path("unused-test-logs"), 2)
+    outcomes = [(1.0, True), (2.0, True), (99.0, False), (99.0, False), (3.0, True)]
+    with (
+        patch("src.training.loop.train_step", side_effect=outcomes),
+        patch("src.training.loop.validate", return_value=(1.5, 4.5)),
+    ):
+        train_loop(**args, config=TrainingConfig(1, 1.0, 2), total_steps=3)
+    calls = args["writer"].add_scalar.call_args_list
+    assert [c for c in calls if c.args[0] == "train/loss"] == [
+        call("train/loss", 2.0, 2),
+        call("train/loss", 3.0, 3),
+    ]
+    assert [c.args[1] for c in calls if c.args[0] == "train/tokens"] == [6, 15]

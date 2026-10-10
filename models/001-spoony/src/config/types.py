@@ -160,3 +160,27 @@ class TrainingConfig:
 
         if type(self.validation_interval) is not int or self.validation_interval <= 0:
             raise ConfigError("validation_interval must be a positive integer")
+
+
+@dataclass(frozen=True)
+class LoggingConfig:
+    directory: Path
+    interval: int
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.directory, Path):
+            raise ConfigError("directory must be a Path")
+        if type(self.interval) is not int or self.interval <= 0:
+            raise ConfigError("interval must be a positive integer")
+
+
+@dataclass(frozen=True)
+class CheckpointConfig:
+    directory: Path
+    interval: int
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.directory, Path):
+            raise ConfigError("directory must be a Path")
+        if type(self.interval) is not int or self.interval <= 0:
+            raise ConfigError("interval must be a positive integer")

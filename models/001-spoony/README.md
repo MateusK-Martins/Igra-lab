@@ -52,9 +52,9 @@ causal/window masks, SDPA, and the output projection. RoPE is a configurable
 function bound with `functools.partial`. Cached calls write new rotated K/V
 before reading retained history. Bounded chunks can discard context for earlier
 queries; see MODEL_ASSEMBLY.md for that behavior.
-Logging integration, checkpoint orchestration, generation,
+The runnable training script, generation,
 and SFT remain pending. Infrastructure is being built before choosing a corpus or
-starting training. The latest suite passed 391 tests.
+starting training. The latest suite passed 424 tests.
 
 See [ROADMAP.md](ROADMAP.md) and [MODEL_ASSEMBLY.md](MODEL_ASSEMBLY.md) for the
 remaining work and composition contracts.
@@ -118,7 +118,8 @@ decay 0.01, and a schedule of 100 warmup updates, 1000 total updates, and minimu
 LR ratio 0.1. These are provisional settings, not measured training results.
 For resume, rebuild optimizer and scheduler with the same configuration before
 loading both state dictionaries; the LambdaLR closure's configuration is not
-saved in its state. Full training/checkpoint integration is still pending.
+saved in its state. Checkpoint loading checks the supplied run settings before
+restoration.
 
 ## Directory contract
 
@@ -128,7 +129,8 @@ saved in its state. Full training/checkpoint integration is still pending.
 - `configs/data/dataloader.py` holds window and train/validation batch settings.
 - `configs/tokenizers/` holds tokenizer preparation settings.
 - `configs/model/model.py` exposes `build_model(tokenizer)`.
-- `configs/training/` holds optimizer and scheduler settings.
+- `configs/training/` holds optimizer, scheduler, precision, training, logging,
+  and checkpoint settings.
 - `src/data/`, `src/training/`, `src/evaluation/`, and `src/inference/` hold
   separate stages of the model lifecycle.
 - `tests/` contains tests that run without a full training job.
@@ -156,4 +158,8 @@ not use a cache or optimizer. The loop receives a separate validation_loader
 and validates after each configured interval of successful updates and after
 the final update. Counters advance before the interval check, and skipped
 updates do not repeat validation. TrainingState stores the latest validation
-loss and perplexity. Next: logging, then checkpoint/resume.
+loss and perplexity. TensorBoard records training loss, the LR used for the update,
+consumed tokens, validation loss, and perplexity. Logging settings live in
+`configs/training/training.py`; checkpoint settings live in
+`configs/training/checkpoint.py`. See [CHECKPOINTS.md](CHECKPOINTS.md) for saving
+and resuming. The runnable training script is next.

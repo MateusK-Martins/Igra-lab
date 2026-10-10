@@ -15,16 +15,17 @@ DataLoaders, and declarative assembly are implemented. Model composition
 includes embeddings, Linear, SwiGLU, RMSNorm, expanded Sequential/Repeat
 definitions, leaf residuals, and head tying. Assembly returns a flat ModuleList
 runtime and cache entries. External KV storage, snapshots, IDs, and optional
-cache forwarding are implemented. The latest verification passed 391 tests.
+cache forwarding are implemented. The latest verification passed 424 tests.
 
 GQA, injected RoPE, causal/window masks, and cached execution are implemented.
 The editable four-layer architecture, next-token loss, AdamW builder, and
 warmup/cosine scheduler, mixed precision, accumulation/clipping, training loop,
-and periodic validation are implemented. Next: logging integration.
+periodic validation, TensorBoard logging, and checkpoint/resume are implemented.
+Next: the runnable training script and run metadata.
 Build the infrastructure before selecting a corpus or starting training.
-Still missing: a configured corpus, logging, checkpoint
-orchestration, generation, and SFT. The following lifecycle sections describe
-targets unless explicitly identified as implemented.
+Still missing: a configured corpus, training-script orchestration and run
+metadata, generation, SFT, and distributed training. The following lifecycle
+sections describe targets unless explicitly identified as implemented.
 
 ## Project rules
 
@@ -93,14 +94,17 @@ configs/
 │   └── model.py       # Architecture factory receiving a trained tokenizer
 └── training/
     ├── optimizer.py   # AdamW settings
-    └── scheduler.py   # Warmup/cosine settings
+    ├── scheduler.py   # Warmup/cosine settings
+    ├── precision.py   # FP32/BF16/FP16 settings
+    ├── training.py    # Accumulation, validation and logging settings
+    └── checkpoint.py  # Checkpoint interval and directory
 ```
 
 `dataclasses.replace` can create variations without a custom merge language.
-Constructors validate settings. A JSON snapshot helper exists for JSON-compatible
-dataclass fields; Path-containing and model definitions need a serialization
-policy before full run snapshots are integrated. Saving resolved settings in
-run directories and checkpoints remains a training-system requirement.
+Constructors validate settings. Checkpoints normalize dataclasses and Paths to
+JSON-compatible settings. The training script still needs to assemble a complete
+manifest, including a serializable model recipe and dataset/tokenizer identities,
+and save it in the run directory.
 
 Local and cloud training will differ through editable settings while sharing
 the same training implementation.
@@ -248,8 +252,8 @@ src/training/
 ├── step.py         # Implemented accumulation, clipping and optimizer update
 ├── validation.py   # Implemented token-weighted loss and perplexity
 ├── distributed.py
-├── checkpoint.py
-├── logging.py
+├── checkpoint.py   # Implemented atomic save and deterministic resume
+├── logging.py      # Implemented TensorBoard writer and resume purging
 ├── loop.py         # Implemented batch grouping and epoch traversal
 └── train.py
 ```
@@ -278,16 +282,19 @@ Implemented components:
 
 Still required:
 
-- Logging integration in the loop.
-- TensorBoard metrics.
+- Runnable one-GPU training script connecting the implemented components.
+- Run manifest with resolved settings, tokenizer/dataset hashes, and Git revision.
 - Fixed-prompt generation during training.
-- Checkpoint creation and exact resume.
-- RNG state capture/restoration for reproducible checkpoint continuation.
-- One-GPU local mode and `torchrun` distributed mode.
+- `torchrun` distributed mode.
 
-A checkpoint contains model, optimizer, scheduler, scaler, step, consumed
-tokens, random-number-generator state, resolved configuration, tokenizer hash,
-dataset hash, and Git commit.
+TensorBoard logging and atomic checkpoints are implemented. Resume restores CPU/
+CUDA RNG and loader generators, with exact partial-epoch replay for deterministic
+data and num_workers=0. See [CHECKPOINTS.md](CHECKPOINTS.md).
+
+A checkpoint contains model, optimizer, scheduler, scaler, counters, epoch
+cursor, random-number-generator states, loader signatures, and caller-supplied
+settings. The training script still needs to assemble the complete settings
+manifest, including tokenizer/dataset hashes and Git commit.
 
 ## Evaluation and generation
 
@@ -473,7 +480,8 @@ Spoony and then intentionally promoted to `template/decoder-transformer`.
    warmup/cosine scheduling with boundary and state-restoration tests.
 9. Completed: mixed precision, accumulation/clipping, loop counters and traversal,
    and periodic validation loss/perplexity.
-10. Next: logging, then checkpoint/resume and the training script.
+10. Logging and checkpoint/resume are implemented. Next: the training script
+    and run manifest.
 11. Configure a corpus and run a one-batch overfit test.
 12. Run a small corpus smoke run; TinyStories remains a candidate.
 13. Add generation and benchmark reporting, then create a release candidate.

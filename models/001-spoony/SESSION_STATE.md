@@ -123,14 +123,22 @@ successful-update interval and at the final update, once. Counters advance
 before checking the interval; skips do not repeat evaluation. TrainingState
 stores last_validation_loss and last_validation_perplexity.
 
-Next agreed step: logging in the loop, then
-checkpoint/resume and the runnable training script. Infrastructure comes before
-corpus selection or training runs. Exact resume and persistent-overflow stopping
-policy are not implemented; the loop currently stops by successful updates.
+TensorBoard logging and atomic checkpoint/resume are implemented. Checkpoints
+restore model, optimizer, scheduler, scaler, counters, CPU/CUDA RNG and both
+DataLoader generators. Epoch-start generator state plus the batch cursor replay
+a partial epoch without changing training RNG. Saving occurs after successful
+updates and their validation/logging; epoch boundaries are normalized first.
+See CHECKPOINTS.md for the API and constraints.
+
+Next agreed step: the runnable training script, including a resolved settings
+manifest with tokenizer/dataset hashes and Git revision, and writer cleanup.
+Infrastructure comes before corpus selection or training runs. Resume requires
+deterministic data/collation and num_workers=0. A persistent-overflow stopping
+policy remains unimplemented; the loop stops by successful updates.
 
 ## Verification
 
-391 tests passed on 2026-10-10, including CUDA tests. Ruff lint and formatting
+424 tests passed on 2026-10-10, including CUDA tests. Ruff lint and formatting
 checks passed for src, configs, scripts, and tests.
 New tests cover explicit GQA output/gradient reference, causal/window isolation,
 RoPE scalar reference/norms/offsets/dtypes/gradients, dropout, cached snapshots,
@@ -145,4 +153,7 @@ configured-model CUDA updates, loop groups/epochs/counters and skipped updates.
 preservation, mode restoration on success/failure, perplexity overflow, and
 CPU/CUDA precision modes. Another 12 cases cover periodic/final validation,
 skipped updates at interval boundaries, and invalid validation intervals.
-Logging and checkpoint integration remain pending.
+Another 33 cases cover logging and checkpoint/resume: scalar values/steps,
+TensorBoard purging after resume, exact shuffled/dropout continuation within and
+across epochs on CPU and CUDA, scaler restoration, periodic/final saves, atomic
+write failures, and rejection of incompatible settings/loaders/state.
