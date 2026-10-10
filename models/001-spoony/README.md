@@ -42,6 +42,9 @@ Implemented and tested:
   supplied trained tokenizer, width 256, windowed GQA, RoPE, and a tied LM head.
 - Next-token cross-entropy loss, configurable AdamW construction, and validated
   warmup/cosine scheduler settings with state-restoration tests.
+- FP32/BF16/FP16 contexts, FP16 scaling, accumulation, clipping, and a training
+  loop with update/batch/token/epoch counters.
+- Standalone token-weighted validation loss and perplexity with mode restoration.
 
 No real corpus is selected: `configs/data/datasets.py` defines an empty pipe.
 GQA attention now computes output using injected positional rotation, explicit
@@ -49,9 +52,9 @@ causal/window masks, SDPA, and the output projection. RoPE is a configurable
 function bound with `functools.partial`. Cached calls write new rotated K/V
 before reading retained history. Bounded chunks can discard context for earlier
 queries; see MODEL_ASSEMBLY.md for that behavior.
-Mixed precision, the training loop, checkpoint orchestration, evaluation, and
-SFT remain pending. Infrastructure is being built before choosing a corpus or
-starting training. The latest suite passed 323 tests.
+Periodic validation/logging integration, checkpoint orchestration, generation,
+and SFT remain pending. Infrastructure is being built before choosing a corpus or
+starting training. The latest suite passed 379 tests.
 
 See [ROADMAP.md](ROADMAP.md) and [MODEL_ASSEMBLY.md](MODEL_ASSEMBLY.md) for the
 remaining work and composition contracts.
@@ -130,3 +133,23 @@ saved in its state. Full training/checkpoint integration is still pending.
   separate stages of the model lifecycle.
 - `tests/` contains tests that run without a full training job.
 - `results/` stores small, versioned experiment records only.
+
+## Training execution
+
+`build_precision(device, config)` returns a reusable autocast/null context and
+a GradScaler enabled only for CUDA FP16. BF16 is the current editable mode.
+`train_step()` accumulates token-weighted losses, unscales before clipping, and
+steps the scheduler only after an actual optimizer update. FP16 overflow tests
+verify skipped updates and subsequent recovery.
+
+`TrainingConfig` declares accumulation_steps and max_grad_norm (currently 1 and
+1.0). `train_loop()` groups DataLoader batches, processes partial groups, restarts
+epochs, and returns TrainingState. Counters track successful updates, consumed
+batches/tokens, completed epochs, and the last training loss. The model must be
+on the target device before constructing the optimizer. Pass the scheduler
+configuration's total_steps as the loop limit.
+
+`validate()` uses eval mode and no_grad, computes token-weighted mean loss and
+perplexity, and restores the previous model mode, including on failure. It does
+not use a cache or optimizer. It is not yet called by the loop. Next: configure
+its update interval and connect validation and logging, then checkpoint/resume.

@@ -1,4 +1,4 @@
-# Pair-programming continuation — 2026-10-04
+# Pair-programming continuation — 2026-10-10
 
 Branch: model/001-spoony. This checkpoint includes RMSNorm, model assembly
 refactoring, external cache storage, cache forwarding, configured architecture,
@@ -9,8 +9,8 @@ before guiding edits; preserve subsequent user changes.
 
 The data pipeline, tokenizer, disk-backed windows, DataLoaders, embeddings,
 SwiGLU, RMSNorm, leaf residuals, head tying, and attention are implemented. The
-small decoder architecture is configured. No real corpus or training loop is
-configured.
+small decoder architecture is configured. A training loop and standalone
+validation exist; no real corpus is selected.
 
 Model definitions inherit protocols with default cache() and unpack() methods.
 Sequential/Repeat unpack recursively into leaf definitions; they no longer build
@@ -102,14 +102,29 @@ Scheduler construction sets the initial LR. Step it after successful optimizer
 updates only. Resume rebuilds both objects with the same settings, then loads
 both state dictionaries; LambdaLR does not save the closure's configuration.
 
-Next agreed step: src/training/precision.py for FP32/BF16/FP16 execution, then
-the training step with accumulation and clipping. FP16 requires GradScaler;
-if it skips an optimizer update, the scheduler must not advance. The user wants
-infrastructure completed before selecting a corpus or starting training.
+PrecisionConfig selects fp32/bf16/fp16; configs/training/precision.py selects
+bf16. build_precision returns a reusable context and scaler (enabled only for
+CUDA FP16). CPU FP16 is rejected; CUDA availability/BF16 support are checked.
+TrainingConfig validates accumulation_steps and max_grad_norm; current values
+are 1 and 1.0. train_step accumulates token-weighted loss gradients, unscales,
+clips, updates the scaler/optimizer, and advances the scheduler only if an
+update occurred. With the scaler disabled, nonfinite gradients raise before
+updating weights.
+
+train_loop groups batches with islice, handles partial groups, restarts epochs,
+and stops on successful update count. TrainingState tracks updates, batches,
+tokens, completed_epochs, last_loss. Consumed data counts include skipped updates.
+validate computes token-weighted mean loss/perplexity with no_grad and eval,
+restoring the prior mode in finally. Overflowing perplexity returns infinity.
+
+Next agreed step: connect periodic validation and logging to the loop, then
+checkpoint/resume and the runnable training script. Infrastructure comes before
+corpus selection or training runs. Exact resume and persistent-overflow stopping
+policy are not implemented; the loop currently stops by successful updates.
 
 ## Verification
 
-323 tests passed on 2026-10-04, including CUDA tests. Ruff lint and formatting
+379 tests passed on 2026-10-10, including CUDA tests. Ruff lint and formatting
 checks passed for src, configs, scripts, and tests.
 New tests cover explicit GQA output/gradient reference, causal/window isolation,
 RoPE scalar reference/norms/offsets/dtypes/gradients, dropout, cached snapshots,
@@ -118,4 +133,9 @@ with CPU storage. Existing identity/forwarding/assembly tests now supply RoPE.
 Configured architecture adds five integration tests. Optimizer settings add
 32 validation cases; scheduler adds 26 tests for rates, boundaries, parameter
 groups, and restoration of optimizer/scheduler state with matching updates.
-Mixed precision and a full training/checkpoint loop are not yet tested or built.
+Another 44 tests cover precision, accumulation/clipping, FP16 overflow/recovery,
+configured-model CUDA updates, loop groups/epochs/counters and skipped updates.
+12 validation tests cover token weighting, dropout/no_grad, parameter/gradient
+preservation, mode restoration on success/failure, perplexity overflow, and
+CPU/CUDA precision modes. Periodic validation and checkpoint integration remain
+pending.

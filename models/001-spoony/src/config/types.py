@@ -3,6 +3,7 @@
 import math
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 
 from src.config.errors import ConfigError
 
@@ -129,3 +130,29 @@ class SchedulerConfig:
             or not 0 <= self.min_lr_ratio <= 1
         ):
             raise ConfigError("min_lr_ratio must be a finite number in [0, 1]")
+
+
+@dataclass(frozen=True)
+class PrecisionConfig:
+    mode: Literal["fp32", "bf16", "fp16"]
+
+    def __post_init__(self) -> None:
+        if self.mode not in ("fp32", "bf16", "fp16"):
+            raise ConfigError("mode must be fp32, bf16 or fp16")
+
+
+@dataclass(frozen=True)
+class TrainingConfig:
+    accumulation_steps: int
+    max_grad_norm: float
+
+    def __post_init__(self) -> None:
+        if type(self.accumulation_steps) is not int or self.accumulation_steps <= 0:
+            raise ConfigError("accumulation_steps must be a positive integer")
+
+        if (
+            type(self.max_grad_norm) not in (int, float)
+            or not math.isfinite(self.max_grad_norm)
+            or self.max_grad_norm <= 0
+        ):
+            raise ConfigError("max_grad_norm must be finite and positive")

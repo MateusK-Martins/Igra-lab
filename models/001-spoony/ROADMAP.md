@@ -15,14 +15,15 @@ DataLoaders, and declarative assembly are implemented. Model composition
 includes embeddings, Linear, SwiGLU, RMSNorm, expanded Sequential/Repeat
 definitions, leaf residuals, and head tying. Assembly returns a flat ModuleList
 runtime and cache entries. External KV storage, snapshots, IDs, and optional
-cache forwarding are implemented. The latest verification passed 323 tests.
+cache forwarding are implemented. The latest verification passed 379 tests.
 
 GQA, injected RoPE, causal/window masks, and cached execution are implemented.
 The editable four-layer architecture, next-token loss, AdamW builder, and
-warmup/cosine scheduler are implemented. Next: mixed precision and the training
-step. Build the infrastructure before selecting a corpus or starting training.
-Still missing: a configured corpus, training loop, checkpoint orchestration,
-evaluation, generation, and SFT. The following lifecycle sections describe
+warmup/cosine scheduler, mixed precision, accumulation/clipping, training loop,
+and standalone validation are implemented. Next: periodic validation/logging.
+Build the infrastructure before selecting a corpus or starting training.
+Still missing: a configured corpus, periodic validation/logging, checkpoint
+orchestration, generation, and SFT. The following lifecycle sections describe
 targets unless explicitly identified as implemented.
 
 ## Project rules
@@ -239,15 +240,17 @@ Target modules:
 
 ```text
 src/training/
-├── state.py
+├── state.py        # Implemented training counters
 ├── loss.py         # Implemented mean next-token cross-entropy
 ├── optimizer.py    # Implemented configurable AdamW builder
 ├── scheduler.py    # Implemented warmup/cosine LambdaLR
-├── precision.py    # Next: FP32/BF16/FP16 and scaling
+├── precision.py    # Implemented FP32/BF16/FP16 and scaling
+├── step.py         # Implemented accumulation, clipping and optimizer update
+├── validation.py   # Implemented token-weighted loss and perplexity
 ├── distributed.py
 ├── checkpoint.py
 ├── logging.py
-├── loop.py
+├── loop.py         # Implemented batch grouping and epoch traversal
 └── train.py
 ```
 
@@ -265,11 +268,16 @@ Implemented components:
   Without warmup, the first update uses the base LR. Resume tests rebuild with
   identical settings and load both optimizer/scheduler state dictionaries.
 
+- Mixed precision with reusable context and CUDA FP16 scaling; BF16 is the
+  current editable setting.
+- Token-weighted accumulation, clipping after unscale, and successful-update-only
+  scheduler advancement, with overflow/recovery tests.
+- Loop grouping, partial groups, epoch restart, and training counters.
+- Standalone validation loss/perplexity, preserving model mode and gradients.
+
 Still required:
 
-- Gradient clipping and gradient accumulation.
-- Configurable FP16 or BF16 mixed precision.
-- Gradient scaler when FP16 is selected.
+- Periodic validation and logging integration in the loop.
 - TensorBoard metrics.
 - Periodic validation loss, perplexity, and fixed-prompt generation.
 - Checkpoint creation and exact resume.
@@ -462,8 +470,9 @@ Spoony and then intentionally promoted to `template/decoder-transformer`.
    real-model tests, and the configured four-layer architecture.
 8. Completed: script-level PyTorch seed, loss, validated AdamW settings, and
    warmup/cosine scheduling with boundary and state-restoration tests.
-9. Next: mixed precision, then the training step with accumulation and clipping.
-10. Build the pretraining loop, checkpoint/resume, validation, and reporting.
+9. Completed: mixed precision, accumulation/clipping, loop counters and traversal,
+   and standalone validation loss/perplexity.
+10. Next: periodic validation/logging, then checkpoint/resume and the training script.
 11. Configure a corpus and run a one-batch overfit test.
 12. Run a small corpus smoke run; TinyStories remains a candidate.
 13. Add generation and benchmark reporting, then create a release candidate.
