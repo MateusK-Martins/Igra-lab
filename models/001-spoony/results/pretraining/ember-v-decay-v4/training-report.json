@@ -1,0 +1,198 @@
+{
+  "branch": "model/001-spoony-ember",
+  "experiment": "ember-v-decay-v4",
+  "training_seconds_including_validation_and_saving": 322.181705784,
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "peak_allocated_vram_bytes": 942876672,
+  "training_state": {
+    "updates": 9000,
+    "batches": 9000,
+    "tokens": 18429440,
+    "completed_epochs": 2,
+    "last_loss": 2.781306743621826,
+    "last_validation_loss": 2.519256309226707,
+    "last_validation_perplexity": 12.419357067041055,
+    "batches_in_epoch": 2728
+  },
+  "validation_curve": [
+    {
+      "update": 500,
+      "loss": 3.8866989612579346
+    },
+    {
+      "update": 1000,
+      "loss": 3.627159833908081
+    },
+    {
+      "update": 1500,
+      "loss": 3.4320616722106934
+    },
+    {
+      "update": 2000,
+      "loss": 3.238107442855835
+    },
+    {
+      "update": 2500,
+      "loss": 3.09808087348938
+    },
+    {
+      "update": 3000,
+      "loss": 3.0024726390838623
+    },
+    {
+      "update": 3500,
+      "loss": 2.9106714725494385
+    },
+    {
+      "update": 4000,
+      "loss": 2.8350398540496826
+    },
+    {
+      "update": 4500,
+      "loss": 2.7865283489227295
+    },
+    {
+      "update": 5000,
+      "loss": 2.72664737701416
+    },
+    {
+      "update": 5500,
+      "loss": 2.6877033710479736
+    },
+    {
+      "update": 6000,
+      "loss": 2.634519338607788
+    },
+    {
+      "update": 6500,
+      "loss": 2.6100053787231445
+    },
+    {
+      "update": 7000,
+      "loss": 2.5785932540893555
+    },
+    {
+      "update": 7500,
+      "loss": 2.5601487159729004
+    },
+    {
+      "update": 8000,
+      "loss": 2.545229911804199
+    },
+    {
+      "update": 8500,
+      "loss": 2.529475212097168
+    },
+    {
+      "update": 9000,
+      "loss": 2.519256353378296
+    }
+  ],
+  "best_saved_validation": {
+    "update": 9000,
+    "loss": 2.519256353378296
+  },
+  "subset": {
+    "dataset": "roneneldan/TinyStories",
+    "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "selection": "first unique nonempty documents in source order",
+    "splits": {
+      "train": {
+        "documents": 30000,
+        "duplicates_or_empty_skipped": 0,
+        "sha256": "69a5f3422b4c51f98ca0692a3514822a6527999dc59c624baaefb1f8f04e65d3",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-train.txt"
+      },
+      "validation": {
+        "documents": 256,
+        "duplicates_or_empty_skipped": 0,
+        "sha256": "ab09f4248a55ca51d899ba51ce90d96a2c990d52a821338aa1743a525fda7d4a",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-valid.txt"
+      }
+    }
+  },
+  "benchmark": {
+    "scheduler": {
+      "warmup_steps": 300,
+      "total_steps": 9000,
+      "min_lr_ratio": 0.1
+    },
+    "optimizer": {
+      "learning_rate": 0.0003,
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01
+    },
+    "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+    "parameters": 12889344,
+    "vocab_size": 8192,
+    "initial_validation_loss": 9.107039274992765,
+    "validation_seconds": 0.38798716899998453,
+    "measured_updates": 100,
+    "mean_update_seconds": 0.03416789437999682,
+    "p95_update_seconds": 0.03465816300001734,
+    "tokens_per_update": 2048,
+    "peak_allocated_vram_bytes": 940025856,
+    "benchmark_final_loss": 6.317756652832031,
+    "torch_cpu_threads": 4
+  },
+  "torch_cpu_threads": 4,
+  "seed": 42,
+  "comparison": "Single seed, equal-token baseline; include preparation separately and rebenchmark each architecture for equal-time runs.",
+  "greedy_samples_from_best_saved_checkpoint": [
+    {
+      "prompt": "Once upon a time, there was a little girl named Lily.",
+      "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the garden. One day, she saw a big, scary dog. The dog was scared and wanted to play with it.\nLily asked her friend, \"Can I play with you?\" The dog said, \"Yes, I can play with you.\"\nLily and the dog played together"
+    },
+    {
+      "prompt": "Tom found a small dog outside his house. The dog was",
+      "text": "Tom found a small dog outside his house. The dog was very sad. He wanted to play with the ball. He ran to the ball and ran to the ball. The dog was very happy.\nThe dog saw the dog and wanted to play with the ball. The dog ran to the ball. The dog was happy. The dog and the dog played with the ball all"
+    },
+    {
+      "prompt": "One day, a boy lost his favorite toy. He felt",
+      "text": "One day, a boy lost his favorite toy. He felt sad and sad. He wanted to play with it. He wanted to play with it. He asked his friend, \"Can I play with you?\" The boy said, \"Yes, I can play with you. I can play with you. I can play with you.\"\nThe boy was happy. He played with"
+    }
+  ],
+  "best_checkpoint": "checkpoints/step-00009000.pt",
+  "learned_decay_stats": {
+    "body.1.branch.value_decay_logits": {
+      "min": 0.986486554145813,
+      "mean": 0.988654613494873,
+      "max": 0.9910100698471069,
+      "std": 0.000797601358499378
+    },
+    "body.5.branch.value_decay_logits": {
+      "min": 0.9868825078010559,
+      "mean": 0.9886543154716492,
+      "max": 0.9900497198104858,
+      "std": 0.0004418831958901137
+    },
+    "body.9.branch.value_decay_logits": {
+      "min": 0.9865846037864685,
+      "mean": 0.9882287383079529,
+      "max": 0.9893032312393188,
+      "std": 0.0004616549704223871
+    },
+    "body.13.branch.value_decay_logits": {
+      "min": 0.9864341020584106,
+      "mean": 0.9881533980369568,
+      "max": 0.9890957474708557,
+      "std": 0.0004938041092827916
+    },
+    "body.17.branch.value_decay_logits": {
+      "min": 0.986713171005249,
+      "mean": 0.9882938265800476,
+      "max": 0.9890581965446472,
+      "std": 0.00035554260830394924
+    },
+    "body.21.branch.value_decay_logits": {
+      "min": 0.9881600141525269,
+      "mean": 0.9887485504150391,
+      "max": 0.9893056154251099,
+      "std": 0.0001726490299915895
+    }
+  }
+}

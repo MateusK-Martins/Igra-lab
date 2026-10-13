@@ -43,3 +43,11 @@ Run 1 outputs: results/pretraining/ember-v-decay-v4/.
 Run 2 outputs: results/pretraining/ember-kv-decay-v5/.
 Each has its own benchmark, frozen recipe commit, manifest, checkpoints and report.
 A single seed and recipe do not establish a general architecture ranking.
+
+## V-only result
+
+Recipe commit `db2111f`. Completed 9,000 updates and 18,429,440 target tokens
+in 322.18 seconds including validation and saving. Final validation loss
+2.519256, perplexity 12.419357. Final checkpoint is best
+among saved checkpoints, loaded successfully for generation and checked against
+the manifest. Learned per-layer feature-decay ranges are saved in the report.
