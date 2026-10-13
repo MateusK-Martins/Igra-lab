@@ -7,7 +7,8 @@ import torch
 from torch import Tensor, nn
 
 from src.model.cache_storage import CacheStorage
-from src.model.scan import decayed_prefix_sum
+from src.model.decay import TokenDecayImpl
+from src.model.scan import affine_prefix_sum, decayed_prefix_sum
 from src.model.stability import RMSNormImpl, SoftRMSNormImpl
 
 
@@ -22,12 +23,14 @@ class CumulativeMixerImpl(nn.Module):
         key_decay: bool = False,
         value_decay: bool = False,
         decay_init: float = 0.99,
+        decay_mode: Literal["diagonal", "token"] = "diagonal",
     ) -> None:
         super().__init__()
         self.q_proj = nn.Linear(features, features, bias=bias)
         self.k_proj = nn.Linear(features, features, bias=bias)
         self.v_proj = nn.Linear(features, features, bias=bias)
         self.normalization = normalization
+        self.decay_mode = decay_mode
         self.key_norm = (
             RMSNormImpl(features, eps)
             if normalization == "rms"
@@ -47,9 +50,19 @@ class CumulativeMixerImpl(nn.Module):
                 nn.Parameter(
                     torch.full((features,), math.log(decay_init / (1 - decay_init)))
                 )
-                if enabled
+                if enabled and decay_mode == "diagonal"
                 else None,
             )
+        self.key_decay_gate = (
+            TokenDecayImpl(features, decay_init)
+            if key_decay and decay_mode == "token"
+            else None
+        )
+        self.value_decay_gate = (
+            TokenDecayImpl(features, decay_init)
+            if value_decay and decay_mode == "token"
+            else None
+        )
         self.layer_id = ""
 
     def assign_id(self, layer_id: int) -> None:
@@ -89,11 +102,22 @@ class CumulativeMixerImpl(nn.Module):
             if self.value_decay_logits is not None
             else None
         )
-        key_sum = decayed_prefix_sum(k.to(working_dtype), key_decay, initial_key)
+        if self.key_decay_gate is not None:
+            key_sum = affine_prefix_sum(
+                k.to(working_dtype),
+                self.key_decay_gate(x).to(working_dtype),
+                initial_key,
+            )
+        else:
+            key_sum = decayed_prefix_sum(k.to(working_dtype), key_decay, initial_key)
         normalized_keys = self.key_norm(key_sum)
-        value_sum = decayed_prefix_sum(
-            v.to(working_dtype) * normalized_keys, value_decay, initial_value
-        )
+        value_update = v.to(working_dtype) * normalized_keys
+        if self.value_decay_gate is not None:
+            value_sum = affine_prefix_sum(
+                value_update, self.value_decay_gate(x).to(working_dtype), initial_value
+            )
+        else:
+            value_sum = decayed_prefix_sum(value_update, value_decay, initial_value)
         result = q * self.value_norm(value_sum).to(q.dtype)
         if cache is not None and x.shape[1]:
             cache.write_state(

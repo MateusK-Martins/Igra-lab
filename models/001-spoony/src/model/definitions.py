@@ -350,6 +350,7 @@ class CumulativeMixer(BlockDefinition):
     key_decay: bool = False
     value_decay: bool = False
     decay_init: float = 0.99
+    decay_mode: Literal["diagonal", "token"] = "diagonal"
 
     @property
     def output_features(self) -> int:
@@ -373,6 +374,8 @@ class CumulativeMixer(BlockDefinition):
             raise ValueError(
                 "decay_init must be finite and strictly between zero and one"
             )
+        if self.decay_mode not in ("diagonal", "token"):
+            raise ValueError("decay_mode must be diagonal or token")
         for name in ("residual", "bias", "key_decay", "value_decay"):
             if type(getattr(self, name)) is not bool:
                 raise ValueError(f"{name} must be a boolean")
@@ -386,6 +389,7 @@ class CumulativeMixer(BlockDefinition):
             key_decay=self.key_decay,
             value_decay=self.value_decay,
             decay_init=self.decay_init,
+            decay_mode=self.decay_mode,
         )
 
     def cache(self, layer_id: int) -> StateEntry:

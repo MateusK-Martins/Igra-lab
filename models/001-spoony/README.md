@@ -1,3 +1,6 @@
+> **Active token-decay experiment:** see [TOKEN_DECAY.md](TOKEN_DECAY.md).
+> Ember and earlier notes below are historical.
+
 > **Active Ember experiments:** read [DECAY_EXPERIMENTS.md](DECAY_EXPERIMENTS.md).
 > RMSNorm is restored; the next runs add parallel feature-wise state decay.
 

@@ -1,3 +1,6 @@
+> **Active token-decay experiment:** see [TOKEN_DECAY.md](TOKEN_DECAY.md).
+> Ember and earlier notes below are historical.
+
 # Ember diagonal-decay experiments completed — 2026-10-13
 
 Read DECAY_EXPERIMENTS.md first. Branch: model/001-spoony-ember. Pre-decay

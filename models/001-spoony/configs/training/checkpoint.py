@@ -2,6 +2,6 @@ from src.config.paths import results_path
 from src.config.types import CheckpointConfig
 
 checkpoint_config = CheckpointConfig(
-    directory=results_path("pretraining/ember-kv-decay-v5/checkpoints"),
+    directory=results_path("pretraining/token-v-decay-v6/checkpoints"),
     interval=1000,
 )

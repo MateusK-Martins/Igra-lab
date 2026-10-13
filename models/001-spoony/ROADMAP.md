@@ -1,3 +1,6 @@
+> **Active token-decay experiment:** see [TOKEN_DECAY.md](TOKEN_DECAY.md).
+> Ember and earlier notes below are historical.
+
 > **Active attentionless branch:** read [ATTENTIONLESS.md](ATTENTIONLESS.md)
 > for the cumulative mechanism, cache semantics and current experiment.
 > Lantern notes below are historical baseline results.

@@ -17,9 +17,10 @@ def build_model(tokenizer: Tokenizer):
                         eps=1e-6,
                         residual=True,
                         normalization="rms",
-                        key_decay=True,
+                        key_decay=False,
                         value_decay=True,
                         decay_init=0.99,
+                        decay_mode="token",
                     ),
                     SwiGLU(
                         input_features=384,
