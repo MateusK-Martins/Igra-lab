@@ -1,3 +1,6 @@
+> **Active Ember experiments:** read [DECAY_EXPERIMENTS.md](DECAY_EXPERIMENTS.md).
+> RMSNorm is restored; the next runs add parallel feature-wise state decay.
+
 > **Active attentionless branch:** read [ATTENTIONLESS.md](ATTENTIONLESS.md)
 > for the cumulative mechanism, cache semantics and current experiment.
 > Lantern notes below are historical baseline results.

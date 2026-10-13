@@ -347,6 +347,9 @@ class CumulativeMixer(BlockDefinition):
     residual: bool = False
     bias: bool = False
     normalization: Literal["rms", "soft_rms"] = "rms"
+    key_decay: bool = False
+    value_decay: bool = False
+    decay_init: float = 0.99
 
     @property
     def output_features(self) -> int:
@@ -362,7 +365,15 @@ class CumulativeMixer(BlockDefinition):
             raise ValueError("eps must be finite and greater than zero")
         if self.normalization not in ("rms", "soft_rms"):
             raise ValueError("normalization must be rms or soft_rms")
-        for name in ("residual", "bias"):
+        if (
+            type(self.decay_init) not in (int, float)
+            or not math.isfinite(self.decay_init)
+            or not 0 < self.decay_init < 1
+        ):
+            raise ValueError(
+                "decay_init must be finite and strictly between zero and one"
+            )
+        for name in ("residual", "bias", "key_decay", "value_decay"):
             if type(getattr(self, name)) is not bool:
                 raise ValueError(f"{name} must be a boolean")
 
@@ -372,6 +383,9 @@ class CumulativeMixer(BlockDefinition):
             self.eps,
             bias=self.bias,
             normalization=self.normalization,
+            key_decay=self.key_decay,
+            value_decay=self.value_decay,
+            decay_init=self.decay_init,
         )
 
     def cache(self, layer_id: int) -> StateEntry:

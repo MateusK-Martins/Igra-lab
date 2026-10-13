@@ -1,3 +1,6 @@
+> **Active Ember experiments:** read [DECAY_EXPERIMENTS.md](DECAY_EXPERIMENTS.md).
+> RMSNorm is restored; the next runs add parallel feature-wise state decay.
+
 > **Ember:** this model now lives on `model/001-spoony-ember`. Historical
 > recipe commits and reports retain their original branch identities.
 

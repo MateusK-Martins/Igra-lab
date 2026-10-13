@@ -8,6 +8,6 @@ training_config = TrainingConfig(
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/attentionless-sigmoid-soft-rms-v3/tensorboard"),
+    directory=results_path("pretraining/ember-v-decay-v4/tensorboard"),
     interval=10,
 )

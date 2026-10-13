@@ -1,6 +1,7 @@
 """Run the frozen recipe, then save timings, metrics and fixed greedy samples."""
 
 import json
+import subprocess
 import time
 
 import torch
@@ -43,7 +44,9 @@ def main():
         key=lambda row: row["loss"],
     )
     report = {
-        "branch": "codex/attentionless",
+        "branch": subprocess.check_output(
+            ["git", "branch", "--show-current"], text=True
+        ).strip(),
         "experiment": logging_config.directory.parent.name,
         "training_seconds_including_validation_and_saving": elapsed,
         "gpu": torch.cuda.get_device_name(),

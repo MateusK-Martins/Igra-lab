@@ -15,15 +15,23 @@ def reference(module, x):
     keys = torch.zeros_like(k[:, 0])
     values = torch.zeros_like(v[:, 0])
     offset = 1.0 if module.normalization == "soft_rms" else module.key_norm.eps
+    key_decay = (
+        module.key_decay_logits.sigmoid() if module.key_decay_logits is not None else 1
+    )
+    value_decay = (
+        module.value_decay_logits.sigmoid()
+        if module.value_decay_logits is not None
+        else 1
+    )
     output = []
     for token in range(x.shape[1]):
-        keys = keys + k[:, token]
+        keys = key_decay * keys + k[:, token]
         normalized_keys = (
             keys
             * torch.rsqrt(keys.square().mean(-1, keepdim=True) + offset)
             * getattr(module.key_norm, "weights", 1)
         )
-        values = values + v[:, token] * normalized_keys
+        values = value_decay * values + v[:, token] * normalized_keys
         normalized_values = (
             values
             * torch.rsqrt(values.square().mean(-1, keepdim=True) + offset)
@@ -34,9 +42,22 @@ def reference(module, x):
 
 
 @pytest.mark.parametrize("normalization", ["rms", "soft_rms"])
-def test_output_and_gradients_match_independent_sequential_recurrence(normalization):
+@pytest.mark.parametrize("decay_mode", ["none", "v", "kv"])
+def test_output_and_gradients_match_independent_sequential_recurrence(
+    normalization, decay_mode
+):
     torch.manual_seed(123)
-    module = CumulativeMixer(6, bias=True, normalization=normalization).build().double()
+    module = (
+        CumulativeMixer(
+            6,
+            bias=True,
+            normalization=normalization,
+            key_decay=decay_mode == "kv",
+            value_decay=decay_mode != "none",
+        )
+        .build()
+        .double()
+    )
     with torch.no_grad():
         for norm in (module.key_norm, module.value_norm):
             if hasattr(norm, "weights"):
@@ -65,8 +86,18 @@ def test_residual_is_added_exactly_once_and_zero_input_is_finite():
 
 
 @pytest.mark.parametrize("normalization", ["rms", "soft_rms"])
-def test_future_values_and_gradients_cannot_affect_prefix(normalization):
-    module = CumulativeMixer(5, normalization=normalization).build().double()
+@pytest.mark.parametrize("decay_mode", ["none", "v", "kv"])
+def test_future_values_and_gradients_cannot_affect_prefix(normalization, decay_mode):
+    module = (
+        CumulativeMixer(
+            5,
+            normalization=normalization,
+            key_decay=decay_mode == "kv",
+            value_decay=decay_mode != "none",
+        )
+        .build()
+        .double()
+    )
     x = torch.randn(2, 11, 5, dtype=torch.float64, requires_grad=True)
     changed = x.detach().clone()
     changed[:, 6:] = torch.randn_like(changed[:, 6:]) * 100
@@ -77,10 +108,17 @@ def test_future_values_and_gradients_cannot_affect_prefix(normalization):
 
 @pytest.mark.parametrize("chunks", [(1, 1, 1, 1, 1, 1, 1), (2, 4, 1), (7,)])
 @pytest.mark.parametrize("normalization", ["rms", "soft_rms"])
+@pytest.mark.parametrize("decay_mode", ["none", "v", "kv"])
 def test_cached_chunks_and_snapshot_match_full_sequence(
-    tmp_path, chunks, normalization
+    tmp_path, chunks, normalization, decay_mode
 ):
-    definition = CumulativeMixer(5, residual=True, normalization=normalization)
+    definition = CumulativeMixer(
+        5,
+        residual=True,
+        normalization=normalization,
+        key_decay=decay_mode == "kv",
+        value_decay=decay_mode != "none",
+    )
     module = build_block(definition, 3).double()
     storage = CacheStorage(
         [definition.cache(3)], torch.device("cpu"), torch.device("cpu")
@@ -138,6 +176,11 @@ def test_cache_does_not_grow_and_rejects_changed_batch_without_mutation():
         {"input_features": 4, "bias": 1},
         {"input_features": 4, "residual": 1},
         {"input_features": 4, "normalization": "bad"},
+        {"input_features": 4, "key_decay": 1},
+        {"input_features": 4, "value_decay": 1},
+        {"input_features": 4, "decay_init": 0},
+        {"input_features": 4, "decay_init": 1},
+        {"input_features": 4, "decay_init": float("nan")},
     ],
 )
 def test_invalid_definition(kwargs):
@@ -148,8 +191,17 @@ def test_invalid_definition(kwargs):
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")
 @pytest.mark.parametrize("dtype", [torch.bfloat16, torch.float16])
 @pytest.mark.parametrize("normalization", ["rms", "soft_rms"])
-def test_cuda_mixed_precision_gradients_and_cpu_cached_state(dtype, normalization):
-    definition = CumulativeMixer(16, residual=True, normalization=normalization)
+@pytest.mark.parametrize("decay_mode", ["none", "v", "kv"])
+def test_cuda_mixed_precision_gradients_and_cpu_cached_state(
+    dtype, normalization, decay_mode
+):
+    definition = CumulativeMixer(
+        16,
+        residual=True,
+        normalization=normalization,
+        key_decay=decay_mode == "kv",
+        value_decay=decay_mode != "none",
+    )
     module = build_block(definition, 2).cuda()
     x = torch.randn(2, 33, 16, device="cuda", requires_grad=True)
     with torch.autocast("cuda", dtype=dtype):
