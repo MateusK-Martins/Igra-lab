@@ -1,6 +1,6 @@
-# Codename: attention baseline
+# Lantern: attention baseline
 
-This branch (`codex/codename`) freezes a larger Spoony baseline before an
+This branch (`model/001-spoony-lantern`) freezes a larger Spoony baseline before an
 attentionless comparison. Model-local paths remain `models/001-spoony/`.
 It starts from committed Spoony `6d2d5f3` and deliberately carries over the
 working-tree Embedding.init_std implementation and tests plus the 0.02
@@ -109,3 +109,7 @@ reusing these exact data/tokenizer artifacts. Treat these as single-seed
 preliminary results. Checkpoint compatibility includes the recipe Git commit;
 result-only commits do not change the model weights, but rebuilding a resume
 manifest on a different commit is rejected by the existing strict loader.
+
+The branch was renamed from `codex/codename` to `model/001-spoony-lantern`
+after training. Frozen training scripts, reports, artifact paths and the manifest
+retain the original run identity so the recorded source hashes remain valid.

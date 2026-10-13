@@ -1,6 +1,6 @@
 # Codename baseline completed — 2026-10-13
 
-Branch `codex/codename`, isolated from the original Spoony working directory.
+Branch `model/001-spoony-lantern`, isolated from the original Spoony working directory.
 Read [CODENAME.md](CODENAME.md) first: 12,440,064 parameters, TinyStories
 30,000/256 stories, fixed 8,192-vocabulary tokenizer, context/window 256.
 The fresh 9,000-update baseline finished in 431.33 seconds including validation
