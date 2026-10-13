@@ -51,3 +51,11 @@ in 322.18 seconds including validation and saving. Final validation loss
 2.519256, perplexity 12.419357. Final checkpoint is best
 among saved checkpoints, loaded successfully for generation and checked against
 the manifest. Learned per-layer feature-decay ranges are saved in the report.
+
+## K+V recipe
+
+The second configuration enables key_decay=True as well as value_decay=True,
+with independent [384] learned logits for each per layer, still initialized to
+0.99. RMSNorm, shared initialization draws, optimizer, schedule and data order
+are unchanged. All 550 tests and Ruff passed with this configured model too.
+This is a fresh run, not continuation or fine-tuning of the V-only weights.

@@ -8,6 +8,6 @@ training_config = TrainingConfig(
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/ember-v-decay-v4/tensorboard"),
+    directory=results_path("pretraining/ember-kv-decay-v5/tensorboard"),
     interval=10,
 )
