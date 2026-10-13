@@ -23,9 +23,9 @@ class CumulativeMixerImpl(nn.Module):
     def forward(self, x: Tensor, *, cache: CacheStorage | None = None) -> Tensor:
         if cache is not None and torch.is_grad_enabled():
             raise RuntimeError("Cumulative cached execution requires no_grad")
-        q = self.q_proj(x)
+        q = torch.sigmoid(self.q_proj(x))
         k = torch.tanh(self.k_proj(x))
-        v = self.v_proj(x)
+        v = torch.sigmoid(self.v_proj(x))
         # Accumulate low-precision projections in FP32, preserving FP64 references.
         working_dtype = (
             torch.float32 if k.dtype in (torch.float16, torch.bfloat16) else k.dtype

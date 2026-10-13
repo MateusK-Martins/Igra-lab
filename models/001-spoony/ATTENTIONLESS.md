@@ -1,3 +1,6 @@
+> **Current experiments:** [SIGMOID_NORM.md](SIGMOID_NORM.md) tracks the
+> sigmoid Q/V runs. The original unbounded-Q/V experiment below is historical.
+
 # Cumulative mechanism — codename pending
 
 Branch: `codex/attentionless`, based on Lantern. The configured model replaces

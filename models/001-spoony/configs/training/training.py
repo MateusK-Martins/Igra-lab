@@ -8,6 +8,6 @@ training_config = TrainingConfig(
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/attentionless-tinystories-v1/tensorboard"),
+    directory=results_path("pretraining/attentionless-sigmoid-rms-v2/tensorboard"),
     interval=10,
 )

@@ -44,6 +44,7 @@ def main():
     )
     report = {
         "branch": "codex/attentionless",
+        "experiment": logging_config.directory.parent.name,
         "training_seconds_including_validation_and_saving": elapsed,
         "gpu": torch.cuda.get_device_name(),
         "peak_allocated_vram_bytes": torch.cuda.max_memory_allocated(),

@@ -9,9 +9,9 @@ from src.model.definitions import CumulativeMixer
 
 
 def reference(module, x):
-    q = module.q_proj(x)
+    q = module.q_proj(x).sigmoid()
     k = module.k_proj(x).tanh()
-    v = module.v_proj(x)
+    v = module.v_proj(x).sigmoid()
     keys = torch.zeros_like(k[:, 0])
     values = torch.zeros_like(v[:, 0])
     output = []
