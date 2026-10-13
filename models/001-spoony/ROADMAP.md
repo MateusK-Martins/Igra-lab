@@ -1,3 +1,6 @@
+> **Flux — active model:** see [TOKEN_DECAY.md](TOKEN_DECAY.md) for the
+> token-dependent affine-scan model and results. Ember below is historical.
+
 > **Active token-decay experiment:** see [TOKEN_DECAY.md](TOKEN_DECAY.md).
 > Ember and earlier notes below are historical.
 

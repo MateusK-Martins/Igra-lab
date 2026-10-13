@@ -1,6 +1,6 @@
-# Token-conditioned decay — codename pending
+# Flux: token-conditioned decay
 
-This model branches from pushed Ember commit c856b10 on codex/token-decay.
+Flux branches from pushed Ember commit c856b10 on model/001-spoony-flux.
 Ember remains unchanged on model/001-spoony-ember. The model-local directory is
 still models/001-spoony, with independent code, configs and copied data artifacts.
 
@@ -81,3 +81,51 @@ independent 384-to-384 projections per layer, initialized to the same 0.99
 retention, with RMSNorm and all training settings unchanged. All 603 tests and
 Ruff passed with this configured model as well. This is a fresh run from seed
 42, not fine-tuning or continuation of the V-only checkpoint.
+
+## Completed Flux comparison — 2026-10-13
+
+The branch was named Flux after both runs. Frozen reports retain the actual
+training branch name codex/token-decay and original artifact directory names.
+Recipe commits: V-only 29890bc, K+V 9354fab. All 603 tests and Ruff passed for
+both configurations. Both fresh seed-42 runs consumed 18,429,440 target tokens
+in 9,000 updates, with data/tokenizer hashes and training settings identical
+to Ember. Final checkpoints are best among nine saved per run, loaded for
+generation/probes and checked against their manifests. Current source hashes
+match the K+V training manifest.
+
+| Variant | Parameters | Validation loss | Perplexity | Time |
+| --- | ---: | ---: | ---: | ---: |
+| Ember fixed V | 12,889,344 | 2.519256 | 12.419357 | 5m 22s |
+| Flux token V | 13,774,080 | 2.173892 | 8.792440 | 6m 36s |
+| Ember fixed K+V | 12,891,648 | 2.509973 | 12.304594 | 6m 24s |
+| Flux token K+V | 14,661,120 | 2.169193 | 8.751216 | 8m 48s |
+
+Both token-conditioned variants score better in this seed, but are larger;
+this does not isolate conditioning from added capacity. Adding K improves
+Flux loss by only 0.004700 nats at higher time and parameter cost. V-only is a
+strong cost/quality choice here; repeated seeds are needed for stronger claims.
+Flux remains behind Lantern's attention baseline (loss 2.018320) under this
+recipe. Generations remain repetitive and sometimes inconsistent.
+
+Probes use the same first ordered validation batch in BF16 eval/no_grad with
+no cache. All trained gate matrices are nonzero and all gates vary across
+tokens within each feature. K+V layer-average K retention is about 0.933–0.980
+with mean within-feature token standard deviation 0.023–0.072; V retention is
+about 0.664–0.941 with variation 0.098–0.215. These confirm conditioning without
+establishing a semantic interpretation. Sigmoid can round extreme values to
+one in floating point; boundary zero/unit coefficients are covered by tests.
+
+Reports and probes:
+- [V report](results/pretraining/token-v-decay-v6/training-report.json)
+- [V gate probe](results/pretraining/token-v-decay-v6/gate-probe.json)
+- [K+V report](results/pretraining/token-kv-decay-v7/training-report.json)
+- [K+V gate probe](results/pretraining/token-kv-decay-v7/gate-probe.json)
+- [Comparison](results/pretraining/token-kv-decay-v7/token-decay-comparison.json)
+
+Times include validation/saving, excluding preparation, benchmark, tests and
+subsequent samples/probes. Code, manifests and reports are pushed on Flux; data
+and checkpoints remain local and ignored in this worktree. Ember's original
+ignored weights remain in its own worktree, not copied here. Current Flux
+configuration retains both token-dependent gates and RMSNorm. For historical
+checkpoint compatibility use the recorded recipe commit and configuration;
+the existing strict resume policy includes the exact Git identity.

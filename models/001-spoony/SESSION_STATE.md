@@ -1,3 +1,26 @@
+# Flux token-dependent experiments completed — 2026-10-13
+
+Read TOKEN_DECAY.md first. Branch model/001-spoony-flux starts from pushed
+Ember c856b10; Ember is unchanged. Current model selects decay_mode="token"
+with independent learned 384-to-384 K/V gates per layer, sigmoid(Wx+b),
+initialized W=0 and b=logit(0.99). Q/V use sigmoid, K tanh; internal norms are
+trainable RMSNorm. Parallel affine scan has O(log T) depth; cached inference
+keeps only two [B,1,D] states. Constant diagonal mode remains available.
+
+Fresh seed-42 runs, identical data/settings, 9,000 updates / 18,429,440 tokens:
+- V-only, recipe 29890bc: 13,774,080 params, loss 2.173892, perplexity 8.792440,
+  395.58 seconds including validation/saving.
+- K+V, recipe 9354fab: 14,661,120 params, loss 2.169193, perplexity 8.751216,
+  528.02 seconds including validation/saving.
+
+603 tests and Ruff passed for both configurations. Final checkpoints are best
+among nine saved each and matched their manifests when loaded for generation
+and probes. Probes share the same validation batch and confirm all gates vary
+across tokens/features. Code/reports are pushed on Flux; weights/data remain
+local and ignored. Old temporary branch names remain in frozen run metadata.
+Not parameter matched to Ember. The extra K gate adds little in this seed.
+Historical notes follow.
+
 > **Active token-decay experiment:** see [TOKEN_DECAY.md](TOKEN_DECAY.md).
 > Ember and earlier notes below are historical.
 

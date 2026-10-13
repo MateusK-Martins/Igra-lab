@@ -1,3 +1,6 @@
+> **Historical Ember experiment:** current Flux results are in
+> [TOKEN_DECAY.md](TOKEN_DECAY.md). Ember remains on its separate branch.
+
 # Ember: feature-wise diagonal decay
 
 Ember is the cumulative model on `model/001-spoony-ember`. The pre-decay snapshot

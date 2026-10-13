@@ -1,0 +1,58 @@
+{
+  "model": "Flux",
+  "branch": "model/001-spoony-flux",
+  "parent_model": "Ember",
+  "parent_commit": "c856b1083b3cda90e6dbc86294f0043aa7bff8d4",
+  "seed": 42,
+  "updates": 9000,
+  "target_tokens": 18429440,
+  "identical_artifacts_and_training_settings": true,
+  "gate": "per-token per-feature sigmoid(W_D x + b_D), initially zero W and logit(0.99) bias",
+  "execution": "parallel affine prefix scan, O(log T) depth, constant-size cached states",
+  "runs": {
+    "ember_v": {
+      "experiment": "ember-v-decay-v4",
+      "recipe_commit": "db2111fa53608794b85402b60cf53b686a7912b2",
+      "parameters": 12889344,
+      "validation_loss": 2.519256309226707,
+      "perplexity": 12.419357067041055,
+      "training_seconds": 322.181705784,
+      "best_checkpoint": "checkpoints/step-00009000.pt"
+    },
+    "flux_v": {
+      "experiment": "token-v-decay-v6",
+      "recipe_commit": "29890bc8a7327667102eceb823317a009b96d32e",
+      "parameters": 13774080,
+      "validation_loss": 2.173892272843255,
+      "perplexity": 8.792440101097792,
+      "training_seconds": 395.57828178399996,
+      "best_checkpoint": "checkpoints/step-00009000.pt"
+    },
+    "ember_kv": {
+      "experiment": "ember-kv-decay-v5",
+      "recipe_commit": "ec1e92723816a808043cd4239624ddcd56bf64e8",
+      "parameters": 12891648,
+      "validation_loss": 2.509972669460155,
+      "perplexity": 12.304593764724698,
+      "training_seconds": 383.97715534400004,
+      "best_checkpoint": "checkpoints/step-00009000.pt"
+    },
+    "flux_kv": {
+      "experiment": "token-kv-decay-v7",
+      "recipe_commit": "9354fabc1fb0aac01d4aafd7334d1f7f14fffd1b",
+      "parameters": 14661120,
+      "validation_loss": 2.1691926055484347,
+      "perplexity": 8.751215504733475,
+      "training_seconds": 528.0241898089998,
+      "best_checkpoint": "checkpoints/step-00009000.pt"
+    }
+  },
+  "kv_minus_v_validation_loss": -0.004699667294820298,
+  "conclusion": "Token-conditioned versions score better than fixed decays in this seed but are larger. Adding the K gate gives only a tiny loss improvement at greater cost.",
+  "limitations": [
+    "Single seed and recipe.",
+    "Not parameter matched: full gate projections increase model size.",
+    "Durations include validation/saving and exclude preparation, benchmark, tests and subsequent generation/probes."
+  ],
+  "current_configuration": "token-dependent K and V decay, sigmoid Q/V, tanh K, trainable RMSNorm"
+}
