@@ -1,3 +1,18 @@
+# Codename baseline completed — 2026-10-13
+
+Branch `codex/codename`, isolated from the original Spoony working directory.
+Read [CODENAME.md](CODENAME.md) first: 12,440,064 parameters, TinyStories
+30,000/256 stories, fixed 8,192-vocabulary tokenizer, context/window 256.
+The fresh 9,000-update baseline finished in 431.33 seconds including validation
+and saving. Final validation loss 2.018320, perplexity 7.525675; final checkpoint
+step-00009000.pt is best among nine saved checkpoints. 480 tests and Ruff passed.
+Artifacts live in this worktree; raw/prepared data and weights are ignored.
+Original uncommitted generation and Shakespeare work was not copied. Only the
+embedding std implementation/tests and current pre-attention norm recipe were
+carried over deliberately. No attentionless architecture has been implemented.
+
+The notes below are historical Spoony context.
+
 > **Codename branch:** the active larger TinyStories recipe and comparison
 > protocol are documented in [CODENAME.md](CODENAME.md). The historical
 > Spoony notes below describe earlier configurations.

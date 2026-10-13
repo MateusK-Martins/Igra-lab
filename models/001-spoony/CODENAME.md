@@ -72,3 +72,40 @@ same tokenizer, throughput and peak allocated VRAM. Fixed greedy prompts are
 in configs/inference_baseline.py. One seed is preliminary; repeat seeds before
 making architecture claims. This short run does not establish convergence or
 broad language capability.
+
+## Completed baseline — 2026-10-13
+
+Recipe commit: `2eb1a7badd44a58a59841a5e817effb218fc071e`. All 480 tests
+passed, including configured-model forward/backward, cache equivalence across
+the enlarged window, embedding initialization, corpus deduplication and
+checkpoint/resume coverage. Ruff lint and formatting checks passed.
+
+Training completed in **431.33 seconds (7 minutes 11 seconds)**, including
+validation, checkpoint saving, manifest creation and writer closure, excluding
+data download/preparation, benchmarking and the subsequent generation samples.
+The run consumed **18,429,440 target tokens** in 9,000 updates: two full epochs
+plus 2,728 batches. Partial final batches account for the difference from
+9,000 × 2,048 tokens. Overall throughput was about 42,726 target tokens/second;
+peak allocated CUDA memory was 802,710,528 bytes (0.748 GiB; allocator usage,
+not total device occupancy).
+
+Initial validation loss was 9.242885; final loss **2.018320**, perplexity
+**7.525675**. Every recorded validation measurement improved; convergence is
+not established. The final checkpoint is also the best saved checkpoint:
+`results/pretraining/codename-tinystories-v1/checkpoints/step-00009000.pt`.
+Nine checkpoints were saved. The final checkpoint was loaded successfully for
+generation and its settings were checked against the saved manifest.
+
+The fixed greedy samples produce readable sentences but exhibit repetition
+and inconsistent story progression. The full samples, 18 validation measurements,
+subset identities and actual timing are in
+[training-report.json](results/pretraining/codename-tinystories-v1/training-report.json).
+The [manifest](results/pretraining/codename-tinystories-v1/manifest.json) pins
+processed artifacts, settings, source hashes and environment. Prepared data and
+checkpoints remain local and ignored; retain this worktree for the comparison.
+
+The next experiment can now replace attention on a separate branch while
+reusing these exact data/tokenizer artifacts. Treat these as single-seed
+preliminary results. Checkpoint compatibility includes the recipe Git commit;
+result-only commits do not change the model weights, but rebuilding a resume
+manifest on a different commit is rejected by the existing strict loader.
