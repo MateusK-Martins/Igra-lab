@@ -5,10 +5,10 @@ from src.config.types import PreparationConfig, TokenizerConfig
 
 preparation_config = PreparationConfig(
     tokenizer=TokenizerConfig(
-        target_vocab_size=4096,
+        target_vocab_size=8192,
         min_frequency=2,
         special_tokens=("<|unk|>", "<|eot|>"),
     ),
-    output_directory=data_path("processed/initial"),
+    output_directory=data_path("processed/codename-tinystories"),
     end_of_document_token="<|eot|>",
 )

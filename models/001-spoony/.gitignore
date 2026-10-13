@@ -1,5 +1,5 @@
 # Local Python environment
-.venv/
+.venv
 
 # Environment secrets and machine-specific values
 .env

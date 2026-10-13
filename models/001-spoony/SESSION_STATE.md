@@ -1,3 +1,7 @@
+> **Codename branch:** the active larger TinyStories recipe and comparison
+> protocol are documented in [CODENAME.md](CODENAME.md). The historical
+> Spoony notes below describe earlier configurations.
+
 # Pair-programming continuation — 2026-10-10
 
 Branch: model/001-spoony. This checkpoint includes RMSNorm, model assembly

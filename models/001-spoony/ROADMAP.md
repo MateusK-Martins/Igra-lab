@@ -1,3 +1,7 @@
+> **Codename branch:** the active larger TinyStories recipe and comparison
+> protocol are documented in [CODENAME.md](CODENAME.md). The historical
+> Spoony notes below describe earlier configurations.
+
 # Spoony roadmap
 
 Spoony is a small, independently runnable decoder Transformer. Its size is

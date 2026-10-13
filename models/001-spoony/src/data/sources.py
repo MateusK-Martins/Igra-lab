@@ -2,6 +2,7 @@
 
 from collections.abc import Iterator, Mapping
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Protocol
 
 from datasets import load_dataset
@@ -34,3 +35,17 @@ class HuggingFaceSource:
             streaming=self.streaming,
         )
         yield from dataset
+
+
+@dataclass(frozen=True)
+class JsonlSource:
+    """Read materialized documents without loading the corpus into memory."""
+
+    path: "Path"
+
+    def read(self) -> Iterator[Mapping[str, object]]:
+        import json
+
+        with self.path.open(encoding="utf-8") as stream:
+            for line in stream:
+                yield json.loads(line)

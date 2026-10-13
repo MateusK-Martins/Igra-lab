@@ -41,29 +41,29 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     assert model.embedding.num_embeddings == tokenizer.vocab_size
     assert model.lm_head.out_features == tokenizer.vocab_size
     assert model.lm_head.weight is model.embedding.weight
-    assert len(model.body) == 16
-    for index in range(0, 16, 4):
-        attention, norm1, feedforward, norm2 = model.body[index : index + 4]
+    assert len(model.body) == 24
+    for index in range(0, 24, 4):
+        norm1, attention, feedforward, norm2 = model.body[index : index + 4]
         assert isinstance(attention, ResidualImpl)
         assert isinstance(attention.branch, GQAAttentionImpl)
         assert isinstance(feedforward, ResidualImpl)
         assert isinstance(feedforward.branch, SwiGLUImpl)
         assert isinstance(norm1, RMSNormImpl)
         assert isinstance(norm2, RMSNormImpl)
-        assert attention.branch.window_size == 128
+        assert attention.branch.window_size == 256
         assert attention.branch.dropout == 0
     assert [entry.layer_id for entry in entries] == [
-        model.body[index].branch.layer_id for index in range(0, 16, 4)
+        model.body[index].branch.layer_id for index in range(1, 24, 4)
     ]
-    assert len({entry.layer_id for entry in entries}) == 4
-    assert all(entry.keys.shape == (0, 2, 0, 32) for entry in entries)
+    assert len({entry.layer_id for entry in entries}) == 6
+    assert all(entry.keys.shape == (0, 2, 0, 48) for entry in entries)
 
 
 def test_config_forward_and_next_token_loss_backward(tokenizer):
     model, _ = build_model(tokenizer)
-    tokens = torch.randint(tokenizer.vocab_size, (2, 129))
+    tokens = torch.randint(tokenizer.vocab_size, (2, 257))
     logits = model(tokens[:, :-1])
-    assert logits.shape == (2, 128, tokenizer.vocab_size)
+    assert logits.shape == (2, 256, tokenizer.vocab_size)
     loss = F.cross_entropy(
         logits.reshape(-1, tokenizer.vocab_size), tokens[:, 1:].reshape(-1)
     )
@@ -77,10 +77,10 @@ def test_config_forward_and_next_token_loss_backward(tokenizer):
 def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokenizer):
     first, first_entries = build_model(tokenizer)
     second, second_entries = build_model(tokenizer)
-    weights = [first.body[index].branch.q_proj.weight for index in range(0, 16, 4)]
-    assert len({weight.data_ptr() for weight in weights}) == 4
-    gates = [first.body[index].branch.gate.weight for index in range(2, 16, 4)]
-    assert len({weight.data_ptr() for weight in gates}) == 4
+    weights = [first.body[index].branch.q_proj.weight for index in range(1, 24, 4)]
+    assert len({weight.data_ptr() for weight in weights}) == 6
+    gates = [first.body[index].branch.gate.weight for index in range(2, 24, 4)]
+    assert len({weight.data_ptr() for weight in gates}) == 6
     assert all(
         a.data_ptr() != b.data_ptr()
         for a, b in zip(first.parameters(), second.parameters(), strict=True)
@@ -102,20 +102,20 @@ def test_config_cached_chunks_match_full_logits_across_window_boundary(tokenizer
     # to distinguish cache semantics from accumulated float32 rounding.
     model.double().eval()
     cache = CacheStorage(entries, torch.device("cpu"), torch.device("cpu"))
-    tokens = torch.randint(tokenizer.vocab_size, (1, 133))
+    tokens = torch.randint(tokenizer.vocab_size, (1, 261))
     with torch.no_grad():
         expected = model(tokens)
         actual = torch.cat(
             [
-                model(tokens[:, :127], cache=cache),
-                model(tokens[:, 127:130], cache=cache),
-                model(tokens[:, 130:], cache=cache),
+                model(tokens[:, :255], cache=cache),
+                model(tokens[:, 255:258], cache=cache),
+                model(tokens[:, 258:], cache=cache),
             ],
             dim=1,
         )
     torch.testing.assert_close(actual, expected, rtol=1e-7, atol=1e-9)
-    assert all(entry.count == 133 for entry in entries)
-    assert all(entry.keys.shape == (1, 2, 133, 32) for entry in entries)
+    assert all(entry.count == 261 for entry in entries)
+    assert all(entry.keys.shape == (1, 2, 261, 48) for entry in entries)
 
 
 def test_config_state_dict_round_trip_preserves_logits_and_tying(tokenizer):
@@ -129,3 +129,19 @@ def test_config_state_dict_round_trip_preserves_logits_and_tying(tokenizer):
     with torch.no_grad():
         torch.testing.assert_close(restored(tokens), model(tokens))
     assert restored.lm_head.weight is restored.embedding.weight
+
+
+def test_configured_embedding_scale_and_initial_next_token_loss(tokenizer):
+    import math
+
+    model, _ = build_model(tokenizer)
+    assert model.embedding.weight.std().item() == pytest.approx(0.02, rel=0.02)
+    tokens = torch.randint(tokenizer.vocab_size, (2, 17))
+    with torch.no_grad():
+        loss = F.cross_entropy(
+            model(tokens[:, :-1]).reshape(-1, tokenizer.vocab_size),
+            tokens[:, 1:].reshape(-1),
+        )
+    # The wider tied head has higher initial self-token confidence; reject the
+    # old unscaled initialization, allowing two nats above uniform here.
+    assert abs(loss.item() - math.log(tokenizer.vocab_size)) < 2.0

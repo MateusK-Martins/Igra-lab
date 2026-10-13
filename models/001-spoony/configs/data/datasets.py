@@ -1,7 +1,21 @@
-"""Declare selected datasets here. Importing does not read or download data."""
+from configs.data.corpus import DATASET_ID, RAW_DIRECTORY, REVISION
+from src.data.pipeline import DataSet, DataSetPipe
+from src.data.schemas import DocumentManifest
+from src.data.sources import JsonlSource
 
-from src.data.pipeline import DataSetPipe
-
-# Add DataSet(manifest=DocumentManifest(...), source=...) entries here.
-# Each DataSet represents one split; no source is selected yet.
-dataset_pipe = DataSetPipe(datasets=[])
+dataset_pipe = DataSetPipe(
+    datasets=[
+        DataSet(
+            manifest=DocumentManifest(
+                name=f"tinystories-{REVISION}",
+                language="en",
+                text_field="text",
+                split=split,
+                license="CDLA-Sharing-1.0",
+                citation=f"https://huggingface.co/datasets/{DATASET_ID}/tree/{REVISION}",
+            ),
+            source=JsonlSource(RAW_DIRECTORY / f"{split}.jsonl"),
+        )
+        for split in ("train", "validation")
+    ]
+)

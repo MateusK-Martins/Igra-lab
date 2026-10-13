@@ -4,10 +4,10 @@ from src.config.types import LoggingConfig, TrainingConfig
 training_config = TrainingConfig(
     accumulation_steps=1,
     max_grad_norm=1.0,
-    validation_interval=100,
+    validation_interval=500,
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/local/tensorboard"),
+    directory=results_path("pretraining/codename-tinystories-v1/tensorboard"),
     interval=10,
 )

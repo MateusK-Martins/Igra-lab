@@ -189,17 +189,29 @@ class SwiGLU(BlockDefinition):
 @dataclass(frozen=True)
 class Embedding(EmbeddingDefinition):
     output_features: int
+    init_std: float = 1.0
 
     def __post_init__(self) -> None:
         _positive_integer(self.output_features, "output_features")
+        if (
+            type(self.init_std) not in (int, float)
+            or not math.isfinite(self.init_std)
+            or self.init_std <= 0
+        ):
+            raise ValueError("init_std must be a finite positive number")
 
     def build(self, *, vocab_size: int) -> nn.Embedding:
         _positive_integer(vocab_size, "vocab_size")
 
-        return nn.Embedding(
+        embedding = nn.Embedding(
             num_embeddings=vocab_size,
             embedding_dim=self.output_features,
         )
+        # nn.Embedding starts with N(0, 1). Scaling preserves the same random
+        # draw and RNG state, including the initialization of subsequent blocks.
+        with torch.no_grad():
+            embedding.weight.mul_(self.init_std)
+        return embedding
 
 
 class LMHeadDefinition(Protocol):
