@@ -9,7 +9,7 @@ manifest, benchmark, saved checkpoints and fixed-prompt greedy samples.
 Stage 1: retain both trainable RMSNorms inside the cumulative mixer, to measure
 sigmoid Q/V separately. Outputs: results/pretraining/attentionless-sigmoid-rms-v2/.
 
-Stage 2 (planned): replace only the two norms inside the cumulative mechanism
+Stage 2 (implemented): replace only the two norms inside the cumulative mechanism
 with feature-wise `x / sqrt(1 + mean(x**2))`, without learned gain. This smooth
 compression has denominator at least one, so it does not amplify small signals;
 its derivative at zero is one rather than RMSNorm's 1/sqrt(epsilon). At large
@@ -30,3 +30,19 @@ step-00009000.pt is best among saved checkpoints and was loaded for generation;
 its settings match the saved manifest. It consumed exactly 18,429,440 tokens.
 Compared with the original cumulative model (loss 2.659388), the loss improvement
 is small (0.022733 nats); this is not a multi-seed conclusion.
+
+## Stage 2 recipe
+
+The configured cumulative mixer now selects normalization="soft_rms". The
+original RMSNorm option remains available. Only the two internal norms change;
+outer RMSNorms are preserved. The soft variant uses no epsilon because its
+denominator already has a unit floor, and no learned gains. Parameter count is
+12,882,432 versus stage 1's 12,887,040. New outputs use
+results/pretraining/attentionless-sigmoid-soft-rms-v3/.
+
+509 tests passed before the battery interruption, including both norm choices'
+formula/gradient references, causality, cached continuation and CUDA precision
+checks, plus soft norm gradcheck, identity Jacobian at zero, non-amplification,
+dtype preservation and unchanged common initial projection weights. Lint and
+format checks passed again after resuming. No stage-2 training had started before
+the interruption; the benchmark was rerun successfully after resuming.

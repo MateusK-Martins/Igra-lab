@@ -1,6 +1,6 @@
 import math
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Literal, Protocol
 
 import torch
 from torch import nn
@@ -346,6 +346,7 @@ class CumulativeMixer(BlockDefinition):
     eps: float = 1e-6
     residual: bool = False
     bias: bool = False
+    normalization: Literal["rms", "soft_rms"] = "rms"
 
     @property
     def output_features(self) -> int:
@@ -359,12 +360,19 @@ class CumulativeMixer(BlockDefinition):
             or self.eps <= 0
         ):
             raise ValueError("eps must be finite and greater than zero")
+        if self.normalization not in ("rms", "soft_rms"):
+            raise ValueError("normalization must be rms or soft_rms")
         for name in ("residual", "bias"):
             if type(getattr(self, name)) is not bool:
                 raise ValueError(f"{name} must be a boolean")
 
     def build(self) -> nn.Module:
-        return CumulativeMixerImpl(self.input_features, self.eps, bias=self.bias)
+        return CumulativeMixerImpl(
+            self.input_features,
+            self.eps,
+            bias=self.bias,
+            normalization=self.normalization,
+        )
 
     def cache(self, layer_id: int) -> StateEntry:
         return StateEntry(

@@ -14,32 +14,33 @@ def reference(module, x):
     v = module.v_proj(x).sigmoid()
     keys = torch.zeros_like(k[:, 0])
     values = torch.zeros_like(v[:, 0])
+    offset = 1.0 if module.normalization == "soft_rms" else module.key_norm.eps
     output = []
     for token in range(x.shape[1]):
         keys = keys + k[:, token]
         normalized_keys = (
             keys
-            * torch.rsqrt(keys.square().mean(-1, keepdim=True) + module.key_norm.eps)
-            * module.key_norm.weights
+            * torch.rsqrt(keys.square().mean(-1, keepdim=True) + offset)
+            * getattr(module.key_norm, "weights", 1)
         )
         values = values + v[:, token] * normalized_keys
         normalized_values = (
             values
-            * torch.rsqrt(
-                values.square().mean(-1, keepdim=True) + module.value_norm.eps
-            )
-            * module.value_norm.weights
+            * torch.rsqrt(values.square().mean(-1, keepdim=True) + offset)
+            * getattr(module.value_norm, "weights", 1)
         )
         output.append(q[:, token] * normalized_values)
     return torch.stack(output, dim=1)
 
 
-def test_output_and_gradients_match_independent_sequential_recurrence():
+@pytest.mark.parametrize("normalization", ["rms", "soft_rms"])
+def test_output_and_gradients_match_independent_sequential_recurrence(normalization):
     torch.manual_seed(123)
-    module = CumulativeMixer(6, bias=True).build().double()
+    module = CumulativeMixer(6, bias=True, normalization=normalization).build().double()
     with torch.no_grad():
-        module.key_norm.weights.uniform_(0.5, 1.5)
-        module.value_norm.weights.uniform_(0.5, 1.5)
+        for norm in (module.key_norm, module.value_norm):
+            if hasattr(norm, "weights"):
+                norm.weights.uniform_(0.5, 1.5)
     other = copy.deepcopy(module)
     x = torch.randn(2, 9, 6, dtype=torch.float64, requires_grad=True)
     y = x.detach().clone().requires_grad_()
@@ -63,8 +64,9 @@ def test_residual_is_added_exactly_once_and_zero_input_is_finite():
     assert torch.isfinite(zeros.grad).all()
 
 
-def test_future_values_and_gradients_cannot_affect_prefix():
-    module = CumulativeMixer(5).build().double()
+@pytest.mark.parametrize("normalization", ["rms", "soft_rms"])
+def test_future_values_and_gradients_cannot_affect_prefix(normalization):
+    module = CumulativeMixer(5, normalization=normalization).build().double()
     x = torch.randn(2, 11, 5, dtype=torch.float64, requires_grad=True)
     changed = x.detach().clone()
     changed[:, 6:] = torch.randn_like(changed[:, 6:]) * 100
@@ -74,8 +76,11 @@ def test_future_values_and_gradients_cannot_affect_prefix():
 
 
 @pytest.mark.parametrize("chunks", [(1, 1, 1, 1, 1, 1, 1), (2, 4, 1), (7,)])
-def test_cached_chunks_and_snapshot_match_full_sequence(tmp_path, chunks):
-    definition = CumulativeMixer(5, residual=True)
+@pytest.mark.parametrize("normalization", ["rms", "soft_rms"])
+def test_cached_chunks_and_snapshot_match_full_sequence(
+    tmp_path, chunks, normalization
+):
+    definition = CumulativeMixer(5, residual=True, normalization=normalization)
     module = build_block(definition, 3).double()
     storage = CacheStorage(
         [definition.cache(3)], torch.device("cpu"), torch.device("cpu")
@@ -132,6 +137,7 @@ def test_cache_does_not_grow_and_rejects_changed_batch_without_mutation():
         {"input_features": 4, "eps": float("nan")},
         {"input_features": 4, "bias": 1},
         {"input_features": 4, "residual": 1},
+        {"input_features": 4, "normalization": "bad"},
     ],
 )
 def test_invalid_definition(kwargs):
@@ -141,8 +147,9 @@ def test_invalid_definition(kwargs):
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")
 @pytest.mark.parametrize("dtype", [torch.bfloat16, torch.float16])
-def test_cuda_mixed_precision_gradients_and_cpu_cached_state(dtype):
-    definition = CumulativeMixer(16, residual=True)
+@pytest.mark.parametrize("normalization", ["rms", "soft_rms"])
+def test_cuda_mixed_precision_gradients_and_cpu_cached_state(dtype, normalization):
+    definition = CumulativeMixer(16, residual=True, normalization=normalization)
     module = build_block(definition, 2).cuda()
     x = torch.randn(2, 33, 16, device="cuda", requires_grad=True)
     with torch.autocast("cuda", dtype=dtype):

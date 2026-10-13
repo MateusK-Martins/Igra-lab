@@ -12,7 +12,12 @@ def build_model(tokenizer: Tokenizer):
                 times=6,
                 blocks=[
                     RMSNorm(input_features=384, eps=1e-6),
-                    CumulativeMixer(input_features=384, eps=1e-6, residual=True),
+                    CumulativeMixer(
+                        input_features=384,
+                        eps=1e-6,
+                        residual=True,
+                        normalization="soft_rms",
+                    ),
                     SwiGLU(
                         input_features=384,
                         hidden_features=1024,

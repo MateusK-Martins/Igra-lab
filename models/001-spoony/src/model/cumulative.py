@@ -1,20 +1,38 @@
 """Causal feature-wise cumulative mixing, with two constant-size running sums."""
 
+from typing import Literal
+
 import torch
 from torch import Tensor, nn
 
 from src.model.cache_storage import CacheStorage
-from src.model.stability import RMSNormImpl
+from src.model.stability import RMSNormImpl, SoftRMSNormImpl
 
 
 class CumulativeMixerImpl(nn.Module):
-    def __init__(self, features: int, eps: float, *, bias: bool) -> None:
+    def __init__(
+        self,
+        features: int,
+        eps: float,
+        *,
+        bias: bool,
+        normalization: Literal["rms", "soft_rms"] = "rms",
+    ) -> None:
         super().__init__()
         self.q_proj = nn.Linear(features, features, bias=bias)
         self.k_proj = nn.Linear(features, features, bias=bias)
         self.v_proj = nn.Linear(features, features, bias=bias)
-        self.key_norm = RMSNormImpl(features, eps)
-        self.value_norm = RMSNormImpl(features, eps)
+        self.normalization = normalization
+        self.key_norm = (
+            RMSNormImpl(features, eps)
+            if normalization == "rms"
+            else SoftRMSNormImpl(features)
+        )
+        self.value_norm = (
+            RMSNormImpl(features, eps)
+            if normalization == "rms"
+            else SoftRMSNormImpl(features)
+        )
         self.layer_id = ""
 
     def assign_id(self, layer_id: int) -> None:
