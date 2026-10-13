@@ -20,3 +20,13 @@ internal learned gains removes 4,608 parameters (0.036%); record this explicitly
 The second run must start from scratch, use a fresh output directory and keep
 all other training settings fixed. Norms operate per token across features;
 sequence aggregation remains causal cumsum along dim=1 with FP32 accumulation.
+
+## Stage 1 completed
+
+Recipe commit `2b32df1`. All 495 tests and Ruff passed. The fresh sigmoid Q/V
+plus RMSNorm run completed in 324.14 seconds (5m 24s), including validation
+and saving. Final validation loss 2.636655, perplexity 13.966409. Final checkpoint
+step-00009000.pt is best among saved checkpoints and was loaded for generation;
+its settings match the saved manifest. It consumed exactly 18,429,440 tokens.
+Compared with the original cumulative model (loss 2.659388), the loss improvement
+is small (0.022733 nats); this is not a multi-seed conclusion.
