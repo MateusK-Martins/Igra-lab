@@ -1,3 +1,6 @@
+> **Ember:** this model now lives on `model/001-spoony-ember`. Historical
+> recipe commits and reports retain their original branch identities.
+
 # Sigmoid and normalization experiments completed — 2026-10-13
 
 Read SIGMOID_NORM.md first. Branch remains codex/attentionless; codename pending.

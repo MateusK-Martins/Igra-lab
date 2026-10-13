@@ -1,3 +1,6 @@
+> **Ember:** this model now lives on `model/001-spoony-ember`. Historical
+> recipe commits and reports retain their original branch identities.
+
 > **Current experiments:** [SIGMOID_NORM.md](SIGMOID_NORM.md) tracks the
 > sigmoid Q/V runs. The original unbounded-Q/V experiment below is historical.
 

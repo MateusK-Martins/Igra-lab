@@ -1,3 +1,6 @@
+> **Ember:** this model now lives on `model/001-spoony-ember`. Historical
+> recipe commits and reports retain their original branch identities.
+
 # Sigmoid Q/V and normalization experiments
 
 Two fresh seed-42, 9,000-update runs use the same prepared TinyStories artifacts,
