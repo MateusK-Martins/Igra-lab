@@ -57,3 +57,19 @@ Outputs:
 Each run records its own recipe commit, manifest, benchmark, checkpoints and
 fixed-prompt generations. Data and weights stay local and ignored; small reports
 are versioned. A single seed and recipe do not establish an architecture ranking.
+
+## Token-dependent V-only completed
+
+Recipe commit `29890bc`. Fresh 9,000 updates / 18,429,440 target tokens finished
+in 395.58 seconds including validation and saving. Final validation loss
+2.173892, perplexity 8.792440. Final checkpoint is best
+among nine saved, was loaded for generation and gate probing, and matched its
+manifest. Ember's fixed V decay scored 2.519256 / 12.419357 at equal tokens.
+
+A probe of the first ordered validation batch confirms token-dependent
+retention: all six gate weight matrices changed from zero, and each feature's
+retention varies across tokens. Mean within-feature token standard deviations
+range about 0.085 to 0.246 across layers; layer-average retention ranges about
+0.636 to 0.948. Full per-layer statistics and the probe input fingerprint are
+in results/pretraining/token-v-decay-v6/gate-probe.json. This probe is outside
+the measured training time.

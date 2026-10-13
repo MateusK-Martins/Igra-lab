@@ -1,0 +1,80 @@
+{
+  "checkpoint": "checkpoints/step-00009000.pt",
+  "recipe_commit": "29890bc8a7327667102eceb823317a009b96d32e",
+  "probe": "first ordered validation batch, eval mode, configured precision, no cache",
+  "input_sha256": "50048bf75003d47660a380ede10995c7f2051ba7a4df9207ff94f3ba28941c7a",
+  "gates": {
+    "body.1.branch.value_decay_gate": {
+      "shape": [
+        8,
+        256,
+        384
+      ],
+      "min": 8.205888298107311e-05,
+      "mean": 0.85401850938797,
+      "max": 1.0,
+      "mean_feature_std_across_tokens": 0.21676211059093475,
+      "gate_weight_norm": 11.990736961364746
+    },
+    "body.5.branch.value_decay_gate": {
+      "shape": [
+        8,
+        256,
+        384
+      ],
+      "min": 0.00036137152346782386,
+      "mean": 0.8605614304542542,
+      "max": 0.9999366998672485,
+      "mean_feature_std_across_tokens": 0.15783877670764923,
+      "gate_weight_norm": 12.211051940917969
+    },
+    "body.9.branch.value_decay_gate": {
+      "shape": [
+        8,
+        256,
+        384
+      ],
+      "min": 0.00010218744137091562,
+      "mean": 0.6361522078514099,
+      "max": 0.9997357726097107,
+      "mean_feature_std_across_tokens": 0.24625281989574432,
+      "gate_weight_norm": 13.717819213867188
+    },
+    "body.13.branch.value_decay_gate": {
+      "shape": [
+        8,
+        256,
+        384
+      ],
+      "min": 9.580961341271177e-05,
+      "mean": 0.8659203052520752,
+      "max": 0.9999457597732544,
+      "mean_feature_std_across_tokens": 0.16468331217765808,
+      "gate_weight_norm": 12.836860656738281
+    },
+    "body.17.branch.value_decay_gate": {
+      "shape": [
+        8,
+        256,
+        384
+      ],
+      "min": 0.00036504134186543524,
+      "mean": 0.9019536375999451,
+      "max": 0.9999860525131226,
+      "mean_feature_std_across_tokens": 0.14101426303386688,
+      "gate_weight_norm": 13.177722930908203
+    },
+    "body.21.branch.value_decay_gate": {
+      "shape": [
+        8,
+        256,
+        384
+      ],
+      "min": 0.00031815480906516314,
+      "mean": 0.9477002024650574,
+      "max": 0.9999384880065918,
+      "mean_feature_std_across_tokens": 0.08542635291814804,
+      "gate_weight_norm": 11.933455467224121
+    }
+  }
+}
