@@ -1,3 +1,6 @@
+> **Historical experiment:** current Ember configuration and results are in
+> [DECAY_EXPERIMENTS.md](DECAY_EXPERIMENTS.md).
+
 > **Ember:** this model now lives on `model/001-spoony-ember`. Historical
 > recipe commits and reports retain their original branch identities.
 

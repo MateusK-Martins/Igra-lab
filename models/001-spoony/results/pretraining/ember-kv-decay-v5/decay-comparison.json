@@ -1,0 +1,46 @@
+{
+  "model": "Ember",
+  "branch": "model/001-spoony-ember",
+  "seed": 42,
+  "updates": 9000,
+  "target_tokens": 18429440,
+  "identical_artifacts_and_training_settings": true,
+  "normalization": "trainable RMSNorm",
+  "decay": "independent per-layer per-feature sigmoid logits initialized to coefficient 0.99",
+  "execution": "parallel doubling scans, no per-token Python loop, O(log T) depth",
+  "runs": {
+    "no_decay": {
+      "experiment": "attentionless-sigmoid-rms-v2",
+      "recipe_commit": "2b32df17f92b3e56257d05e183dac62ee0dbc382",
+      "parameters": 12887040,
+      "validation_loss": 2.6366550657484265,
+      "perplexity": 13.966408669638204,
+      "training_seconds": 324.14445105699997,
+      "best_checkpoint": "checkpoints/step-00009000.pt"
+    },
+    "v_decay": {
+      "experiment": "ember-v-decay-v4",
+      "recipe_commit": "db2111fa53608794b85402b60cf53b686a7912b2",
+      "parameters": 12889344,
+      "validation_loss": 2.519256309226707,
+      "perplexity": 12.419357067041055,
+      "training_seconds": 322.181705784,
+      "best_checkpoint": "checkpoints/step-00009000.pt"
+    },
+    "kv_decay": {
+      "experiment": "ember-kv-decay-v5",
+      "recipe_commit": "ec1e92723816a808043cd4239624ddcd56bf64e8",
+      "parameters": 12891648,
+      "validation_loss": 2.509972669460155,
+      "perplexity": 12.304593764724698,
+      "training_seconds": 383.97715534400004,
+      "best_checkpoint": "checkpoints/step-00009000.pt"
+    }
+  },
+  "conclusion": "V-only decay improves this seed versus no decay. K+V gives a small additional loss improvement but takes longer. No general architecture or statistical claim is established.",
+  "limitations": [
+    "Single seed, one initialization and recipe.",
+    "Different parameter counts: V adds 2304; K+V adds 4608 versus no decay.",
+    "Wall-clock durations include validation/saving and are not a controlled throughput-only study."
+  ]
+}

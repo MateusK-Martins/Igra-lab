@@ -59,3 +59,43 @@ with independent [384] learned logits for each per layer, still initialized to
 0.99. RMSNorm, shared initialization draws, optimizer, schedule and data order
 are unchanged. All 550 tests and Ruff passed with this configured model too.
 This is a fresh run, not continuation or fine-tuning of the V-only weights.
+
+## Completed comparison — 2026-10-13
+
+K+V recipe commit `ec1e927`. All 550 tests and Ruff passed for both configured
+models. Both fresh runs consumed exactly 18,429,440 target tokens in 9,000
+updates. Their tokenizer/split hashes and training settings match the no-decay
+sigmoid/RMSNorm baseline exactly. Final checkpoints are best among nine saved
+checkpoints per run, were loaded for fixed greedy generations, and matched
+their manifests. The final run's current source hashes also match its manifest.
+
+| RMSNorm + sigmoid Q/V variant | Parameters | Final validation loss | Perplexity | Time |
+| --- | ---: | ---: | ---: | ---: |
+| No decay | 12,887,040 | 2.636655 | 13.966409 | 5m 24s |
+| V decay | 12,889,344 | 2.519256 | 12.419357 | 5m 22s |
+| K+V decay | 12,891,648 | 2.509973 | 12.304594 | 6m 24s |
+
+V-only decay improved loss by 0.117399 nats in this seed; adding K decay gave a
+further 0.009284-nat improvement but took more time. This small additional gain
+is not evidence of a reliable advantage without repeated seeds. Both decay
+variants remain worse in validation loss than Lantern's attention baseline
+(2.018320). Generations remain repetitive and sometimes inconsistent.
+
+All six learned V vectors, and all twelve learned K/V vectors in the second
+run, are saved in the respective checkpoints. Their per-feature ranges and
+standard deviations are recorded in the training reports, demonstrating
+feature-specific updates rather than a single shared decay. Current model
+configuration keeps both decays enabled, initialized to 0.99 for fresh runs,
+and uses the restored trainable RMSNorms. There are no token-by-token Python
+loops in the runtime scans; sequential references live only in tests.
+
+Reports:
+[V-only](results/pretraining/ember-v-decay-v4/training-report.json),
+[K+V](results/pretraining/ember-kv-decay-v5/training-report.json),
+[comparison](results/pretraining/ember-kv-decay-v5/decay-comparison.json).
+Timing includes validation and checkpoint saves, excluding preparation, tests,
+benchmarking and subsequent generation. Checkpoints and data remain local and
+ignored; code, manifests, reports and comparison are pushed on the Ember branch.
+For historical checkpoint loading, use the recorded recipe commit and matching
+configuration; result-only commits are different Git identities under the
+existing strict checkpoint compatibility policy.

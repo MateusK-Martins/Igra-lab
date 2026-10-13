@@ -1,3 +1,27 @@
+# Ember diagonal-decay experiments completed — 2026-10-13
+
+Read DECAY_EXPERIMENTS.md first. Branch: model/001-spoony-ember. Pre-decay
+snapshot was pushed at ced912d, then the original trainable internal RMSNorms
+were restored. Q/V use sigmoid, K uses tanh. Current configuration enables both
+key_decay and value_decay with independent learned [384] vectors per layer,
+sigmoid-parameterized and initialized to 0.99. Training uses parallel doubling
+scans, O(log T) depth, no Python loop over tokens. Cached inference stores two
+constant-size states and matches full execution.
+
+Fresh seed-42 equal-token runs, 9,000 updates / 18,429,440 target tokens:
+- No decay + RMSNorm: loss 2.636655, perplexity 13.966409.
+- V decay, recipe db2111f: loss 2.519256, perplexity 12.419357, 322.18 seconds.
+- K+V decay, recipe ec1e927: loss 2.509973, perplexity 12.304594, 383.98 seconds.
+
+550 tests and Ruff passed for both configured models. Artifacts/training settings
+match exactly. Final checkpoints are best among nine saved per run, were loaded
+for generation and checked against manifests. Both runs' learned coefficient
+statistics are in their reports. Data and weights stay local and ignored. Code
+and reports are pushed to Ember. This is a single-seed result; K's additional
+gain is small, and no-decay/decay parameter counts differ slightly.
+
+Historical notes follow.
+
 > **Active Ember experiments:** read [DECAY_EXPERIMENTS.md](DECAY_EXPERIMENTS.md).
 > RMSNorm is restored; the next runs add parallel feature-wise state decay.
 
