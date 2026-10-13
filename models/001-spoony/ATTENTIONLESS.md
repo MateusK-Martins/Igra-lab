@@ -51,3 +51,28 @@ backpropagation, single-token/chunked/full equivalence, snapshot continuation,
 constant-size state, cache rejection without mutation, definition validation,
 and CUDA BF16/FP16 gradients with CPU-resident FP32 running sums.
 No training result is implied by the inherited Lantern report in CODENAME.md.
+
+## Completed equal-token run — 2026-10-13
+
+Recipe commit: `09782df`. All 495 tests passed; Ruff lint and formatting passed.
+The fresh seed-42 run completed 9,000 updates and 18,429,440 target tokens in
+290.50 seconds (4 minutes 50 seconds), including validation and saving. Initial
+validation loss was 9.090187; final loss 2.659388, perplexity 14.287542. Final
+checkpoint step-00009000.pt is best among nine saved checkpoints. It was loaded
+for fixed greedy generations, and its settings match the saved manifest.
+
+Lantern used 431.33 seconds for exactly the same consumed target tokens, with
+final validation loss 2.018320 and perplexity 7.525675. This mechanism was about
+1.48 times as fast overall (32.65% less elapsed training time), but learned less
+effectively under this fixed recipe. The cumulative model has 3.59% more
+parameters. This does not establish an architecture ranking: one seed, one
+normalization choice, one untuned recipe and no equal-time follow-up were tested.
+
+Fixed-prompt generations are readable but repetitive and inconsistent; the
+complete samples and curve are in
+[training-report.json](results/pretraining/attentionless-tinystories-v1/training-report.json).
+See [comparison.json](results/pretraining/attentionless-tinystories-v1/comparison.json)
+and the saved manifest for the exact comparison and artifact hashes. Prepared
+artifacts were checked against Lantern byte for byte, and both runs consumed
+the same number of target tokens. All weights and raw/prepared data remain
+ignored and local to this worktree. No additional training run has been started.

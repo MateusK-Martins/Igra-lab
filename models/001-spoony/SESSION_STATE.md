@@ -1,3 +1,22 @@
+# Attentionless cumulative experiment completed — 2026-10-13
+
+Read ATTENTIONLESS.md first. On codex/attentionless, all six GQA branches are
+replaced by the user's tanh-key/cumulative-key/cumulative-value mechanism,
+interpreting both norm steps as trainable feature-wise RMSNorm. Residual is
+applied once through build_block. StateEntry stores two raw running sums in
+external CacheStorage.states; training is uncached, cached inference requires
+no_grad. No codename has been selected for this model.
+
+495 tests and Ruff passed. Fresh 9,000-update training finished in 290.50 seconds;
+18,429,440 tokens, validation loss 2.659388, perplexity 14.287542. This is faster
+but worse in loss than Lantern at equal tokens (431.33 seconds, loss 2.018320).
+Final checkpoint is best, step-00009000.pt, under
+results/pretraining/attentionless-tinystories-v1/checkpoints/. Nine checkpoints
+remain local. Reports/manifest/comparison are versioned. No equal-time run or
+hyperparameter tuning has been done. Preserve the fixed data/tokenizer artifacts.
+
+Historical notes follow.
+
 > **Active attentionless branch:** read [ATTENTIONLESS.md](ATTENTIONLESS.md)
 > for the cumulative mechanism, cache semantics and current experiment.
 > Lantern notes below are historical baseline results.
