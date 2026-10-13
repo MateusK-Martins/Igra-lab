@@ -73,3 +73,11 @@ range about 0.085 to 0.246 across layers; layer-average retention ranges about
 0.636 to 0.948. Full per-layer statistics and the probe input fingerprint are
 in results/pretraining/token-v-decay-v6/gate-probe.json. This probe is outside
 the measured training time.
+
+## K+V recipe
+
+The second configuration enables both token-conditioned gates. They are
+independent 384-to-384 projections per layer, initialized to the same 0.99
+retention, with RMSNorm and all training settings unchanged. All 603 tests and
+Ruff passed with this configured model as well. This is a fresh run from seed
+42, not fine-tuning or continuation of the V-only checkpoint.
