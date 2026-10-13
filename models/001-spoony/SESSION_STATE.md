@@ -1,3 +1,25 @@
+# Sigmoid and normalization experiments completed — 2026-10-13
+
+Read SIGMOID_NORM.md first. Branch remains codex/attentionless; codename pending.
+Both Q and V now use sigmoid, K still uses tanh. Current config selects soft_rms
+only for the two internal cumulative norms: x/sqrt(1+mean(x^2)), no learned gain.
+Outer RMSNorms remain unchanged. The rms option is retained and scored better.
+
+Both fresh runs used seed 42, identical data/tokenizer hashes and training
+settings, 9,000 updates and exactly 18,429,440 target tokens:
+- Sigmoid/RMS, recipe 2b32df1: loss 2.636655, perplexity 13.966409, 324.14 seconds.
+- Sigmoid/soft RMS, recipe 9b7f253: loss 2.718405, perplexity 15.156136, 265.14 seconds.
+Original unbounded Q/V: loss 2.659388. The gentler norm did not improve loss.
+
+495 tests passed for stage 1; 509 passed with both normalization choices and
+soft-norm property tests for stage 2. Ruff passed. Stage 2 was started only after
+resuming from the battery interruption; no partial training was resumed. Final
+checkpoints are best among nine saved checkpoints per variant and were loaded
+for generation and checked against manifests. See results/pretraining/
+attentionless-sigmoid-rms-v2/ and attentionless-sigmoid-soft-rms-v3/.
+Reports/manifests are versioned; weights/data remain local and ignored. Changes
+are committed locally, not pushed. Historical notes follow.
+
 # Attentionless cumulative experiment completed — 2026-10-13
 
 Read ATTENTIONLESS.md first. On codex/attentionless, all six GQA branches are

@@ -46,3 +46,42 @@ checks, plus soft norm gradcheck, identity Jacobian at zero, non-amplification,
 dtype preservation and unchanged common initial projection weights. Lint and
 format checks passed again after resuming. No stage-2 training had started before
 the interruption; the benchmark was rerun successfully after resuming.
+
+## Stage 2 completed — 2026-10-13
+
+Recipe commit `9b7f253`. The fresh run completed in 265.14 seconds (4m 25s),
+including validation and saving. It consumed 18,429,440 target tokens in 9,000
+updates, with the exact same prepared artifact hashes and training settings as
+stage 1 and the original cumulative run. Final validation loss was 2.718405,
+perplexity 15.156136. The final checkpoint step-00009000.pt is best among nine
+saved checkpoints; it was loaded for generation and matched its saved manifest.
+
+| Variant | Parameters | Final validation loss | Perplexity | Training seconds |
+| --- | ---: | ---: | ---: | ---: |
+| Original Q/V + RMSNorm | 12,887,040 | 2.659388 | 14.287542 | 290.50 |
+| Sigmoid Q/V + RMSNorm | 12,887,040 | 2.636655 | 13.966409 | 324.14 |
+| Sigmoid Q/V + soft RMS | 12,882,432 | 2.718405 | 15.156136 | 265.14 |
+
+Sigmoid Q/V gave a small loss improvement in this seed. The proposed gentler
+norm was worse by 0.081750 nats versus sigmoid Q/V with RMSNorm. Its guaranteed
+non-amplification did not translate into better validation loss. Changing the
+denominator and removing learned gains are bundled in this comparison; these
+results do not isolate their individual effects. Both variants still produce
+repetitive and inconsistent generations. These are preliminary single-seed
+results, not proof of general improvement or inferiority. Stage 1 and stage 2
+ran on opposite sides of a battery interruption, so measured wall times should
+not be treated as a controlled isolated norm speed comparison.
+
+The current model configuration retains the requested soft norm. To choose the
+better-scoring sigmoid/RMS variant, select normalization="rms" in the cumulative
+mixer config. To load an existing trained model, use its recorded recipe commit
+and manifest; do not reinterpret historical weights under a changed recipe.
+Checkpoints and processed artifacts remain ignored and local. Code and reports
+are committed locally, not pushed.
+
+Full stage-1 results:
+[training-report.json](results/pretraining/attentionless-sigmoid-rms-v2/training-report.json).
+Full stage-2 results:
+[training-report.json](results/pretraining/attentionless-sigmoid-soft-rms-v3/training-report.json).
+The machine-readable comparison is
+[norm-comparison.json](results/pretraining/attentionless-sigmoid-soft-rms-v3/norm-comparison.json).
