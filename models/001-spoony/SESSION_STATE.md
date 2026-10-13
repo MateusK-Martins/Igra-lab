@@ -1,3 +1,7 @@
+> **Active attentionless branch:** read [ATTENTIONLESS.md](ATTENTIONLESS.md)
+> for the cumulative mechanism, cache semantics and current experiment.
+> Lantern notes below are historical baseline results.
+
 # Codename baseline completed — 2026-10-13
 
 Branch `model/001-spoony-lantern`, isolated from the original Spoony working directory.

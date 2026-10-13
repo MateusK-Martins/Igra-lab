@@ -1,3 +1,7 @@
+> **Active attentionless branch:** read [ATTENTIONLESS.md](ATTENTIONLESS.md)
+> for the cumulative mechanism, cache semantics and current experiment.
+> Lantern notes below are historical baseline results.
+
 > **Codename branch:** the active larger TinyStories recipe and comparison
 > protocol are documented in [CODENAME.md](CODENAME.md). The historical
 > Spoony notes below describe earlier configurations.

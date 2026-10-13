@@ -1,0 +1,164 @@
+import copy
+
+import pytest
+import torch
+
+from src.model.cache_storage import CacheStorage
+from src.model.composition import build_block
+from src.model.definitions import CumulativeMixer
+
+
+def reference(module, x):
+    q = module.q_proj(x)
+    k = module.k_proj(x).tanh()
+    v = module.v_proj(x)
+    keys = torch.zeros_like(k[:, 0])
+    values = torch.zeros_like(v[:, 0])
+    output = []
+    for token in range(x.shape[1]):
+        keys = keys + k[:, token]
+        normalized_keys = (
+            keys
+            * torch.rsqrt(keys.square().mean(-1, keepdim=True) + module.key_norm.eps)
+            * module.key_norm.weights
+        )
+        values = values + v[:, token] * normalized_keys
+        normalized_values = (
+            values
+            * torch.rsqrt(
+                values.square().mean(-1, keepdim=True) + module.value_norm.eps
+            )
+            * module.value_norm.weights
+        )
+        output.append(q[:, token] * normalized_values)
+    return torch.stack(output, dim=1)
+
+
+def test_output_and_gradients_match_independent_sequential_recurrence():
+    torch.manual_seed(123)
+    module = CumulativeMixer(6, bias=True).build().double()
+    with torch.no_grad():
+        module.key_norm.weights.uniform_(0.5, 1.5)
+        module.value_norm.weights.uniform_(0.5, 1.5)
+    other = copy.deepcopy(module)
+    x = torch.randn(2, 9, 6, dtype=torch.float64, requires_grad=True)
+    y = x.detach().clone().requires_grad_()
+    actual, expected = module(x), reference(other, y)
+    torch.testing.assert_close(actual, expected, atol=1e-12, rtol=1e-12)
+    actual.square().sum().backward()
+    expected.square().sum().backward()
+    torch.testing.assert_close(x.grad, y.grad)
+    for first, second in zip(module.parameters(), other.parameters(), strict=True):
+        torch.testing.assert_close(first.grad, second.grad)
+
+
+def test_residual_is_added_exactly_once_and_zero_input_is_finite():
+    module = build_block(CumulativeMixer(4, residual=True), 7)
+    x = torch.randn(2, 8, 4)
+    torch.testing.assert_close(module(x), x + reference(module.branch, x))
+    zeros = torch.zeros_like(x, requires_grad=True)
+    output = module(zeros)
+    assert torch.isfinite(output).all()
+    output.sum().backward()
+    assert torch.isfinite(zeros.grad).all()
+
+
+def test_future_values_and_gradients_cannot_affect_prefix():
+    module = CumulativeMixer(5).build().double()
+    x = torch.randn(2, 11, 5, dtype=torch.float64, requires_grad=True)
+    changed = x.detach().clone()
+    changed[:, 6:] = torch.randn_like(changed[:, 6:]) * 100
+    torch.testing.assert_close(module(x)[:, :6], module(changed)[:, :6])
+    module(x)[:, :6].sum().backward()
+    assert torch.count_nonzero(x.grad[:, 6:]) == 0
+
+
+@pytest.mark.parametrize("chunks", [(1, 1, 1, 1, 1, 1, 1), (2, 4, 1), (7,)])
+def test_cached_chunks_and_snapshot_match_full_sequence(tmp_path, chunks):
+    definition = CumulativeMixer(5, residual=True)
+    module = build_block(definition, 3).double()
+    storage = CacheStorage(
+        [definition.cache(3)], torch.device("cpu"), torch.device("cpu")
+    )
+    x = torch.randn(2, sum(chunks), 5, dtype=torch.float64)
+    with torch.no_grad():
+        expected = module(x)
+        outputs = []
+        offset = 0
+        for size in chunks:
+            outputs.append(module(x[:, offset : offset + size], cache=storage))
+            offset += size
+            storage.save(tmp_path / "state.pt")
+            storage = CacheStorage.load(
+                tmp_path / "state.pt",
+                storage_device=torch.device("cpu"),
+                read_device=torch.device("cpu"),
+            )
+    torch.testing.assert_close(
+        torch.cat(outputs, dim=1), expected, atol=1e-12, rtol=1e-12
+    )
+    state = storage.read_state(module.branch.layer_id)
+    assert state.key_sum.shape == (2, 1, 5)
+    assert state.value_sum.shape == (2, 1, 5)
+    assert state.count == sum(chunks)
+
+
+def test_cache_does_not_grow_and_rejects_changed_batch_without_mutation():
+    definition = CumulativeMixer(4)
+    module = build_block(definition, 0)
+    storage = CacheStorage(
+        [definition.cache(0)], torch.device("cpu"), torch.device("cpu")
+    )
+    with torch.no_grad():
+        module(torch.randn(2, 300, 4), cache=storage)
+        before = storage.read_state(module.layer_id)
+        with pytest.raises(ValueError, match="batch"):
+            module(torch.randn(1, 3, 4), cache=storage)
+        after = storage.read_state(module.layer_id)
+    assert after.count == 300
+    assert after.key_sum.numel() == 8
+    torch.testing.assert_close(after.key_sum, before.key_sum)
+    torch.testing.assert_close(after.value_sum, before.value_sum)
+    with pytest.raises(RuntimeError, match="no_grad"):
+        module(torch.randn(2, 1, 4), cache=storage)
+
+
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        {"input_features": 0},
+        {"input_features": True},
+        {"input_features": 4, "eps": 0},
+        {"input_features": 4, "eps": float("nan")},
+        {"input_features": 4, "bias": 1},
+        {"input_features": 4, "residual": 1},
+    ],
+)
+def test_invalid_definition(kwargs):
+    with pytest.raises(ValueError):
+        CumulativeMixer(**kwargs)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")
+@pytest.mark.parametrize("dtype", [torch.bfloat16, torch.float16])
+def test_cuda_mixed_precision_gradients_and_cpu_cached_state(dtype):
+    definition = CumulativeMixer(16, residual=True)
+    module = build_block(definition, 2).cuda()
+    x = torch.randn(2, 33, 16, device="cuda", requires_grad=True)
+    with torch.autocast("cuda", dtype=dtype):
+        full = module(x)
+    full.square().mean().backward()
+    assert all(
+        p.grad is not None and torch.isfinite(p.grad).all() for p in module.parameters()
+    )
+    storage = CacheStorage(
+        [definition.cache(2)], torch.device("cpu"), torch.device("cuda")
+    )
+    with torch.no_grad(), torch.autocast("cuda", dtype=dtype):
+        chunks = torch.cat(
+            [module(x[:, :11], cache=storage), module(x[:, 11:], cache=storage)], dim=1
+        )
+    torch.testing.assert_close(chunks, full, atol=0.03, rtol=0.03)
+    state = storage.states[module.branch.layer_id]
+    assert state.key_sum.device.type == "cpu"
+    assert state.key_sum.dtype == torch.float32

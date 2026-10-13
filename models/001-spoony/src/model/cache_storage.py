@@ -15,10 +15,20 @@ class CacheEntry:
     pointer: int
 
 
+@dataclass
+class StateEntry:
+    """External cumulative state: raw key/value sums shaped [batch, 1, features]."""
+
+    layer_id: str
+    key_sum: Tensor
+    value_sum: Tensor
+    count: int = 0
+
+
 class CacheStorage:
     def __init__(
         self,
-        entries: list[CacheEntry],
+        entries: list[CacheEntry | StateEntry],
         storage_device: torch.device,
         read_device: torch.device,
     ) -> None:
@@ -26,10 +36,17 @@ class CacheStorage:
         self.read_device = read_device
 
         self.entries: dict[str, CacheEntry] = {}
+        self.states: dict[str, StateEntry] = {}
 
         for entry in entries:
-            if entry.layer_id in self.entries:
+            if entry.layer_id in self.entries or entry.layer_id in self.states:
                 raise ValueError(f"Duplicate cache layer_id: {entry.layer_id!r}")
+
+            if isinstance(entry, StateEntry):
+                entry.key_sum = entry.key_sum.to(self.storage_device)
+                entry.value_sum = entry.value_sum.to(self.storage_device)
+                self.states[entry.layer_id] = entry
+                continue
 
             entry.keys = entry.keys.to(self.storage_device)
             entry.values = entry.values.to(self.storage_device)
@@ -39,6 +56,15 @@ class CacheStorage:
     def save(self, path: Path) -> None:
         snapshot = {
             "format_version": 1,
+            "states": [
+                {
+                    "layer_id": entry.layer_id,
+                    "key_sum": entry.key_sum.detach().cpu(),
+                    "value_sum": entry.value_sum.detach().cpu(),
+                    "count": entry.count,
+                }
+                for entry in self.states.values()
+            ],
             "entries": [
                 {
                     "layer_id": entry.layer_id,
@@ -104,6 +130,36 @@ class CacheStorage:
                 raise ValueError("Invalid unbounded cache count or pointer")
             entries.append(entry)
 
+        states = snapshot.get("states", [])
+        if not isinstance(states, list):
+            raise TypeError("Cache states must be a list")
+        for record in states:
+            if not isinstance(record, dict) or set(record) != {
+                "layer_id",
+                "key_sum",
+                "value_sum",
+                "count",
+            }:
+                raise ValueError("Invalid recurrent cache fields")
+            entry = StateEntry(**record)
+            if not isinstance(entry.layer_id, str) or not entry.layer_id:
+                raise ValueError("Invalid recurrent cache layer_id")
+            if type(entry.count) is not int or entry.count < 0:
+                raise ValueError("Invalid recurrent cache count")
+            if (
+                not isinstance(entry.key_sum, Tensor)
+                or not isinstance(entry.value_sum, Tensor)
+                or entry.key_sum.ndim != 3
+                or entry.key_sum.shape != entry.value_sum.shape
+                or entry.key_sum.shape[1] != 1
+                or entry.key_sum.shape[2] == 0
+                or entry.key_sum.dtype != entry.value_sum.dtype
+                or not entry.key_sum.is_floating_point()
+                or (entry.count > 0 and entry.key_sum.shape[0] == 0)
+            ):
+                raise ValueError("Invalid recurrent cache tensors")
+            entries.append(entry)
+
         return cls(
             entries=entries,
             storage_device=storage_device,
@@ -111,7 +167,9 @@ class CacheStorage:
         )
 
     def step(self, layer_id: str) -> int:
-        return self.entries[layer_id].count
+        return (
+            self.states[layer_id] if layer_id in self.states else self.entries[layer_id]
+        ).count
 
     def write(
         self,
@@ -229,3 +287,37 @@ class CacheStorage:
             count=entry.count,
             pointer=0,
         )
+
+    def read_state(self, layer_id: str) -> StateEntry:
+        entry = self.states[layer_id]
+        return StateEntry(
+            entry.layer_id,
+            entry.key_sum.to(self.read_device),
+            entry.value_sum.to(self.read_device),
+            entry.count,
+        )
+
+    def write_state(
+        self, layer_id: str, key_sum: Tensor, value_sum: Tensor, tokens: int
+    ) -> None:
+        entry = self.states[layer_id]
+        if type(tokens) is not int or tokens <= 0:
+            raise ValueError("State update requires a positive token count")
+        if (
+            key_sum.ndim != 3
+            or key_sum.shape != value_sum.shape
+            or key_sum.shape[1] != 1
+            or key_sum.shape[2] != entry.key_sum.shape[2]
+            or key_sum.shape[0] == 0
+            or key_sum.dtype != value_sum.dtype
+            or not key_sum.is_floating_point()
+        ):
+            raise ValueError("Invalid recurrent state update")
+        if entry.count and (
+            key_sum.shape != entry.key_sum.shape or key_sum.dtype != entry.key_sum.dtype
+        ):
+            raise ValueError("Recurrent state shape or dtype changed")
+        keys = key_sum.detach().to(self.storage_device).clone()
+        values = value_sum.detach().to(self.storage_device).clone()
+        entry.key_sum, entry.value_sum = keys, values
+        entry.count += tokens

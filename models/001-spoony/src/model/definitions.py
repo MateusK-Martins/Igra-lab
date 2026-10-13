@@ -6,7 +6,8 @@ import torch
 from torch import nn
 
 from src.model.attention import GQAAttentionImpl
-from src.model.cache_storage import CacheEntry
+from src.model.cache_storage import CacheEntry, StateEntry
+from src.model.cumulative import CumulativeMixerImpl
 from src.model.feedforward import LinearImpl, SwiGLUImpl
 from src.model.position import PositionRotation
 from src.model.stability import RMSNormImpl
@@ -30,7 +31,7 @@ class BlockDefinition(Protocol):
 
     def build(self) -> nn.Module: ...
 
-    def cache(self, layer_id: int) -> CacheEntry | None:
+    def cache(self, layer_id: int) -> CacheEntry | StateEntry | None:
         return None
 
     def unpack(self) -> list["BlockDefinition"]:
@@ -336,4 +337,38 @@ class GQAAttention(BlockDefinition):
             values=torch.empty(shape),
             count=0,
             pointer=0,
+        )
+
+
+@dataclass(frozen=True)
+class CumulativeMixer(BlockDefinition):
+    input_features: int
+    eps: float = 1e-6
+    residual: bool = False
+    bias: bool = False
+
+    @property
+    def output_features(self) -> int:
+        return self.input_features
+
+    def __post_init__(self) -> None:
+        _positive_integer(self.input_features, "input_features")
+        if (
+            type(self.eps) not in (int, float)
+            or not math.isfinite(self.eps)
+            or self.eps <= 0
+        ):
+            raise ValueError("eps must be finite and greater than zero")
+        for name in ("residual", "bias"):
+            if type(getattr(self, name)) is not bool:
+                raise ValueError(f"{name} must be a boolean")
+
+    def build(self) -> nn.Module:
+        return CumulativeMixerImpl(self.input_features, self.eps, bias=self.bias)
+
+    def cache(self, layer_id: int) -> StateEntry:
+        return StateEntry(
+            f"CumulativeMixerImpl-{layer_id}",
+            torch.empty(0, 1, self.input_features),
+            torch.empty(0, 1, self.input_features),
         )
