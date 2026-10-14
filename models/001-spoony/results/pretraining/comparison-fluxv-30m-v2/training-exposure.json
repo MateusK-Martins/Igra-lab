@@ -1,0 +1,10 @@
+{
+  "story_windows_available": 86438,
+  "qa_examples_available": 30000,
+  "story_windows_consumed": 38572,
+  "qa_examples_consumed": 13428,
+  "supervised_story_tokens": 19748864,
+  "supervised_qa_tokens_including_eos": 101560,
+  "input_positions": 26624000,
+  "method": "Replayed initial DataLoader base-seed draw and RandomSampler permutation, seed42; first6500batches, no epoch rollover."
+}

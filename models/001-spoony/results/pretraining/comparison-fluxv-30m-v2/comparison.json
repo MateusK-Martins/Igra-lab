@@ -1,0 +1,68 @@
+{
+  "models": [
+    {
+      "model": "Lantern",
+      "branch": "model/001-spoony-lantern-30m",
+      "recipe_commit": "cbdfb15e0abd907196e17031eb628aa2d6aadb56",
+      "training_minutes": 20.48254320399998,
+      "parameters": 29565952,
+      "updates": 6500,
+      "stories": {
+        "loss": 2.055921299572297,
+        "perplexity": 7.8140336232409515,
+        "examples": 374
+      },
+      "qa_answers": {
+        "loss": 6.080586914125578,
+        "perplexity": 437.2857686121178,
+        "examples": 1000
+      },
+      "qa_generation": {
+        "exact_match": 0.0,
+        "f1": 1.1896306818181819,
+        "examples": 256
+      },
+      "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+    },
+    {
+      "model": "Flux V-only",
+      "branch": "model/001-spoony-fluxv-30m",
+      "recipe_commit": "9f16fa964c65a3e90fe415ac8d1ceeb4b9919eb8",
+      "training_minutes": 25.383303245700002,
+      "parameters": 29579776,
+      "updates": 6500,
+      "stories": {
+        "loss": 2.2750540812385274,
+        "perplexity": 9.728445124694648,
+        "examples": 374
+      },
+      "qa_answers": {
+        "loss": 6.18913578747992,
+        "perplexity": 487.4246856262803,
+        "examples": 1000
+      },
+      "qa_generation": {
+        "exact_match": 0.0,
+        "f1": 0.9867931547619048,
+        "examples": 256
+      },
+      "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+    }
+  ],
+  "exposure": {
+    "story_windows_available": 86438,
+    "qa_examples_available": 30000,
+    "story_windows_consumed": 38572,
+    "qa_examples_consumed": 13428,
+    "supervised_story_tokens": 19748864,
+    "supervised_qa_tokens_including_eos": 101560,
+    "input_positions": 26624000,
+    "method": "Replayed initial DataLoader base-seed draw and RandomSampler permutation, seed42; first6500batches, no epoch rollover."
+  },
+  "checks": {
+    "identical_data_artifact_hashes": true,
+    "identical_training_settings": true,
+    "source_hashes_unchanged_through_training": true
+  },
+  "interpretation": "Lantern leads on story NLL and trains faster. Both are poor on QA; QA contributes only about 0.51% of supervised labels in the simple existing mixed loader. Single seed and short training do not establish an architecture-wide ranking."
+}
