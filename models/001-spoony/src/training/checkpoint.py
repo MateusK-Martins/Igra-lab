@@ -48,15 +48,12 @@ def _validate_state(state: TrainingState, loader: DataLoader) -> None:
         "updates",
         "batches",
         "tokens",
-        "supervised_tokens",
         "completed_epochs",
         "batches_in_epoch",
     ):
         value = getattr(state, name)
         if type(value) is not int or value < 0:
             raise ValueError(f"Invalid training state: {name}")
-    if state.supervised_tokens > state.tokens:
-        raise ValueError("Supervised tokens exceed processed token positions")
     if len(loader) == 0 or state.batches_in_epoch >= len(loader):
         raise ValueError("Invalid batches_in_epoch")
     if state.batches != state.completed_epochs * len(loader) + state.batches_in_epoch:
