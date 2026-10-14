@@ -1,3 +1,5 @@
+Current QA post-training: see [QA_POSTTRAIN.md](QA_POSTTRAIN.md).
+
 Current 30M comparison: see [COMPARISON_30M.md](COMPARISON_30M.md).
 
 > **Flux — active model:** see [TOKEN_DECAY.md](TOKEN_DECAY.md) for the

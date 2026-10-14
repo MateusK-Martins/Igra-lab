@@ -9,12 +9,13 @@ from collections import Counter
 import torch
 
 from configs.data.dataloader import chunking_config, validation_loader_config
-from configs.data.qa_corpus import GENERATION_EXAMPLES, MAX_NEW_TOKENS, qa_config
+from configs.data.qa_corpus import GENERATION_EXAMPLES, MAX_NEW_TOKENS
 from configs.model.model import build_model
+from configs.sft.data import data_config as qa_config
+from configs.sft.scheduler import scheduler_config
+from configs.sft.training import checkpoint_config
 from configs.tokenizers.preparation import preparation_config
-from configs.training.checkpoint import checkpoint_config
 from configs.training.precision import precision_config
-from configs.training.scheduler import scheduler_config
 from src.data.dataloader import build_dataloader, build_split_dataloader
 from src.data.tokenizer import ByteLevelBPETokenizer
 from src.model.cache_storage import CacheStorage

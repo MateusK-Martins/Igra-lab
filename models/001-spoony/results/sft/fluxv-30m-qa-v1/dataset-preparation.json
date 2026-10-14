@@ -1,0 +1,22 @@
+{
+  "dataset": "rajpurkar/squad",
+  "revision": "7b6d24c440a36b6815f21b70d25016731768db1f",
+  "seed": 42,
+  "selection": "all eligible training records; seeded shuffle; full passages; original 1000 validation questions",
+  "splits": {
+    "train": {
+      "raw_examples": 87599,
+      "examples": 86695,
+      "skipped": 904,
+      "raw_sha256": "ea7f52bac024f6b1bdc7aaa2a4ee302cba8c2fdc8d4a235cf18a9a5196b6175b",
+      "prepared_sha256": "2d79c81cafe86a0e78686b9615df9742b1c1b645eaeb12ff000f716259928cd3"
+    },
+    "validation": {
+      "raw_examples": 10570,
+      "examples": 1000,
+      "skipped": 19,
+      "raw_sha256": "8c6646d36bd5a95061e076788cf3161d11f6f3e7d625dac7a83bbed0a49f69f7",
+      "prepared_sha256": "a5d7d4d674052e6eb444c7060874b985b8427ae0b55bce9aa40c706332c08682"
+    }
+  }
+}
