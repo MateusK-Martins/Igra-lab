@@ -27,3 +27,32 @@ Run python -m scripts.prepare_qa_stage once, python -m scripts.sft to train,
 and python -m scripts.validate_comparison to evaluate, using the model .venv.
 The source, complete resolved SFT settings, initialization checkpoint hash and
 data hashes are recorded by the existing manifest. Data and weights remain ignored.
+
+## Completed results
+
+Both models completed 6,500 SFT updates on 52,000 distinct questions (389,671
+answer/EOS labels; 26,624,000 padded input positions). This is not a full epoch
+over the 86,695 eligible records. Timing includes loading, periodic validation
+and checkpoint saving; final generation/scoring runs separately.
+
+| Model | Minutes | QA loss before → after | QA PPL before → after | EM % before → after | F1 % before → after | Story PPL before → after |
+| --- | ---: | --- | --- | --- | --- | --- |
+| Lantern | 21.26 | 6.0806 → 5.0786 | 437.29 → 160.54 | 0.00 → 0.78 | 1.19 → 2.37 | 7.81 → 12.99 |
+| Flux V-only | 26.09 | 6.1891 → 5.2961 | 487.42 → 199.55 | 0.00 → 0.39 | 0.99 → 1.32 | 9.73 → 21.05 |
+
+Answer loss uses 1,000 unchanged held-out questions; generation uses the same
+256-question subset. Lantern answers 2/256 exactly, Flux 1/256, versus zero
+before post-training. These small counts do not support a strong accuracy claim.
+QA prediction improved modestly, but both models remain weak QA systems. Story
+perplexity worsened for both, showing forgetting during QA-only tuning. The old
+pretrained checkpoints remain available and the parent branches are preserved.
+
+All tokenizer/QA data hashes and shared training/format settings match. Recorded
+source hashes stayed fixed throughout both runs. The original 30,000 training
+examples are a byte-identical prefix of the expanded corpus. Initialization
+checkpoint hashes differ intentionally because each stage starts its own model.
+
+Verification: 481 Lantern tests, 604 Flux tests, Ruff lint and formatting passed.
+Runtime source and scripts.sft are unchanged. Results include frozen manifests,
+training curves/timing, dataset provenance, exposure, QA predictions and a shared
+comparison.json. Data and checkpoint weights remain local and ignored.

@@ -1,0 +1,45 @@
+{
+  "training_seconds_including_loading_validation_and_saving": 1565.5718315640006,
+  "peak_allocated_vram_bytes": 3688121344,
+  "training_state": {
+    "updates": 6500,
+    "batches": 6500,
+    "tokens": 26624000,
+    "completed_epochs": 0,
+    "last_loss": 5.3297438621521,
+    "last_validation_loss": 5.296060838813088,
+    "last_validation_perplexity": 199.54920326196634,
+    "batches_in_epoch": 6500
+  },
+  "recipe_commit": "f3bd95ce5842d5261824aa9ba140bd6c205a6301",
+  "qa_validation_curve": [
+    {
+      "update": 1000,
+      "loss": 5.639064311981201
+    },
+    {
+      "update": 2000,
+      "loss": 5.531634330749512
+    },
+    {
+      "update": 3000,
+      "loss": 5.435580730438232
+    },
+    {
+      "update": 4000,
+      "loss": 5.362274169921875
+    },
+    {
+      "update": 5000,
+      "loss": 5.322149753570557
+    },
+    {
+      "update": 6000,
+      "loss": 5.302560329437256
+    },
+    {
+      "update": 6500,
+      "loss": 5.296061038970947
+    }
+  ]
+}
