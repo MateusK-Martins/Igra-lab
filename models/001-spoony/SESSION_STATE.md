@@ -1,3 +1,6 @@
+> **Active 30M comparison:** see [COMPARISON_30M.md](COMPARISON_30M.md).
+> Earlier small-model experiments below are historical.
+
 # Flux token-dependent experiments completed — 2026-10-13
 
 Read TOKEN_DECAY.md first. Branch model/001-spoony-flux starts from pushed

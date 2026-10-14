@@ -1,3 +1,6 @@
+> **Active 30M comparison:** see [COMPARISON_30M.md](COMPARISON_30M.md).
+> Earlier small-model experiments below are historical.
+
 > **Flux — active model:** see [TOKEN_DECAY.md](TOKEN_DECAY.md) for the
 > token-dependent affine-scan model and results. Ember below is historical.
 
