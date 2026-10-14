@@ -1,0 +1,7 @@
+{
+  "available_qa_examples": 86695,
+  "unique_qa_examples_consumed": 52000,
+  "supervised_answer_tokens_including_eos": 389671,
+  "padded_input_positions": 26624000,
+  "method": "Replayed seed42 DataLoader base-seed draw and RandomSampler permutation; no epoch rollover."
+}

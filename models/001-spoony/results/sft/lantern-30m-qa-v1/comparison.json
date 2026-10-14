@@ -1,0 +1,112 @@
+{
+  "models": [
+    {
+      "model": "Lantern",
+      "branch": "model/001-spoony-lantern-30m-qa",
+      "recipe_commit": "cb598d48003eeee56cf31a60468cdff5caa9a1a3",
+      "training_minutes": 21.26144101936667,
+      "before": {
+        "parameters": 29565952,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.055921299572297,
+          "perplexity": 7.8140336232409515,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 6.080586914125578,
+          "perplexity": 437.2857686121178,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 1.1896306818181819,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "after": {
+        "parameters": 29565952,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.564398522045523,
+          "perplexity": 12.992841111457508,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 5.078573963382955,
+          "perplexity": 160.54494963359073,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.78125,
+          "f1": 2.366258882428941,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      }
+    },
+    {
+      "model": "Flux V-only",
+      "branch": "model/001-spoony-fluxv-30m-qa",
+      "recipe_commit": "f3bd95ce5842d5261824aa9ba140bd6c205a6301",
+      "training_minutes": 26.09286385940001,
+      "before": {
+        "parameters": 29579776,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.2750540812385274,
+          "perplexity": 9.728445124694648,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 6.18913578747992,
+          "perplexity": 487.4246856262803,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 0.9867931547619048,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "after": {
+        "parameters": 29579776,
+        "updates": 6500,
+        "stories": {
+          "loss": 3.0468111892435,
+          "perplexity": 21.048118826935358,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 5.296060838813088,
+          "perplexity": 199.54920326196634,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.390625,
+          "f1": 1.3170869807866712,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      }
+    }
+  ],
+  "exposure": {
+    "available_qa_examples": 86695,
+    "unique_qa_examples_consumed": 52000,
+    "supervised_answer_tokens_including_eos": 389671,
+    "padded_input_positions": 26624000,
+    "method": "Replayed seed42 DataLoader base-seed draw and RandomSampler permutation; no epoch rollover."
+  },
+  "audit": {
+    "same_qa_data_hashes": true,
+    "same_training_recipe_and_format": true,
+    "original_heldout_questions_unchanged": true,
+    "original_30000_training_examples_preserved": true,
+    "source_hashes_unchanged_during_training": true,
+    "training_runtime_and_model_implementation_unchanged": true
+  },
+  "interpretation": "Both QA-only stages reduce held-out answer loss, but exact match and F1 remain very low. Both worsen story perplexity, especially Flux V-only. Lantern leads this single-seed, fixed-update comparison. This does not establish a general architecture ranking."
+}
