@@ -1,0 +1,15 @@
+{
+  "training_seconds_including_loading_validation_and_saving": 1228.952592239999,
+  "peak_allocated_vram_bytes": 2649963520,
+  "training_state": {
+    "updates": 6500,
+    "batches": 6500,
+    "tokens": 26624000,
+    "completed_epochs": 0,
+    "last_loss": 1.9762461185455322,
+    "last_validation_loss": 2.055921299572297,
+    "last_validation_perplexity": 7.8140336232409515,
+    "batches_in_epoch": 6500
+  },
+  "recipe_commit": "cbdfb15e0abd907196e17031eb628aa2d6aadb56"
+}

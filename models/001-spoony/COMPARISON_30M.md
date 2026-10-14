@@ -36,3 +36,30 @@ be compared directly with older runs using a different tokenizer.
 
 The earlier expanded implementation was reverted and retained only in local
 archive branches. Its interrupted training run is excluded from this comparison.
+
+## Completed results
+
+Both runs completed all 6,500 updates. Timing includes loading, periodic story
+validation and saving; the separate final evaluation is outside training timing.
+
+| Model | Parameters | Minutes | Story loss / PPL | QA answer loss / PPL | QA EM / F1 (%) |
+| --- | ---: | ---: | --- | --- | --- |
+| Lantern | 29,565,952 | 20.48 | 2.0559 / 7.81 | 6.0806 / 437.29 | 0.00 / 1.19 |
+| Flux V-only | 29,579,776 | 25.38 | 2.2751 / 9.73 | 6.1891 / 487.42 | 0.00 / 0.99 |
+
+Story validation uses all 374 windows from 1,000 held-out stories; QA loss
+uses 1,000 held-out examples, while generation scores use 256. Both models
+consume 38,572 story windows (19,748,864 labels) and 13,428 QA examples
+(101,560 answer/EOS labels): 19,850,424 supervised tokens total, versus
+26,624,000 padded input positions. Data hashes and resolved training settings
+match exactly, and all recorded source hashes stayed unchanged during training.
+
+Lantern wins this run on story loss, speed and QA loss, but both models fail
+to answer QA reliably. QA supplies only 0.51% of supervised labels in the simple
+mixed loader, so this is chiefly a story-language-model comparison. A dedicated
+QA stage using the existing SFT script would be a more useful QA test. This
+single-seed, short-budget result does not prove a general architecture ranking.
+
+The result directory stores the frozen manifest, timings, validation scores,
+predictions, data provenance, exposure and comparison.json. Checkpoints remain
+local and ignored. Original parent branches and the primary checkout are preserved.
