@@ -1,0 +1,7 @@
+{
+  "mean_update_seconds": 0.18195752866619538,
+  "p95_update_seconds": 0.18279396099751466,
+  "measured_updates": 30,
+  "dataset_examples": 86695,
+  "benchmark_discards_weights": true
+}

@@ -1,3 +1,5 @@
+Current QA post-training: see [QA_POSTTRAIN.md](QA_POSTTRAIN.md).
+
 Current 30M comparison: see [COMPARISON_30M.md](COMPARISON_30M.md).
 
 > **Codename branch:** the active larger TinyStories recipe and comparison

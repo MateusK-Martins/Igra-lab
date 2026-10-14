@@ -5,6 +5,6 @@ from src.sft.config import SFTInitializationConfig
 run_config = RunConfig(device="cuda")
 initialization_config = SFTInitializationConfig(
     checkpoint_path=results_path(
-        "pretraining/shakespeare-v4/checkpoints/step-00002400.pt"
+        "pretraining/comparison-lantern-30m-v2/checkpoints/step-00006500.pt"
     )
 )
