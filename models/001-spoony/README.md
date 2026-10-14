@@ -1,3 +1,6 @@
+> **Active 30M comparison:** see [COMPARISON_30M.md](COMPARISON_30M.md).
+> Earlier small-model experiments below are historical.
+
 > **Codename branch:** the active larger TinyStories recipe and comparison
 > protocol are documented in [CODENAME.md](CODENAME.md). The historical
 > Spoony notes below describe earlier configurations.

@@ -10,6 +10,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 from src.config.types import CheckpointConfig, LoggingConfig, TrainingConfig
 from src.training.checkpoint import loader_signature, save_checkpoint, training_iterator
+from src.training.loss import supervised_token_count
 from src.training.state import TrainingState
 from src.training.step import train_step
 from src.training.validation import validate
@@ -74,6 +75,9 @@ def train_loop(
             state.last_loss = loss
             state.batches += len(batches)
             state.tokens += sum(targets.numel() for _, targets in batches)
+            state.supervised_tokens += sum(
+                supervised_token_count(targets) for _, targets in batches
+            )
             state.updates += int(did_update)
             state.batches_in_epoch += len(batches)
             epoch_finished = state.batches_in_epoch == len(train_loader)
