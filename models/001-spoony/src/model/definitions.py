@@ -6,9 +6,10 @@ import torch
 from torch import nn
 
 from src.model.attention import GQAAttentionImpl
-from src.model.cache_storage import CacheEntry, StateEntry
+from src.model.cache_storage import CacheEntry, MatrixStateEntry, StateEntry
 from src.model.cumulative import CumulativeMixerImpl
 from src.model.feedforward import LinearImpl, SwiGLUImpl
+from src.model.matrix_memory import MatrixMemoryImpl
 from src.model.position import PositionRotation
 from src.model.stability import RMSNormImpl
 
@@ -31,7 +32,7 @@ class BlockDefinition(Protocol):
 
     def build(self) -> nn.Module: ...
 
-    def cache(self, layer_id: int) -> CacheEntry | StateEntry | None:
+    def cache(self, layer_id: int) -> CacheEntry | StateEntry | MatrixStateEntry | None:
         return None
 
     def unpack(self) -> list["BlockDefinition"]:
@@ -397,4 +398,55 @@ class CumulativeMixer(BlockDefinition):
             f"CumulativeMixerImpl-{layer_id}",
             torch.empty(0, 1, self.input_features),
             torch.empty(0, 1, self.input_features),
+        )
+
+
+@dataclass(frozen=True)
+class MatrixMemory(BlockDefinition):
+    input_features: int
+    key_features: int = 64
+    value_features: int = 128
+    eps: float = 1e-6
+    decay_init: float = 0.99
+    chunk_size: int = 16
+    checkpoint_chunks: bool = True
+    residual: bool = False
+
+    @property
+    def output_features(self) -> int:
+        return self.input_features
+
+    def __post_init__(self):
+        for name in ("input_features", "key_features", "value_features", "chunk_size"):
+            _positive_integer(getattr(self, name), name)
+        if (
+            type(self.eps) not in (int, float)
+            or not math.isfinite(self.eps)
+            or self.eps <= 0
+        ):
+            raise ValueError("eps must be finite and positive")
+        if (
+            type(self.decay_init) not in (int, float)
+            or not math.isfinite(self.decay_init)
+            or not 0 < self.decay_init < 1
+        ):
+            raise ValueError("decay_init must lie strictly between zero and one")
+        if type(self.checkpoint_chunks) is not bool or type(self.residual) is not bool:
+            raise ValueError("checkpoint_chunks and residual must be boolean")
+
+    def build(self):
+        return MatrixMemoryImpl(
+            self.input_features,
+            self.key_features,
+            self.value_features,
+            self.eps,
+            self.decay_init,
+            self.chunk_size,
+            self.checkpoint_chunks,
+        )
+
+    def cache(self, layer_id: int) -> MatrixStateEntry:
+        return MatrixStateEntry(
+            f"MatrixMemoryImpl-{layer_id}",
+            torch.empty(0, self.key_features, self.value_features),
         )

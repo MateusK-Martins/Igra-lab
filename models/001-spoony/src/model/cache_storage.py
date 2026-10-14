@@ -25,10 +25,19 @@ class StateEntry:
     count: int = 0
 
 
+@dataclass
+class MatrixStateEntry:
+    """Single associative memory [batch, key_features, value_features]."""
+
+    layer_id: str
+    matrix: Tensor
+    count: int = 0
+
+
 class CacheStorage:
     def __init__(
         self,
-        entries: list[CacheEntry | StateEntry],
+        entries: list[CacheEntry | StateEntry | MatrixStateEntry],
         storage_device: torch.device,
         read_device: torch.device,
     ) -> None:
@@ -37,10 +46,20 @@ class CacheStorage:
 
         self.entries: dict[str, CacheEntry] = {}
         self.states: dict[str, StateEntry] = {}
+        self.matrix_states: dict[str, MatrixStateEntry] = {}
 
         for entry in entries:
-            if entry.layer_id in self.entries or entry.layer_id in self.states:
+            if (
+                entry.layer_id in self.entries
+                or entry.layer_id in self.states
+                or entry.layer_id in self.matrix_states
+            ):
                 raise ValueError(f"Duplicate cache layer_id: {entry.layer_id!r}")
+
+            if isinstance(entry, MatrixStateEntry):
+                entry.matrix = entry.matrix.to(self.storage_device)
+                self.matrix_states[entry.layer_id] = entry
+                continue
 
             if isinstance(entry, StateEntry):
                 entry.key_sum = entry.key_sum.to(self.storage_device)
@@ -56,6 +75,14 @@ class CacheStorage:
     def save(self, path: Path) -> None:
         snapshot = {
             "format_version": 1,
+            "matrix_states": [
+                {
+                    "layer_id": entry.layer_id,
+                    "matrix": entry.matrix.detach().cpu(),
+                    "count": entry.count,
+                }
+                for entry in self.matrix_states.values()
+            ],
             "states": [
                 {
                     "layer_id": entry.layer_id,
@@ -160,6 +187,32 @@ class CacheStorage:
                 raise ValueError("Invalid recurrent cache tensors")
             entries.append(entry)
 
+        matrices = snapshot.get("matrix_states", [])
+        if not isinstance(matrices, list):
+            raise TypeError("Matrix cache states must be a list")
+        for record in matrices:
+            if not isinstance(record, dict) or set(record) != {
+                "layer_id",
+                "matrix",
+                "count",
+            }:
+                raise ValueError("Invalid matrix cache fields")
+            entry = MatrixStateEntry(**record)
+            if not isinstance(entry.layer_id, str) or not entry.layer_id:
+                raise ValueError("Invalid matrix cache layer_id")
+            if type(entry.count) is not int or entry.count < 0:
+                raise ValueError("Invalid matrix cache count")
+            if (
+                not isinstance(entry.matrix, Tensor)
+                or entry.matrix.ndim != 3
+                or min(entry.matrix.shape[1:]) <= 0
+                or entry.matrix.dtype not in (torch.float32, torch.float64)
+                or (entry.count > 0 and entry.matrix.shape[0] == 0)
+                or not torch.isfinite(entry.matrix).all()
+            ):
+                raise ValueError("Invalid matrix cache tensor")
+            entries.append(entry)
+
         return cls(
             entries=entries,
             storage_device=storage_device,
@@ -167,6 +220,8 @@ class CacheStorage:
         )
 
     def step(self, layer_id: str) -> int:
+        if layer_id in self.matrix_states:
+            return self.matrix_states[layer_id].count
         return (
             self.states[layer_id] if layer_id in self.states else self.entries[layer_id]
         ).count
@@ -320,4 +375,32 @@ class CacheStorage:
         keys = key_sum.detach().to(self.storage_device).clone()
         values = value_sum.detach().to(self.storage_device).clone()
         entry.key_sum, entry.value_sum = keys, values
+        entry.count += tokens
+
+    def read_matrix_state(self, layer_id: str) -> MatrixStateEntry:
+        if layer_id not in self.matrix_states:
+            raise ValueError(
+                "Matrix memory requires a MatrixStateEntry, not a vector cache"
+            )
+        entry = self.matrix_states[layer_id]
+        return MatrixStateEntry(
+            entry.layer_id, entry.matrix.to(self.read_device), entry.count
+        )
+
+    def write_matrix_state(self, layer_id: str, matrix: Tensor, tokens: int) -> None:
+        entry = self.matrix_states[layer_id]
+        if type(tokens) is not int or tokens <= 0:
+            raise ValueError("Matrix state update requires positive tokens")
+        if (
+            matrix.ndim != 3
+            or matrix.shape[0] == 0
+            or matrix.shape[1:] != entry.matrix.shape[1:]
+            or matrix.dtype not in (torch.float32, torch.float64)
+        ):
+            raise ValueError("Invalid matrix state update")
+        if entry.count and (
+            matrix.shape != entry.matrix.shape or matrix.dtype != entry.matrix.dtype
+        ):
+            raise ValueError("Matrix state shape or dtype changed")
+        entry.matrix = matrix.detach().to(self.storage_device).clone()
         entry.count += tokens
