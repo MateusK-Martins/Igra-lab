@@ -4,10 +4,10 @@ from src.config.types import LoggingConfig, TrainingConfig
 training_config = TrainingConfig(
     accumulation_steps=1,
     max_grad_norm=1.0,
-    validation_interval=1000,
+    validation_interval=500,
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/comparison-fluxv-30m-v1/tensorboard"),
-    interval=25,
+    directory=results_path("pretraining/token-kv-decay-v7/tensorboard"),
+    interval=10,
 )

@@ -89,7 +89,6 @@ def test_loop_stops_at_successful_update_limit(
         1.5,
         4.5,
         expected_batches % 5,
-        supervised_tokens=expected_batches * 3,
     )
 
 
@@ -104,7 +103,7 @@ def test_skipped_update_counts_consumed_data_but_not_successful_updates():
     ):
         state = train_loop(**args, config=TrainingConfig(2, 1.0, 100), total_steps=3)
     assert step.call_count == 4
-    assert state == TrainingState(3, 7, 21, 1, 0.5, 1.5, 4.5, 2, supervised_tokens=21)
+    assert state == TrainingState(3, 7, 21, 1, 0.5, 1.5, 4.5, 2)
 
 
 @pytest.mark.parametrize("total_steps", [0, -1, True, 1.5])
