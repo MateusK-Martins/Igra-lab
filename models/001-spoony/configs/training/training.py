@@ -8,6 +8,6 @@ training_config = TrainingConfig(
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/token-v-decay-v6/tensorboard"),
+    directory=results_path("pretraining/fluxv-mlp-headmix-14m/tensorboard"),
     interval=10,
 )

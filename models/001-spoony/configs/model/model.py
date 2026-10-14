@@ -21,6 +21,11 @@ def build_model(tokenizer: Tokenizer):
                         value_decay=True,
                         decay_init=0.99,
                         decay_mode="token",
+                        normalization_scope="global",
+                        readout="head_mlp",
+                        num_heads=6,
+                        query_head_features=48,
+                        head_mlp_hidden=24,
                     ),
                     SwiGLU(
                         input_features=384,
