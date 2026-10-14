@@ -1,0 +1,22 @@
+{
+  "checkpoint": "step-00006500.pt",
+  "decoding": "greedy FP32",
+  "max_new_tokens": 64,
+  "samples": [
+    {
+      "prompt": "Once upon a time, there was a little girl named Lily.",
+      "continuation": " She loved to play outside in the park with her friends. One day, Lily's mom told her they were going to a party. Lily was so excited to go to the park and play.\nWhen they got to the park, Lily saw a big slide. She wanted to go on it, but her mom said",
+      "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the park with her friends. One day, Lily's mom told her they were going to a party. Lily was so excited to go to the park and play.\nWhen they got to the park, Lily saw a big slide. She wanted to go on it, but her mom said"
+    },
+    {
+      "prompt": "Tom found a small dog outside his house. The dog was",
+      "continuation": " very friendly and liked to play with the dog. The dog liked to play with the dog and the dog. They played together and had fun.\nOne day, the dog and the dog went to the park. The dog saw a big dog. The dog was barking and running. The dog wanted to play with the",
+      "text": "Tom found a small dog outside his house. The dog was very friendly and liked to play with the dog. The dog liked to play with the dog and the dog. They played together and had fun.\nOne day, the dog and the dog went to the park. The dog saw a big dog. The dog was barking and running. The dog wanted to play with the"
+    },
+    {
+      "prompt": "One day, a boy lost his favorite toy. He felt",
+      "continuation": " sad and scared. He wanted to help his friend.\nHe went to his friend, the boy, and asked, \"Can you help me find my toy car?\" The boy said, \"Yes, I can help you. I will help you.\"\nThe boy was very happy. He said, \"Thank you",
+      "text": "One day, a boy lost his favorite toy. He felt sad and scared. He wanted to help his friend.\nHe went to his friend, the boy, and asked, \"Can you help me find my toy car?\" The boy said, \"Yes, I can help you. I will help you.\"\nThe boy was very happy. He said, \"Thank you"
+    }
+  ]
+}
