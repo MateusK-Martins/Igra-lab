@@ -351,6 +351,11 @@ class CumulativeMixer(BlockDefinition):
     value_decay: bool = False
     decay_init: float = 0.99
     decay_mode: Literal["diagonal", "token"] = "diagonal"
+    normalization_scope: Literal["global", "head"] = "global"
+    readout: Literal["elementwise", "matrix", "head_mlp"] = "elementwise"
+    num_heads: int = 1
+    query_head_features: int = 48
+    head_mlp_hidden: int = 24
 
     @property
     def output_features(self) -> int:
@@ -358,6 +363,22 @@ class CumulativeMixer(BlockDefinition):
 
     def __post_init__(self) -> None:
         _positive_integer(self.input_features, "input_features")
+        for name in ("num_heads", "query_head_features", "head_mlp_hidden"):
+            _positive_integer(getattr(self, name), name)
+        if self.normalization_scope not in ("global", "head") or self.readout not in (
+            "elementwise",
+            "matrix",
+            "head_mlp",
+        ):
+            raise ValueError("Invalid normalization scope or readout")
+        if self.input_features % self.num_heads:
+            raise ValueError("num_heads must divide input_features")
+        if self.normalization_scope == "head" and self.normalization != "rms":
+            raise ValueError("Head scope requires RMSNorm")
+        if self.readout == "head_mlp" and self.normalization_scope != "global":
+            raise ValueError("Head MLP experiment requires global normalization")
+        if self.readout == "matrix" and self.bias:
+            raise ValueError("Matrix readout uses bias-free projections")
         if (
             type(self.eps) not in (int, float)
             or not math.isfinite(self.eps)
@@ -390,6 +411,11 @@ class CumulativeMixer(BlockDefinition):
             value_decay=self.value_decay,
             decay_init=self.decay_init,
             decay_mode=self.decay_mode,
+            normalization_scope=self.normalization_scope,
+            readout=self.readout,
+            num_heads=self.num_heads,
+            query_head_features=self.query_head_features,
+            head_mlp_hidden=self.head_mlp_hidden,
         )
 
     def cache(self, layer_id: int) -> StateEntry:

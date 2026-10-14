@@ -9,7 +9,7 @@ from torch import Tensor, nn
 from src.model.cache_storage import CacheStorage
 from src.model.decay import TokenDecayImpl
 from src.model.scan import affine_prefix_sum, decayed_prefix_sum
-from src.model.stability import RMSNormImpl, SoftRMSNormImpl
+from src.model.stability import HeadRMSNormImpl, RMSNormImpl, SoftRMSNormImpl
 
 
 class CumulativeMixerImpl(nn.Module):
@@ -24,9 +24,24 @@ class CumulativeMixerImpl(nn.Module):
         value_decay: bool = False,
         decay_init: float = 0.99,
         decay_mode: Literal["diagonal", "token"] = "diagonal",
+        normalization_scope: str = "global",
+        readout: str = "elementwise",
+        num_heads: int = 1,
+        query_head_features: int = 48,
+        head_mlp_hidden: int = 24,
     ) -> None:
         super().__init__()
         self.q_proj = nn.Linear(features, features, bias=bias)
+        self.readout = readout
+        self.num_heads = num_heads
+        self.query_head_features = query_head_features
+        # Draw the original full Q first; replace it inside an RNG fork so all
+        # unchanged parameters retain their original seed-42 initial values.
+        if readout == "matrix":
+            with torch.random.fork_rng(devices=[]):
+                self.q_proj = nn.Linear(
+                    features, num_heads * query_head_features, bias=False
+                )
         self.k_proj = nn.Linear(features, features, bias=bias)
         self.v_proj = nn.Linear(features, features, bias=bias)
         self.normalization = normalization
@@ -41,6 +56,9 @@ class CumulativeMixerImpl(nn.Module):
             if normalization == "rms"
             else SoftRMSNormImpl(features)
         )
+        if normalization_scope == "head":
+            self.key_norm = HeadRMSNormImpl(features, eps, num_heads)
+            self.value_norm = HeadRMSNormImpl(features, eps, num_heads)
         for name, enabled in (
             ("key_decay_logits", key_decay),
             ("value_decay_logits", value_decay),
@@ -63,6 +81,28 @@ class CumulativeMixerImpl(nn.Module):
             if value_decay and decay_mode == "token"
             else None
         )
+        self.head_mlp = None
+        self.register_parameter("pair_p", None)
+        self.register_parameter("pair_w", None)
+        with torch.random.fork_rng(devices=[]):
+            if readout == "matrix":
+                width = features // num_heads
+                self.pair_p = nn.Parameter(
+                    torch.empty(num_heads, width, query_head_features)
+                )
+                self.pair_w = nn.Parameter(
+                    torch.empty(num_heads, query_head_features, width)
+                )
+                nn.init.normal_(self.pair_p, std=1 / math.sqrt(width))
+                nn.init.normal_(self.pair_w, std=1 / math.sqrt(query_head_features))
+            elif readout == "head_mlp":
+                self.head_mlp = nn.Sequential(
+                    nn.Linear(num_heads, head_mlp_hidden),
+                    nn.GELU(),
+                    nn.Linear(head_mlp_hidden, num_heads),
+                )
+                nn.init.zeros_(self.head_mlp[-1].weight)
+                nn.init.zeros_(self.head_mlp[-1].bias)
         self.layer_id = ""
 
     def assign_id(self, layer_id: int) -> None:
@@ -118,10 +158,23 @@ class CumulativeMixerImpl(nn.Module):
             )
         else:
             value_sum = decayed_prefix_sum(value_update, value_decay, initial_value)
-        result = q * self.value_norm(value_sum).to(q.dtype)
+        result = self.read_values(q, self.value_norm(value_sum).to(q.dtype))
         if cache is not None and x.shape[1]:
             cache.write_state(
                 self.layer_id, key_sum[:, -1:], value_sum[:, -1:], x.shape[1]
             )
         # build_block supplies x + result when the definition declares residual=True.
         return result
+
+    def read_values(self, q: Tensor, values: Tensor) -> Tensor:
+        if self.readout == "elementwise":
+            return q * values
+        heads = values.reshape(*values.shape[:-1], self.num_heads, -1)
+        if self.readout == "head_mlp":
+            h = heads.transpose(-1, -2)
+            mixed = (h + self.head_mlp(h)).transpose(-1, -2).reshape_as(values)
+            return q * mixed
+        queries = q.reshape(*q.shape[:-1], self.num_heads, self.query_head_features)
+        u = torch.einsum("...hd,hdr->...hr", heads, self.pair_p)
+        transformed = torch.einsum("...hr,hrd->...hd", queries * u, self.pair_w)
+        return (heads.roll(-1, dims=-2) * transformed).reshape_as(values)
