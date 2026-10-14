@@ -38,3 +38,17 @@ class SoftRMSNormImpl(nn.Module):
         working = x.float() if x.dtype in (torch.float16, torch.bfloat16) else x
         mean_square = working.square().mean(dim=-1, keepdim=True)
         return (working * torch.rsqrt(1.0 + mean_square)).to(x.dtype)
+
+
+class HeadRMSNormImpl(RMSNormImpl):
+    """Same per-feature gains; independent RMS statistics over contiguous heads."""
+
+    def __init__(self, features: int, eps: float, heads: int):
+        super().__init__(features, eps)
+        self.heads = heads
+
+    def forward(self, x: Tensor, *, cache: CacheStorage | None = None) -> Tensor:
+        working = x.float() if x.dtype in (torch.float16, torch.bfloat16) else x
+        h = working.reshape(*x.shape[:-1], self.heads, -1)
+        normalized = h * torch.rsqrt(h.square().mean(-1, keepdim=True) + self.eps)
+        return (normalized.reshape_as(working) * self.weights).to(x.dtype)
