@@ -1,0 +1,22 @@
+{
+  "checkpoint": "step-00006500.pt",
+  "decoding": "greedy FP32",
+  "max_new_tokens": 64,
+  "samples": [
+    {
+      "prompt": "Once upon a time, there was a little girl named Lily.",
+      "continuation": " She loved to play outside in the park. One day, she saw a big, scary dog. The dog was very scary and Lily was scared. She ran away from the dog and hid behind a tree.\nLily's mom came to help her. She told Lily to be careful and not go near the dog.",
+      "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the park. One day, she saw a big, scary dog. The dog was very scary and Lily was scared. She ran away from the dog and hid behind a tree.\nLily's mom came to help her. She told Lily to be careful and not go near the dog."
+    },
+    {
+      "prompt": "Tom found a small dog outside his house. The dog was",
+      "continuation": " very happy to see the dog and wanted to play with it. The dog said, \"Hi, dog! Do you want to play with me?\" The dog was happy to play with the dog. They played together and had lots of fun. The end.",
+      "text": "Tom found a small dog outside his house. The dog was very happy to see the dog and wanted to play with it. The dog said, \"Hi, dog! Do you want to play with me?\" The dog was happy to play with the dog. They played together and had lots of fun. The end."
+    },
+    {
+      "prompt": "One day, a boy lost his favorite toy. He felt",
+      "continuation": " sad and scared. He looked around and saw a big, scary dog. The boy was scared and ran away.\nThe boy was very scared. He did not know what to do. He did not know what to do. He did not know what to do. He did not know what to do.\nHe",
+      "text": "One day, a boy lost his favorite toy. He felt sad and scared. He looked around and saw a big, scary dog. The boy was scared and ran away.\nThe boy was very scared. He did not know what to do. He did not know what to do. He did not know what to do. He did not know what to do.\nHe"
+    }
+  ]
+}
