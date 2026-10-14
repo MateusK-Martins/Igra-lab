@@ -19,6 +19,6 @@ validation_loader_config = DataLoaderConfig(
 )
 
 chunking_config = ChunkingConfig(
-    context_length=256,
-    stride=256,
+    context_length=512,
+    stride=512,
 )

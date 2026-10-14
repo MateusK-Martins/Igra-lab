@@ -37,6 +37,7 @@ class TinyModel(torch.nn.Module):
 
 @pytest.fixture
 def configured_script(tmp_path, monkeypatch):
+    monkeypatch.setattr(train, "qa_config", None)
     data = tmp_path / "data"
     tokenizer = ByteLevelBPETokenizer.train(
         ["A fox found a bird."],
@@ -200,3 +201,43 @@ def test_run_config_rejects_unsupported_device(device):
 def test_run_config_rejects_nonpath_checkpoint(path):
     with pytest.raises(ConfigError, match="resume_from"):
         RunConfig("cpu", path)
+
+
+def test_train_script_combines_existing_story_and_qa_datasets(
+    configured_script, monkeypatch
+):
+    from torch.utils.data import ConcatDataset
+
+    from src.sft.config import SFTDataConfig
+
+    root, _, _, _ = configured_script
+    qa_path = root / "qa.jsonl"
+    qa_path.write_text(json.dumps({"instruction": "a", "response": "b"}) + "\n")
+    monkeypatch.setattr(
+        train,
+        "qa_config",
+        SFTDataConfig(
+            train_path=qa_path,
+            validation_path=qa_path,
+            tokenizer_path=root / "data/tokenizer.json",
+            context_length=4,
+            instruction_prefix="a",
+            response_prefix="b",
+        ),
+    )
+    datasets = []
+    original = train.build_dataloader
+
+    def capture(dataset, config):
+        datasets.append(dataset)
+        return original(dataset, config)
+
+    monkeypatch.setattr(train, "build_dataloader", capture)
+    train.main()
+    assert isinstance(datasets[0], ConcatDataset)
+    assert [len(dataset) for dataset in datasets[0].datasets] == [6, 1]
+    manifest = json.loads((root / "run/manifest.json").read_text())
+    assert (
+        manifest["artifacts"]["qa-train.jsonl"]
+        == manifest["artifacts"]["qa-validation.jsonl"]
+    )
