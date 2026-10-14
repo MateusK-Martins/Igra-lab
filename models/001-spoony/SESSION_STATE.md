@@ -1,3 +1,5 @@
+Current 30M comparison: see [COMPARISON_30M.md](COMPARISON_30M.md).
+
 # Codename baseline completed — 2026-10-13
 
 Branch `model/001-spoony-lantern`, isolated from the original Spoony working directory.
