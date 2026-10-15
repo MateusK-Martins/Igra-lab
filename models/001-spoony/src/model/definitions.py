@@ -524,6 +524,7 @@ class DenominatorState(BlockDefinition):
     eps: float = 1e-6
     decay_init: float = 0.99
     residual: bool = False
+    write_gate: bool = False
 
     @property
     def output_features(self):
@@ -536,17 +537,20 @@ class DenominatorState(BlockDefinition):
             decay_init=self.decay_init,
             residual=self.residual,
         )
+        if not isinstance(self.write_gate, bool):
+            raise TypeError("write_gate must be boolean")
         if self.mode not in ("average", "squared"):
             raise ValueError("mode must be average or squared")
 
     def build(self):
         return DenominatorStateImpl(
-            self.input_features, self.eps, self.decay_init, self.mode
+            self.input_features, self.eps, self.decay_init, self.mode, self.write_gate
         )
 
     def cache(self, layer_id: int):
+        suffix = "-write" if self.write_gate else ""
         return StateEntry(
-            f"DenominatorStateImpl-{self.mode}-{layer_id}",
+            f"DenominatorStateImpl-{self.mode}{suffix}-{layer_id}",
             torch.empty(0, 1, self.input_features),
             torch.empty(0, 1, self.input_features),
         )

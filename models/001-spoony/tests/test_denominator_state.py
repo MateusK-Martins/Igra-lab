@@ -12,6 +12,8 @@ from src.model.scan import affine_prefix_sum
 def reference(m, x):
     q = m.q_proj(x).sigmoid()
     u = m.v_proj(x).tanh()
+    if m.write_gate is not None:
+        u = (x @ m.write_gate.weight.T + m.write_gate.bias).sigmoid() * u
     g = (x @ m.value_decay_gate.weight.T + m.value_decay_gate.bias).sigmoid()
     s = torch.zeros_like(u[:, 0])
     z = torch.zeros_like(s)
@@ -27,8 +29,9 @@ def reference(m, x):
 
 
 @pytest.mark.parametrize("mode", ["average", "squared"])
-def test_independent_reference_values_and_gradients(mode):
-    m = DenominatorState(4, mode=mode).build().double()
+@pytest.mark.parametrize("write_gate", [False, True])
+def test_independent_reference_values_and_gradients(write_gate, mode):
+    m = DenominatorState(4, mode=mode, write_gate=write_gate).build().double()
     with torch.no_grad():
         m.value_decay_gate.weight.normal_(0, 0.2)
         m.value_decay_gate.bias.uniform_(-1, 3)
@@ -56,8 +59,9 @@ def test_independent_reference_values_and_gradients(mode):
 
 
 @pytest.mark.parametrize("mode", ["average", "squared"])
-def test_causality_gradcheck_and_residual_once(mode):
-    d = DenominatorState(3, mode=mode)
+@pytest.mark.parametrize("write_gate", [False, True])
+def test_causality_gradcheck_and_residual_once(write_gate, mode):
+    d = DenominatorState(3, mode=mode, write_gate=write_gate)
     m = build_block(d, 0).double()
     x = torch.randn(1, 7, 3, dtype=torch.float64, requires_grad=True)
     out = m(x)
@@ -76,8 +80,11 @@ def test_causality_gradcheck_and_residual_once(mode):
 
 
 @pytest.mark.parametrize("mode", ["average", "squared"])
-def test_cached_chunks_single_tokens_snapshot_and_constant_size(mode, tmp_path):
-    d = DenominatorState(4, mode=mode)
+@pytest.mark.parametrize("write_gate", [False, True])
+def test_cached_chunks_single_tokens_snapshot_and_constant_size(
+    write_gate, mode, tmp_path
+):
+    d = DenominatorState(4, mode=mode, write_gate=write_gate)
     m = build_block(d, 0).double()
     x = torch.randn(2, 39, 4, dtype=torch.float64)
     cache = CacheStorage([d.cache(0)], torch.device("cpu"), torch.device("cpu"))
@@ -184,8 +191,9 @@ def test_squared_weight_energy_explains_variance_scale():
 
 
 @pytest.mark.parametrize("mode", ["average", "squared"])
-def test_zero_long_sequence_and_denominator_gradients(mode):
-    m = DenominatorState(4, mode=mode).build()
+@pytest.mark.parametrize("write_gate", [False, True])
+def test_zero_long_sequence_and_denominator_gradients(write_gate, mode):
+    m = DenominatorState(4, mode=mode, write_gate=write_gate).build()
     assert torch.equal(m(torch.zeros(1, 2049, 4)), torch.zeros(1, 2049, 4))
     out = m(torch.randn(1, 2049, 4))
     out.square().mean().backward()
@@ -197,8 +205,9 @@ def test_zero_long_sequence_and_denominator_gradients(mode):
 
 @pytest.mark.parametrize("mode", ["average", "squared"])
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")
-def test_bf16_fp32_gate_states_and_gradient_stability(mode):
-    d = DenominatorState(8, mode=mode)
+@pytest.mark.parametrize("write_gate", [False, True])
+def test_bf16_fp32_gate_states_and_gradient_stability(write_gate, mode):
+    d = DenominatorState(8, mode=mode, write_gate=write_gate)
     m = build_block(d, 0).cuda()
     x = torch.randn(2, 256, 8, device="cuda")
     cache = CacheStorage([d.cache(0)], torch.device("cuda"), torch.device("cuda"))
@@ -222,9 +231,31 @@ def test_validation_and_actual_parameter_budget():
         vocab_size = 8192
 
     model, entries = build_model(Tokenizer())
-    assert sum(p.numel() for p in model.parameters()) == 12887040
+    assert sum(p.numel() for p in model.parameters()) == 13774080
     assert sum(isinstance(m, RMSNormImpl) for m in model.modules()) == 12
     assert all(e.key_sum.shape[-1] == e.value_sum.shape[-1] == 384 for e in entries)
     for kw in [{"mode": "rms"}, {"eps": 0}, {"decay_init": 1}, {"input_features": 0}]:
         with pytest.raises(ValueError):
             DenominatorState(**({"input_features": 4} | kw))
+
+
+def test_write_gate_common_initialization_and_denominator_independence():
+    torch.manual_seed(42)
+    plain = build_block(DenominatorState(4, mode="squared"), 0).double()
+    rng = torch.random.get_rng_state()
+    torch.manual_seed(42)
+    gated = build_block(
+        DenominatorState(4, mode="squared", write_gate=True), 0
+    ).double()
+    assert torch.equal(rng, torch.random.get_rng_state())
+    for name, value in plain.state_dict().items():
+        torch.testing.assert_close(value, gated.state_dict()[name], rtol=0, atol=0)
+    x = torch.randn(2, 19, 4, dtype=torch.float64)
+    torch.testing.assert_close(gated.write_gate(x), torch.full_like(x, 0.5))
+    torch.testing.assert_close(gated(x), plain(x) * 0.5, rtol=1e-10, atol=1e-10)
+    with torch.no_grad():
+        gated.write_gate.bias.fill_(-40)
+    assert gated(x).abs().max() < 1e-15
+    with pytest.raises(RuntimeError):
+        gated.load_state_dict(plain.state_dict())
+    assert gated.layer_id != plain.layer_id

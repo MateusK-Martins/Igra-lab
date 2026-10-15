@@ -180,7 +180,7 @@ def test_actual_parameter_count_and_no_k_storage():
     m = model.body[1].branch
     count = sum(p.numel() for p in model.parameters())
     if hasattr(m, "gain"):
-        expected = 12887040
+        expected = 13774080 if m.write_gate is not None else 12887040
         assert not hasattr(m, "value_norm") and not hasattr(m, "k_proj")
         assert all(e.key_sum.shape[-1] == 384 for e in entries)
     elif hasattr(m, "num_keys"):

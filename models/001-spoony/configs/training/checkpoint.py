@@ -2,6 +2,8 @@ from src.config.paths import results_path
 from src.config.types import CheckpointConfig
 
 checkpoint_config = CheckpointConfig(
-    directory=results_path("pretraining/fluxv-no-k-squared-retention/checkpoints"),
+    directory=results_path(
+        "pretraining/fluxv-no-k-write-gate-squared-retention/checkpoints"
+    ),
     interval=1000,
 )

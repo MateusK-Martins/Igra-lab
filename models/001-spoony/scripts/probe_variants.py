@@ -140,6 +140,13 @@ def main():
                     module.gain * raw.value_sum / divisor
                 )
                 writes = module.v_proj(inputs[name]).tanh().float()
+                if module.write_gate is not None:
+                    gate = module.write_gate(inputs[name])
+                    record["write_gate"] = statistics(gate)
+                    record["write_gate"]["token_variation_std"] = (
+                        gate.std(1, unbiased=False).mean().item()
+                    )
+                    writes = gate * writes
                 record["writes"] = statistics(writes)
                 record["write_feature_mean_absolute"] = (
                     writes.mean((0, 1)).abs().mean().item()
