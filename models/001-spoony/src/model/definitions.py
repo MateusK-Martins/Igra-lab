@@ -523,6 +523,7 @@ class NoKVariant(BlockDefinition):
     mode: Literal["write_gate", "signed_readout", "lowrank"] = "write_gate"
     rank: int = 32
     num_heads: int = 1
+    normalization_scope: Literal["head", "global"] = "head"
     retention_initials: tuple[float, ...] | None = None
     write_initials: tuple[float, ...] | None = None
     eps: float = 1e-6
@@ -546,6 +547,8 @@ class NoKVariant(BlockDefinition):
         if self.mode == "lowrank" and self.rank > self.input_features:
             raise ValueError("rank must not exceed feature width")
 
+        if self.normalization_scope not in ("head", "global"):
+            raise ValueError("normalization_scope must be head or global")
         _positive_integer(self.num_heads, "num_heads")
         if self.input_features % self.num_heads:
             raise ValueError("feature width must be divisible by num_heads")
@@ -581,10 +584,13 @@ class NoKVariant(BlockDefinition):
             self.num_heads,
             self.retention_initials,
             self.write_initials,
+            self.normalization_scope,
         )
 
     def cache(self, layer_id: int):
         suffix = f"-heads{self.num_heads}" if self.num_heads > 1 else ""
+        if self.num_heads > 1 and self.normalization_scope == "global":
+            suffix += "-global"
         return StateEntry(
             f"NoKVariantImpl-{self.mode}{suffix}-{layer_id}",
             torch.empty(0, 1, 0),

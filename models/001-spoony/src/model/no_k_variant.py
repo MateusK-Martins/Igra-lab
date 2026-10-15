@@ -23,6 +23,7 @@ class NoKVariantImpl(SignedStateImpl):
         num_heads: int = 1,
         retention_initials: tuple[float, ...] | None = None,
         write_initials: tuple[float, ...] | None = None,
+        normalization_scope: str = "head",
     ):
         super().__init__(features, eps, decay_init, token_decay=True)
         self.mode, self.rank = mode, rank
@@ -38,7 +39,8 @@ class NoKVariantImpl(SignedStateImpl):
                 nn.init.normal_(self.read_up.weight, std=1 / math.sqrt(rank))
 
         self.num_heads = num_heads
-        if num_heads > 1:
+        self.normalization_scope = normalization_scope
+        if num_heads > 1 and normalization_scope == "head":
             self.value_norm = HeadRMSNormImpl(features, eps, num_heads)
         for gate, values in (
             (self.value_decay_gate, retention_initials),
@@ -53,6 +55,8 @@ class NoKVariantImpl(SignedStateImpl):
 
     def assign_id(self, layer_id: int):
         suffix = f"-heads{self.num_heads}" if self.num_heads > 1 else ""
+        if self.num_heads > 1 and self.normalization_scope == "global":
+            suffix += "-global"
         self.layer_id = f"NoKVariantImpl-{self.mode}{suffix}-{layer_id}"
 
     def forward(self, x: Tensor, *, cache: CacheStorage | None = None):

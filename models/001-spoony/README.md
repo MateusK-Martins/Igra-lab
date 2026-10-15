@@ -1,3 +1,5 @@
+Current mechanism ablations: see [MECHANISM_ABLATIONS.md](MECHANISM_ABLATIONS.md).
+
 Current No-K gate/readout suite: see [GATE_READOUT_TESTS.md](GATE_READOUT_TESTS.md).
 
 Current controlled mechanism suite: see [MECHANISMS.md](MECHANISMS.md). Earlier notes are historical.

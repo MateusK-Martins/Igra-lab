@@ -8,6 +8,6 @@ training_config = TrainingConfig(
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/fluxv-selective-specialized/tensorboard"),
+    directory=results_path("pretraining/fluxv-ablation-write/tensorboard"),
     interval=10,
 )
