@@ -1,0 +1,15 @@
+{
+  "started_at_unix": 1792011303.172583,
+  "completed": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E"
+  ],
+  "sleep_inhibitor": "systemd-inhibit sleep:idle block",
+  "active": null,
+  "status": "completed",
+  "finished_at_unix": 1792033409.5239859,
+  "sleep_inhibitor_active": false
+}

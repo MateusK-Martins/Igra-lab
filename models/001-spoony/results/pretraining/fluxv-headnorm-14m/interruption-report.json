@@ -1,0 +1,18 @@
+{
+  "status": "interrupted; GPU OS reboot required",
+  "cause": "Kernel reports suspend/resume followed by NVIDIA Xid31 and Xid154; uvm global fatal error0x60, Node Reboot Required. Fresh CUDA process cannot initialize.",
+  "durable_checkpoint": "step-00003000.pt",
+  "durable_updates": 3000,
+  "checkpoint_sha256": "b6422aba2c5ceab5851b44a3d26f8482667d10ba1c34c952a2a921d69432728d",
+  "checkpoint_model_finite": true,
+  "checkpoint_settings_match_frozen_manifest": true,
+  "source_hashes_unchanged": true,
+  "last_logged_update": 3920,
+  "last_logged_validation": {
+    "update": 3500,
+    "loss": 2.47129
+  },
+  "completed_training_run": false,
+  "timing_limitation": "Original run timer did not complete. Resuming is mathematically supported, but runtime comparison must report interrupted/replayed work and downtime separately.",
+  "resolution": "Resumed from update 3000 and completed update 9000; final report labels resumed-phase timing."
+}
