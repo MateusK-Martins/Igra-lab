@@ -155,8 +155,8 @@ not a statistical significance result.
 ### What this says about normalization
 
 Weighted averaging divides by surviving write mass and bounds the un-gained
-normalized state by 1 in absolute value. It can suppress signed cancellation and
-historical signal amplitude. Squared retention divides by coefficient-energy
+normalized state by 1 in absolute value. Signed cancellation can make this average small,
+and the division does not restore the remaining signal amplitude. Squared retention divides by coefficient-energy
 scale, preserving more amplitude for independent zero-mean writes. Its variance
 argument does not hold automatically for learned nonzero-mean, correlated writes
 and input-dependent retention. The diagnostics below test those assumptions only
