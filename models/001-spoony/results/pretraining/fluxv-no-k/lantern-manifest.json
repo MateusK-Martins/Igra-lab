@@ -1,0 +1,126 @@
+{
+  "artifacts": {
+    "tokenizer.json": "ba860d881be0a85b457d6623fe8fdff79c00235776b92a9e2d2d48f43eb2e793",
+    "train/documents.jsonl": "708dd3a0b14ac4766316befa14aba9dac46d0a3d3724f54e56a0a831d886b202",
+    "train/metadata.json": "8e2678ee80201f510e70ab2af5e0b862e59a705b3e40cc71bdca1d9e38fa3a46",
+    "train/tokens.bin": "92b5d1296741f8808bc41a78661b56f320988f563f6ea45851aab3e3063f0e7f",
+    "validation/documents.jsonl": "da7ab1962319ac43c02c6bed744d05674d09a91f747931e3628630ce31338f7c",
+    "validation/metadata.json": "a88a8c445b9300d69334d8d9812f278c7c170794b6954d712ee5c6a941cf7c8b",
+    "validation/tokens.bin": "44e3d4954e0102799db3f39b475b9add58b4163185f986e2f6448673e756dfef"
+  },
+  "code": {
+    "files": {
+      "configs/model/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "configs/model/model.py": "8ce3599fc543eec8bc053461558c3d9bbeb710bbf5a563360cb6d819aeabc061",
+      "scripts/__init__.py": "5c33cae409def9bff5513f5690f573989507df8c28740e1305843f8cf73c0383",
+      "scripts/benchmark.py": "7b22dae8a79c6a9439157d089e934abf57ebfde43e303fbea7d0fe793d9284a6",
+      "scripts/materialize_corpus.py": "e464866924c8b5abe1f83bb254a3b2389ad56a70b6f54ce6d753c2b47cd0f4b2",
+      "scripts/prepare_data.py": "5414a87e0d85f06988c5df578059ea89b1e0bd3139beee40a6cd55b531e14aa2",
+      "scripts/run_baseline.py": "593dd2a54333c8ed27fe51fcbb6b79b6e75c7b64e4c7803c438ad7f9cfdc9b6d",
+      "scripts/sft.py": "bba14123e243623b489c831429246b89df315a1168a790a82ca364785a41f932",
+      "scripts/train.py": "bb1d78d40ccf5c01154d5130d39674e30e56a757f901bfc6978525ef63b68303",
+      "src/__init__.py": "6f11f770803a959fcd6f2bd3778ea3d045ad41f4c6172d7b12e370e63b374ae4",
+      "src/config/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/config/errors.py": "6a79c217e4d373cddf22e8b43883a48186c30be7d58a629283b20bb64be27af9",
+      "src/config/paths.py": "60daeef1f6689415c89520a995dc684d009b9c1426a7285ac7fd87b392308b6c",
+      "src/config/snapshot.py": "e69891f84f5a519ebd610783456cf2a3dfbb55fc331929df75694d7e23690834",
+      "src/config/types.py": "2d87998913e3693525900511be30d0cd5a2d2fda785f3694ca6fdcb40bbcdb53",
+      "src/data/__init__.py": "a94612ff54080f81a81aa22736313796e39657db100128c6ee0c7f3fc1abd569",
+      "src/data/chunker.py": "c9b9ee5785faeab199e082ab711d67b5e0174adbc0864cf3fc927263f4a4b2e0",
+      "src/data/dataloader.py": "8a2e194801afc88738d04b754df8c39fa370fdc34220e7dcadb9d98ffa89fba5",
+      "src/data/pipeline.py": "10943f8140b0d1d034e1a72439012311770156842c063226b8eda4e58aabb191",
+      "src/data/prepare.py": "3f7dcadf79280b30f2a626b57c7dc6e54ff724bb91189f048c1b814730b7d569",
+      "src/data/schemas.py": "0090f458a581caff1b81aee41664d73936d4a1bfdf2a3d845e537730a6b2af30",
+      "src/data/serialization.py": "226b9dfa65bf89099ddbace41b20060e1be692dca2c40eee46c7a517be3d9342",
+      "src/data/sources.py": "67c4b069661a51c5bcceba43a8ea4fae2e52cafb452d61a5061163c87d27b708",
+      "src/data/tokenizer.py": "05c8aa13289c46aca862d5b1e5d812ddcb01342355596e700d2a03272c1f2cbd",
+      "src/model/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/model/assembler.py": "5b72103ae60b5adc39ed7040523a05b6d5f5a2865ec86e5862afc30b53a4afd3",
+      "src/model/attention.py": "e99d7772d367a49e2be63e74404d920828956ad4e0677e623e74a76ab3cb7e0b",
+      "src/model/cache_storage.py": "243e7754870cf4c6785737cc9764410c1419834072d11268d2f06e74b6a8f037",
+      "src/model/composition.py": "6cac8dae3b909d8b22249299783774d99b55595d62c2aa1aacfbb3d12cefcb34",
+      "src/model/definitions.py": "efbde471a334299bbf4b93a5652afdbcc45f1b1bfe27e02fcc581f6443806f8a",
+      "src/model/feedforward.py": "d2d13203dadce539b4c64dbeadcb96cb0d1a69f6a9ebf1931aca331a2980271f",
+      "src/model/language_model.py": "5c0f28b8e69ca123c616c4cafd257b5118749a38cfe98e37bb12f8d0d85caded",
+      "src/model/position.py": "4b19f2e49c20cb0593d7bf7ffeccef2a540cdeb36d9251a3594454803b48e4a9",
+      "src/model/stability.py": "10edb89a3b1748e86365bf11bcef8db888d762f51110fd3fe64fe3f7a748eaf7",
+      "src/sft/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/sft/config.py": "8b639b4b1ba681dbed33c2fa67502b31a585edfbc971951e809ef64eb3450497",
+      "src/sft/data.py": "39b91e71b7e584a3dbcf419ff53c0e573fdd951eebe1fa4fc0cb173b2a9535be",
+      "src/training/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/training/checkpoint.py": "a58366ddb93fd416385b66fe5c205ac2c872e0a11a5dcdd1509eb5dd2e36e5b2",
+      "src/training/logging.py": "e4375898bb8b813680fc6f2b334b72ddd7aa004f62127027daf85882e1e35328",
+      "src/training/loop.py": "0c7e65263346ff64237412f0d40a5c86731a63d9b75b76fe4b53a639dc8a5b33",
+      "src/training/loss.py": "6490a7a4d7275717a740cc2b864bf795de00bde6b2a945788de24b90ab7ff363",
+      "src/training/manifest.py": "d1bb25c883b6fa4caf1224403c4e5b720a96bc3d173457d2ebf515d3f3ba8c1b",
+      "src/training/optimizer.py": "f5685111800abdf1b70ab6376a2a1c717238689fa2f66540e5574d7c1cae476b",
+      "src/training/precision.py": "9ae26dfabacecfdfd4435913ad80a8bb08a581ac889fedccd4555b3f8b4c958a",
+      "src/training/scheduler.py": "0a976506ebd947fc85dfced3445be12a6e96ca2ddfad6c81cf61ea8db108c44e",
+      "src/training/state.py": "e2adb57e287d65058698f1ca3ccd24b4236569121007d5fbfe30d0d50d41c7c6",
+      "src/training/step.py": "7f1ca5b1f8e1000219a4a0c5a94644a3e1ae66afeef392f4280ff342b645f151",
+      "src/training/validation.py": "5ba33dd4dce26e04b107a205efe11d56fdf347fb07317e1693e815687b348c6e"
+    },
+    "git_commit": "2eb1a7badd44a58a59841a5e817effb218fc071e"
+  },
+  "environment": {
+    "cuda": "12.8",
+    "cuda_devices": [
+      {
+        "capability": [
+          8,
+          9
+        ],
+        "name": "NVIDIA GeForce RTX 4050 Laptop GPU"
+      }
+    ],
+    "machine": "x86_64",
+    "python": "3.13.3",
+    "torch": "2.11.0+cu128"
+  },
+  "format_version": 1,
+  "settings": {
+    "chunking": {
+      "context_length": 256,
+      "stride": 256
+    },
+    "device": "cuda",
+    "optimizer": {
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "eps": 1e-08,
+      "learning_rate": 0.0003,
+      "weight_decay": 0.01
+    },
+    "precision": {
+      "mode": "bf16"
+    },
+    "scheduler": {
+      "min_lr_ratio": 0.1,
+      "total_steps": 9000,
+      "warmup_steps": 300
+    },
+    "train_loader": {
+      "batch_size": 8,
+      "drop_last": false,
+      "num_workers": 0,
+      "pin_memory": true,
+      "seed": 42,
+      "shuffle": true
+    },
+    "training": {
+      "accumulation_steps": 1,
+      "max_grad_norm": 1.0,
+      "validation_interval": 500
+    },
+    "validation_loader": {
+      "batch_size": 8,
+      "drop_last": false,
+      "num_workers": 0,
+      "pin_memory": true,
+      "seed": 42,
+      "shuffle": false
+    }
+  }
+}

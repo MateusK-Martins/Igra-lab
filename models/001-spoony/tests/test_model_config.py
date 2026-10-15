@@ -54,7 +54,7 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
         model.body[index].branch.layer_id for index in range(1, 24, 4)
     ]
     assert len({entry.layer_id for entry in entries}) == 6
-    assert all(entry.key_sum.shape == (0, 1, 384) for entry in entries)
+    assert all(entry.key_sum.shape == (0, 1, 0) for entry in entries)
 
 
 def test_config_forward_and_next_token_loss_backward(tokenizer):
@@ -113,7 +113,7 @@ def test_config_cached_chunks_match_full_logits_across_window_boundary(tokenizer
         )
     torch.testing.assert_close(actual, expected, rtol=1e-7, atol=1e-9)
     assert all(entry.count == 261 for entry in entries)
-    assert all(entry.key_sum.shape == (1, 1, 384) for entry in entries)
+    assert all(entry.key_sum.shape == (1, 1, 0) for entry in entries)
 
 
 def test_config_state_dict_round_trip_preserves_logits_and_tying(tokenizer):

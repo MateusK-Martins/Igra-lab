@@ -12,15 +12,12 @@ def build_model(tokenizer: Tokenizer):
                 times=6,
                 blocks=[
                     RMSNorm(input_features=384, eps=1e-6),
-                    CumulativeMixer(
+                    SignedState(
                         input_features=384,
                         eps=1e-6,
                         residual=True,
-                        normalization="rms",
-                        key_decay=False,
-                        value_decay=True,
                         decay_init=0.99,
-                        decay_mode="token",
+                        token_decay=True,
                     ),
                     SwiGLU(
                         input_features=384,
