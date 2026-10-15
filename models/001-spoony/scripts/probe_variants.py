@@ -128,6 +128,41 @@ def main():
         loss = compute_loss(logits, y).item()
         for name, module in modules.items():
             record = records[name]
+            if hasattr(module, "mode") and hasattr(module, "write_gate"):
+                record["variant_mode"] = module.mode
+                logits = module.q_proj(inputs[name])
+                query = (
+                    logits.tanh()
+                    if module.mode == "signed_readout"
+                    else logits.sigmoid()
+                )
+                record["readout_query"] = statistics(query)
+                record["negative_query_fraction"] = (query < 0).float().mean().item()
+                if module.write_gate is not None:
+                    gate = module.write_gate(inputs[name])
+                    record["input_gate"] = statistics(gate)
+                    record["input_gate"]["token_variation_std"] = (
+                        gate.float().std(1, unbiased=False).mean().item()
+                    )
+                    record["gated_write"] = statistics(
+                        gate * module.v_proj(inputs[name]).tanh().float()
+                    )
+                if module.read_down is not None:
+                    down, up = (
+                        module.read_down.weight.detach().float().cpu(),
+                        module.read_up.weight.detach().float().cpu(),
+                    )
+                    _, ru = torch.linalg.qr(up, mode="reduced")
+                    _, rv = torch.linalg.qr(down.T, mode="reduced")
+                    singular = torch.linalg.svdvals(ru @ rv.T)
+                    p = singular / singular.sum().clamp_min(1e-30)
+                    record["readout_rank"] = module.rank
+                    record["readout_singular_values"] = singular.tolist()
+                    record["readout_effective_rank"] = torch.exp(
+                        -(p * p.clamp_min(1e-30).log()).sum()
+                    ).item()
+                    record["read_down_norm"] = down.norm().item()
+                    record["read_up_norm"] = up.norm().item()
             if isinstance(module, SignedStateImpl):
                 state = cache.read_state(module.layer_id)
                 record["signed_state"] = statistics(state.value_sum)

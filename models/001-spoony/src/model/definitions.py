@@ -10,6 +10,7 @@ from src.model.cache_storage import CacheEntry, StateEntry
 from src.model.cumulative import CumulativeMixerImpl
 from src.model.feedforward import LinearImpl, SwiGLUImpl
 from src.model.multikey import MultiKeyMixerImpl
+from src.model.no_k_variant import NoKVariantImpl
 from src.model.position import PositionRotation
 from src.model.stability import RMSNormImpl
 from src.model.state_mechanisms import MassNormalizedImpl, SignedStateImpl
@@ -512,5 +513,44 @@ class MultiKeyMixer(BlockDefinition):
         return StateEntry(
             f"MultiKeyMixerImpl-{layer_id}",
             torch.empty(0, 1, self.num_keys * self.input_features),
+            torch.empty(0, 1, self.input_features),
+        )
+
+
+@dataclass
+class NoKVariant(BlockDefinition):
+    input_features: int
+    mode: Literal["write_gate", "signed_readout", "lowrank"] = "write_gate"
+    rank: int = 32
+    eps: float = 1e-6
+    decay_init: float = 0.99
+    residual: bool = False
+
+    @property
+    def output_features(self):
+        return self.input_features
+
+    def __post_init__(self):
+        CumulativeMixer(
+            self.input_features,
+            eps=self.eps,
+            decay_init=self.decay_init,
+            residual=self.residual,
+        )
+        if self.mode not in ("write_gate", "signed_readout", "lowrank"):
+            raise ValueError("mode must be write_gate, signed_readout or lowrank")
+        _positive_integer(self.rank, "rank")
+        if self.mode == "lowrank" and self.rank > self.input_features:
+            raise ValueError("rank must not exceed feature width")
+
+    def build(self):
+        return NoKVariantImpl(
+            self.input_features, self.eps, self.decay_init, self.mode, self.rank
+        )
+
+    def cache(self, layer_id: int):
+        return StateEntry(
+            f"NoKVariantImpl-{self.mode}-{layer_id}",
+            torch.empty(0, 1, 0),
             torch.empty(0, 1, self.input_features),
         )

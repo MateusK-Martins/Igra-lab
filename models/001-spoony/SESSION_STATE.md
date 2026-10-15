@@ -1,1 +1,1 @@
-Controlled mechanism suite in preflight. See MECHANISMS.md for equations and protocol. Four-K comparison completed first and pushed. Preserve source/recipe HEAD during training. Tests638 each passed; originalFFN1024 retained by user choice. Data/checkpoints remain ignored.
+Three fresh No-K RMSNorm ablations authorized: independent signed-write gate, tanh readout query, direct rank32 readout. See GATE_READOUT_TESTS.md.660 tests each/Ruff passed, preflight in progress. Preserve source/recipeHEAD while training. Other stopped suites remain stopped. OriginalFFN1024 preserved.
