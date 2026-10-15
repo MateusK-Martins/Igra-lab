@@ -17,7 +17,7 @@ class CacheEntry:
 
 @dataclass
 class StateEntry:
-    """External cumulative state: raw key/value sums shaped [batch, 1, features]."""
+    """External cumulative state: raw key/value sums [batch, 1, independent feature widths]."""
 
     layer_id: str
     key_sum: Tensor
@@ -150,9 +150,10 @@ class CacheStorage:
                 not isinstance(entry.key_sum, Tensor)
                 or not isinstance(entry.value_sum, Tensor)
                 or entry.key_sum.ndim != 3
-                or entry.key_sum.shape != entry.value_sum.shape
+                or entry.value_sum.ndim != 3
+                or entry.key_sum.shape[:2] != entry.value_sum.shape[:2]
                 or entry.key_sum.shape[1] != 1
-                or entry.key_sum.shape[2] == 0
+                or entry.value_sum.shape[2] == 0
                 or entry.key_sum.dtype != entry.value_sum.dtype
                 or not entry.key_sum.is_floating_point()
                 or (entry.count > 0 and entry.key_sum.shape[0] == 0)
@@ -305,16 +306,20 @@ class CacheStorage:
             raise ValueError("State update requires a positive token count")
         if (
             key_sum.ndim != 3
-            or key_sum.shape != value_sum.shape
+            or value_sum.ndim != 3
+            or key_sum.shape[:2] != value_sum.shape[:2]
             or key_sum.shape[1] != 1
             or key_sum.shape[2] != entry.key_sum.shape[2]
+            or value_sum.shape[2] != entry.value_sum.shape[2]
             or key_sum.shape[0] == 0
             or key_sum.dtype != value_sum.dtype
             or not key_sum.is_floating_point()
         ):
             raise ValueError("Invalid recurrent state update")
         if entry.count and (
-            key_sum.shape != entry.key_sum.shape or key_sum.dtype != entry.key_sum.dtype
+            key_sum.shape != entry.key_sum.shape
+            or value_sum.shape != entry.value_sum.shape
+            or key_sum.dtype != entry.key_sum.dtype
         ):
             raise ValueError("Recurrent state shape or dtype changed")
         keys = key_sum.detach().to(self.storage_device).clone()

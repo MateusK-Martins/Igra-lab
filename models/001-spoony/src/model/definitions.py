@@ -9,8 +9,10 @@ from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheEntry, StateEntry
 from src.model.cumulative import CumulativeMixerImpl
 from src.model.feedforward import LinearImpl, SwiGLUImpl
+from src.model.multikey import MultiKeyMixerImpl
 from src.model.position import PositionRotation
 from src.model.stability import RMSNormImpl
+from src.model.state_mechanisms import MassNormalizedImpl, SignedStateImpl
 
 
 def _positive_integer(value: int, name: str) -> None:
@@ -396,5 +398,119 @@ class CumulativeMixer(BlockDefinition):
         return StateEntry(
             f"CumulativeMixerImpl-{layer_id}",
             torch.empty(0, 1, self.input_features),
+            torch.empty(0, 1, self.input_features),
+        )
+
+
+@dataclass
+class SignedState(BlockDefinition):
+    input_features: int
+    token_decay: bool = True
+    eps: float = 1e-6
+    decay_init: float = 0.99
+    residual: bool = False
+
+    @property
+    def output_features(self):
+        return self.input_features
+
+    def __post_init__(self):
+        CumulativeMixer(
+            self.input_features,
+            eps=self.eps,
+            decay_init=self.decay_init,
+            residual=self.residual,
+        )
+        if type(self.token_decay) is not bool:
+            raise ValueError("token_decay must be boolean")
+
+    def build(self):
+        return SignedStateImpl(
+            self.input_features, self.eps, self.decay_init, self.token_decay
+        )
+
+    def cache(self, layer_id: int):
+        return StateEntry(
+            f"SignedStateImpl-{layer_id}",
+            torch.empty(0, 1, 0),
+            torch.empty(0, 1, self.input_features),
+        )
+
+
+@dataclass
+class MassNormalized(BlockDefinition):
+    input_features: int
+    eps: float = 1e-6
+    decay_init: float = 0.99
+    residual: bool = False
+
+    @property
+    def output_features(self):
+        return self.input_features
+
+    def __post_init__(self):
+        CumulativeMixer(
+            self.input_features,
+            eps=self.eps,
+            decay_init=self.decay_init,
+            residual=self.residual,
+        )
+
+    def build(self):
+        return MassNormalizedImpl(self.input_features, self.eps, self.decay_init)
+
+    def cache(self, layer_id: int):
+        return StateEntry(
+            f"MassNormalizedImpl-{layer_id}",
+            torch.empty(0, 1, 2 * self.input_features),
+            torch.empty(0, 1, 2 * self.input_features),
+        )
+
+
+@dataclass
+class MultiKeyMixer(BlockDefinition):
+    input_features: int
+    num_keys: int = 4
+    tied_query: bool = True
+    eps: float = 1e-6
+    decay_init: float = 0.99
+    residual: bool = False
+
+    @property
+    def output_features(self) -> int:
+        return self.input_features
+
+    def __post_init__(self):
+        _positive_integer(self.input_features, "input_features")
+        _positive_integer(self.num_keys, "num_keys")
+        for name in ("tied_query", "residual"):
+            if type(getattr(self, name)) is not bool:
+                raise ValueError(f"{name} must be boolean")
+        if (
+            type(self.eps) not in (int, float)
+            or not math.isfinite(self.eps)
+            or self.eps <= 0
+        ):
+            raise ValueError("eps must be finite and positive")
+        if (
+            type(self.decay_init) not in (int, float)
+            or not math.isfinite(self.decay_init)
+            or not 0 < self.decay_init < 1
+        ):
+            raise ValueError("decay_init must be strictly between zero and one")
+
+    def build(self):
+        return MultiKeyMixerImpl(
+            self.input_features,
+            self.num_keys,
+            self.tied_query,
+            self.eps,
+            self.decay_init,
+        )
+
+    def cache(self, layer_id: int) -> StateEntry:
+        return StateEntry(
+            f"MultiKeyMixerImpl-{layer_id}",
+            torch.empty(0, 1, self.num_keys * self.input_features),
             torch.empty(0, 1, self.input_features),
         )
