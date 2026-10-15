@@ -8,12 +8,21 @@ from torch import Tensor, nn
 from src.model.cache_storage import CacheStorage
 from src.model.decay import TokenDecayImpl
 from src.model.scan import affine_prefix_sum
+from src.model.stability import HeadRMSNormImpl
 from src.model.state_mechanisms import SignedStateImpl
 
 
 class NoKVariantImpl(SignedStateImpl):
     def __init__(
-        self, features: int, eps: float, decay_init: float, mode: str, rank: int
+        self,
+        features: int,
+        eps: float,
+        decay_init: float,
+        mode: str,
+        rank: int,
+        num_heads: int = 1,
+        retention_initials: tuple[float, ...] | None = None,
+        write_initials: tuple[float, ...] | None = None,
     ):
         super().__init__(features, eps, decay_init, token_decay=True)
         self.mode, self.rank = mode, rank
@@ -28,8 +37,23 @@ class NoKVariantImpl(SignedStateImpl):
                 nn.init.normal_(self.read_down.weight, std=1 / math.sqrt(features))
                 nn.init.normal_(self.read_up.weight, std=1 / math.sqrt(rank))
 
+        self.num_heads = num_heads
+        if num_heads > 1:
+            self.value_norm = HeadRMSNormImpl(features, eps, num_heads)
+        for gate, values in (
+            (self.value_decay_gate, retention_initials),
+            (self.write_gate, write_initials),
+        ):
+            if values is not None:
+                with torch.no_grad():
+                    probabilities = gate.bias.new_tensor(values).repeat_interleave(
+                        features // num_heads
+                    )
+                    gate.bias.copy_(torch.logit(probabilities))
+
     def assign_id(self, layer_id: int):
-        self.layer_id = f"NoKVariantImpl-{self.mode}-{layer_id}"
+        suffix = f"-heads{self.num_heads}" if self.num_heads > 1 else ""
+        self.layer_id = f"NoKVariantImpl-{self.mode}{suffix}-{layer_id}"
 
     def forward(self, x: Tensor, *, cache: CacheStorage | None = None):
         if cache is not None and torch.is_grad_enabled():

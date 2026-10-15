@@ -19,6 +19,7 @@ def build_model(tokenizer: Tokenizer):
                         decay_init=0.99,
                         mode="write_gate",
                         rank=32,
+                        num_heads=4,
                     ),
                     SwiGLU(
                         input_features=384,
