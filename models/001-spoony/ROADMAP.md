@@ -1,3 +1,5 @@
+Current No-K gate/readout suite: see [GATE_READOUT_TESTS.md](GATE_READOUT_TESTS.md).
+
 Current controlled mechanism suite: see [MECHANISMS.md](MECHANISMS.md). Earlier notes are historical.
 
 > **Active token-decay experiment:** see [TOKEN_DECAY.md](TOKEN_DECAY.md).
