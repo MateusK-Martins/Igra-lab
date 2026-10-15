@@ -1,0 +1,2793 @@
+{
+  "completed_models": [
+    {
+      "model": "Original FluxV",
+      "parameters": 13774080,
+      "loss": 2.173892272843255,
+      "perplexity": 8.792440101097792,
+      "seconds": 395.57828178399996,
+      "phase_updates": 9000,
+      "phase_target_tokens": 18429440,
+      "tokens_per_second": 46588.604199618676,
+      "peak_cuda_bytes": 1121110016,
+      "timing_scope": "Full historical run",
+      "full_training_seconds": 395.57828178399996,
+      "validation_curve": [
+        {
+          "update": 500,
+          "loss": 3.83423113822937
+        },
+        {
+          "update": 1000,
+          "loss": 3.216437339782715
+        },
+        {
+          "update": 1500,
+          "loss": 2.927384376525879
+        },
+        {
+          "update": 2000,
+          "loss": 2.7511377334594727
+        },
+        {
+          "update": 2500,
+          "loss": 2.621856689453125
+        },
+        {
+          "update": 3000,
+          "loss": 2.541008472442627
+        },
+        {
+          "update": 3500,
+          "loss": 2.468012809753418
+        },
+        {
+          "update": 4000,
+          "loss": 2.415098190307617
+        },
+        {
+          "update": 4500,
+          "loss": 2.3734045028686523
+        },
+        {
+          "update": 5000,
+          "loss": 2.327448606491089
+        },
+        {
+          "update": 5500,
+          "loss": 2.297948122024536
+        },
+        {
+          "update": 6000,
+          "loss": 2.258131742477417
+        },
+        {
+          "update": 6500,
+          "loss": 2.236807346343994
+        },
+        {
+          "update": 7000,
+          "loss": 2.2199673652648926
+        },
+        {
+          "update": 7500,
+          "loss": 2.2039217948913574
+        },
+        {
+          "update": 8000,
+          "loss": 2.1915252208709717
+        },
+        {
+          "update": 8500,
+          "loss": 2.1827428340911865
+        },
+        {
+          "update": 9000,
+          "loss": 2.1738922595977783
+        }
+      ],
+      "generations": [
+        {
+          "prompt": "Once upon a time, there was a little girl named Lily.",
+          "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, scary dog. The dog was scared and ran away. Lily was scared and didn't know what to do.\nSuddenly, a big dog came running towards her. Lily was scared and ran away. She ran back to the dog and"
+        },
+        {
+          "prompt": "Tom found a small dog outside his house. The dog was",
+          "text": "Tom found a small dog outside his house. The dog was very happy. He wanted to play with the ball. He ran to the dog and said, \"Hi, dog! Do you want to play with me?\" The dog looked at the ball and said, \"Yes, I want to play with you.\"\nThe dog and the dog played together. They played with the"
+        },
+        {
+          "prompt": "One day, a boy lost his favorite toy. He felt",
+          "text": "One day, a boy lost his favorite toy. He felt sad and lonely. He wanted to play with his toy car. He looked everywhere for it, but he could not find it. He looked everywhere for it, but he could not find it.\nThen, he saw a big dog. The dog was playing with a ball. The dog wanted to play with the ball"
+        }
+      ]
+    },
+    {
+      "model": "A HeadNorm",
+      "parameters": 13774080,
+      "loss": 2.1771685856359975,
+      "perplexity": 8.82129412667654,
+      "seconds": 268.934489028,
+      "phase_updates": 6000,
+      "phase_target_tokens": 12285440,
+      "tokens_per_second": 45681.905821759094,
+      "peak_cuda_bytes": 1121769472,
+      "timing_scope": "Resumed from update3000; timer covers only the resumed invocation. Earlier work, replay and downtime are not included.",
+      "full_training_seconds": null,
+      "validation_curve": [
+        {
+          "update": 500,
+          "loss": 3.833538293838501
+        },
+        {
+          "update": 1000,
+          "loss": 3.212259531021118
+        },
+        {
+          "update": 1500,
+          "loss": 2.9296438694000244
+        },
+        {
+          "update": 2000,
+          "loss": 2.757317304611206
+        },
+        {
+          "update": 2500,
+          "loss": 2.628386974334717
+        },
+        {
+          "update": 3000,
+          "loss": 2.5476815700531006
+        },
+        {
+          "update": 3500,
+          "loss": 2.4712913036346436
+        },
+        {
+          "update": 4000,
+          "loss": 2.4140396118164062
+        },
+        {
+          "update": 4500,
+          "loss": 2.3767127990722656
+        },
+        {
+          "update": 5000,
+          "loss": 2.3320183753967285
+        },
+        {
+          "update": 5500,
+          "loss": 2.304098606109619
+        },
+        {
+          "update": 6000,
+          "loss": 2.2605953216552734
+        },
+        {
+          "update": 6500,
+          "loss": 2.242724895477295
+        },
+        {
+          "update": 7000,
+          "loss": 2.2217390537261963
+        },
+        {
+          "update": 7500,
+          "loss": 2.206799268722534
+        },
+        {
+          "update": 8000,
+          "loss": 2.193904161453247
+        },
+        {
+          "update": 8500,
+          "loss": 2.183997392654419
+        },
+        {
+          "update": 9000,
+          "loss": 2.177168607711792
+        }
+      ],
+      "generations": [
+        {
+          "prompt": "Once upon a time, there was a little girl named Lily.",
+          "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the sun. One day, she saw a big, scary dog. The dog was scared and ran away. Lily felt sad for the dog and wanted to help.\nLily's mom saw the dog and asked, \"What's wrong, Lily?\" The dog barked and wagged its tail."
+        },
+        {
+          "prompt": "Tom found a small dog outside his house. The dog was",
+          "text": "Tom found a small dog outside his house. The dog was not happy. It wanted to play with the dog.\n\"Can we play with the dog?\" Tom asked.\n\"Yes, but be careful. The dog is not nice. It is not nice. It is not nice. It is not nice.\" Mia said.\n\"I am sorry. I was mean"
+        },
+        {
+          "prompt": "One day, a boy lost his favorite toy. He felt",
+          "text": "One day, a boy lost his favorite toy. He felt sad and lonely. He wanted to play with his toy car, but he was too small to play with it. He looked everywhere, but he could not find it.\nOne day, he saw a big dog in the park. The dog was not nice. The dog wanted to play with the dog. The dog"
+        }
+      ]
+    },
+    {
+      "model": "B HeadNorm + matrix readout",
+      "parameters": 13774080,
+      "loss": 2.1904463591399015,
+      "perplexity": 8.939202318982126,
+      "seconds": 411.155398456,
+      "phase_updates": 9000,
+      "phase_target_tokens": 18429440,
+      "tokens_per_second": 44823.53890817813,
+      "peak_cuda_bytes": 1160529920,
+      "timing_scope": "Uninterrupted full run, including setup, validation and saving.",
+      "full_training_seconds": 411.155398456,
+      "validation_curve": [
+        {
+          "update": 500,
+          "loss": 3.8391947746276855
+        },
+        {
+          "update": 1000,
+          "loss": 3.1972780227661133
+        },
+        {
+          "update": 1500,
+          "loss": 2.920152187347412
+        },
+        {
+          "update": 2000,
+          "loss": 2.760322093963623
+        },
+        {
+          "update": 2500,
+          "loss": 2.6293537616729736
+        },
+        {
+          "update": 3000,
+          "loss": 2.5469071865081787
+        },
+        {
+          "update": 3500,
+          "loss": 2.477185010910034
+        },
+        {
+          "update": 4000,
+          "loss": 2.4247379302978516
+        },
+        {
+          "update": 4500,
+          "loss": 2.386824607849121
+        },
+        {
+          "update": 5000,
+          "loss": 2.343092203140259
+        },
+        {
+          "update": 5500,
+          "loss": 2.3094918727874756
+        },
+        {
+          "update": 6000,
+          "loss": 2.271977424621582
+        },
+        {
+          "update": 6500,
+          "loss": 2.252673387527466
+        },
+        {
+          "update": 7000,
+          "loss": 2.236011028289795
+        },
+        {
+          "update": 7500,
+          "loss": 2.2201075553894043
+        },
+        {
+          "update": 8000,
+          "loss": 2.2092111110687256
+        },
+        {
+          "update": 8500,
+          "loss": 2.19872784614563
+        },
+        {
+          "update": 9000,
+          "loss": 2.190446376800537
+        }
+      ],
+      "generations": [
+        {
+          "prompt": "Once upon a time, there was a little girl named Lily.",
+          "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, scary dog. The dog was very friendly and had a big smile on its face.\nLily and the dog played together for a while, but then it started to rain. The dog ran away and Lily was sad. She wanted to"
+        },
+        {
+          "prompt": "Tom found a small dog outside his house. The dog was",
+          "text": "Tom found a small dog outside his house. The dog was very happy. He wanted to play with the ball. He ran to the ball and tried to catch it. But the ball was too fast. The ball went away.\nTim was sad. He wanted to play with the ball. He ran to the ball and tried to catch it. But the ball was too high"
+        },
+        {
+          "prompt": "One day, a boy lost his favorite toy. He felt",
+          "text": "One day, a boy lost his favorite toy. He felt sad and lonely. He wanted to play with the toy car. He asked his mom for help. His mom said, \"Yes, you can have it. But first, you have to be careful. It's not safe.\"\nTim was sad. He wanted to play with his toy car. He said, \""
+        }
+      ]
+    },
+    {
+      "model": "C GlobalNorm + matrix readout",
+      "parameters": 13774080,
+      "loss": 2.1870749438250505,
+      "perplexity": 8.90911530179514,
+      "seconds": 406.2606910589999,
+      "phase_updates": 9000,
+      "phase_target_tokens": 18429440,
+      "tokens_per_second": 45363.58157605643,
+      "peak_cuda_bytes": 1160038400,
+      "timing_scope": "Uninterrupted full run, including setup, validation and saving.",
+      "full_training_seconds": 406.2606910589999,
+      "validation_curve": [
+        {
+          "update": 500,
+          "loss": 3.8417446613311768
+        },
+        {
+          "update": 1000,
+          "loss": 3.2074015140533447
+        },
+        {
+          "update": 1500,
+          "loss": 2.925473928451538
+        },
+        {
+          "update": 2000,
+          "loss": 2.7535107135772705
+        },
+        {
+          "update": 2500,
+          "loss": 2.6259562969207764
+        },
+        {
+          "update": 3000,
+          "loss": 2.546663761138916
+        },
+        {
+          "update": 3500,
+          "loss": 2.4728314876556396
+        },
+        {
+          "update": 4000,
+          "loss": 2.417194128036499
+        },
+        {
+          "update": 4500,
+          "loss": 2.3834733963012695
+        },
+        {
+          "update": 5000,
+          "loss": 2.340580463409424
+        },
+        {
+          "update": 5500,
+          "loss": 2.305586576461792
+        },
+        {
+          "update": 6000,
+          "loss": 2.267364263534546
+        },
+        {
+          "update": 6500,
+          "loss": 2.248924970626831
+        },
+        {
+          "update": 7000,
+          "loss": 2.2321255207061768
+        },
+        {
+          "update": 7500,
+          "loss": 2.2160308361053467
+        },
+        {
+          "update": 8000,
+          "loss": 2.2045633792877197
+        },
+        {
+          "update": 8500,
+          "loss": 2.195507287979126
+        },
+        {
+          "update": 9000,
+          "loss": 2.187074899673462
+        }
+      ],
+      "generations": [
+        {
+          "prompt": "Once upon a time, there was a little girl named Lily.",
+          "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, red ball. She wanted to catch it, but it was too high up. \nLily's mom saw her and said, \"Don't worry, Lily. We can fix it. We can fix it.\" They went to the"
+        },
+        {
+          "prompt": "Tom found a small dog outside his house. The dog was",
+          "text": "Tom found a small dog outside his house. The dog was very friendly and wanted to play with him. He ran to the dog and said, \"Hi, dog! Do you want to play with me?\" The dog wagged its tail and wagged its tail.\nThe dog wagged its tail and wagged its tail. It wagged its tail and wagged its tail. It wagged its tail"
+        },
+        {
+          "prompt": "One day, a boy lost his favorite toy. He felt",
+          "text": "One day, a boy lost his favorite toy. He felt sad and lonely. He wanted to play with the toy car. He looked everywhere for it, but he could not find it. He looked everywhere, but he could not find it.\nThen, he saw a big dog. The dog was playing with a ball. The dog was not nice. The dog was not"
+        }
+      ]
+    },
+    {
+      "model": "D head-axis MLP",
+      "parameters": 13775988,
+      "loss": 2.171527730094062,
+      "perplexity": 8.77167456078803,
+      "seconds": 423.93445825599997,
+      "phase_updates": 9000,
+      "phase_target_tokens": 18429440,
+      "tokens_per_second": 43472.3803198632,
+      "peak_cuda_bytes": 1213396992,
+      "timing_scope": "Uninterrupted full run, including setup, validation and saving.",
+      "full_training_seconds": 423.93445825599997,
+      "validation_curve": [
+        {
+          "update": 500,
+          "loss": 3.8342201709747314
+        },
+        {
+          "update": 1000,
+          "loss": 3.2151691913604736
+        },
+        {
+          "update": 1500,
+          "loss": 2.924933910369873
+        },
+        {
+          "update": 2000,
+          "loss": 2.7489829063415527
+        },
+        {
+          "update": 2500,
+          "loss": 2.619375467300415
+        },
+        {
+          "update": 3000,
+          "loss": 2.538551092147827
+        },
+        {
+          "update": 3500,
+          "loss": 2.4659409523010254
+        },
+        {
+          "update": 4000,
+          "loss": 2.41245436668396
+        },
+        {
+          "update": 4500,
+          "loss": 2.3703579902648926
+        },
+        {
+          "update": 5000,
+          "loss": 2.3242974281311035
+        },
+        {
+          "update": 5500,
+          "loss": 2.2961835861206055
+        },
+        {
+          "update": 6000,
+          "loss": 2.2554280757904053
+        },
+        {
+          "update": 6500,
+          "loss": 2.234036922454834
+        },
+        {
+          "update": 7000,
+          "loss": 2.216996192932129
+        },
+        {
+          "update": 7500,
+          "loss": 2.200439453125
+        },
+        {
+          "update": 8000,
+          "loss": 2.188880681991577
+        },
+        {
+          "update": 8500,
+          "loss": 2.180180072784424
+        },
+        {
+          "update": 9000,
+          "loss": 2.171527624130249
+        }
+      ],
+      "generations": [
+        {
+          "prompt": "Once upon a time, there was a little girl named Lily.",
+          "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, scary dog. The dog was very big and had a long tail. Lily wanted to pet the dog, but she was scared.\nLily's mom saw her and said, \"Don't worry, Lily. We can help you find"
+        },
+        {
+          "prompt": "Tom found a small dog outside his house. The dog was",
+          "text": "Tom found a small dog outside his house. The dog was very happy. He wanted to play with the ball. He ran to the dog and said, \"Hi, dog! Do you want to play with me?\" The dog barked and wagged its tail.\nThe dog barked and wagged its tail. It barked and wagged its tail. It barked and wagged its tail. It"
+        },
+        {
+          "prompt": "One day, a boy lost his favorite toy. He felt",
+          "text": "One day, a boy lost his favorite toy. He felt sad and lonely. He wanted to play with his toy car. He looked everywhere for it, but he could not find it. He looked everywhere for it, but he could not find it.\nThen, he saw a big dog. The dog was playing with a ball. The dog wanted to play with the ball"
+        }
+      ]
+    },
+    {
+      "model": "E recurrent matrix memory",
+      "parameters": 14211456,
+      "loss": 2.0398355369214656,
+      "perplexity": 7.6893444816168435,
+      "seconds": 2102.3963761960003,
+      "phase_updates": 8000,
+      "phase_target_tokens": 16381440,
+      "tokens_per_second": 7791.794252252272,
+      "peak_cuda_bytes": 1121259520,
+      "timing_scope": "Resumed from update1000; timer covers only the resumed invocation. Earlier work, replay and downtime are not included.",
+      "full_training_seconds": null,
+      "validation_curve": [
+        {
+          "update": 500,
+          "loss": 3.5467586517333984
+        },
+        {
+          "update": 1000,
+          "loss": 2.9887003898620605
+        },
+        {
+          "update": 1500,
+          "loss": 2.7638583183288574
+        },
+        {
+          "update": 2000,
+          "loss": 2.6025161743164062
+        },
+        {
+          "update": 2500,
+          "loss": 2.492316484451294
+        },
+        {
+          "update": 3000,
+          "loss": 2.41218638420105
+        },
+        {
+          "update": 3500,
+          "loss": 2.3353331089019775
+        },
+        {
+          "update": 4000,
+          "loss": 2.275855541229248
+        },
+        {
+          "update": 4500,
+          "loss": 2.242509126663208
+        },
+        {
+          "update": 5000,
+          "loss": 2.196113348007202
+        },
+        {
+          "update": 5500,
+          "loss": 2.1618905067443848
+        },
+        {
+          "update": 6000,
+          "loss": 2.12487530708313
+        },
+        {
+          "update": 6500,
+          "loss": 2.106250286102295
+        },
+        {
+          "update": 7000,
+          "loss": 2.0850110054016113
+        },
+        {
+          "update": 7500,
+          "loss": 2.068552017211914
+        },
+        {
+          "update": 8000,
+          "loss": 2.057002544403076
+        },
+        {
+          "update": 8500,
+          "loss": 2.046468496322632
+        },
+        {
+          "update": 9000,
+          "loss": 2.0398354530334473
+        }
+      ],
+      "generations": [
+        {
+          "prompt": "Once upon a time, there was a little girl named Lily.",
+          "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, scary dog. The dog was very big and had a long tail. Lily was scared and didn't know what to do.\nLily's mom saw her and said, \"Don't worry, Lily. I will help you.\" She"
+        },
+        {
+          "prompt": "Tom found a small dog outside his house. The dog was",
+          "text": "Tom found a small dog outside his house. The dog was not happy. It wanted to play with Tom and Tom.\n\"Let's play with the dog!\" Tom said. He ran to the dog and tried to catch it. But the dog was faster. He pushed Tom and Tom away. Tom was sad. He did not want to play with Tom anymore.\nTom"
+        },
+        {
+          "prompt": "One day, a boy lost his favorite toy. He felt",
+          "text": "One day, a boy lost his favorite toy. He felt sad and lonely. He wanted to find his friend, the boy, to help him.\nThe boy went to the boy and said, \"Hi, I am Tom. I like to play with you. Do you want to play with me?\" The boy said, \"Yes, I want to play with you."
+        }
+      ]
+    },
+    {
+      "model": "Lantern attention",
+      "parameters": 12440064,
+      "loss": 2.0183204765673035,
+      "perplexity": 7.525674766392367,
+      "seconds": 431.3326097320023,
+      "phase_updates": 9000,
+      "phase_target_tokens": 18429440,
+      "tokens_per_second": 42726.7486486836,
+      "peak_cuda_bytes": 802710528,
+      "timing_scope": "Full fresh run; historical session for earlier experiments",
+      "full_training_seconds": 431.3326097320023,
+      "validation_curve": [
+        {
+          "update": 500,
+          "loss": 3.3202414512634277
+        },
+        {
+          "update": 1000,
+          "loss": 2.8575119972229004
+        },
+        {
+          "update": 1500,
+          "loss": 2.6555593013763428
+        },
+        {
+          "update": 2000,
+          "loss": 2.51301908493042
+        },
+        {
+          "update": 2500,
+          "loss": 2.4121930599212646
+        },
+        {
+          "update": 3000,
+          "loss": 2.3398749828338623
+        },
+        {
+          "update": 3500,
+          "loss": 2.277949571609497
+        },
+        {
+          "update": 4000,
+          "loss": 2.227402448654175
+        },
+        {
+          "update": 4500,
+          "loss": 2.196164131164551
+        },
+        {
+          "update": 5000,
+          "loss": 2.1554818153381348
+        },
+        {
+          "update": 5500,
+          "loss": 2.125843048095703
+        },
+        {
+          "update": 6000,
+          "loss": 2.0885090827941895
+        },
+        {
+          "update": 6500,
+          "loss": 2.0743980407714844
+        },
+        {
+          "update": 7000,
+          "loss": 2.0562920570373535
+        },
+        {
+          "update": 7500,
+          "loss": 2.0437748432159424
+        },
+        {
+          "update": 8000,
+          "loss": 2.031844139099121
+        },
+        {
+          "update": 8500,
+          "loss": 2.025123357772827
+        },
+        {
+          "update": 9000,
+          "loss": 2.0183205604553223
+        }
+      ],
+      "generations": [
+        {
+          "prompt": "Once upon a time, there was a little girl named Lily.",
+          "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the sun. One day, she saw a big, scary dog. The dog was barking and running towards her. Lily was scared and didn't know what to do.\nSuddenly, a big dog came running towards her. The dog barked and wagged its tail. Lily was scared and didn"
+        },
+        {
+          "prompt": "Tom found a small dog outside his house. The dog was",
+          "text": "Tom found a small dog outside his house. The dog was very hungry and wanted to eat the food. But the dog was too small to eat the food. The dog was sad and scared.\nTom's mom saw the dog and came to help. She saw the dog and the dog. She was very happy and thanked the dog. She gave the dog a big hug and"
+        },
+        {
+          "prompt": "One day, a boy lost his favorite toy. He felt",
+          "text": "One day, a boy lost his favorite toy. He felt sad and scared. He wanted to find his toy, but he could not find it. He looked everywhere, but he could not find it. He looked everywhere, but he could not find it.\nThen, he saw a big tree. He wanted to find it. He looked around and saw a big tree."
+        }
+      ]
+    },
+    {
+      "model": "4-K tied Q",
+      "parameters": 16446720,
+      "loss": 2.169083754221598,
+      "perplexity": 8.750262975157346,
+      "seconds": 950.1474147649997,
+      "phase_updates": 9000,
+      "phase_target_tokens": 18429440,
+      "tokens_per_second": 19396.400720153684,
+      "peak_cuda_bytes": 1907812352,
+      "timing_scope": "Full fresh run; historical session for earlier experiments",
+      "full_training_seconds": 950.1474147649997,
+      "validation_curve": [
+        {
+          "update": 500,
+          "loss": 3.7942874431610107
+        },
+        {
+          "update": 1000,
+          "loss": 3.172775983810425
+        },
+        {
+          "update": 1500,
+          "loss": 2.9119362831115723
+        },
+        {
+          "update": 2000,
+          "loss": 2.7473950386047363
+        },
+        {
+          "update": 2500,
+          "loss": 2.6194746494293213
+        },
+        {
+          "update": 3000,
+          "loss": 2.536003589630127
+        },
+        {
+          "update": 3500,
+          "loss": 2.467647075653076
+        },
+        {
+          "update": 4000,
+          "loss": 2.410611867904663
+        },
+        {
+          "update": 4500,
+          "loss": 2.3696465492248535
+        },
+        {
+          "update": 5000,
+          "loss": 2.326507329940796
+        },
+        {
+          "update": 5500,
+          "loss": 2.2961690425872803
+        },
+        {
+          "update": 6000,
+          "loss": 2.2521238327026367
+        },
+        {
+          "update": 6500,
+          "loss": 2.233405590057373
+        },
+        {
+          "update": 7000,
+          "loss": 2.21559476852417
+        },
+        {
+          "update": 7500,
+          "loss": 2.197885751724243
+        },
+        {
+          "update": 8000,
+          "loss": 2.1852519512176514
+        },
+        {
+          "update": 8500,
+          "loss": 2.176760673522949
+        },
+        {
+          "update": 9000,
+          "loss": 2.169083833694458
+        }
+      ],
+      "generations": [
+        {
+          "prompt": "Once upon a time, there was a little girl named Lily.",
+          "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the sun. One day, she saw a big, scary dog. The dog was very friendly and Lily wanted to play with the dog.\nLily said, \"Hi, I'm Lily. Do you want to play with me?\" The dog wagged its tail and wagged its tail. Lily"
+        },
+        {
+          "prompt": "Tom found a small dog outside his house. The dog was",
+          "text": "Tom found a small dog outside his house. The dog was not happy. He wanted to play with the dog, but he was too small. He looked everywhere, but he could not find it.\nTim's friend, a little girl named Lily, saw the dog and wanted to play with him. She said, \"Hi, I am Tom. Do you want to play"
+        },
+        {
+          "prompt": "One day, a boy lost his favorite toy. He felt",
+          "text": "One day, a boy lost his favorite toy. He felt sad and lonely. He wanted to play with it. He asked his mom, \"Can I have the toy car?\" His mom said, \"No, it's mine. It's not safe.\"\nTim was sad. He wanted his toy car. He asked his mom, \"Can I have it?\" His mom"
+        }
+      ]
+    },
+    {
+      "model": "4-K independent Q",
+      "parameters": 17331456,
+      "loss": 2.1357593536376953,
+      "perplexity": 8.463470834750376,
+      "seconds": 946.9210382210003,
+      "phase_updates": 9000,
+      "phase_target_tokens": 18429440,
+      "tokens_per_second": 19462.488693485742,
+      "peak_cuda_bytes": 1944045568,
+      "timing_scope": "Full fresh run; historical session for earlier experiments",
+      "full_training_seconds": 946.9210382210003,
+      "validation_curve": [
+        {
+          "update": 500,
+          "loss": 3.7770934104919434
+        },
+        {
+          "update": 1000,
+          "loss": 3.142747163772583
+        },
+        {
+          "update": 1500,
+          "loss": 2.8746464252471924
+        },
+        {
+          "update": 2000,
+          "loss": 2.705474853515625
+        },
+        {
+          "update": 2500,
+          "loss": 2.5815107822418213
+        },
+        {
+          "update": 3000,
+          "loss": 2.499541759490967
+        },
+        {
+          "update": 3500,
+          "loss": 2.433340311050415
+        },
+        {
+          "update": 4000,
+          "loss": 2.370426654815674
+        },
+        {
+          "update": 4500,
+          "loss": 2.332756996154785
+        },
+        {
+          "update": 5000,
+          "loss": 2.2883293628692627
+        },
+        {
+          "update": 5500,
+          "loss": 2.2577321529388428
+        },
+        {
+          "update": 6000,
+          "loss": 2.218501091003418
+        },
+        {
+          "update": 6500,
+          "loss": 2.199270009994507
+        },
+        {
+          "update": 7000,
+          "loss": 2.179381847381592
+        },
+        {
+          "update": 7500,
+          "loss": 2.162034034729004
+        },
+        {
+          "update": 8000,
+          "loss": 2.151611566543579
+        },
+        {
+          "update": 8500,
+          "loss": 2.1414167881011963
+        },
+        {
+          "update": 9000,
+          "loss": 2.1357593536376953
+        }
+      ],
+      "generations": [
+        {
+          "prompt": "Once upon a time, there was a little girl named Lily.",
+          "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the sun. One day, she saw a big, scary dog. The dog was very loud and scary. Lily was scared and didn't know what to do.\nLily's mom saw her and said, \"Don't worry, Lily. We can help you find your way home.\""
+        },
+        {
+          "prompt": "Tom found a small dog outside his house. The dog was",
+          "text": "Tom found a small dog outside his house. The dog was very friendly and wanted to play with the dog. The dog ran to the dog and tried to catch the dog. The dog barked and wagged its tail.\nThe dog and the dog played together for a long time. They played and laughed and had fun. The dog was happy to have a new friend. The dog"
+        },
+        {
+          "prompt": "One day, a boy lost his favorite toy. He felt",
+          "text": "One day, a boy lost his favorite toy. He felt sad and lonely. He wanted to play with his friends, but he didn't have any friends to play with.\nOne day, he saw a big dog. The dog was very big and had a loud noise. The dog wanted to play with the dog, but the dog was scared. He did not want to"
+        }
+      ]
+    },
+    {
+      "model": "No-K signed writes",
+      "parameters": 12887040,
+      "loss": 2.1231759830757424,
+      "perplexity": 8.357639101412085,
+      "seconds": 410.109747633,
+      "phase_updates": 9000,
+      "phase_target_tokens": 18429440,
+      "tokens_per_second": 44937.824829494624,
+      "peak_cuda_bytes": 1009138688,
+      "timing_scope": "Full fresh run; historical session for earlier experiments",
+      "full_training_seconds": 410.109747633,
+      "validation_curve": [
+        {
+          "update": 500,
+          "loss": 3.604625701904297
+        },
+        {
+          "update": 1000,
+          "loss": 3.0230042934417725
+        },
+        {
+          "update": 1500,
+          "loss": 2.789283275604248
+        },
+        {
+          "update": 2000,
+          "loss": 2.6437177658081055
+        },
+        {
+          "update": 2500,
+          "loss": 2.532686233520508
+        },
+        {
+          "update": 3000,
+          "loss": 2.4540445804595947
+        },
+        {
+          "update": 3500,
+          "loss": 2.3915939331054688
+        },
+        {
+          "update": 4000,
+          "loss": 2.338089942932129
+        },
+        {
+          "update": 4500,
+          "loss": 2.30080509185791
+        },
+        {
+          "update": 5000,
+          "loss": 2.260671377182007
+        },
+        {
+          "update": 5500,
+          "loss": 2.2323145866394043
+        },
+        {
+          "update": 6000,
+          "loss": 2.1965789794921875
+        },
+        {
+          "update": 6500,
+          "loss": 2.1812076568603516
+        },
+        {
+          "update": 7000,
+          "loss": 2.1627697944641113
+        },
+        {
+          "update": 7500,
+          "loss": 2.149394989013672
+        },
+        {
+          "update": 8000,
+          "loss": 2.1374611854553223
+        },
+        {
+          "update": 8500,
+          "loss": 2.129256248474121
+        },
+        {
+          "update": 9000,
+          "loss": 2.123176097869873
+        }
+      ],
+      "generations": [
+        {
+          "prompt": "Once upon a time, there was a little girl named Lily.",
+          "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, scary dog. The dog was barking and running around. Lily was scared of the dog, but she knew she had to be brave.\nAs she walked, she saw a big dog. The dog was barking and running towards her."
+        },
+        {
+          "prompt": "Tom found a small dog outside his house. The dog was",
+          "text": "Tom found a small dog outside his house. The dog was very happy and said, \"Thank you, dog! You are a good dog.\"\nThe dog wagged his tail and licked the dog's face. He wagged his tail and licked their faces. He was happy to see the dog and the dog.\n\"Thank you, dog!\" Lily said. \"You are very"
+        },
+        {
+          "prompt": "One day, a boy lost his favorite toy. He felt",
+          "text": "One day, a boy lost his favorite toy. He felt sad and lonely. He wanted to play with the toy, but he could not find it. He looked under the bed, in the closet, and in the toy box, but he could not find it. He was sad and angry.\nThen, a kind girl named Lily saw the toy. She was very happy"
+        }
+      ]
+    }
+  ],
+  "no_K_initial_diagnostics": {
+    "stage": "initial",
+    "parameters": 12887040,
+    "fixed_batch_validation_loss": 9.109375,
+    "layers": {
+      "body.1.branch": {
+        "value_decay_gate": {
+          "rms": 0.990000307559967,
+          "mean": 0.9899998307228088,
+          "variance": 5.684341886080802e-14,
+          "min": 0.9900000691413879,
+          "max": 0.9900000691413879,
+          "finite": true,
+          "token_variation_std": 0.0
+        },
+        "value_norm": {
+          "rms": 0.9999998807907104,
+          "mean": -0.07587132602930069,
+          "variance": 0.9942433834075928,
+          "min": -4.439870357513428,
+          "max": 4.010159015655518,
+          "finite": true,
+          "per_head": {
+            "rms": [
+              0.9852845668792725,
+              1.0422182083129883,
+              0.974595844745636,
+              0.9992795586585999,
+              0.9806036353111267,
+              1.016372799873352
+            ],
+            "variance": [
+              0.9605783820152283,
+              1.0806748867034912,
+              0.9362908601760864,
+              0.9975060820579529,
+              0.9509695768356323,
+              1.024407148361206
+            ],
+            "mean_absolute_contribution": [
+              0.8035082221031189,
+              0.8431785702705383,
+              0.7706339955329895,
+              0.8030071258544922,
+              0.7889874577522278,
+              0.8149442076683044
+            ]
+          }
+        },
+        "output": {
+          "rms": 0.521546483039856,
+          "mean": -0.03796730563044548,
+          "variance": 0.27056917548179626,
+          "min": -3.578125,
+          "max": 2.828125,
+          "finite": true
+        },
+        "signed_state": {
+          "rms": 6.6388397216796875,
+          "mean": -0.5767462253570557,
+          "variance": 43.74155807495117,
+          "min": -23.110767364501953,
+          "max": 22.22937774658203,
+          "finite": true
+        },
+        "token_decay": true
+      },
+      "body.5.branch": {
+        "value_decay_gate": {
+          "rms": 0.990000307559967,
+          "mean": 0.9899998307228088,
+          "variance": 5.684341886080802e-14,
+          "min": 0.9900000691413879,
+          "max": 0.9900000691413879,
+          "finite": true,
+          "token_variation_std": 0.0
+        },
+        "value_norm": {
+          "rms": 0.9999998807907104,
+          "mean": -0.025440461933612823,
+          "variance": 0.9993526935577393,
+          "min": -3.72774076461792,
+          "max": 3.5535032749176025,
+          "finite": true,
+          "per_head": {
+            "rms": [
+              1.0174099206924438,
+              0.9032915234565735,
+              1.054877758026123,
+              1.000365972518921,
+              1.0154664516448975,
+              1.0021315813064575
+            ],
+            "variance": [
+              1.0345168113708496,
+              0.8111190795898438,
+              1.1118121147155762,
+              0.984586775302887,
+              1.009083867073059,
+              1.0042645931243896
+            ],
+            "mean_absolute_contribution": [
+              0.8236154913902283,
+              0.7169667482376099,
+              0.8622129559516907,
+              0.8174862861633301,
+              0.8147792220115662,
+              0.8043538928031921
+            ]
+          }
+        },
+        "output": {
+          "rms": 0.5154118537902832,
+          "mean": -0.014928269200026989,
+          "variance": 0.26542654633522034,
+          "min": -2.578125,
+          "max": 2.4375,
+          "finite": true
+        },
+        "signed_state": {
+          "rms": 18.311330795288086,
+          "mean": -0.37671223282814026,
+          "variance": 335.1629638671875,
+          "min": -56.91155242919922,
+          "max": 54.094932556152344,
+          "finite": true
+        },
+        "token_decay": true
+      },
+      "body.9.branch": {
+        "value_decay_gate": {
+          "rms": 0.990000307559967,
+          "mean": 0.9899998307228088,
+          "variance": 5.684341886080802e-14,
+          "min": 0.9900000691413879,
+          "max": 0.9900000691413879,
+          "finite": true,
+          "token_variation_std": 0.0
+        },
+        "value_norm": {
+          "rms": 0.9999999403953552,
+          "mean": 0.02509513683617115,
+          "variance": 0.9993701577186584,
+          "min": -3.3253173828125,
+          "max": 3.3458597660064697,
+          "finite": true,
+          "per_head": {
+            "rms": [
+              0.9704106450080872,
+              0.9795698523521423,
+              1.0378706455230713,
+              1.0427314043045044,
+              0.9532296061515808,
+              1.0127363204956055
+            ],
+            "variance": [
+              0.9354148507118225,
+              0.9593907594680786,
+              1.0713797807693481,
+              1.0870152711868286,
+              0.9002605080604553,
+              1.0187267065048218
+            ],
+            "mean_absolute_contribution": [
+              0.7910733819007874,
+              0.7980873584747314,
+              0.8489202857017517,
+              0.8507950901985168,
+              0.7761916518211365,
+              0.8232349753379822
+            ]
+          }
+        },
+        "output": {
+          "rms": 0.5144051909446716,
+          "mean": 0.005673243198543787,
+          "variance": 0.26458048820495605,
+          "min": -2.46875,
+          "max": 2.578125,
+          "finite": true
+        },
+        "signed_state": {
+          "rms": 23.473562240600586,
+          "mean": 1.2348406314849854,
+          "variance": 549.4832763671875,
+          "min": -70.23168182373047,
+          "max": 78.59215545654297,
+          "finite": true
+        },
+        "token_decay": true
+      },
+      "body.13.branch": {
+        "value_decay_gate": {
+          "rms": 0.990000307559967,
+          "mean": 0.9899998307228088,
+          "variance": 5.684341886080802e-14,
+          "min": 0.9900000691413879,
+          "max": 0.9900000691413879,
+          "finite": true,
+          "token_variation_std": 0.0
+        },
+        "value_norm": {
+          "rms": 0.9999998807907104,
+          "mean": -0.006676947697997093,
+          "variance": 0.9999553561210632,
+          "min": -2.881382942199707,
+          "max": 3.029198169708252,
+          "finite": true,
+          "per_head": {
+            "rms": [
+              1.0266599655151367,
+              0.9251512289047241,
+              1.0093544721603394,
+              1.0358463525772095,
+              0.9782523512840271,
+              1.02044677734375
+            ],
+            "variance": [
+              1.050039529800415,
+              0.8532645106315613,
+              1.0182580947875977,
+              1.0719544887542725,
+              0.9563975930213928,
+              1.038713812828064
+            ],
+            "mean_absolute_contribution": [
+              0.8458218574523926,
+              0.7617742419242859,
+              0.8293445706367493,
+              0.862564742565155,
+              0.7944871783256531,
+              0.8290325403213501
+            ]
+          }
+        },
+        "output": {
+          "rms": 0.5174492597579956,
+          "mean": -0.0058906166814267635,
+          "variance": 0.267719030380249,
+          "min": -2.359375,
+          "max": 2.296875,
+          "finite": true
+        },
+        "signed_state": {
+          "rms": 27.518585205078125,
+          "mean": -0.2384665459394455,
+          "variance": 757.2156982421875,
+          "min": -77.51939392089844,
+          "max": 74.58039093017578,
+          "finite": true
+        },
+        "token_decay": true
+      },
+      "body.17.branch": {
+        "value_decay_gate": {
+          "rms": 0.990000307559967,
+          "mean": 0.9899998307228088,
+          "variance": 5.684341886080802e-14,
+          "min": 0.9900000691413879,
+          "max": 0.9900000691413879,
+          "finite": true,
+          "token_variation_std": 0.0
+        },
+        "value_norm": {
+          "rms": 0.9999998807907104,
+          "mean": 0.06834656745195389,
+          "variance": 0.9953286647796631,
+          "min": -2.833129405975342,
+          "max": 2.761505603790283,
+          "finite": true,
+          "per_head": {
+            "rms": [
+              0.9833490252494812,
+              1.0257296562194824,
+              0.9428489804267883,
+              1.0172477960586548,
+              0.9985030889511108,
+              1.0296286344528198
+            ],
+            "variance": [
+              0.9658007025718689,
+              1.0461066961288452,
+              0.8874726295471191,
+              1.0189292430877686,
+              0.9949970245361328,
+              1.0522470474243164
+            ],
+            "mean_absolute_contribution": [
+              0.7917097210884094,
+              0.8443285226821899,
+              0.7726781964302063,
+              0.8419745564460754,
+              0.8200905323028564,
+              0.853434681892395
+            ]
+          }
+        },
+        "output": {
+          "rms": 0.5137370228767395,
+          "mean": 0.03736315667629242,
+          "variance": 0.2625297009944916,
+          "min": -2.21875,
+          "max": 2.34375,
+          "finite": true
+        },
+        "signed_state": {
+          "rms": 30.088958740234375,
+          "mean": 2.3278324604034424,
+          "variance": 899.9266967773438,
+          "min": -83.7416763305664,
+          "max": 82.30606079101562,
+          "finite": true
+        },
+        "token_decay": true
+      },
+      "body.21.branch": {
+        "value_decay_gate": {
+          "rms": 0.990000307559967,
+          "mean": 0.9899998307228088,
+          "variance": 5.684341886080802e-14,
+          "min": 0.9900000691413879,
+          "max": 0.9900000691413879,
+          "finite": true,
+          "token_variation_std": 0.0
+        },
+        "value_norm": {
+          "rms": 0.9999999403953552,
+          "mean": -0.04745861515402794,
+          "variance": 0.9977476000785828,
+          "min": -2.60817289352417,
+          "max": 2.8800575733184814,
+          "finite": true,
+          "per_head": {
+            "rms": [
+              0.9820220470428467,
+              0.9913577437400818,
+              1.0120292901992798,
+              0.9885005354881287,
+              1.0529738664627075,
+              0.9709547758102417
+            ],
+            "variance": [
+              0.9437665343284607,
+              0.9789041876792908,
+              1.024073839187622,
+              0.9769526720046997,
+              1.1048866510391235,
+              0.9424014687538147
+            ],
+            "mean_absolute_contribution": [
+              0.8088822364807129,
+              0.8198654055595398,
+              0.8466459512710571,
+              0.8287901282310486,
+              0.8753979802131653,
+              0.8104256391525269
+            ]
+          }
+        },
+        "output": {
+          "rms": 0.5187353491783142,
+          "mean": -0.02403874136507511,
+          "variance": 0.2685084939002991,
+          "min": -2.09375,
+          "max": 2.390625,
+          "finite": true
+        },
+        "signed_state": {
+          "rms": 32.72025680541992,
+          "mean": -1.9377180337905884,
+          "variance": 1066.8604736328125,
+          "min": -80.1111831665039,
+          "max": 85.58091735839844,
+          "finite": true
+        },
+        "token_decay": true
+      }
+    },
+    "gradient_probe": {
+      "loss": 9.109375,
+      "all_finite": true,
+      "total_norm": 3.132542248662638,
+      "parameters": {
+        "embedding.weight": {
+          "rms": 0.001370973652228713,
+          "mean": -7.795337637617195e-07,
+          "variance": 1.8795682308336836e-06,
+          "min": -0.26162827014923096,
+          "max": 0.21140266954898834,
+          "finite": true
+        },
+        "body.0.weights": {
+          "rms": 0.0020443613175302744,
+          "mean": 7.056842878228053e-05,
+          "variance": 4.1744328882487025e-06,
+          "min": -0.011956492438912392,
+          "max": 0.011367050930857658,
+          "finite": true
+        },
+        "body.1.branch.q_proj.weight": {
+          "rms": 0.00016071676509454846,
+          "mean": 3.6014156989949697e-07,
+          "variance": 2.5829752559047847e-08,
+          "min": -0.00156402587890625,
+          "max": 0.00135040283203125,
+          "finite": true
+        },
+        "body.1.branch.v_proj.weight": {
+          "rms": 0.002906740875914693,
+          "mean": -4.559632998279994e-06,
+          "variance": 8.44912210595794e-06,
+          "min": -0.023193359375,
+          "max": 0.023193359375,
+          "finite": true
+        },
+        "body.1.branch.value_norm.weights": {
+          "rms": 0.0016127311391755939,
+          "mean": -5.20820431120228e-05,
+          "variance": 2.5981889848480932e-06,
+          "min": -0.006337837316095829,
+          "max": 0.006606212817132473,
+          "finite": true
+        },
+        "body.1.branch.value_decay_gate.weight": {
+          "rms": 7.109459693310782e-05,
+          "mean": -2.873897209099141e-08,
+          "variance": 5.054441309937374e-09,
+          "min": -0.000797271728515625,
+          "max": 0.000812530517578125,
+          "finite": true
+        },
+        "body.1.branch.value_decay_gate.bias": {
+          "rms": 0.0005139393615536392,
+          "mean": -3.641284592958982e-06,
+          "variance": 2.641203877828957e-07,
+          "min": -0.0020927414298057556,
+          "max": 0.002114209346473217,
+          "finite": true
+        },
+        "body.2.branch.gate.weight": {
+          "rms": 0.00013224806752987206,
+          "mean": 4.192069624764372e-08,
+          "variance": 1.748954936431346e-08,
+          "min": -0.0021514892578125,
+          "max": 0.0020751953125,
+          "finite": true
+        },
+        "body.2.branch.up.weight": {
+          "rms": 0.00014158802514430135,
+          "mean": -5.831104132880682e-08,
+          "variance": 2.0047167481607175e-08,
+          "min": -0.001983642578125,
+          "max": 0.0018768310546875,
+          "finite": true
+        },
+        "body.2.branch.down.weight": {
+          "rms": 0.00022137953783385456,
+          "mean": 3.252866918046493e-07,
+          "variance": 4.900879702063321e-08,
+          "min": -0.0027618408203125,
+          "max": 0.0028533935546875,
+          "finite": true
+        },
+        "body.3.weights": {
+          "rms": 0.0018687009578570724,
+          "mean": -3.8805108432127255e-11,
+          "variance": 3.492043333608308e-06,
+          "min": -0.008542099967598915,
+          "max": 0.00890069268643856,
+          "finite": true
+        },
+        "body.4.weights": {
+          "rms": 0.0018710828153416514,
+          "mean": -3.614265369833447e-05,
+          "variance": 3.499644435578375e-06,
+          "min": -0.008626929484307766,
+          "max": 0.008860113099217415,
+          "finite": true
+        },
+        "body.5.branch.q_proj.weight": {
+          "rms": 0.00023783702636137605,
+          "mean": -5.011704047319654e-07,
+          "variance": 5.656620416516489e-08,
+          "min": -0.003143310546875,
+          "max": 0.0032196044921875,
+          "finite": true
+        },
+        "body.5.branch.v_proj.weight": {
+          "rms": 0.0022329208441078663,
+          "mean": 1.3519646699933219e-06,
+          "variance": 4.985934083379107e-06,
+          "min": -0.024658203125,
+          "max": 0.0260009765625,
+          "finite": true
+        },
+        "body.5.branch.value_norm.weights": {
+          "rms": 0.0013413457199931145,
+          "mean": 4.036260725115426e-05,
+          "variance": 1.7975791024582577e-06,
+          "min": -0.006145553197711706,
+          "max": 0.0068408530205488205,
+          "finite": true
+        },
+        "body.5.branch.value_decay_gate.weight": {
+          "rms": 0.00017214097897522151,
+          "mean": -5.6764520195429213e-08,
+          "variance": 2.9632516884703364e-08,
+          "min": -0.0028839111328125,
+          "max": 0.00274658203125,
+          "finite": true
+        },
+        "body.5.branch.value_decay_gate.bias": {
+          "rms": 0.00046454748371616006,
+          "mean": 4.1977400542236865e-06,
+          "variance": 2.157867555752091e-07,
+          "min": -0.0022381041198968887,
+          "max": 0.002306180540472269,
+          "finite": true
+        },
+        "body.6.branch.gate.weight": {
+          "rms": 0.00012210778368171304,
+          "mean": -8.499932135919153e-08,
+          "variance": 1.491030232614321e-08,
+          "min": -0.001556396484375,
+          "max": 0.00186920166015625,
+          "finite": true
+        },
+        "body.6.branch.up.weight": {
+          "rms": 0.00013155156921129674,
+          "mean": -1.3153716338365484e-07,
+          "variance": 1.730579768377538e-08,
+          "min": -0.0018463134765625,
+          "max": 0.0019073486328125,
+          "finite": true
+        },
+        "body.6.branch.down.weight": {
+          "rms": 0.00021929053764324635,
+          "mean": 5.088135708319896e-07,
+          "variance": 4.808807929634895e-08,
+          "min": -0.00445556640625,
+          "max": 0.00341796875,
+          "finite": true
+        },
+        "body.7.weights": {
+          "rms": 0.0017445073463022709,
+          "mean": -9.094947017729282e-12,
+          "variance": 3.0433061510848347e-06,
+          "min": -0.011874409392476082,
+          "max": 0.006292319856584072,
+          "finite": true
+        },
+        "body.8.weights": {
+          "rms": 0.001747624482959509,
+          "mean": -8.530503691872582e-06,
+          "variance": 3.0541189062205376e-06,
+          "min": -0.0118977390229702,
+          "max": 0.006299322471022606,
+          "finite": true
+        },
+        "body.9.branch.q_proj.weight": {
+          "rms": 0.0002501563576515764,
+          "mean": -2.867558350772015e-07,
+          "variance": 6.257812401599949e-08,
+          "min": -0.0030670166015625,
+          "max": 0.0035858154296875,
+          "finite": true
+        },
+        "body.9.branch.v_proj.weight": {
+          "rms": 0.001975816674530506,
+          "mean": 3.0374583275261102e-06,
+          "variance": 3.903842298313975e-06,
+          "min": -0.0206298828125,
+          "max": 0.0194091796875,
+          "finite": true
+        },
+        "body.9.branch.value_norm.weights": {
+          "rms": 0.0010931896977126598,
+          "mean": 1.8805267245625146e-05,
+          "variance": 1.1947100801990018e-06,
+          "min": -0.004414641298353672,
+          "max": 0.004652286879718304,
+          "finite": true
+        },
+        "body.9.branch.value_decay_gate.weight": {
+          "rms": 0.00019149985746480525,
+          "mean": -2.638411267241736e-08,
+          "variance": 3.6672194170250805e-08,
+          "min": -0.002838134765625,
+          "max": 0.00262451171875,
+          "finite": true
+        },
+        "body.9.branch.value_decay_gate.bias": {
+          "rms": 0.0004028190451208502,
+          "mean": 2.297001628903672e-07,
+          "variance": 1.622631202735647e-07,
+          "min": -0.0017028891015797853,
+          "max": 0.0018187349196523428,
+          "finite": true
+        },
+        "body.10.branch.gate.weight": {
+          "rms": 0.00012679427163675427,
+          "mean": -1.4506731815799867e-07,
+          "variance": 1.6076766584660618e-08,
+          "min": -0.00176239013671875,
+          "max": 0.00164794921875,
+          "finite": true
+        },
+        "body.10.branch.up.weight": {
+          "rms": 0.00013431232946459204,
+          "mean": 4.2001683908665655e-08,
+          "variance": 1.80397989879566e-08,
+          "min": -0.00185394287109375,
+          "max": 0.0019989013671875,
+          "finite": true
+        },
+        "body.10.branch.down.weight": {
+          "rms": 0.0002174186665797606,
+          "mean": 2.127213605263023e-07,
+          "variance": 4.727083435795976e-08,
+          "min": -0.003204345703125,
+          "max": 0.0030975341796875,
+          "finite": true
+        },
+        "body.11.weights": {
+          "rms": 0.0016874965513125062,
+          "mean": -1.8189894035458565e-11,
+          "variance": 2.8476445095293457e-06,
+          "min": -0.010841980576515198,
+          "max": 0.005946887657046318,
+          "finite": true
+        },
+        "body.12.weights": {
+          "rms": 0.001690329983830452,
+          "mean": -1.9605911802500486e-05,
+          "variance": 2.856831315511954e-06,
+          "min": -0.010892044752836227,
+          "max": 0.005927626509219408,
+          "finite": true
+        },
+        "body.13.branch.q_proj.weight": {
+          "rms": 0.00024334633781109005,
+          "mean": -8.222016845138569e-08,
+          "variance": 5.921743451153816e-08,
+          "min": -0.0031890869140625,
+          "max": 0.0027923583984375,
+          "finite": true
+        },
+        "body.13.branch.v_proj.weight": {
+          "rms": 0.001608989667147398,
+          "mean": 2.128895630448824e-06,
+          "variance": 2.58884324466635e-06,
+          "min": -0.016845703125,
+          "max": 0.0146484375,
+          "finite": true
+        },
+        "body.13.branch.value_norm.weights": {
+          "rms": 0.0009511044481769204,
+          "mean": 3.272988806202193e-06,
+          "variance": 9.045888873515651e-07,
+          "min": -0.0039159441366791725,
+          "max": 0.003929229453206062,
+          "finite": true
+        },
+        "body.13.branch.value_decay_gate.weight": {
+          "rms": 0.0002116424439009279,
+          "mean": 6.322001411263045e-08,
+          "variance": 4.479251813904739e-08,
+          "min": -0.002105712890625,
+          "max": 0.0021514892578125,
+          "finite": true
+        },
+        "body.13.branch.value_decay_gate.bias": {
+          "rms": 0.00039362485404126346,
+          "mean": 4.841561462853861e-07,
+          "variance": 1.5494030947138526e-07,
+          "min": -0.0015297116478905082,
+          "max": 0.0014360189670696855,
+          "finite": true
+        },
+        "body.14.branch.gate.weight": {
+          "rms": 0.00013960432261228561,
+          "mean": 1.633549544521884e-07,
+          "variance": 1.9489341696043994e-08,
+          "min": -0.0022125244140625,
+          "max": 0.0023956298828125,
+          "finite": true
+        },
+        "body.14.branch.up.weight": {
+          "rms": 0.00014345157251227647,
+          "mean": 8.417980090769106e-09,
+          "variance": 2.057835679636355e-08,
+          "min": -0.0031280517578125,
+          "max": 0.0023651123046875,
+          "finite": true
+        },
+        "body.14.branch.down.weight": {
+          "rms": 0.00023614632664248347,
+          "mean": -6.816114819230279e-07,
+          "variance": 5.576462314138553e-08,
+          "min": -0.0045166015625,
+          "max": 0.00421142578125,
+          "finite": true
+        },
+        "body.15.weights": {
+          "rms": 0.001599492970854044,
+          "mean": -3.637978807091713e-11,
+          "variance": 2.5583779006410623e-06,
+          "min": -0.010634807869791985,
+          "max": 0.005289240274578333,
+          "finite": true
+        },
+        "body.16.weights": {
+          "rms": 0.0016012140549719334,
+          "mean": -3.156388993375003e-05,
+          "variance": 2.562889903856558e-06,
+          "min": -0.010671249590814114,
+          "max": 0.005132218822836876,
+          "finite": true
+        },
+        "body.17.branch.q_proj.weight": {
+          "rms": 0.00026251276722177863,
+          "mean": -4.08714242894348e-07,
+          "variance": 6.891278303555737e-08,
+          "min": -0.0030364990234375,
+          "max": 0.0032958984375,
+          "finite": true
+        },
+        "body.17.branch.v_proj.weight": {
+          "rms": 0.001526493695564568,
+          "mean": 3.210893055438646e-06,
+          "variance": 2.3301731744140852e-06,
+          "min": -0.0120849609375,
+          "max": 0.01336669921875,
+          "finite": true
+        },
+        "body.17.branch.value_norm.weights": {
+          "rms": 0.0009126764489337802,
+          "mean": 2.502552706573624e-05,
+          "variance": 8.323520432895748e-07,
+          "min": -0.004778576083481312,
+          "max": 0.004851811565458775,
+          "finite": true
+        },
+        "body.17.branch.value_decay_gate.weight": {
+          "rms": 0.00023574670194648206,
+          "mean": -2.944711496866148e-08,
+          "variance": 5.5576499846665683e-08,
+          "min": -0.0028533935546875,
+          "max": 0.0034332275390625,
+          "finite": true
+        },
+        "body.17.branch.value_decay_gate.bias": {
+          "rms": 0.00038832350401207805,
+          "mean": 1.2252567103132606e-06,
+          "variance": 1.5079363890890818e-07,
+          "min": -0.0019423539051786065,
+          "max": 0.0016741002909839153,
+          "finite": true
+        },
+        "body.18.branch.gate.weight": {
+          "rms": 0.0001299035648116842,
+          "mean": -9.72911848862168e-08,
+          "variance": 1.6874928121524135e-08,
+          "min": -0.0022735595703125,
+          "max": 0.00262451171875,
+          "finite": true
+        },
+        "body.18.branch.up.weight": {
+          "rms": 0.00014000908413436264,
+          "mean": 1.5536657826942246e-07,
+          "variance": 1.9602518719352702e-08,
+          "min": -0.00238037109375,
+          "max": 0.00244140625,
+          "finite": true
+        },
+        "body.18.branch.down.weight": {
+          "rms": 0.0002284770307596773,
+          "mean": -5.508771661055789e-09,
+          "variance": 5.2201759359604694e-08,
+          "min": -0.005218505859375,
+          "max": 0.004791259765625,
+          "finite": true
+        },
+        "body.19.weights": {
+          "rms": 0.001518295961432159,
+          "mean": 7.518489303359743e-11,
+          "variance": 2.305222778886673e-06,
+          "min": -0.006825285032391548,
+          "max": 0.00513831339776516,
+          "finite": true
+        },
+        "body.20.weights": {
+          "rms": 0.0015225218376144767,
+          "mean": 6.579746695933864e-05,
+          "variance": 2.3137431526265573e-06,
+          "min": -0.006695407442748547,
+          "max": 0.00527539849281311,
+          "finite": true
+        },
+        "body.21.branch.q_proj.weight": {
+          "rms": 0.00025072411517612636,
+          "mean": -7.717277981100779e-07,
+          "variance": 6.286199294436301e-08,
+          "min": -0.00299072265625,
+          "max": 0.0027923583984375,
+          "finite": true
+        },
+        "body.21.branch.v_proj.weight": {
+          "rms": 0.0014405047986656427,
+          "mean": -8.863887046572927e-07,
+          "variance": 2.0750535441038664e-06,
+          "min": -0.01519775390625,
+          "max": 0.01470947265625,
+          "finite": true
+        },
+        "body.21.branch.value_norm.weights": {
+          "rms": 0.0008120937272906303,
+          "mean": -9.093214612221345e-05,
+          "variance": 6.512275376735488e-07,
+          "min": -0.0035063878167420626,
+          "max": 0.0033630020916461945,
+          "finite": true
+        },
+        "body.21.branch.value_decay_gate.weight": {
+          "rms": 0.00024930606014095247,
+          "mean": 8.410299540129174e-11,
+          "variance": 6.215351788796397e-08,
+          "min": -0.0031585693359375,
+          "max": 0.0033111572265625,
+          "finite": true
+        },
+        "body.21.branch.value_decay_gate.bias": {
+          "rms": 0.0003827275359071791,
+          "mean": 3.364337089806213e-06,
+          "variance": 1.4646902002368734e-07,
+          "min": -0.0015945220366120338,
+          "max": 0.0016647202428430319,
+          "finite": true
+        },
+        "body.22.branch.gate.weight": {
+          "rms": 0.0001442938664695248,
+          "mean": -5.606281661130197e-08,
+          "variance": 2.0820719370817642e-08,
+          "min": -0.00183868408203125,
+          "max": 0.001953125,
+          "finite": true
+        },
+        "body.22.branch.up.weight": {
+          "rms": 0.00015489700308535248,
+          "mean": 6.817518283241952e-08,
+          "variance": 2.3993077746808922e-08,
+          "min": -0.003204345703125,
+          "max": 0.0030517578125,
+          "finite": true
+        },
+        "body.22.branch.down.weight": {
+          "rms": 0.0002428840525681153,
+          "mean": -1.2882847499895433e-07,
+          "variance": 5.899265076436677e-08,
+          "min": -0.00494384765625,
+          "max": 0.00506591796875,
+          "finite": true
+        },
+        "body.23.weights": {
+          "rms": 0.001689231488853693,
+          "mean": 0.00048673825222067535,
+          "variance": 2.6165889721596614e-06,
+          "min": -0.005003591068089008,
+          "max": 0.008301625028252602,
+          "finite": true
+        }
+      }
+    },
+    "notes": "One fixed held-out batch, BF16; head amplitudes are not semantic specialization evidence. Matrix SVD uses final cached state sample0; gate matrix statistics sample first16tokens. Head MLP relative change samples final recurrent vector."
+  },
+  "no_K_final_diagnostics": {
+    "stage": "final",
+    "parameters": 12887040,
+    "fixed_batch_validation_loss": 2.048647880554199,
+    "layers": {
+      "body.1.branch": {
+        "value_decay_gate": {
+          "rms": 0.8248043060302734,
+          "mean": 0.7654285430908203,
+          "variance": 0.09442117810249329,
+          "min": 9.182965186482761e-06,
+          "max": 1.0,
+          "finite": true,
+          "token_variation_std": 0.2867485284805298
+        },
+        "value_norm": {
+          "rms": 1.1210484504699707,
+          "mean": 0.012920993380248547,
+          "variance": 1.2565826177597046,
+          "min": -8.542226791381836,
+          "max": 7.969090938568115,
+          "finite": true,
+          "per_head": {
+            "rms": [
+              1.1237871646881104,
+              1.1197764873504639,
+              1.1205296516418457,
+              1.1341936588287354,
+              1.0949307680130005,
+              1.1326279640197754
+            ],
+            "variance": [
+              1.2625149488449097,
+              1.2533555030822754,
+              1.2555793523788452,
+              1.2833638191223145,
+              1.1988719701766968,
+              1.2825340032577515
+            ],
+            "mean_absolute_contribution": [
+              0.9086847305297852,
+              0.9008986353874207,
+              0.9051124453544617,
+              0.8977042436599731,
+              0.8907827734947205,
+              0.9151508212089539
+            ]
+          }
+        },
+        "output": {
+          "rms": 0.763521134853363,
+          "mean": 0.007472742814570665,
+          "variance": 0.5829087495803833,
+          "min": -8.3125,
+          "max": 7.8125,
+          "finite": true
+        },
+        "signed_state": {
+          "rms": 0.9929564595222473,
+          "mean": 0.021283060312271118,
+          "variance": 0.9855095744132996,
+          "min": -3.5901970863342285,
+          "max": 5.674970626831055,
+          "finite": true
+        },
+        "token_decay": true
+      },
+      "body.5.branch": {
+        "value_decay_gate": {
+          "rms": 0.9359877705574036,
+          "mean": 0.9271059632301331,
+          "variance": 0.016547517850995064,
+          "min": 0.0005860048113390803,
+          "max": 0.999907374382019,
+          "finite": true,
+          "token_variation_std": 0.10822625458240509
+        },
+        "value_norm": {
+          "rms": 0.9662925004959106,
+          "mean": -0.01506497710943222,
+          "variance": 0.9334942102432251,
+          "min": -5.550354480743408,
+          "max": 5.270654678344727,
+          "finite": true,
+          "per_head": {
+            "rms": [
+              0.9582630395889282,
+              0.943009614944458,
+              0.9764286279678345,
+              1.0236291885375977,
+              0.950187623500824,
+              0.9437708258628845
+            ],
+            "variance": [
+              0.9153180122375488,
+              0.8884365558624268,
+              0.9148052334785461,
+              1.0016111135482788,
+              0.9028420448303223,
+              0.890648603439331
+            ],
+            "mean_absolute_contribution": [
+              0.7548677325248718,
+              0.6968192458152771,
+              0.7464226484298706,
+              0.7598688006401062,
+              0.7141377925872803,
+              0.691228985786438
+            ]
+          }
+        },
+        "output": {
+          "rms": 0.439677894115448,
+          "mean": -0.007186200935393572,
+          "variance": 0.19326502084732056,
+          "min": -4.21875,
+          "max": 3.9375,
+          "finite": true
+        },
+        "signed_state": {
+          "rms": 8.706846237182617,
+          "mean": -0.09409552812576294,
+          "variance": 75.8003158569336,
+          "min": -56.73554992675781,
+          "max": 34.48626708984375,
+          "finite": true
+        },
+        "token_decay": true
+      },
+      "body.9.branch": {
+        "value_decay_gate": {
+          "rms": 0.90872722864151,
+          "mean": 0.8941472172737122,
+          "variance": 0.02628580667078495,
+          "min": 6.150778790470213e-05,
+          "max": 0.9999557733535767,
+          "finite": true,
+          "token_variation_std": 0.14633263647556305
+        },
+        "value_norm": {
+          "rms": 0.9788742065429688,
+          "mean": -0.04339609667658806,
+          "variance": 0.9563114047050476,
+          "min": -6.078189849853516,
+          "max": 6.774099349975586,
+          "finite": true,
+          "per_head": {
+            "rms": [
+              1.0017189979553223,
+              0.986372709274292,
+              0.9924987554550171,
+              0.9291123747825623,
+              1.076438307762146,
+              0.8750849962234497
+            ],
+            "variance": [
+              0.9914771318435669,
+              0.9703956842422485,
+              0.9825986623764038,
+              0.854335367679596,
+              1.1339080333709717,
+              0.7654534578323364
+            ],
+            "mean_absolute_contribution": [
+              0.7744578123092651,
+              0.7529260516166687,
+              0.7715781331062317,
+              0.6932706832885742,
+              0.8431867957115173,
+              0.675236701965332
+            ]
+          }
+        },
+        "output": {
+          "rms": 0.46352389454841614,
+          "mean": -0.02260066382586956,
+          "variance": 0.2143436223268509,
+          "min": -5.3125,
+          "max": 4.5625,
+          "finite": true
+        },
+        "signed_state": {
+          "rms": 5.096199989318848,
+          "mean": -0.24743235111236572,
+          "variance": 25.910030364990234,
+          "min": -28.070924758911133,
+          "max": 21.440231323242188,
+          "finite": true
+        },
+        "token_decay": true
+      },
+      "body.13.branch": {
+        "value_decay_gate": {
+          "rms": 0.9411147236824036,
+          "mean": 0.9331623911857605,
+          "variance": 0.014904913492500782,
+          "min": 0.001945594558492303,
+          "max": 0.9999291896820068,
+          "finite": true,
+          "token_variation_std": 0.10782476514577866
+        },
+        "value_norm": {
+          "rms": 0.9739126563072205,
+          "mean": 0.028573738411068916,
+          "variance": 0.9476894736289978,
+          "min": -5.796273708343506,
+          "max": 6.050538539886475,
+          "finite": true,
+          "per_head": {
+            "rms": [
+              0.9405016899108887,
+              0.9720501899719238,
+              1.0457696914672852,
+              0.8986124396324158,
+              0.9515435695648193,
+              1.027148962020874
+            ],
+            "variance": [
+              0.8552359938621521,
+              0.9297255277633667,
+              1.0883508920669556,
+              0.798711359500885,
+              0.8966182470321655,
+              1.0441054105758667
+            ],
+            "mean_absolute_contribution": [
+              0.7141333818435669,
+              0.7494549751281738,
+              0.7851626873016357,
+              0.6852187514305115,
+              0.7129603624343872,
+              0.7636452913284302
+            ]
+          }
+        },
+        "output": {
+          "rms": 0.4475669264793396,
+          "mean": 0.008800598792731762,
+          "variance": 0.20023871958255768,
+          "min": -5.3125,
+          "max": 4.96875,
+          "finite": true
+        },
+        "signed_state": {
+          "rms": 9.525407791137695,
+          "mean": 0.26052388548851013,
+          "variance": 90.66551208496094,
+          "min": -63.58464050292969,
+          "max": 53.62021255493164,
+          "finite": true
+        },
+        "token_decay": true
+      },
+      "body.17.branch": {
+        "value_decay_gate": {
+          "rms": 0.9383906126022339,
+          "mean": 0.9270297884941101,
+          "variance": 0.021192867308855057,
+          "min": 0.0008549632620997727,
+          "max": 0.9999566078186035,
+          "finite": true,
+          "token_variation_std": 0.1369728446006775
+        },
+        "value_norm": {
+          "rms": 0.9837901592254639,
+          "mean": 0.03056507371366024,
+          "variance": 0.966908872127533,
+          "min": -9.849733352661133,
+          "max": 10.557063102722168,
+          "finite": true,
+          "per_head": {
+            "rms": [
+              0.8937895894050598,
+              1.020097017288208,
+              0.9783311486244202,
+              0.9848790168762207,
+              0.9802692532539368,
+              1.0390154123306274
+            ],
+            "variance": [
+              0.7978883385658264,
+              1.0388708114624023,
+              0.9570103883743286,
+              0.9293121695518494,
+              0.9581661224365234,
+              1.0787993669509888
+            ],
+            "mean_absolute_contribution": [
+              0.7038432359695435,
+              0.7780046463012695,
+              0.7652251124382019,
+              0.7655638456344604,
+              0.7387253642082214,
+              0.7689735889434814
+            ]
+          }
+        },
+        "output": {
+          "rms": 0.47829821705818176,
+          "mean": 0.013944781385362148,
+          "variance": 0.2285747081041336,
+          "min": -6.53125,
+          "max": 9.6875,
+          "finite": true
+        },
+        "signed_state": {
+          "rms": 8.489883422851562,
+          "mean": 0.2353910207748413,
+          "variance": 72.022705078125,
+          "min": -66.28776550292969,
+          "max": 32.831634521484375,
+          "finite": true
+        },
+        "token_decay": true
+      },
+      "body.21.branch": {
+        "value_decay_gate": {
+          "rms": 0.9630242586135864,
+          "mean": 0.9608017802238464,
+          "variance": 0.004275606945157051,
+          "min": 0.007671547122299671,
+          "max": 0.9994341731071472,
+          "finite": true,
+          "token_variation_std": 0.05228465050458908
+        },
+        "value_norm": {
+          "rms": 0.9585500955581665,
+          "mean": -0.09075286984443665,
+          "variance": 0.9105823040008545,
+          "min": -3.957972288131714,
+          "max": 4.084868907928467,
+          "finite": true,
+          "per_head": {
+            "rms": [
+              1.0148016214370728,
+              0.99160236120224,
+              1.0128018856048584,
+              0.9696693420410156,
+              0.8640300631523132,
+              0.8872652053833008
+            ],
+            "variance": [
+              1.0293782949447632,
+              0.93147873878479,
+              1.022036075592041,
+              0.916728138923645,
+              0.746410608291626,
+              0.7785720229148865
+            ],
+            "mean_absolute_contribution": [
+              0.8185259699821472,
+              0.7667033076286316,
+              0.7650789618492126,
+              0.756856381893158,
+              0.6753653883934021,
+              0.7100009918212891
+            ]
+          }
+        },
+        "output": {
+          "rms": 0.40146487951278687,
+          "mean": -0.032440412789583206,
+          "variance": 0.16012167930603027,
+          "min": -3.15625,
+          "max": 3.859375,
+          "finite": true
+        },
+        "signed_state": {
+          "rms": 16.746583938598633,
+          "mean": -1.6354084014892578,
+          "variance": 277.77349853515625,
+          "min": -59.302978515625,
+          "max": 68.77767181396484,
+          "finite": true
+        },
+        "token_decay": true
+      }
+    },
+    "gradient_probe": {
+      "loss": 2.048647880554199,
+      "all_finite": true,
+      "total_norm": 1.7138651840525652,
+      "parameters": {
+        "embedding.weight": {
+          "rms": 0.0006315200007520616,
+          "mean": -2.3262408888058417e-07,
+          "variance": 3.98817519453587e-07,
+          "min": -0.07138954848051071,
+          "max": 0.04595372825860977,
+          "finite": true
+        },
+        "body.0.weights": {
+          "rms": 0.002539106411859393,
+          "mean": 0.00012057631829520687,
+          "variance": 6.432522695831722e-06,
+          "min": -0.012780671939253807,
+          "max": 0.010701214894652367,
+          "finite": true
+        },
+        "body.1.branch.q_proj.weight": {
+          "rms": 0.0002728797262534499,
+          "mean": -1.4135997616904206e-06,
+          "variance": 7.446134731026177e-08,
+          "min": -0.005157470703125,
+          "max": 0.00482177734375,
+          "finite": true
+        },
+        "body.1.branch.v_proj.weight": {
+          "rms": 0.001821783371269703,
+          "mean": -5.176221293368144e-06,
+          "variance": 3.3188680390594527e-06,
+          "min": -0.0301513671875,
+          "max": 0.0218505859375,
+          "finite": true
+        },
+        "body.1.branch.value_norm.weights": {
+          "rms": 0.0008935051737353206,
+          "mean": -9.041022713063285e-05,
+          "variance": 7.901775234131492e-07,
+          "min": -0.003110193647444248,
+          "max": 0.0026474008336663246,
+          "finite": true
+        },
+        "body.1.branch.value_decay_gate.weight": {
+          "rms": 0.0002487907186150551,
+          "mean": 4.7498218691544025e-07,
+          "variance": 6.189659274014048e-08,
+          "min": -0.0017852783203125,
+          "max": 0.0019683837890625,
+          "finite": true
+        },
+        "body.1.branch.value_decay_gate.bias": {
+          "rms": 0.00038399078766815364,
+          "mean": 3.832337370113237e-06,
+          "variance": 1.4743423548679857e-07,
+          "min": -0.0012757452204823494,
+          "max": 0.0015961271710693836,
+          "finite": true
+        },
+        "body.2.branch.gate.weight": {
+          "rms": 0.00040544228977523744,
+          "mean": -4.386648015497485e-06,
+          "variance": 1.6436422356491676e-07,
+          "min": -0.018310546875,
+          "max": 0.0101318359375,
+          "finite": true
+        },
+        "body.2.branch.up.weight": {
+          "rms": 0.00042778419447131455,
+          "mean": 8.206338861782569e-07,
+          "variance": 1.8299864734672155e-07,
+          "min": -0.01275634765625,
+          "max": 0.016357421875,
+          "finite": true
+        },
+        "body.2.branch.down.weight": {
+          "rms": 0.0005180896841920912,
+          "mean": 3.15232256298259e-07,
+          "variance": 2.68416840754071e-07,
+          "min": -0.010009765625,
+          "max": 0.01385498046875,
+          "finite": true
+        },
+        "body.3.weights": {
+          "rms": 0.0012889053905382752,
+          "mean": -1.51790061408974e-06,
+          "variance": 1.6612746094324393e-06,
+          "min": -0.005199984647333622,
+          "max": 0.003374852705746889,
+          "finite": true
+        },
+        "body.4.weights": {
+          "rms": 0.001247017178684473,
+          "mean": -3.319348252261989e-05,
+          "variance": 1.5539501418970758e-06,
+          "min": -0.0049454038962721825,
+          "max": 0.0033282795920968056,
+          "finite": true
+        },
+        "body.5.branch.q_proj.weight": {
+          "rms": 0.00021340047533158213,
+          "mean": 3.0769518843953847e-07,
+          "variance": 4.553967158926753e-08,
+          "min": -0.0019989013671875,
+          "max": 0.0023651123046875,
+          "finite": true
+        },
+        "body.5.branch.v_proj.weight": {
+          "rms": 0.0004154753405600786,
+          "mean": 6.057726977815037e-07,
+          "variance": 1.726193943341059e-07,
+          "min": -0.0030975341796875,
+          "max": 0.0048828125,
+          "finite": true
+        },
+        "body.5.branch.value_norm.weights": {
+          "rms": 0.0006294951890595257,
+          "mean": 5.2927257456758525e-06,
+          "variance": 3.962362313814083e-07,
+          "min": -0.0023675046395510435,
+          "max": 0.0022017532028257847,
+          "finite": true
+        },
+        "body.5.branch.value_decay_gate.weight": {
+          "rms": 0.0001656435342738405,
+          "mean": 8.987742035060364e-07,
+          "variance": 2.7436968252914085e-08,
+          "min": -0.001800537109375,
+          "max": 0.0020294189453125,
+          "finite": true
+        },
+        "body.5.branch.value_decay_gate.bias": {
+          "rms": 0.00037600696668960154,
+          "mean": 1.3469652003550436e-05,
+          "variance": 1.411997914146923e-07,
+          "min": -0.001577378949150443,
+          "max": 0.0015294377226382494,
+          "finite": true
+        },
+        "body.6.branch.gate.weight": {
+          "rms": 0.0002934720541816205,
+          "mean": -5.19959371558798e-07,
+          "variance": 8.612558843879015e-08,
+          "min": -0.00469970703125,
+          "max": 0.0036468505859375,
+          "finite": true
+        },
+        "body.6.branch.up.weight": {
+          "rms": 0.0002740908821579069,
+          "mean": -5.232636226537579e-07,
+          "variance": 7.512553423794088e-08,
+          "min": -0.0034027099609375,
+          "max": 0.0036468505859375,
+          "finite": true
+        },
+        "body.6.branch.down.weight": {
+          "rms": 0.00039098013075999916,
+          "mean": 3.8887648656782403e-07,
+          "variance": 1.5286533994185447e-07,
+          "min": -0.01025390625,
+          "max": 0.00885009765625,
+          "finite": true
+        },
+        "body.7.weights": {
+          "rms": 0.0011820968938991427,
+          "mean": -1.4413113831324154e-06,
+          "variance": 1.3973508430353831e-06,
+          "min": -0.004323769360780716,
+          "max": 0.003715262981131673,
+          "finite": true
+        },
+        "body.8.weights": {
+          "rms": 0.0011448725126683712,
+          "mean": -1.6506872270838358e-05,
+          "variance": 1.3104605613989406e-06,
+          "min": -0.00418495899066329,
+          "max": 0.003645828226581216,
+          "finite": true
+        },
+        "body.9.branch.q_proj.weight": {
+          "rms": 0.00019156871712766588,
+          "mean": 4.7436353156626865e-07,
+          "variance": 3.6698345695640455e-08,
+          "min": -0.00148773193359375,
+          "max": 0.001617431640625,
+          "finite": true
+        },
+        "body.9.branch.v_proj.weight": {
+          "rms": 0.0004649758629966527,
+          "mean": 1.7439434341071092e-09,
+          "variance": 2.162025509733212e-07,
+          "min": -0.0045166015625,
+          "max": 0.004638671875,
+          "finite": true
+        },
+        "body.9.branch.value_norm.weights": {
+          "rms": 0.0005895508802495897,
+          "mean": -4.522989456745563e-06,
+          "variance": 3.4754975786199793e-07,
+          "min": -0.0025326248724013567,
+          "max": 0.003065139055252075,
+          "finite": true
+        },
+        "body.9.branch.value_decay_gate.weight": {
+          "rms": 0.00017916178330779076,
+          "mean": 2.938220120540791e-07,
+          "variance": 3.2098856905804496e-08,
+          "min": -0.0032806396484375,
+          "max": 0.0037994384765625,
+          "finite": true
+        },
+        "body.9.branch.value_decay_gate.bias": {
+          "rms": 0.00034309978946112096,
+          "mean": 1.4036406355444342e-05,
+          "variance": 1.1752045736557193e-07,
+          "min": -0.0016032152343541384,
+          "max": 0.0021017296239733696,
+          "finite": true
+        },
+        "body.10.branch.gate.weight": {
+          "rms": 0.00029258194263093174,
+          "mean": -5.508447884494672e-07,
+          "variance": 8.560388664591301e-08,
+          "min": -0.0026702880859375,
+          "max": 0.00262451171875,
+          "finite": true
+        },
+        "body.10.branch.up.weight": {
+          "rms": 0.0002751826250459999,
+          "mean": -1.7282195585721638e-07,
+          "variance": 7.572545257517049e-08,
+          "min": -0.0034637451171875,
+          "max": 0.00286865234375,
+          "finite": true
+        },
+        "body.10.branch.down.weight": {
+          "rms": 0.00039290328277274966,
+          "mean": 2.9307395266187086e-07,
+          "variance": 1.5437289846431668e-07,
+          "min": -0.004913330078125,
+          "max": 0.00543212890625,
+          "finite": true
+        },
+        "body.11.weights": {
+          "rms": 0.001103920047171414,
+          "mean": -1.2700585330094327e-06,
+          "variance": 1.2186377489342703e-06,
+          "min": -0.003235945478081703,
+          "max": 0.0034505196381360292,
+          "finite": true
+        },
+        "body.12.weights": {
+          "rms": 0.0010684733279049397,
+          "mean": -2.1915150227869162e-06,
+          "variance": 1.1416304914746433e-06,
+          "min": -0.0031268559396266937,
+          "max": 0.003319112816825509,
+          "finite": true
+        },
+        "body.13.branch.q_proj.weight": {
+          "rms": 0.00017912800831254572,
+          "mean": -1.1890882944953773e-07,
+          "variance": 3.20868238645744e-08,
+          "min": -0.0015106201171875,
+          "max": 0.001373291015625,
+          "finite": true
+        },
+        "body.13.branch.v_proj.weight": {
+          "rms": 0.0003780029946938157,
+          "mean": -1.2003016536255018e-07,
+          "variance": 1.4288625038716418e-07,
+          "min": -0.003326416015625,
+          "max": 0.00262451171875,
+          "finite": true
+        },
+        "body.13.branch.value_norm.weights": {
+          "rms": 0.0005016489303670824,
+          "mean": 8.965930646809284e-06,
+          "variance": 2.5157129357467056e-07,
+          "min": -0.002033982891589403,
+          "max": 0.0022145600523799658,
+          "finite": true
+        },
+        "body.13.branch.value_decay_gate.weight": {
+          "rms": 0.00013700296403840184,
+          "mean": -1.8906727916601085e-07,
+          "variance": 1.876977684389658e-08,
+          "min": -0.00150299072265625,
+          "max": 0.001861572265625,
+          "finite": true
+        },
+        "body.13.branch.value_decay_gate.bias": {
+          "rms": 0.00028894166462123394,
+          "mean": 5.684335064870538e-06,
+          "variance": 8.345497093387166e-08,
+          "min": -0.0013499747728928924,
+          "max": 0.0009810086339712143,
+          "finite": true
+        },
+        "body.14.branch.gate.weight": {
+          "rms": 0.0002925043518189341,
+          "mean": 1.736193233625727e-08,
+          "variance": 8.555879560390167e-08,
+          "min": -0.002197265625,
+          "max": 0.0029754638671875,
+          "finite": true
+        },
+        "body.14.branch.up.weight": {
+          "rms": 0.00028261254192329943,
+          "mean": -5.99317672822508e-07,
+          "variance": 7.986950123495262e-08,
+          "min": -0.002288818359375,
+          "max": 0.002593994140625,
+          "finite": true
+        },
+        "body.14.branch.down.weight": {
+          "rms": 0.0004009489493910223,
+          "mean": 5.181374831408903e-07,
+          "variance": 1.6075979658580763e-07,
+          "min": -0.0032958984375,
+          "max": 0.00469970703125,
+          "finite": true
+        },
+        "body.15.weights": {
+          "rms": 0.0010839287424460053,
+          "mean": -6.882862066959206e-07,
+          "variance": 1.174901058220712e-06,
+          "min": -0.003858777927234769,
+          "max": 0.0034218933433294296,
+          "finite": true
+        },
+        "body.16.weights": {
+          "rms": 0.0010556576307862997,
+          "mean": -4.739785799756646e-05,
+          "variance": 1.1121663874291698e-06,
+          "min": -0.003921739757061005,
+          "max": 0.0033372226171195507,
+          "finite": true
+        },
+        "body.17.branch.q_proj.weight": {
+          "rms": 0.0001769743103068322,
+          "mean": -6.477848728536628e-07,
+          "variance": 3.1319487447944994e-08,
+          "min": -0.001983642578125,
+          "max": 0.00182342529296875,
+          "finite": true
+        },
+        "body.17.branch.v_proj.weight": {
+          "rms": 0.0004259763518348336,
+          "mean": 1.616992335584655e-06,
+          "variance": 1.8145324531815277e-07,
+          "min": -0.005828857421875,
+          "max": 0.0048828125,
+          "finite": true
+        },
+        "body.17.branch.value_norm.weights": {
+          "rms": 0.0004790111561305821,
+          "mean": 4.705265746451914e-05,
+          "variance": 2.2723772019617172e-07,
+          "min": -0.0016216961666941643,
+          "max": 0.0026239685248583555,
+          "finite": true
+        },
+        "body.17.branch.value_decay_gate.weight": {
+          "rms": 0.00012971054820809513,
+          "mean": -8.263581463552327e-08,
+          "variance": 1.6824820647798333e-08,
+          "min": -0.001861572265625,
+          "max": 0.0016021728515625,
+          "finite": true
+        },
+        "body.17.branch.value_decay_gate.bias": {
+          "rms": 0.0002607416536193341,
+          "mean": 3.2519249089091318e-06,
+          "variance": 6.797564111593601e-08,
+          "min": -0.0015188839752227068,
+          "max": 0.001264663296751678,
+          "finite": true
+        },
+        "body.18.branch.gate.weight": {
+          "rms": 0.00031732444767840207,
+          "mean": 3.065680402869475e-07,
+          "variance": 1.0069469880136239e-07,
+          "min": -0.0032196044921875,
+          "max": 0.00299072265625,
+          "finite": true
+        },
+        "body.18.branch.up.weight": {
+          "rms": 0.0003060980816371739,
+          "mean": 2.8054293466084346e-07,
+          "variance": 9.369596654096313e-08,
+          "min": -0.0030517578125,
+          "max": 0.0031585693359375,
+          "finite": true
+        },
+        "body.18.branch.down.weight": {
+          "rms": 0.0004569274024106562,
+          "mean": -3.7779349781885685e-07,
+          "variance": 2.0878250950318034e-07,
+          "min": -0.00750732421875,
+          "max": 0.00872802734375,
+          "finite": true
+        },
+        "body.19.weights": {
+          "rms": 0.0012762367259711027,
+          "mean": -1.022612764245423e-06,
+          "variance": 1.6287791595459566e-06,
+          "min": -0.004113353788852692,
+          "max": 0.007812759838998318,
+          "finite": true
+        },
+        "body.20.weights": {
+          "rms": 0.001211868249811232,
+          "mean": -0.00010641989501891658,
+          "variance": 1.4572997315553948e-06,
+          "min": -0.0043662674725055695,
+          "max": 0.0067473044618964195,
+          "finite": true
+        },
+        "body.21.branch.q_proj.weight": {
+          "rms": 0.0002059323451248929,
+          "mean": -1.3819359878652904e-07,
+          "variance": 4.240811435352043e-08,
+          "min": -0.00299072265625,
+          "max": 0.004425048828125,
+          "finite": true
+        },
+        "body.21.branch.v_proj.weight": {
+          "rms": 0.0002627024077810347,
+          "mean": -9.034214940584206e-07,
+          "variance": 6.901174032236668e-08,
+          "min": -0.0023040771484375,
+          "max": 0.0020904541015625,
+          "finite": true
+        },
+        "body.21.branch.value_norm.weights": {
+          "rms": 0.000473377964226529,
+          "mean": -2.5120725695160218e-05,
+          "variance": 2.2345562911141315e-07,
+          "min": -0.0020533795468509197,
+          "max": 0.001587812788784504,
+          "finite": true
+        },
+        "body.21.branch.value_decay_gate.weight": {
+          "rms": 0.00012667184637393802,
+          "mean": 1.6936066771222613e-08,
+          "variance": 1.604575317060153e-08,
+          "min": -0.0017242431640625,
+          "max": 0.00160980224609375,
+          "finite": true
+        },
+        "body.21.branch.value_decay_gate.bias": {
+          "rms": 0.00028949134866707027,
+          "mean": 4.918310878565535e-06,
+          "variance": 8.378105320616669e-08,
+          "min": -0.0018562925979495049,
+          "max": 0.0007633992354385555,
+          "finite": true
+        },
+        "body.22.branch.gate.weight": {
+          "rms": 0.0003334320499561727,
+          "mean": -1.5218368787373038e-07,
+          "variance": 1.1117692366724441e-07,
+          "min": -0.0089111328125,
+          "max": 0.00518798828125,
+          "finite": true
+        },
+        "body.22.branch.up.weight": {
+          "rms": 0.00032615161035209894,
+          "mean": -2.3372263058263343e-07,
+          "variance": 1.0637481295816542e-07,
+          "min": -0.00921630859375,
+          "max": 0.013427734375,
+          "finite": true
+        },
+        "body.22.branch.down.weight": {
+          "rms": 0.000601384905166924,
+          "mean": 1.6978486883090227e-06,
+          "variance": 3.6166096606393694e-07,
+          "min": -0.01495361328125,
+          "max": 0.01708984375,
+          "finite": true
+        },
+        "body.23.weights": {
+          "rms": 0.0012686033733189106,
+          "mean": -0.000286960625089705,
+          "variance": 1.5270081803464564e-06,
+          "min": -0.005673723760992289,
+          "max": 0.011336075142025948,
+          "finite": true
+        }
+      }
+    },
+    "notes": "One fixed held-out batch, BF16; head amplitudes are not semantic specialization evidence. Matrix SVD uses final cached state sample0; gate matrix statistics sample first16tokens. Head MLP relative change samples final recurrent vector."
+  },
+  "contrasts": {
+    "NoK_minus_original_loss": -0.050716289767512635,
+    "NoK_minus_Lantern_loss": 0.10485550650843889,
+    "NoK_minus_4K_independent_loss": -0.012583370561952911,
+    "NoK_minus_matrix_memory_loss": 0.08334044615427683,
+    "NoK_perplexity_reduction_vs_original_percent": 4.945168743673555,
+    "NoK_parameter_reduction_vs_original_percent": 6.43992194034012
+  },
+  "audit": {
+    "same_data_settings_with_FluxV_and_Lantern": true,
+    "frozen_no_K_source_hashes_unchanged": true,
+    "updates": 9000,
+    "target_tokens": 18429440,
+    "tests_each_new_branch": 638,
+    "unchanged_initial_tensors_match_reference": true,
+    "final_outputs_gradients_finite": true
+  },
+  "incomplete_experiments": {
+    "two-key": "Stopped at last logged update660; validation500 only; no first1000-update checkpoint. Excluded from final-budget comparisons.",
+    "diagonal-vector": "Implemented/tested/preflight only; no full training.",
+    "mass-normalized": "Implemented/tested/preflight only; no full training."
+  },
+  "limitations": [
+    "One seed; no statistical significance/general-superiority claim.",
+    "Parameter counts and memory mechanisms differ.",
+    "A/E timings cover resumed phases only; full uninterrupted time unavailable.",
+    "Historical timings from earlier sessions; equal tokens are not equal compute.",
+    "Loss does not demonstrate semantic head specialization, retrieval or reasoning."
+  ]
+}

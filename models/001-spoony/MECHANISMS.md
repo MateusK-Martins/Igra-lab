@@ -1,3 +1,5 @@
+No-K completed; remaining suite stopped at user request. See [RESULTS_SO_FAR.md](RESULTS_SO_FAR.md) for completed results and analysis. The definitions below preserve the original experimental plan; three runs are incomplete.
+
 # Controlled recurrent mechanism experiments
 
 All branches originate at original V-only FluxV commit
