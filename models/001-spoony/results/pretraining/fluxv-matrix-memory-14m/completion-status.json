@@ -1,0 +1,12 @@
+{
+  "status": "completed",
+  "resume_from_update": 1000,
+  "target_updates": 9000,
+  "sleep_inhibitor": "sleep:idle:handle-lid-switch",
+  "thermal_throttling": false,
+  "thermal_monitoring": "user manages this",
+  "started_at_unix": 1792031314.4270644,
+  "active": null,
+  "finished_at_unix": 1792033409.5277963,
+  "sleep_inhibitor_active": false
+}
