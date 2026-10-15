@@ -1,3 +1,11 @@
+# Tide
+
+Tide is the continuously ranged-initialized No-K model with independent write gates and global RMSNorm. It has 13,774,080 parameters and 384 FP32 recurrent state values per layer.
+
+The frozen training recipe is commit 744e1ca; completed results are at 563ab4a. Validation loss: **2.010153**; perplexity: **7.464462**.
+
+The following experiment notes and original Spoony documentation are retained as history.
+
 Current initialization controls: see [INITIALIZATION_CONTROLS.md](INITIALIZATION_CONTROLS.md).
 
 Current mechanism ablations: see [MECHANISM_ABLATIONS.md](MECHANISM_ABLATIONS.md).

@@ -1,4 +1,6 @@
-# Specialized-global initialization controls — range
+# Tide — continuously ranged initialization
+
+Codename: **Tide**. Branch: `model/001-spoony-tide`. Frozen training artifacts retain their original `fluxv-init-range` names and training-time branch identity for reproducibility.
 
 Architecture unchanged from specialized-global recipe05ad3d9, completed8985395:
 signed No-K state S=g*S_previous+i*tanh(W_V*x), global learned RMSNorm,
