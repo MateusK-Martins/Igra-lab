@@ -49,7 +49,7 @@ class NoKVariantImpl(SignedStateImpl):
             if values is not None:
                 with torch.no_grad():
                     probabilities = gate.bias.new_tensor(values).repeat_interleave(
-                        features // num_heads
+                        features // len(values)
                     )
                     gate.bias.copy_(torch.logit(probabilities))
 
