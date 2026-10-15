@@ -1,3 +1,7 @@
+Completed controlled 14M suite — 2026-10-15. See [ABLATIONS_14M.md](ABLATIONS_14M.md) and [EXPERIMENT_STATUS.md](EXPERIMENT_STATUS.md). Training is stopped.
+
+The notes below are historical; the active recipe and results are documented above.
+
 Current controlled 14M suite: see [ABLATIONS_14M.md](ABLATIONS_14M.md).
 
 > **Active token-decay experiment:** see [TOKEN_DECAY.md](TOKEN_DECAY.md).
