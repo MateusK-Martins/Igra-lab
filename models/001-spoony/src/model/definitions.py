@@ -560,9 +560,12 @@ class NoKVariant(BlockDefinition):
             raise ValueError("head and gate preferences require write_gate mode")
         for values in (self.retention_initials, self.write_initials):
             if values is not None:
-                if not isinstance(values, tuple) or len(values) != self.num_heads:
+                if not isinstance(values, tuple) or len(values) not in (
+                    self.num_heads,
+                    self.input_features,
+                ):
                     raise ValueError(
-                        "gate preferences must contain one probability per head"
+                        "gate preferences must contain one probability per head or feature"
                     )
                 if any(
                     isinstance(v, bool)

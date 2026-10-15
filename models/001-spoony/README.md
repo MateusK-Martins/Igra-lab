@@ -1,3 +1,5 @@
+Current initialization controls: see [INITIALIZATION_CONTROLS.md](INITIALIZATION_CONTROLS.md).
+
 Current mechanism ablations: see [MECHANISM_ABLATIONS.md](MECHANISM_ABLATIONS.md).
 
 Current No-K gate/readout suite: see [GATE_READOUT_TESTS.md](GATE_READOUT_TESTS.md).

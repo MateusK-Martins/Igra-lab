@@ -21,8 +21,10 @@ def build_model(tokenizer: Tokenizer):
                         rank=32,
                         num_heads=4,
                         normalization_scope="global",
-                        retention_initials=(0.90, 0.95, 0.98, 0.995),
-                        write_initials=(0.20, 0.10, 0.05, 0.02),
+                        retention_initials=tuple(
+                            0.90 + 0.095 * j / 383 for j in range(384)
+                        ),
+                        write_initials=tuple(0.20 - 0.18 * j / 383 for j in range(384)),
                     ),
                     SwiGLU(
                         input_features=384,

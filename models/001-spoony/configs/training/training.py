@@ -8,6 +8,6 @@ training_config = TrainingConfig(
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/fluxv-ablation-global/tensorboard"),
+    directory=results_path("pretraining/fluxv-init-range/tensorboard"),
     interval=10,
 )
