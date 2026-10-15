@@ -1,1 +1,1 @@
-Controlled mechanism suite in preflight. See MECHANISMS.md for equations and protocol. Four-K comparison completed first and pushed. Preserve source/recipe HEAD during training. Tests638 each passed; originalFFN1024 retained by user choice. Data/checkpoints remain ignored.
+Two fresh No-K denominator models authorized: weighted average and squared retention. Read DENOMINATOR_TESTS.md. Both12887040 parameters; gamma ones; exact equations/epsilon1e-6.655 tests each passed plus Ruff. Preserve source/recipeHEAD during training. Other stopped experimental branches remain stopped.

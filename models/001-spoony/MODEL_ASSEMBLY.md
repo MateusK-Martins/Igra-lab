@@ -1,3 +1,5 @@
+Current recurrent-denominator comparison: see [DENOMINATOR_TESTS.md](DENOMINATOR_TESTS.md).
+
 Current controlled mechanism suite: see [MECHANISMS.md](MECHANISMS.md). Earlier notes are historical.
 
 > **Active token-decay experiment:** see [TOKEN_DECAY.md](TOKEN_DECAY.md).

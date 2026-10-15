@@ -128,6 +128,32 @@ def main():
         loss = compute_loss(logits, y).item()
         for name, module in modules.items():
             record = records[name]
+            if hasattr(module, "gain"):
+                raw = cache.read_state(module.layer_id)
+                record["denominator_mode"] = module.mode
+                record["denominator"] = statistics(raw.key_sum)
+                record["gain"] = statistics(module.gain)
+                divisor = raw.key_sum + module.eps
+                if module.mode == "squared":
+                    divisor = divisor.sqrt()
+                record["normalized_last_state"] = statistics(
+                    module.gain * raw.value_sum / divisor
+                )
+                writes = module.v_proj(inputs[name]).tanh().float()
+                record["writes"] = statistics(writes)
+                record["write_feature_mean_absolute"] = (
+                    writes.mean((0, 1)).abs().mean().item()
+                )
+                centered = writes - writes.mean((0, 1), keepdim=True)
+                left, right = centered[:, :-1], centered[:, 1:]
+                scale = (
+                    (left.square().mean((0, 1)) * right.square().mean((0, 1)))
+                    .sqrt()
+                    .clamp_min(1e-12)
+                )
+                record["write_lag1_correlation"] = statistics(
+                    (left * right).mean((0, 1)) / scale
+                )
             if isinstance(module, SignedStateImpl):
                 state = cache.read_state(module.layer_id)
                 record["signed_state"] = statistics(state.value_sum)
