@@ -1,0 +1,29 @@
+[
+  {
+    "model": "Standard global RMSNorm",
+    "parameters": 13774080,
+    "loss": 2.0908223213972867,
+    "perplexity": 8.091566297349628,
+    "seconds": 377.0664761650005,
+    "tokens_per_second": 48875.837988671956,
+    "peak_vram_bytes": 1072384000
+  },
+  {
+    "model": "A Uniform heads",
+    "parameters": 13774080,
+    "loss": 2.0929677927935564,
+    "perplexity": 8.108945157649137,
+    "seconds": 378.10390977899806,
+    "tokens_per_second": 48741.733484776756,
+    "peak_vram_bytes": 1072531456
+  },
+  {
+    "model": "B Specialized heads",
+    "parameters": 13774080,
+    "loss": 2.0231713542231806,
+    "perplexity": 7.56226958068615,
+    "seconds": 379.51959860699935,
+    "tokens_per_second": 48559.91645133478,
+    "peak_vram_bytes": 1072531456
+  }
+]

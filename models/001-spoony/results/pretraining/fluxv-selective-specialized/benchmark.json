@@ -1,0 +1,28 @@
+{
+  "scheduler": {
+    "warmup_steps": 300,
+    "total_steps": 9000,
+    "min_lr_ratio": 0.1
+  },
+  "optimizer": {
+    "learning_rate": 0.0003,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.01
+  },
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "parameters": 13774080,
+  "vocab_size": 8192,
+  "initial_validation_loss": 9.09819765444155,
+  "validation_seconds": 0.41182427699823165,
+  "measured_updates": 100,
+  "mean_update_seconds": 0.0402993253297609,
+  "p95_update_seconds": 0.04073689200231456,
+  "tokens_per_update": 2048,
+  "peak_allocated_vram_bytes": 1068275712,
+  "benchmark_final_loss": 6.069980621337891,
+  "torch_cpu_threads": 4
+}
