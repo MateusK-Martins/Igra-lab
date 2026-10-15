@@ -522,6 +522,9 @@ class NoKVariant(BlockDefinition):
     input_features: int
     mode: Literal["write_gate", "signed_readout", "lowrank"] = "write_gate"
     rank: int = 32
+    num_heads: int = 1
+    retention_initials: tuple[float, ...] | None = None
+    write_initials: tuple[float, ...] | None = None
     eps: float = 1e-6
     decay_init: float = 0.99
     residual: bool = False
@@ -543,14 +546,47 @@ class NoKVariant(BlockDefinition):
         if self.mode == "lowrank" and self.rank > self.input_features:
             raise ValueError("rank must not exceed feature width")
 
+        _positive_integer(self.num_heads, "num_heads")
+        if self.input_features % self.num_heads:
+            raise ValueError("feature width must be divisible by num_heads")
+        if self.mode != "write_gate" and (
+            self.num_heads != 1
+            or self.retention_initials is not None
+            or self.write_initials is not None
+        ):
+            raise ValueError("head and gate preferences require write_gate mode")
+        for values in (self.retention_initials, self.write_initials):
+            if values is not None:
+                if not isinstance(values, tuple) or len(values) != self.num_heads:
+                    raise ValueError(
+                        "gate preferences must contain one probability per head"
+                    )
+                if any(
+                    isinstance(v, bool)
+                    or not isinstance(v, (int, float))
+                    or not 0 < v < 1
+                    for v in values
+                ):
+                    raise ValueError(
+                        "gate probabilities must be strictly between zero and one"
+                    )
+
     def build(self):
         return NoKVariantImpl(
-            self.input_features, self.eps, self.decay_init, self.mode, self.rank
+            self.input_features,
+            self.eps,
+            self.decay_init,
+            self.mode,
+            self.rank,
+            self.num_heads,
+            self.retention_initials,
+            self.write_initials,
         )
 
     def cache(self, layer_id: int):
+        suffix = f"-heads{self.num_heads}" if self.num_heads > 1 else ""
         return StateEntry(
-            f"NoKVariantImpl-{self.mode}-{layer_id}",
+            f"NoKVariantImpl-{self.mode}{suffix}-{layer_id}",
             torch.empty(0, 1, 0),
             torch.empty(0, 1, self.input_features),
         )

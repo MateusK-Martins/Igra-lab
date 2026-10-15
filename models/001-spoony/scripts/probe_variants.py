@@ -85,6 +85,8 @@ def main():
 
         def save_output(m, args, output, record=record):
             record["output"] = statistics(output)
+            if getattr(m, "num_heads", 1) > 1:
+                record["per_head_output"] = heads_statistics(output, m.num_heads)
             if (
                 not isinstance(m, (SignedStateImpl, MassNormalizedImpl))
                 and not hasattr(m, "row_gate")
@@ -107,7 +109,9 @@ def main():
                     if label != "value_decay_gate" and not hasattr(
                         module, "key_output_weights"
                     ):
-                        record[label]["per_head"] = heads_statistics(output)
+                        record[label]["per_head"] = heads_statistics(
+                            output, getattr(module, "num_heads", 6)
+                        )
                     elif label == "value_decay_gate":
                         record[label]["token_variation_std"] = (
                             output.detach()
@@ -163,6 +167,39 @@ def main():
                     ).item()
                     record["read_down_norm"] = down.norm().item()
                     record["read_up_norm"] = up.norm().item()
+            if getattr(module, "num_heads", 1) > 1:
+                heads = module.num_heads
+                record["num_heads"] = heads
+                state = cache.read_state(module.layer_id).value_sum
+                record["per_head_state"] = heads_statistics(state, heads)
+                record["per_head_normalized"] = heads_statistics(
+                    module.value_norm(state), heads
+                )
+                for label, values in (
+                    ("retention", module.value_decay_gate(inputs[name])),
+                    ("write", module.write_gate(inputs[name])),
+                    ("query", module.q_proj(inputs[name]).sigmoid()),
+                ):
+                    reshaped = values.float().reshape(*values.shape[:-1], heads, -1)
+                    record[f"per_head_{label}"] = {
+                        "mean": reshaped.mean((0, 1, 3)).cpu().tolist(),
+                        "token_std": reshaped.std(1, unbiased=False)
+                        .mean((0, 2))
+                        .cpu()
+                        .tolist(),
+                        "min": reshaped.amin((0, 1, 3)).cpu().tolist(),
+                        "max": reshaped.amax((0, 1, 3)).cpu().tolist(),
+                    }
+                # Full fixed-batch head outputs are measured by the forward hook.
+                h = state.float().reshape(state.shape[0], heads, -1)
+                flat = h.permute(1, 0, 2).flatten(1)
+                record["head_state_cosine_sample"] = (
+                    torch.nn.functional.normalize(flat, dim=1)
+                    @ torch.nn.functional.normalize(flat, dim=1).T
+                )
+                record["head_state_cosine_sample"] = (
+                    record["head_state_cosine_sample"].cpu().tolist()
+                )
             if isinstance(module, SignedStateImpl):
                 state = cache.read_state(module.layer_id)
                 record["signed_state"] = statistics(state.value_sum)

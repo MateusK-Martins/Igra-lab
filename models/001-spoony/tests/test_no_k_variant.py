@@ -21,7 +21,14 @@ def reference(m, x):
         state = gate[:, t] * state + u[:, t]
         read = (
             state
-            * (state.square().mean(-1, keepdim=True) + m.value_norm.eps).rsqrt()
+            * (
+                state.reshape(*state.shape[:-1], m.num_heads, -1)
+                .square()
+                .mean(-1, keepdim=True)
+                .expand(*state.shape[:-1], m.num_heads, state.shape[-1] // m.num_heads)
+                .flatten(-2)
+                + m.value_norm.eps
+            ).rsqrt()
             * m.value_norm.weights
         )
         if m.read_down is not None:
