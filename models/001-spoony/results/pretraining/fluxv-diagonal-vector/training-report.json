@@ -1,0 +1,164 @@
+{
+  "branch": "model/001-spoony-fluxv-diagonal-vector",
+  "experiment": "fluxv-diagonal-vector",
+  "training_seconds_including_validation_and_saving": 297.9015166060001,
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "peak_allocated_vram_bytes": 838294528,
+  "training_state": {
+    "updates": 9000,
+    "batches": 9000,
+    "tokens": 18429440,
+    "completed_epochs": 2,
+    "last_loss": 2.6097636222839355,
+    "last_validation_loss": 2.434742000367906,
+    "last_validation_perplexity": 11.412873816246364,
+    "batches_in_epoch": 2728
+  },
+  "validation_curve": [
+    {
+      "update": 500,
+      "loss": 3.7200543880462646
+    },
+    {
+      "update": 1000,
+      "loss": 3.3143768310546875
+    },
+    {
+      "update": 1500,
+      "loss": 3.1363377571105957
+    },
+    {
+      "update": 2000,
+      "loss": 2.985675573348999
+    },
+    {
+      "update": 2500,
+      "loss": 2.8752267360687256
+    },
+    {
+      "update": 3000,
+      "loss": 2.798414707183838
+    },
+    {
+      "update": 3500,
+      "loss": 2.72798490524292
+    },
+    {
+      "update": 4000,
+      "loss": 2.672229528427124
+    },
+    {
+      "update": 4500,
+      "loss": 2.6369452476501465
+    },
+    {
+      "update": 5000,
+      "loss": 2.5876553058624268
+    },
+    {
+      "update": 5500,
+      "loss": 2.5539634227752686
+    },
+    {
+      "update": 6000,
+      "loss": 2.512620449066162
+    },
+    {
+      "update": 6500,
+      "loss": 2.496363401412964
+    },
+    {
+      "update": 7000,
+      "loss": 2.477969169616699
+    },
+    {
+      "update": 7500,
+      "loss": 2.4616599082946777
+    },
+    {
+      "update": 8000,
+      "loss": 2.451343059539795
+    },
+    {
+      "update": 8500,
+      "loss": 2.4407923221588135
+    },
+    {
+      "update": 9000,
+      "loss": 2.434741973876953
+    }
+  ],
+  "best_saved_validation": {
+    "update": 9000,
+    "loss": 2.434741973876953
+  },
+  "subset": {
+    "dataset": "roneneldan/TinyStories",
+    "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "selection": "first unique nonempty documents in source order",
+    "splits": {
+      "train": {
+        "documents": 30000,
+        "duplicates_or_empty_skipped": 0,
+        "sha256": "69a5f3422b4c51f98ca0692a3514822a6527999dc59c624baaefb1f8f04e65d3",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-train.txt"
+      },
+      "validation": {
+        "documents": 256,
+        "duplicates_or_empty_skipped": 0,
+        "sha256": "ab09f4248a55ca51d899ba51ce90d96a2c990d52a821338aa1743a525fda7d4a",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-valid.txt"
+      }
+    }
+  },
+  "benchmark": {
+    "scheduler": {
+      "warmup_steps": 300,
+      "total_steps": 9000,
+      "min_lr_ratio": 0.1
+    },
+    "optimizer": {
+      "learning_rate": 0.0003,
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01
+    },
+    "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+    "parameters": 12002304,
+    "vocab_size": 8192,
+    "initial_validation_loss": 9.09731207953559,
+    "validation_seconds": 0.372202915999992,
+    "measured_updates": 100,
+    "mean_update_seconds": 0.03419781928000248,
+    "p95_update_seconds": 0.03508807600007913,
+    "tokens_per_update": 2048,
+    "peak_allocated_vram_bytes": 833780736,
+    "benchmark_final_loss": 6.1336212158203125,
+    "torch_cpu_threads": 4
+  },
+  "torch_cpu_threads": 4,
+  "seed": 42,
+  "comparison": "Single seed, equal-token baseline; include preparation separately and rebenchmark each architecture for equal-time runs.",
+  "greedy_samples_from_best_saved_checkpoint": [
+    {
+      "prompt": "Once upon a time, there was a little girl named Lily.",
+      "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, scary dog. The dog was scared and ran away. Lily was scared and ran away.\nLily's mom saw her and said, \"Don't worry, Lily. The dog is just a big dog. It's just a big"
+    },
+    {
+      "prompt": "Tom found a small dog outside his house. The dog was",
+      "text": "Tom found a small dog outside his house. The dog was very happy. He wanted to play with the dog, but he was too small. He wanted to play with the dog, but he was too small to play with.\nThe big dog saw the big dog. The dog was scared of the dog and wanted to play with the dog. The dog ran away and ran"
+    },
+    {
+      "prompt": "One day, a boy lost his favorite toy. He felt",
+      "text": "One day, a boy lost his favorite toy. He felt sad and lonely. He wanted to play with the boy and his toy. He wanted to play with it. He looked for a little girl who was sad. She had an idea. She had an idea. She took the boy to the boy and gave it to the boy. The boy was very happy. He said"
+    }
+  ],
+  "best_checkpoint": "checkpoints/step-00009000.pt",
+  "parameters": 12002304,
+  "recipe_commit": "2453aeebc43b142d642d8577dbd8b07e36bb10d4",
+  "tokens_per_second": 61864.203344672766,
+  "timing_scope": "Full uninterrupted fresh9000-update invocation including setup, validation and saving; excludes benchmarks/separate probes."
+}

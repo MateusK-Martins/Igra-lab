@@ -1,3 +1,5 @@
+Completed signed-state tests: see [SIGNED_STATE_TESTS.md](SIGNED_STATE_TESTS.md). Earlier notes below are historical.
+
 Current controlled mechanism suite: see [MECHANISMS.md](MECHANISMS.md). Earlier notes are historical.
 
 > **Active token-decay experiment:** see [TOKEN_DECAY.md](TOKEN_DECAY.md).
