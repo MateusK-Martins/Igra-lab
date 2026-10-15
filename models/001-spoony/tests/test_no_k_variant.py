@@ -22,10 +22,16 @@ def reference(m, x):
         read = (
             state
             * (
-                state.reshape(*state.shape[:-1], m.num_heads, -1)
+                state.reshape(
+                    *state.shape[:-1], getattr(m.value_norm, "num_heads", 1), -1
+                )
                 .square()
                 .mean(-1, keepdim=True)
-                .expand(*state.shape[:-1], m.num_heads, state.shape[-1] // m.num_heads)
+                .expand(
+                    *state.shape[:-1],
+                    getattr(m.value_norm, "num_heads", 1),
+                    state.shape[-1] // getattr(m.value_norm, "num_heads", 1),
+                )
                 .flatten(-2)
                 + m.value_norm.eps
             ).rsqrt()

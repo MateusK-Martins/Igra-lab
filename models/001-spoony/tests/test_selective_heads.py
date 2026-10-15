@@ -22,16 +22,17 @@ from tests.test_no_k_variant import (
 )
 
 
-@pytest.fixture(params=["uniform", "specialized"])
+@pytest.fixture(params=["uniform", "specialized", "global", "retention", "write"])
 def heads(request):
     return NoKVariant(
         4,
         num_heads=4,
+        normalization_scope="global" if request.param == "global" else "head",
         retention_initials=(0.90, 0.95, 0.98, 0.995)
-        if request.param == "specialized"
+        if request.param in ("specialized", "global", "retention")
         else None,
         write_initials=(0.20, 0.10, 0.05, 0.02)
-        if request.param == "specialized"
+        if request.param in ("specialized", "global", "write")
         else None,
     )
 
@@ -127,12 +128,14 @@ def test_invalid_heads_preferences():
             NoKVariant(8, **kw)
 
 
-def test_multifeature_heads_reference_and_partitioned_projection_rows():
+@pytest.mark.parametrize("scope", ["head", "global"])
+def test_multifeature_heads_reference_and_partitioned_projection_rows(scope):
     from tests.test_no_k_variant import reference
 
     d = NoKVariant(
         12,
         num_heads=4,
+        normalization_scope=scope,
         retention_initials=(0.9, 0.95, 0.98, 0.995),
         write_initials=(0.2, 0.1, 0.05, 0.02),
     )
@@ -154,3 +157,45 @@ def test_multifeature_heads_reference_and_partitioned_projection_rows():
     # Each group's projections see all input features, not just its state slice.
     for gate in (m.q_proj, m.v_proj, m.write_gate, m.value_decay_gate):
         assert gate.weight.shape == (12, 12)
+
+
+def test_global_norm_matches_original_and_preserves_same_recurrent_state():
+    from src.model.cache_storage import CacheStorage
+    from src.model.composition import build_block
+    from src.model.stability import RMSNormImpl
+
+    args = {
+        "input_features": 12,
+        "num_heads": 4,
+        "retention_initials": (0.9, 0.95, 0.98, 0.995),
+        "write_initials": (0.2, 0.1, 0.05, 0.02),
+    }
+    h = NoKVariant(**args)
+    g = NoKVariant(**args, normalization_scope="global")
+    torch.manual_seed(42)
+    head = build_block(h, 0).double()
+    rng = torch.random.get_rng_state()
+    torch.manual_seed(42)
+    global_ = build_block(g, 0).double()
+    assert torch.equal(rng, torch.random.get_rng_state())
+    for name, value in head.state_dict().items():
+        torch.testing.assert_close(value, global_.state_dict()[name], rtol=0, atol=0)
+    norm = RMSNormImpl(12, 1e-6).double()
+    x = torch.randn(2, 31, 12, dtype=torch.float64)
+    assert torch.equal(norm(x), global_.value_norm(x))
+    caches = [
+        CacheStorage([d.cache(0)], torch.device("cpu"), torch.device("cpu"))
+        for d in (h, g)
+    ]
+    with torch.no_grad():
+        head(x, cache=caches[0])
+        global_(x, cache=caches[1])
+    torch.testing.assert_close(
+        caches[0].read_state(head.layer_id).value_sum,
+        caches[1].read_state(global_.layer_id).value_sum,
+        rtol=0,
+        atol=0,
+    )
+    assert head.layer_id != global_.layer_id
+    with pytest.raises(ValueError, match="normalization_scope"):
+        NoKVariant(12, normalization_scope="invalid")
