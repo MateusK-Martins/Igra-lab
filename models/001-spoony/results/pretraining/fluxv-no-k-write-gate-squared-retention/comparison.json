@@ -1,0 +1,38 @@
+[
+  {
+    "model": "No-K RMSNorm",
+    "parameters": 12887040,
+    "loss": 2.123176097869873,
+    "perplexity": 8.357640060820055,
+    "seconds": 410.109747633,
+    "tokens_per_second": 44937.824829494624,
+    "peak_vram_bytes": 1009138688
+  },
+  {
+    "model": "No-K squared retention",
+    "parameters": 12887040,
+    "loss": 2.1126015186309814,
+    "perplexity": 8.269727173854152,
+    "seconds": 637.1264834989997,
+    "tokens_per_second": 28925.87339767824,
+    "peak_vram_bytes": 1380277248
+  },
+  {
+    "model": "Write gate + RMSNorm",
+    "parameters": 13774080,
+    "loss": 2.090822219848633,
+    "perplexity": 8.091565475662003,
+    "seconds": 377.0664761650005,
+    "tokens_per_second": 48875.837988671956,
+    "peak_vram_bytes": 1072384000
+  },
+  {
+    "model": "Write gate + squared retention",
+    "parameters": 13774080,
+    "loss": 2.076411724090576,
+    "perplexity": 7.975798141408354,
+    "seconds": 661.8285790190002,
+    "tokens_per_second": 27846.243852625947,
+    "peak_vram_bytes": 1446029312
+  }
+]
