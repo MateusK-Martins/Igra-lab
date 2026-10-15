@@ -1,3 +1,5 @@
+Current four-key-bank experiment: see [MULTIKEY.md](MULTIKEY.md). Earlier notes below are historical.
+
 > **Active token-decay experiment:** see [TOKEN_DECAY.md](TOKEN_DECAY.md).
 > Ember and earlier notes below are historical.
 
