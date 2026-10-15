@@ -104,3 +104,23 @@ Datasets, tensorboard events and large checkpoints stay local and ignored.
 Results are single-seed observations: extra parameters/state/compute prevent a
 capacity-controlled comparison to the historical original. Tied vs independent
 Q also differs by 884,736 parameters. Lower loss is not proof of retrieval or reasoning.
+
+## Completed comparison
+
+Both fresh runs completed 9,000 updates / 18,429,440 target tokens. Frozen source
+hashes and matching data/settings were verified; final gradient probes are finite.
+
+| Model | Parameters | Loss | Perplexity | Minutes | Tokens/s | Peak CUDA GiB |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Original | 13,774,080 | 2.173892 | 8.7924 | 6.59 | 46,589 | 1.044 |
+| tied | 16,446,720 | 2.169084 | 8.7503 | 15.84 | 19,396 | 1.777 |
+| independent | 17,331,456 | 2.135759 | 8.4635 | 15.78 | 19,462 | 1.811 |
+
+Independent Q lowered loss by 0.033324 versus tied Q in this seed. Tied Q barely
+improved the original. This supports testing separate key/value queries further,
+but independent Q also adds 884,736 parameters. Both add K projections, K decay
+and key-query gating relative to the original; this is not a parameter-matched
+isolation of any one change. Single-seed results do not establish superiority.
+K retention means remained similar across banks (~0.989); amplitudes alone do not
+establish distinct memory timescales or semantics. Full curves, generations and
+initial/final diagnostics are preserved in comparison.json and per-run reports.
