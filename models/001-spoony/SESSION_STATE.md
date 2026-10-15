@@ -1,1 +1,1 @@
-Four-key-bank FluxV experiments are in progress. Read MULTIKEY.md for the current recipe and tests. Both branches start at the original V-only reference. Configuration and source must remain frozen during training.
+Four-key-bank comparison completed. Both runs reached 9000 updates /18429440 tokens. See MULTIKEY.md and result comparison.json. Final probes and fingerprint checks passed. No training runner remains.
