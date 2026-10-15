@@ -118,3 +118,162 @@ write means, variance, correlations and optimization scale. Learned gamma adapta
 and readout RMS help assess amplitude compensation under the fixed training budget.
 Single seed/limited TinyStories exposure; no reasoning/retrieval/general superiority
 claim. Previous references and incomplete branches are preserved.
+
+## Completed comparison
+
+Both fresh runs reached 9,000 updates and 18,429,440 target tokens. Post-training
+checks verified source fingerprints, identical data/settings, initial tensor hashes
+and finite probes. Both have exactly the same 12,887,040 trainable parameters as
+normalized No-K, including learned gamma. No warm-start or post-result tuning.
+
+| Model | Parameters | Final loss | Perplexity | Measured min | Tokens/s | Peak CUDA GiB |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Original FluxV | 13,774,080 | 2.173892 | 8.7924 | 6.59 | 46,589 | 1.044 |
+| E recurrent matrix memory | 14,211,456 | 2.039836 | 7.6893 | 35.04 | 7,792 | 1.044 |
+| Lantern attention | 12,440,064 | 2.018320 | 7.5257 | 7.19 | 42,727 | 0.748 |
+| No-K signed writes | 12,887,040 | 2.123176 | 8.3576 | 6.84 | 44,938 | 0.940 |
+| diagonal | 12,002,304 | 2.434742 | 11.4129 | 4.97 | 61,864 | 0.781 |
+| no-norm | 12,884,736 | 2.743455 | 15.5406 | 5.84 | 52,637 | 0.903 |
+| weighted-average | 12,887,040 | 2.172995 | 8.7846 | 10.36 | 29,647 | 1.294 |
+| squared-retention | 12,887,040 | 2.112602 | 8.2697 | 10.62 | 28,926 | 1.285 |
+
+E timing is its resumed 8000-update phase, not the full 9000 updates. All losses
+are final-budget values. Other reference timings are full historical sessions.
+
+### Controlled loss contrasts
+
+Positive differences are worse:
+
+- average_minus_RMSNorm: +0.049819 nats/token.
+- squared_minus_RMSNorm: -0.010574 nats/token.
+- squared_minus_average: -0.060393 nats/token.
+
+Squared retention has the lower final loss of the two in this seed. This is a matched
+parameter/data/initialization comparison of the requested denominator mechanisms,
+not a statistical significance result.
+
+### What this says about normalization
+
+Weighted averaging divides by surviving write mass and bounds the un-gained
+normalized state by 1 in absolute value. It can suppress signed cancellation and
+historical signal amplitude. Squared retention divides by coefficient-energy
+scale, preserving more amplitude for independent zero-mean writes. Its variance
+argument does not hold automatically for learned nonzero-mean, correlated writes
+and input-dependent retention. The diagnostics below test those assumptions only
+descriptively on a fixed batch.
+
+RMSNorm instead uses the current state's cross-feature second moment (including
+mean offsets), and does not estimate historical surviving mass. Because its divisor
+is common across features, it preserves feature ratios up to learned gains; the
+feature-wise historical denominators can alter those ratios based on each feature's
+retention history. These are distinct inductive biases, not equivalent variance
+estimators.
+
+Squared retention approaches and slightly surpasses RMSNorm here: loss improves
+by 0.010574 nats/token, about 1.05% in perplexity. It beats weighted averaging by
+0.060393 nats/token (about 5.86% perplexity). This supports the user's hypothesis
+that coefficient-energy scaling is more useful than true historical averaging
+for these signed writes at this budget. It provides a viable replacement without
+an instantaneous cross-feature RMS statistic on this recipe.
+
+The measured amplitudes are consistent with that account: final mixer RMS is
+0.5792 for squared retention, 0.3875 for averaging, and 0.4990 for RMSNorm No-K.
+Squared retention's gain RMS remains near 1.0175; averaging's reaches 1.1087.
+Averaging began with much smaller mixer RMS (0.0538), while squared retention
+began at 1.4367. Training adapts writes/gates as well as gains, so these figures
+do not isolate amplitude as the causal reason for the quality gap.
+
+Learned writes are not perfect independent zero-mean noise: sampled per-feature
+mean offsets and lag-one correlations remain nonzero. Squared retention generally
+has smaller offsets/correlations than averaging on this probe, but their learned
+trajectories differ. Thus this is not proof RMSNorm's ONLY role is variance control,
+or that cross-feature coupling is always unnecessary. The extra denominator also
+adds history-dependent feature scaling and doubles recurrent state versus RMSNorm.
+Repeat-seed evidence is needed before treating the small RMSNorm advantage reversal
+as robust; the paired average/squared difference is still a single-seed observation.
+
+The cost matters: squared retention took 10.62 min versus 6.84 min for RMSNorm No-K,
+with 3 KiB versus 1.5 KiB fixed inference state and 1.285 versus 0.940 GiB peak training
+CUDA allocation. Historical sessions limit exact speed attribution, but this
+implementation trades additional state/scan work for the modest quality change.
+These results do not establish attention/retrieval behavior; no query-key matrix
+or token-growing memory is involved.
+
+### Readout, gain, denominator and gradient diagnostics
+
+Values average across six layers of one fixed validation-batch probe. Mixer/gates/
+writes use full batch/time; raw state, denominator and normalized readout use last
+cached token. Gradient norms are un-clipped probe norms. All are finite; training
+retained the existing clip 1/nonfinite-gradient guard at every BF16 update.
+
+| Model | Mixer RMS initial → final | Final raw S RMS | Final normalized-state RMS | Final gamma RMS | Gradient norm initial → final |
+| --- | --- | ---: | ---: | ---: | --- |
+| weighted-average | 0.0538 → 0.3875 | 10.6647 | 0.4953 | 1.1087 | 1.4117 → 3.0990 |
+| squared-retention | 1.4367 → 0.5792 | 4.3506 | 1.1680 | 1.0175 | 3.4505 → 1.8740 |
+
+Per-layer denominator, gain and write diagnostics:
+
+| Model/layer | Denominator-state mean | Gamma mean/min/max | Mean absolute feature write mean | Mean lag-one write correlation | Mean retention | Token variation std |
+| --- | ---: | --- | ---: | ---: | ---: | ---: |
+| weighted-average/body.1.branch | 18.5301 | 1.0678/0.9776/1.2333 | 0.1917 | -0.0129 | 0.85544 | 0.21489 |
+| weighted-average/body.5.branch | 18.6983 | 1.0807/0.9892/1.2617 | 0.2019 | 0.0900 | 0.80484 | 0.22301 |
+| weighted-average/body.9.branch | 17.1973 | 1.1111/0.9948/1.2469 | 0.1466 | 0.1808 | 0.79580 | 0.23065 |
+| weighted-average/body.13.branch | 16.4903 | 1.1283/1.0130/1.2690 | 0.1413 | 0.3395 | 0.80431 | 0.23836 |
+| weighted-average/body.17.branch | 14.3886 | 1.1331/1.0371/1.2417 | 0.1542 | 0.4502 | 0.80097 | 0.23503 |
+| weighted-average/body.21.branch | 15.6953 | 1.1259/1.0324/1.2447 | 0.1642 | 0.5025 | 0.84219 | 0.20063 |
+| squared-retention/body.1.branch | 3.6734 | 1.0341/0.9362/1.1883 | 0.0925 | -0.0242 | 0.76136 | 0.28207 |
+| squared-retention/body.5.branch | 5.0739 | 1.0362/0.9532/1.2405 | 0.1015 | 0.0304 | 0.80037 | 0.28126 |
+| squared-retention/body.9.branch | 10.4191 | 0.9938/0.9351/1.1741 | 0.1148 | 0.1565 | 0.86884 | 0.19115 |
+| squared-retention/body.13.branch | 10.6113 | 1.0072/0.9435/1.1968 | 0.1253 | 0.1866 | 0.85170 | 0.19842 |
+| squared-retention/body.17.branch | 8.2901 | 1.0148/0.9292/1.1911 | 0.1406 | 0.2174 | 0.82264 | 0.21191 |
+| squared-retention/body.21.branch | 5.4489 | 1.0125/0.9462/1.1812 | 0.1536 | 0.3103 | 0.81192 | 0.20376 |
+
+Denominator state means are Z for average and P for squared retention; P is square-
+rooted before division, so those columns are not directly comparable divisors.
+Gamma values show learned static amplitude compensation, not instantaneous feature
+normalization. Lag-one correlation does not characterize all temporal dependence,
+and fixed-batch feature means do not prove stationary population means. These
+diagnostics qualify the independent zero-mean variance argument rather than
+establish causal explanations. Complete distributions/per-parameter gradients,
+curves and samples remain in JSON. Both inference states are 3 KiB/sample/layer
+versus 1.5 KiB for RMSNorm No-K; training throughput/VRAM also differ.
+
+### Fixed-prompt generations
+
+Inherited greedy procedure using best saved checkpoint, 64 new tokens max. Primary
+metrics above use final-budget state. These are illustrative stories, not QA tests.
+
+#### weighted-average — checkpoints/step-00009000.pt
+
+Prompt: Once upon a time, there was a little girl named Lily.
+
+> Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, scary dog. The dog was very friendly and Lily wanted to play with it.
+> Lily asked her mommy, "Can I play with you?" The boy said, "No, I don't want to play with you." Lily felt
+
+Prompt: Tom found a small dog outside his house. The dog was
+
+> Tom found a small dog outside his house. The dog was very happy and wanted to play with the dog. He ran to the dog and said, "Hi, dog! Do you want to play with me?" The dog barked and wagged his tail.
+> The dog wagged its tail and wagged its tail. It wagged its tail and wagged its tail. It wagged its tail and
+
+Prompt: One day, a boy lost his favorite toy. He felt
+
+> One day, a boy lost his favorite toy. He felt sad and lonely. He wanted to play with his friends. He wanted to play with his friends.
+> The little boy went to the park with his friends. They played together and had fun. They played together and had fun. The boy was happy to have a new friend.
+
+#### squared-retention — checkpoints/step-00009000.pt
+
+Prompt: Once upon a time, there was a little girl named Lily.
+
+> Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, scary dog. The dog was very friendly and Lily wanted to play with her.
+> Lily ran to the dog and said, "Hi, I'm Lily. Do you want to play with me?" The dog wagged its tail and wagged
+
+Prompt: Tom found a small dog outside his house. The dog was
+
+> Tom found a small dog outside his house. The dog was very happy and played with Tom. Tom was not scared of the dog anymore. He wanted to play with Tom and his friends.
+> Tom's mom saw him and said, "Tom, you should not touch the dog. It is not safe. It is not safe. It is just a toy. It is a
+
+Prompt: One day, a boy lost his favorite toy. He felt
+
+> One day, a boy lost his favorite toy. He felt sad and lonely. He looked everywhere for it but he couldn't find it.
+> Then, he saw a big dog. The dog was very friendly and he wanted to play with it. The dog ran to the dog and started to play with it. The dog was very happy and played with the dog.
+> The
