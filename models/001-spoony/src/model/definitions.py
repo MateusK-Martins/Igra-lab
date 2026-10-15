@@ -8,6 +8,7 @@ from torch import nn
 from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheEntry, StateEntry
 from src.model.cumulative import CumulativeMixerImpl
+from src.model.denominator_state import DenominatorStateImpl
 from src.model.feedforward import LinearImpl, SwiGLUImpl
 from src.model.multikey import MultiKeyMixerImpl
 from src.model.position import PositionRotation
@@ -512,5 +513,40 @@ class MultiKeyMixer(BlockDefinition):
         return StateEntry(
             f"MultiKeyMixerImpl-{layer_id}",
             torch.empty(0, 1, self.num_keys * self.input_features),
+            torch.empty(0, 1, self.input_features),
+        )
+
+
+@dataclass
+class DenominatorState(BlockDefinition):
+    input_features: int
+    mode: Literal["average", "squared"] = "average"
+    eps: float = 1e-6
+    decay_init: float = 0.99
+    residual: bool = False
+
+    @property
+    def output_features(self):
+        return self.input_features
+
+    def __post_init__(self):
+        CumulativeMixer(
+            self.input_features,
+            eps=self.eps,
+            decay_init=self.decay_init,
+            residual=self.residual,
+        )
+        if self.mode not in ("average", "squared"):
+            raise ValueError("mode must be average or squared")
+
+    def build(self):
+        return DenominatorStateImpl(
+            self.input_features, self.eps, self.decay_init, self.mode
+        )
+
+    def cache(self, layer_id: int):
+        return StateEntry(
+            f"DenominatorStateImpl-{self.mode}-{layer_id}",
+            torch.empty(0, 1, self.input_features),
             torch.empty(0, 1, self.input_features),
         )

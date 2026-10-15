@@ -12,12 +12,12 @@ def build_model(tokenizer: Tokenizer):
                 times=6,
                 blocks=[
                     RMSNorm(input_features=384, eps=1e-6),
-                    SignedState(
+                    DenominatorState(
                         input_features=384,
                         eps=1e-6,
                         residual=True,
                         decay_init=0.99,
-                        token_decay=True,
+                        mode="average",
                     ),
                     SwiGLU(
                         input_features=384,

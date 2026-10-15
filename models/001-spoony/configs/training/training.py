@@ -8,6 +8,6 @@ training_config = TrainingConfig(
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/fluxv-no-k/tensorboard"),
+    directory=results_path("pretraining/fluxv-no-k-weighted-average/tensorboard"),
     interval=10,
 )
