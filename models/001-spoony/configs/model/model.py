@@ -21,7 +21,7 @@ def build_model(tokenizer: Tokenizer):
                         rank=32,
                         num_heads=4,
                         retention_initials=(0.90, 0.95, 0.98, 0.995),
-                        write_initials=(0.20, 0.10, 0.05, 0.02),
+                        write_initials=(0.50, 0.50, 0.50, 0.50),
                     ),
                     SwiGLU(
                         input_features=384,
