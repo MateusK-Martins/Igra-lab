@@ -41,8 +41,8 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     assert model.embedding.num_embeddings == tokenizer.vocab_size
     assert model.lm_head.out_features == tokenizer.vocab_size
     assert model.lm_head.weight is model.embedding.weight
-    assert len(model.body) == 24
-    for index in range(0, 24, 4):
+    assert len(model.body) == 36
+    for index in range(0, 36, 4):
         norm1, attention, feedforward, norm2 = model.body[index : index + 4]
         assert isinstance(attention, ResidualImpl)
         assert isinstance(attention.branch, CumulativeMixerImpl)
@@ -51,17 +51,17 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
         assert isinstance(norm1, RMSNormImpl)
         assert isinstance(norm2, RMSNormImpl)
     assert [entry.layer_id for entry in entries] == [
-        model.body[index].branch.layer_id for index in range(1, 24, 4)
+        model.body[index].branch.layer_id for index in range(1, 36, 4)
     ]
-    assert len({entry.layer_id for entry in entries}) == 6
+    assert len({entry.layer_id for entry in entries}) == 9
     assert all(entry.key_sum.shape == (0, 1, 0) for entry in entries)
 
 
 def test_config_forward_and_next_token_loss_backward(tokenizer):
     model, _ = build_model(tokenizer)
-    tokens = torch.randint(tokenizer.vocab_size, (2, 257))
+    tokens = torch.randint(tokenizer.vocab_size, (2, 513))
     logits = model(tokens[:, :-1])
-    assert logits.shape == (2, 256, tokenizer.vocab_size)
+    assert logits.shape == (2, 512, tokenizer.vocab_size)
     loss = F.cross_entropy(
         logits.reshape(-1, tokenizer.vocab_size), tokens[:, 1:].reshape(-1)
     )
@@ -75,10 +75,10 @@ def test_config_forward_and_next_token_loss_backward(tokenizer):
 def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokenizer):
     first, first_entries = build_model(tokenizer)
     second, second_entries = build_model(tokenizer)
-    weights = [first.body[index].branch.q_proj.weight for index in range(1, 24, 4)]
-    assert len({weight.data_ptr() for weight in weights}) == 6
-    gates = [first.body[index].branch.gate.weight for index in range(2, 24, 4)]
-    assert len({weight.data_ptr() for weight in gates}) == 6
+    weights = [first.body[index].branch.q_proj.weight for index in range(1, 36, 4)]
+    assert len({weight.data_ptr() for weight in weights}) == 9
+    gates = [first.body[index].branch.gate.weight for index in range(2, 36, 4)]
+    assert len({weight.data_ptr() for weight in gates}) == 9
     assert all(
         a.data_ptr() != b.data_ptr()
         for a, b in zip(first.parameters(), second.parameters(), strict=True)

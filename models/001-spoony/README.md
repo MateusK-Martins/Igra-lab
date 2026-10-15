@@ -1,4 +1,8 @@
-# Tide
+# Tide 30M
+
+Current scaled story/QA pipeline: [TIDE_30M.md](TIDE_30M.md).
+
+The14M notes below are historical; this branch has width512,ninelayers and29,579,776parameters.
 
 Tide is the continuously ranged-initialized No-K model with independent write gates and global RMSNorm. It has 13,774,080 parameters and 384 FP32 recurrent state values per layer.
 

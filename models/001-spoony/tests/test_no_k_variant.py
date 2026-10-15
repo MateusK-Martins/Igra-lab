@@ -234,11 +234,11 @@ def test_configuration_parameter_counts_and_state_budget():
     m = model.body[1].branch
     assert (
         sum(p.numel() for p in model.parameters())
-        == {"write_gate": 13774080, "signed_readout": 12887040, "lowrank": 13034496}[
+        == {"write_gate": 29579776, "signed_readout": 12887040, "lowrank": 13034496}[
             m.mode
         ]
     )
-    assert all(e.value_sum.shape[-1] == 384 and e.key_sum.numel() == 0 for e in entries)
+    assert all(e.value_sum.shape[-1] == 512 and e.key_sum.numel() == 0 for e in entries)
     if m.mode == "lowrank":
         assert m.rank == 32
     for kw in [

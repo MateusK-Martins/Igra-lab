@@ -181,7 +181,7 @@ def test_actual_parameter_count_and_no_k_storage():
     count = sum(p.numel() for p in model.parameters())
     if hasattr(m, "mode"):
         expected = {
-            "write_gate": 13774080,
+            "write_gate": 29579776,
             "signed_readout": 12887040,
             "lowrank": 13034496,
         }[m.mode]
