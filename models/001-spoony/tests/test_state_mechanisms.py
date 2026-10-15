@@ -39,19 +39,29 @@ def reference(m, x):
         else:
             state = g * state + v[:, t]
             read = (
-                state
-                * (state.square().mean(-1, keepdim=True) + m.value_norm.eps).rsqrt()
-                * m.value_norm.weights
+                (
+                    state
+                    * (state.square().mean(-1, keepdim=True) + m.value_norm.eps).rsqrt()
+                    * m.value_norm.weights
+                )
+                if m.normalize_state
+                else state
             )
         out.append(q[:, t] * read)
     return torch.stack(out, 1)
 
 
-@pytest.fixture(params=["token", "diagonal", "mass"])
+@pytest.fixture(
+    params=["token", "diagonal", "mass", "token-no-norm", "diagonal-no-norm"]
+)
 def definition(request):
     if request.param == "mass":
         return MassNormalized(4)
-    return SignedState(4, token_decay=request.param == "token")
+    return SignedState(
+        4,
+        token_decay=request.param.startswith("token"),
+        normalize_state=not request.param.endswith("no-norm"),
+    )
 
 
 def test_independent_reference_and_all_parameter_gradients(definition):
@@ -147,7 +157,7 @@ def test_zero_and_long_sequence_stability(definition):
     assert all(
         p.grad is not None and torch.isfinite(p.grad).all() for p in m.parameters()
     )
-    if not hasattr(m, "value_norm"):
+    if isinstance(definition, MassNormalized):
         assert not hasattr(m, "key_norm")
         assert out.abs().max() <= 1.00001
 
@@ -183,10 +193,36 @@ def test_actual_parameter_count_and_no_k_storage():
         assert m.num_keys == 2 and not m.tied_query
         expected = 15552768
     elif hasattr(m, "token_decay"):
-        expected = 12887040 if m.token_decay else 12002304
+        expected = (12887040 if m.token_decay else 12002304) - (
+            0 if m.normalize_state else 2304
+        )
         assert not hasattr(m, "k_proj") and not hasattr(m, "key_norm")
         assert all(e.key_sum.numel() == 0 for e in entries)
     else:
         expected = 13769472
         assert not hasattr(m, "key_norm") and not hasattr(m, "value_norm")
     assert count == expected
+
+
+def test_only_internal_value_norm_is_removed_and_initialization_preserved():
+    from src.model.stability import RMSNormImpl
+
+    torch.manual_seed(42)
+    normalized = SignedState(4).build()
+    after = torch.random.get_rng_state()
+    torch.manual_seed(42)
+    raw = SignedState(4, normalize_state=False).build()
+    assert torch.equal(after, torch.random.get_rng_state())
+    assert not hasattr(raw, "value_norm")
+    assert not hasattr(raw, "key_norm")
+    for name, value in raw.state_dict().items():
+        torch.testing.assert_close(value, normalized.state_dict()[name], rtol=0, atol=0)
+    from configs.model.model import build_model
+
+    class Tokenizer:
+        vocab_size = 8192
+
+    model, _ = build_model(Tokenizer())
+    assert sum(isinstance(m, RMSNormImpl) for m in model.modules()) == 12
+    with pytest.raises(ValueError, match="normalize_state"):
+        SignedState(4, normalize_state=1)

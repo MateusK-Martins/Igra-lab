@@ -410,6 +410,8 @@ class SignedState(BlockDefinition):
     decay_init: float = 0.99
     residual: bool = False
 
+    normalize_state: bool = True
+
     @property
     def output_features(self):
         return self.input_features
@@ -423,10 +425,16 @@ class SignedState(BlockDefinition):
         )
         if type(self.token_decay) is not bool:
             raise ValueError("token_decay must be boolean")
+        if type(self.normalize_state) is not bool:
+            raise ValueError("normalize_state must be boolean")
 
     def build(self):
         return SignedStateImpl(
-            self.input_features, self.eps, self.decay_init, self.token_decay
+            self.input_features,
+            self.eps,
+            self.decay_init,
+            self.token_decay,
+            self.normalize_state,
         )
 
     def cache(self, layer_id: int):

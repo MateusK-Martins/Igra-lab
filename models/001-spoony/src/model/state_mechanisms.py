@@ -11,7 +11,14 @@ from src.model.scan import affine_prefix_sum, decayed_prefix_sum
 
 
 class SignedStateImpl(CumulativeMixerImpl):
-    def __init__(self, features: int, eps: float, decay_init: float, token_decay: bool):
+    def __init__(
+        self,
+        features: int,
+        eps: float,
+        decay_init: float,
+        token_decay: bool,
+        normalize_state: bool = True,
+    ):
         super().__init__(
             features,
             eps,
@@ -21,6 +28,9 @@ class SignedStateImpl(CumulativeMixerImpl):
             decay_init=decay_init,
         )
         self.features, self.token_decay = features, token_decay
+        self.normalize_state = normalize_state
+        if not normalize_state:
+            del self.value_norm
         # Draw the original projections/gate first, preserving unchanged RNG values.
         del self.k_proj, self.key_norm
         if not token_decay:
@@ -67,7 +77,8 @@ class SignedStateImpl(CumulativeMixerImpl):
                 state[:, -1:],
                 x.shape[1],
             )
-        return q * self.value_norm(state).to(q.dtype)
+        read = self.value_norm(state) if self.normalize_state else state
+        return q * read.to(q.dtype)
 
 
 class MassNormalizedImpl(CumulativeMixerImpl):

@@ -1,3 +1,5 @@
+Current signed-state ablation: see [SIGNED_STATE_TESTS.md](SIGNED_STATE_TESTS.md).
+
 Current controlled mechanism suite: see [MECHANISMS.md](MECHANISMS.md). Earlier notes are historical.
 
 > **Active token-decay experiment:** see [TOKEN_DECAY.md](TOKEN_DECAY.md).
