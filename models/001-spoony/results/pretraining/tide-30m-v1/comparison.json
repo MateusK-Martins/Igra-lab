@@ -1,0 +1,183 @@
+{
+  "models": [
+    {
+      "model": "Lantern",
+      "parameters": 29565952,
+      "before": {
+        "parameters": 29565952,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.055921299572297,
+          "perplexity": 7.8140336232409515,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 6.080586914125578,
+          "perplexity": 437.2857686121178,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 1.1896306818181819,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "after": {
+        "parameters": 29565952,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.564398522045523,
+          "perplexity": 12.992841111457508,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 5.078573963382955,
+          "perplexity": 160.54494963359073,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.78125,
+          "f1": 2.366258882428941,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "stage_seconds": [
+        1228.952592239999,
+        1275.6864611620003
+      ],
+      "stage_peak_vram_bytes": [
+        2649963520,
+        2649963520
+      ],
+      "stage_input_positions_per_second": [
+        21663.976436611534,
+        20870.33202166986
+      ],
+      "story_loss_increase": 0.5084772224732261,
+      "story_perplexity_ratio": 1.6627572567404174
+    },
+    {
+      "model": "FluxV",
+      "parameters": 29579776,
+      "before": {
+        "parameters": 29579776,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.2750540812385274,
+          "perplexity": 9.728445124694648,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 6.18913578747992,
+          "perplexity": 487.4246856262803,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 0.9867931547619048,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "after": {
+        "parameters": 29579776,
+        "updates": 6500,
+        "stories": {
+          "loss": 3.0468111892435,
+          "perplexity": 21.048118826935358,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 5.296060838813088,
+          "perplexity": 199.54920326196634,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.390625,
+          "f1": 1.3170869807866712,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "stage_seconds": [
+        1522.9981947420001,
+        1565.5718315640006
+      ],
+      "stage_peak_vram_bytes": [
+        3688121344,
+        3688121344
+      ],
+      "stage_input_positions_per_second": [
+        17481.307654806627,
+        17005.926820619097
+      ],
+      "story_loss_increase": 0.7717571080049725,
+      "story_perplexity_ratio": 2.163564532373924
+    },
+    {
+      "model": "Tide",
+      "parameters": 29579776,
+      "before": {
+        "parameters": 29579776,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.069291810938381,
+          "perplexity": 7.919212831608315,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 6.1416001758720205,
+          "perplexity": 464.79673262287577,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 0.6689274267399267,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "after": {
+        "parameters": 29579776,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.764866471928071,
+          "perplexity": 15.876919834573107,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 5.252986104742367,
+          "perplexity": 191.13616976563156,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 1.114497843013468,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "stage_seconds": [
+        1456.7455790042877,
+        1498.0346717460015
+      ],
+      "stage_peak_vram_bytes": [
+        null,
+        3499230208
+      ],
+      "stage_input_positions_per_second": [
+        18276.355448559516,
+        17772.61935397595
+      ],
+      "story_loss_increase": 0.6955746609896898,
+      "story_perplexity_ratio": 2.0048608582917273
+    }
+  ],
+  "same_pretraining_settings_artifacts_verified": true,
+  "same_QA_artifacts_verified": true,
+  "stage_updates": 6500,
+  "padded_positions_per_stage": 26624000,
+  "limitations": "Single seed, filtered QA subset, historical reference timings; Mixed-stage Tide timing approximate and actual CUDA peak unavailable due post-run reporting failure; benchmark separately recorded. Model initialization differs by architecture; Lantern FFN1408 versus Tide/FluxV1152 and different parameter count.14M tokenizer/corpus differs."
+}

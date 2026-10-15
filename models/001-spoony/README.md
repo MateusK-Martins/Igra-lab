@@ -1,6 +1,8 @@
 # Tide 30M
 
-Current scaled story/QA pipeline: [TIDE_30M.md](TIDE_30M.md).
+Completed scaled story/QA pipeline: [TIDE_30M.md](TIDE_30M.md).
+
+29,579,776 parameters. Before QA: story loss **2.069292**, PPL **7.9192**. After QA: story PPL **15.8769**, answer PPL **191.14**, EM **0%**, F1 **1.11%** on 256 questions. Both stages completed 6,500 updates.
 
 The14M notes below are historical; this branch has width512,ninelayers and29,579,776parameters.
 

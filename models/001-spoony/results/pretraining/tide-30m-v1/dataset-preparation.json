@@ -1,0 +1,51 @@
+{
+  "qa_dataset": "rajpurkar/squad",
+  "qa_revision": "7b6d24c440a36b6815f21b70d25016731768db1f",
+  "qa_license": "CC-BY-SA-4.0",
+  "tokenizer_training": "all selected training stories plus official SQuAD training texts only; no validation",
+  "selection": "seed-42 shuffle of each official QA split followed by length/dedup filtering; full contexts retained",
+  "stories": {
+    "train": {
+      "document_count": 200000,
+      "token_count": 44256432
+    },
+    "validation": {
+      "document_count": 1000,
+      "token_count": 191774
+    }
+  },
+  "qa": {
+    "train": {
+      "examples": 30000,
+      "skipped_before_limit": 264,
+      "raw_sha256": "ea7f52bac024f6b1bdc7aaa2a4ee302cba8c2fdc8d4a235cf18a9a5196b6175b",
+      "prepared_sha256": "b33c4cda869fc661bc27d20593a397e75e8c7a123256da6e122b0316bf907fbe"
+    },
+    "validation": {
+      "examples": 1000,
+      "skipped_before_limit": 19,
+      "raw_sha256": "8c6646d36bd5a95061e076788cf3161d11f6f3e7d625dac7a83bbed0a49f69f7",
+      "prepared_sha256": "a5d7d4d674052e6eb444c7060874b985b8427ae0b55bce9aa40c706332c08682"
+    }
+  },
+  "story_source": {
+    "dataset": "roneneldan/TinyStories",
+    "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "selection": "first unique nonempty documents in source order",
+    "splits": {
+      "train": {
+        "documents": 200000,
+        "duplicates_or_empty_skipped": 2495,
+        "sha256": "70ff573e665d303aaead22f9678ec61c30d1c28f09a356868717061457b16b7d",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-train.txt"
+      },
+      "validation": {
+        "documents": 1000,
+        "duplicates_or_empty_skipped": 50,
+        "sha256": "433b2464937353faff56b647bf6374357834faddc39f8620a8350a540afc1ad2",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-valid.txt"
+      }
+    }
+  },
+  "selection_seed": 42
+}

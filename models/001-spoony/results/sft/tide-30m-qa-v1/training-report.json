@@ -1,0 +1,51 @@
+{
+  "stage": "sft",
+  "parameters": 29579776,
+  "training_seconds_including_loading_validation_and_saving": 1498.0346717460015,
+  "peak_allocated_vram_bytes": 3499230208,
+  "training_state": {
+    "updates": 6500,
+    "batches": 6500,
+    "tokens": 26624000,
+    "completed_epochs": 0,
+    "last_loss": 5.23828125,
+    "last_validation_loss": 5.252986104742367,
+    "last_validation_perplexity": 191.13616976563156,
+    "batches_in_epoch": 6500
+  },
+  "recipe_commit": "4987db64e50f1b035b85ab902c40b8a8bb2615ae",
+  "validation_curve": [
+    {
+      "update": 1000,
+      "loss": 5.630354404449463
+    },
+    {
+      "update": 2000,
+      "loss": 5.493151664733887
+    },
+    {
+      "update": 3000,
+      "loss": 5.402449131011963
+    },
+    {
+      "update": 4000,
+      "loss": 5.334640979766846
+    },
+    {
+      "update": 5000,
+      "loss": 5.281789302825928
+    },
+    {
+      "update": 6000,
+      "loss": 5.26325798034668
+    },
+    {
+      "update": 6500,
+      "loss": 5.252985954284668
+    }
+  ],
+  "tokens_per_second_padded_positions": 17772.61935397595,
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "torch_cpu_threads": 4,
+  "seed": 42
+}
