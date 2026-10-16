@@ -2,7 +2,7 @@ from src.data.tokenizer import Tokenizer
 from src.model.assembler import Model
 from src.model.definitions import *
 
-MODE = "a16"
+MODE = "sma4"
 
 
 def build_model(tokenizer: Tokenizer):
