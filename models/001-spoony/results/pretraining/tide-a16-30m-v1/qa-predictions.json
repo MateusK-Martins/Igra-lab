@@ -1,0 +1,2906 @@
+[
+  {
+    "id": "57296a65af94a219006aa3c5",
+    "prediction": "the end",
+    "answers": [
+      "linear",
+      "linear",
+      "linear"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726887e708984140094c91b",
+    "prediction": "the Puzor",
+    "answers": [
+      "Lampea",
+      "Lampea",
+      "Lampea"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572a1c943f37b319004786e4",
+    "prediction": "the Tororor",
+    "answers": [
+      "residents willing to pay higher market rate for housing",
+      "gentrification of older neighbourhoods",
+      "new residents willing to pay higher market rate"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56bebb293aeaaa14008c9305",
+    "prediction": "the Senen",
+    "answers": [
+      "San Jose",
+      "San Jose",
+      "San Jose"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "571cd703dd7acb1400e4c183",
+    "prediction": "the end",
+    "answers": [
+      "oxides",
+      "oxides",
+      "oxides",
+      "oxides",
+      "oxides"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "571c8539dd7acb1400e4c0e6",
+    "prediction": "the end of the day of the day,",
+    "answers": [
+      "phlogiston theory",
+      "phlogiston theory of combustion and corrosion",
+      "phlogiston theory of combustion and corrosion",
+      "phlogiston theory of combustion and corrosion",
+      "phlogiston theory"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.18181818181818182
+  },
+  {
+    "id": "57264991f1498d1400e8db31",
+    "prediction": "the end of the day of the city",
+    "answers": [
+      "The city's residents fled to the north",
+      "the north",
+      "north"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57274a8cf1498d1400e8f5b7",
+    "prediction": "1988",
+    "answers": [
+      "June 1979",
+      "June 1979",
+      "1979"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57283a392ca10214002da11c",
+    "prediction": "Mayan",
+    "answers": [
+      "50th anniversary special",
+      "50th anniversary special",
+      "50th anniversary special"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57269656708984140094cafe",
+    "prediction": "the Senen",
+    "answers": [
+      "\u00a376 million",
+      "\u00a376 million",
+      "\u00a376 million"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572680ac708984140094c83e",
+    "prediction": "the Senen",
+    "answers": [
+      "1852",
+      "1852",
+      "1852",
+      "1852"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56d997cddc89441400fdb58a",
+    "prediction": "53",
+    "answers": [
+      "39",
+      "39",
+      "39"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5729789b6aef051400154f6e",
+    "prediction": "the melel",
+    "answers": [
+      "about 5 nanometers across",
+      "about 5 nanometers across",
+      "5 nanometers across"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572749d7dd62a815002e9a90",
+    "prediction": "the end of the day of the day,",
+    "answers": [
+      "Alex Haley",
+      "Alex Haley",
+      "Alex Haley"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572825a92ca10214002d9eff",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "propaganda",
+      "propaganda",
+      "propaganda",
+      "propaganda",
+      "just a harassment"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57287c142ca10214002da3d2",
+    "prediction": "the end of the day of the day of the day,",
+    "answers": [
+      "granaries were ordered built throughout the empire",
+      "granaries were ordered built throughout the empire",
+      "granaries were ordered built"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726c80c5951b619008f7dea",
+    "prediction": "the melelic",
+    "answers": [
+      "mother-of-pearl",
+      "mother-of-pearl",
+      "mother-of-pearl"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726a5525951b619008f78df",
+    "prediction": "the Senen",
+    "answers": [
+      "Works Council Directive",
+      "the 1994 Works Council Directive",
+      "Works Council Directive"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726ace8dd62a815002e8c9f",
+    "prediction": "the Toror",
+    "answers": [
+      "Henry Cole wing",
+      "Henry Cole wing",
+      "Henry Cole wing"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572867d72ca10214002da2ff",
+    "prediction": "the Torori",
+    "answers": [
+      "northeast",
+      "northeast",
+      "the northeast"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726da89dd62a815002e92b6",
+    "prediction": "the end",
+    "answers": [
+      "manage the pharmacy department and specialised areas in pharmacy practice",
+      "manage the pharmacy department and specialised areas",
+      "manage the pharmacy department"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572fda6fb2c2fd140056850e",
+    "prediction": "the finish line of the day",
+    "answers": [
+      "constituency seats",
+      "constituency",
+      "second"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56beaf5e3aeaaa14008c9200",
+    "prediction": "Melelel",
+    "answers": [
+      "Bruno Mars",
+      "Bruno Mars",
+      "Mars"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5730d77ef6cb411900e244dd",
+    "prediction": "the end of the day",
+    "answers": [
+      "confirmation and sometimes the profession of faith",
+      "through confirmation and sometimes the profession of faith.",
+      "confirmation"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.2222222222222222
+  },
+  {
+    "id": "571ccc00dd7acb1400e4c15c",
+    "prediction": "the end",
+    "answers": [
+      "three",
+      "three",
+      "three",
+      "three main reservoirs",
+      "three"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572a0bf96aef051400155206",
+    "prediction": "surno",
+    "answers": [
+      "Type I",
+      "Type I",
+      "Type I hypersensitivity"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57269698dd62a815002e8a6c",
+    "prediction": "the Teded",
+    "answers": [
+      "two",
+      "two",
+      "two"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5729fd111d046914007796a5",
+    "prediction": "the end of the garden",
+    "answers": [
+      "phagocytic cells",
+      "phagocytic",
+      "phagocytic cells"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56e0ef90231d4119001ac46a",
+    "prediction": "the Ted",
+    "answers": [
+      "35",
+      "35",
+      "35"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "573010fab2c2fd14005687da",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "Algeria",
+      "Algeria",
+      "Algeria"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572fb42904bcaa1900d76c15",
+    "prediction": "the Senenen",
+    "answers": [
+      "one MSP",
+      "MSP",
+      "MSP"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572764855951b619008f8953",
+    "prediction": "the Tororor",
+    "answers": [
+      "7:00 to 9:00 a.m. weekdays",
+      "7:00 to 9:00 a.m",
+      "7:00 to 9:00 a.m."
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726509bdd62a815002e815b",
+    "prediction": "the Ted",
+    "answers": [
+      "rates of mortality in rural areas during the 14th-century pandemic were inconsistent with the modern bubonic plague",
+      "the reported rates of mortality in rural areas during the 14th-century pandemic were inconsistent with the modern bubonic plague",
+      "reported rates of mortality in rural areas during the 14th-century pandemic were inconsistent with the modern bubonic plague"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57264a8cdd62a815002e808e",
+    "prediction": "the Senen",
+    "answers": [
+      "The Commission's President",
+      "The Commission's President",
+      "The Commission's President",
+      "The Commission's President ("
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56e7796637bdd419002c3ffe",
+    "prediction": "the Teded",
+    "answers": [
+      "ten years",
+      "ten years",
+      "ten years"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "573062662461fd1900a9cdfa",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "othering",
+      "othering",
+      "othering",
+      "othering",
+      "othering"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5727678e5951b619008f8974",
+    "prediction": "the Teded",
+    "answers": [
+      "Good Morning America and Nightline",
+      "Good Morning America and Nightline",
+      "Good Morning America and Nightline"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726e680dd62a815002e946e",
+    "prediction": "Maya",
+    "answers": [
+      "Italian and French Renaissance",
+      "Italian and French Renaissance objects",
+      "Renaissance"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57293ca73f37b3190047815f",
+    "prediction": "the Cheel",
+    "answers": [
+      "the Financial Regulations and Rules of the WMO",
+      "Financial Regulations and Rules of the WMO",
+      "Financial Regulations and Rules of the WMO"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57293d116aef051400154bc8",
+    "prediction": "surry",
+    "answers": [
+      "does not carry out research nor does it monitor climate related data",
+      "research",
+      "carry out research nor does it monitor climate related data"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f867e3a6d7ea1400e175da",
+    "prediction": "the Teded",
+    "answers": [
+      "Small Catechism",
+      "Small Catechism",
+      "The Small Catechism"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f86966aef2371900626054",
+    "prediction": "the Puzo",
+    "answers": [
+      "Larger Catechism",
+      "Larger Catechism",
+      "Larger Catechism"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f8a6969e9bad19000a025f",
+    "prediction": "milil",
+    "answers": [
+      "Ten Commandments",
+      "Ten Commandments",
+      "his or her vocations on a daily basis"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572fc78d04bcaa1900d76d0a",
+    "prediction": "the Ped",
+    "answers": [
+      "Mandatory",
+      "Mandatory",
+      "Mandatory Committees"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572970c11d04691400779467",
+    "prediction": "the end",
+    "answers": [
+      "at the end of the 19th century",
+      "end of the 19th century",
+      "end of the 19th century",
+      "end of the 19th century",
+      "end of the 19th century"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.4
+  },
+  {
+    "id": "56e1f10ee3433e1400423223",
+    "prediction": "surry",
+    "answers": [
+      "strictly contained in P or equal to P",
+      "contained in P or equal to P.",
+      "strictly contained in P or equal to P"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57268220f1498d1400e8e218",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "provide better absolute bounds on the timing and rates of deposition",
+      "gain information about past climate",
+      "provide better absolute bounds on the timing and rates of deposition"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.13333333333333333
+  },
+  {
+    "id": "5728f2e26aef051400154897",
+    "prediction": "the end",
+    "answers": [
+      "autoimmunity",
+      "autoimmunity",
+      "autoimmunity"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "570961aa200fba1400367f16",
+    "prediction": "the Teded",
+    "answers": [
+      "Astra",
+      "Astra's",
+      "Astra's satellites"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726caaaf1498d1400e8eb5c",
+    "prediction": "the Teded",
+    "answers": [
+      "coronation of Queen Elizabeth II",
+      "the coronation of Queen Elizabeth II",
+      "the coronation of Queen Elizabeth II"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56be5333acb8001400a5030b",
+    "prediction": "Brrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
+    "answers": [
+      "$5 million",
+      "$5 million",
+      "$5 million"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726a14c708984140094cc51",
+    "prediction": "the end of the day of the United States",
+    "answers": [
+      "since the 1960s",
+      "since the 1960s",
+      "since the 1960s"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "571156152419e3140095559b",
+    "prediction": "the Tuesday",
+    "answers": [
+      "duty",
+      "duty"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57267b755951b619008f7433",
+    "prediction": "the Puly",
+    "answers": [
+      "The Walt Disney Company",
+      "Disney\u2013ABC Television Group",
+      "Disney\u2013ABC Television Group"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726cc11dd62a815002e9088",
+    "prediction": "Mararon",
+    "answers": [
+      "from the 12th to 16th",
+      "12th to 16th",
+      "12th to 16th"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5728fd3c3f37b31900477f2f",
+    "prediction": "the end",
+    "answers": [
+      "moral reasons to follow this law",
+      "whether it would do more harm than good",
+      "whether it would do more harm than good",
+      "whether it would do more harm than good",
+      "whether it would do more harm than good"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56dde27d9a695914005b9652",
+    "prediction": "the end",
+    "answers": [
+      "north",
+      "the north",
+      "north"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5733a5f54776f41900660f46",
+    "prediction": "Marar",
+    "answers": [
+      "Famous musicians",
+      "musicians",
+      "Famous musicians"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572800b03acd2414000df1f4",
+    "prediction": "Mararon",
+    "answers": [
+      "The Master",
+      "The Master",
+      "The Master"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726516a708984140094c224",
+    "prediction": "the Puly",
+    "answers": [
+      "the lack of reliable statistics from this period",
+      "the lack of reliable statistics",
+      "lack of reliable statistics"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5710e9f8a58dae1900cd6b34",
+    "prediction": "the Toddas",
+    "answers": [
+      "1565",
+      "1565",
+      "1565"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572879574b864d1900164a14",
+    "prediction": "the end",
+    "answers": [
+      "Western",
+      "Western",
+      "Western"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57274ca8dd62a815002e9aa4",
+    "prediction": "the United States",
+    "answers": [
+      "societies",
+      "societies",
+      "societies"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56e10d2dcd28a01900c674db",
+    "prediction": "the Ted",
+    "answers": [
+      "1935",
+      "In 1935",
+      "1935"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57286c8cff5b5019007da21c",
+    "prediction": "the end of the end of the day",
+    "answers": [
+      "30,000",
+      "30,000",
+      "30,000"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5730b8ca8ab72b1400f9c705",
+    "prediction": "Mararon",
+    "answers": [
+      "1917",
+      "1917",
+      "1917",
+      "1917",
+      "1917"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57339eb9d058e614000b5efa",
+    "prediction": "the end of the day",
+    "answers": [
+      "arms",
+      "history of arms",
+      "arms"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.3333333333333333
+  },
+  {
+    "id": "56d9ccacdc89441400fdb842",
+    "prediction": "Marar",
+    "answers": [
+      "Sanders",
+      "Sanders",
+      "Sanders"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "570d391fb3d812140066d576",
+    "prediction": "the Teded",
+    "answers": [
+      "Great Dividing Range",
+      "the Great Dividing Range",
+      "Great Dividing Range"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572a13841d0469140077973b",
+    "prediction": "the end",
+    "answers": [
+      "Kuznets curve hypothesis",
+      "Kuznets curve hypothesis",
+      "Kuznets curve hypothesis"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572695285951b619008f774b",
+    "prediction": "the Puly",
+    "answers": [
+      "TFEU article 294",
+      "TFEU article 294",
+      "TFEU article 294",
+      "TFEU article 294"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "573093598ab72b1400f9c5ae",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "Cultural imperialism",
+      "Cultural imperialism",
+      "Cultural imperialism",
+      "Cultural imperialism",
+      "Cultural imperialism"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5729f4273f37b319004785fd",
+    "prediction": "the end",
+    "answers": [
+      "wealth condensation",
+      "wealth condensation",
+      "wealth condensation"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5710f4b8b654c5140001fa49",
+    "prediction": "the end of the day of the day, the two of them",
+    "answers": [
+      "1604",
+      "1604",
+      "1604"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57274e975951b619008f87fb",
+    "prediction": "the ends",
+    "answers": [
+      "establishing relationships with other necessary participants through the design-build process",
+      "establishing relationships with other necessary participants",
+      "establishing relationships with other necessary participants"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "573408ef4776f41900661757",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "signing of the Treaty of Paris on 10 February 1763",
+      "10 February 1763",
+      "10 February 1763",
+      "10 February 1763",
+      "10 February 1763"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.2857142857142857
+  },
+  {
+    "id": "57264228ec44d21400f3dcf6",
+    "prediction": "Melel",
+    "answers": [
+      "Larry Roberts",
+      "ARPA IPTO director Larry Roberts",
+      "Larry Roberts"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5709686c200fba1400367f78",
+    "prediction": "198",
+    "answers": [
+      "40,000",
+      "40,000",
+      "40,000"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5729e6313f37b319004785ab",
+    "prediction": "the end of the day of the day, the two of them",
+    "answers": [
+      "the Atlantic",
+      "the Atlantic",
+      "Atlantic"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726c0c5dd62a815002e8f77",
+    "prediction": "the Trin",
+    "answers": [
+      "Inalchuq",
+      "Inalchuq",
+      "Inalchuq"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56e11d8ecd28a01900c675f1",
+    "prediction": "the end",
+    "answers": [
+      "more than 48 hours",
+      "48 hours",
+      "48 hours"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57268882f1498d1400e8e30a",
+    "prediction": "the Teded",
+    "answers": [
+      "Charles Darwin",
+      "Charles Darwin",
+      "Charles Darwin"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572742bd5951b619008f8787",
+    "prediction": "some",
+    "answers": [
+      "a lot of waste",
+      "waste",
+      "waste"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57268f2c708984140094ca28",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "Festival of Britain",
+      "Festival of Britain",
+      "the Festival of Britain"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.25
+  },
+  {
+    "id": "5706149552bb891400689884",
+    "prediction": "the Purn",
+    "answers": [
+      "2018",
+      "in 2018",
+      "2018"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5710f4b8b654c5140001fa46",
+    "prediction": "the Senen",
+    "answers": [
+      "Count Ludwig von Nassau-Saarbr\u00fccken",
+      "Ludwig von Nassau-Saarbr\u00fccken",
+      "Count Ludwig von Nassau-Saarbr\u00fccken"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5733a560d058e614000b5f78",
+    "prediction": "the melel",
+    "answers": [
+      "depths of the oceans and seas",
+      "depths of the oceans and seas",
+      "depths of the oceans and seas"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57265a58dd62a815002e8270",
+    "prediction": "Ma-Ma",
+    "answers": [
+      "Toyota Hilux",
+      "Hilux",
+      "Hilux",
+      "Toyota Hilux",
+      "Hilux"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5729ef266aef05140015511e",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "Xingu tribe",
+      "Xingu",
+      "Xingu"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f7f2e0aef2371900625cb3",
+    "prediction": "the Senen",
+    "answers": [
+      "University of Wittenberg",
+      "University of Wittenberg",
+      "University of Wittenberg."
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f8541da6d7ea1400e17579",
+    "prediction": "the Skilil",
+    "answers": [
+      "wedding banquet",
+      "wedding banquet",
+      "banquet"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "573099ee8ab72b1400f9c5df",
+    "prediction": "the end",
+    "answers": [
+      "arrows, swords, and leather shields",
+      "arrows, swords, and leather shields",
+      "arrows, swords, and leather shields",
+      "arrows, swords, and leather shields",
+      "arrows, swords, and leather shields"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57282f204b864d190016468e",
+    "prediction": "the Puly",
+    "answers": [
+      "due to the death of Elisabeth Sladen",
+      "the death of Elisabeth Sladen",
+      "the death of Elisabeth Sladen"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5725daa8ec44d21400f3d6b5",
+    "prediction": "Maron",
+    "answers": [
+      "Pierre-Auguste Renoir",
+      "Pierre-Auguste Renoir",
+      "Pierre-Auguste Renoir"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5728fc2eaf94a219006a9ec9",
+    "prediction": "the end",
+    "answers": [
+      "defensins and zinc",
+      "defensins and zinc",
+      "defensins"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57309921396df919000961f6",
+    "prediction": "the end",
+    "answers": [
+      "mid-18th century",
+      "began in the mid-18th century within the Church of England.",
+      "mid-18th century"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5725cc2038643c19005acd1b",
+    "prediction": "the Teded",
+    "answers": [
+      "Service Module (SM)",
+      "cylindrical Service Module",
+      "Service Module",
+      "cylindrical Service Module",
+      "Service Module"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5728e5f43acd2414000e0173",
+    "prediction": "the Teded",
+    "answers": [
+      "Threatening government officials",
+      "forbidden speech",
+      "engaging in the forbidden speech",
+      "speech",
+      "Threatening government officials"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56bec0dd3aeaaa14008c935b",
+    "prediction": "Mararon",
+    "answers": [
+      "5K",
+      "5K",
+      "5K"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56e0b9d57aa994140058e6c3",
+    "prediction": "the Teded",
+    "answers": [
+      "New York City",
+      "New York City",
+      "New York City"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5729ef266aef05140015511c",
+    "prediction": "the end of the day",
+    "answers": [
+      "Terra preta (black earth)",
+      "Terra preta",
+      "black earth"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f8a2969e9bad19000a022f",
+    "prediction": "the Puzo",
+    "answers": [
+      "On the Councils and the Church",
+      "On the Councils and the Church",
+      "On the Councils"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5725c01389a1e219009abdd7",
+    "prediction": "the Teded",
+    "answers": [
+      "three",
+      "several",
+      "three",
+      "three pads",
+      "three"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726f4a0708984140094d6eb",
+    "prediction": "Mararon",
+    "answers": [
+      "forming a 'A National Gallery of British Art'",
+      "forming a 'A National Gallery of British Art',",
+      "forming a 'A National Gallery of British Art'"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5728dddc2ca10214002da9d6",
+    "prediction": "the Sadad",
+    "answers": [
+      "Book of Exodus",
+      "Exodus",
+      "Exodus",
+      "Exodus",
+      "Exodus"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56e756bc37bdd419002c3e99",
+    "prediction": "the end",
+    "answers": [
+      "social networking support",
+      "social networking",
+      "social networking"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726dcbddd62a815002e9324",
+    "prediction": "the Teded",
+    "answers": [
+      "ranked above",
+      "ranked above",
+      "ranked above the two personal physicians of the Emperor"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572908c13f37b31900477fbf",
+    "prediction": "the end",
+    "answers": [
+      "adaptive immune system",
+      "adaptive",
+      "adaptive immune system."
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5706111a52bb89140068984e",
+    "prediction": "the Ted",
+    "answers": [
+      "Six",
+      "Six",
+      "Six"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5727f05b4b864d190016406a",
+    "prediction": "some",
+    "answers": [
+      "lower wages",
+      "lower wages",
+      "lower wages"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5725cc38ec44d21400f3d5bf",
+    "prediction": "Marar",
+    "answers": [
+      "Greenland",
+      "Greenland",
+      "Greenland",
+      "Greenland"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572ff293947a6a140053ce56",
+    "prediction": "the Sebel",
+    "answers": [
+      "Ruhr",
+      "Ruhr",
+      "The Ruhr"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56bec4343aeaaa14008c93a9",
+    "prediction": "Mayan",
+    "answers": [
+      "Jason Bourne",
+      "Jason Bourne",
+      "Jason Bourne"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5730ac6b8ab72b1400f9c671",
+    "prediction": "colen",
+    "answers": [
+      "the grace that \"goes before\" us",
+      "It is that power which enables us to love and motivates us to seek a relationship with God through Jesus Christ.",
+      "that power which enables us to love and motivates us to seek a relationship with God through Jesus Christ."
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5725b56589a1e219009abd22",
+    "prediction": "the Ted",
+    "answers": [
+      "Soviet Union",
+      "Apollo Applications Program",
+      "Soviet Union",
+      "Soviet Union",
+      "Soviet Union"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5725b64d89a1e219009abd41",
+    "prediction": "the end",
+    "answers": [
+      "prelaunch test",
+      "prelaunch",
+      "prelaunch test",
+      "prelaunch test"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57332442d058e614000b5723",
+    "prediction": "the Puzor",
+    "answers": [
+      "a village",
+      "village"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5725ce4d38643c19005acd51",
+    "prediction": "the Toror",
+    "answers": [
+      "(/\u02c8fr\u025bzno\u028a/ FREZ-noh)",
+      "FREZ-noh",
+      "FREZ-noh"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572fc41f947a6a140053cc83",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "ministers or party leaders",
+      "ministers or party leaders",
+      "ministers or party leaders"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56d9c203dc89441400fdb7a0",
+    "prediction": "Mayan",
+    "answers": [
+      "KOA (850 AM) and KRFX (103.5 FM)",
+      "KOA (850 AM) and KRFX (103.5 FM)",
+      "KOA (850 AM) and KRFX (103.5 FM)"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "571c3a685efbb31900334db3",
+    "prediction": "the Teded",
+    "answers": [
+      "chalcogen",
+      "chalcogen",
+      "chalcogen",
+      "chalcogen",
+      "the chalcogen group"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56de10b44396321400ee2593",
+    "prediction": "Mayan",
+    "answers": [
+      "Afranji",
+      "Afranji",
+      "Afranji"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572957ad1d046914007792d9",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "eukaryotic",
+      "an early eukaryotic cell",
+      "eukaryotic"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57377862c3c5551400e51ef3",
+    "prediction": "the end",
+    "answers": [
+      "dynamic equilibrium",
+      "dynamic equilibrium",
+      "dynamic equilibrium",
+      "dynamic equilibrium",
+      "dynamic equilibrium"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572945b11d0469140077922f",
+    "prediction": "the Tednes",
+    "answers": [
+      "1 February 2007",
+      "1 February 2007",
+      "1 February 2007"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f8225ea6d7ea1400e173f3",
+    "prediction": "the Ped",
+    "answers": [
+      "estates of the Holy Roman Empire",
+      "estates of the Holy Roman Empire",
+      "general assembly of the estates of the Holy Roman Empire"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5730982f396df919000961e6",
+    "prediction": "the Marar",
+    "answers": [
+      "Wesleyan",
+      "orientation is decidedly Wesleyan",
+      "Wesleyan"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57114f0050c2381900b54a67",
+    "prediction": "the end",
+    "answers": [
+      "Stanley Steamer",
+      "Stanley Steamer",
+      "Stanley Steamer",
+      "Stanley Steamer"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56e7770037bdd419002c3fe0",
+    "prediction": "53",
+    "answers": [
+      "20,427",
+      "\u00a320,427",
+      "20,427"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56bf3e803aeaaa14008c9589",
+    "prediction": "the Teded",
+    "answers": [
+      "Linebacker",
+      "Linebacker",
+      "Linebacker"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57338160d058e614000b5bfa",
+    "prediction": "the end",
+    "answers": [
+      "60",
+      "60",
+      "60"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "573796edc3c5551400e51f37",
+    "prediction": "the end",
+    "answers": [
+      "color confinement",
+      "color confinement",
+      "color confinement",
+      "color confinement"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5730b9852461fd1900a9cffb",
+    "prediction": "the end of the day of the day, the two of them",
+    "answers": [
+      "all war",
+      "war",
+      "war"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5730982f396df919000961e2",
+    "prediction": "the Marar",
+    "answers": [
+      "United Methodist Church",
+      "United Methodist Church (UMC)",
+      "United Methodist Church"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56d9943fdc89441400fdb576",
+    "prediction": "Marar",
+    "answers": [
+      "Carolina Panthers",
+      "the Panthers",
+      "Carolina"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f8c2ee9b226e1400dd0f46",
+    "prediction": "the end",
+    "answers": [
+      "bigamy of the Philip of Hesse",
+      "the bigamy of the Philip of Hesse incident",
+      "bigamy of the Philip of Hesse"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "571095a8a58dae1900cd6a77",
+    "prediction": "the Sanan",
+    "answers": [
+      "1555",
+      "1555",
+      "1555"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572771a5f1498d1400e8f842",
+    "prediction": "the Teded",
+    "answers": [
+      "Department of Justice",
+      "Department of Justice",
+      "Department of Justice"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f80ad1a6d7ea1400e1739c",
+    "prediction": "the end",
+    "answers": [
+      "penance and righteousness",
+      "penance and righteousness",
+      "penance and righteousness"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572ffe6fb2c2fd14005686f3",
+    "prediction": "the end",
+    "answers": [
+      "rhetoric",
+      "rhetoric",
+      "rhetoric"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f8c7029e9bad19000a04a1",
+    "prediction": "Maya",
+    "answers": [
+      "negotiations",
+      "negotiations for a settlement",
+      "siblings' families continuing in their father Hans Luther's copper mining"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5730b10b8ab72b1400f9c6a0",
+    "prediction": "the Senen",
+    "answers": [
+      "Religious Coalition for Reproductive Choice",
+      "Religious Coalition for Reproductive Choice.",
+      "the Religious Coalition for Reproductive Choice"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726bf135951b619008f7ce9",
+    "prediction": "the Tedlean",
+    "answers": [
+      "inciting internal revolt",
+      "inciting internal revolt",
+      "inciting internal revolt among Kuchlug's supporters"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57107d73b654c5140001f91e",
+    "prediction": "the Tuesday",
+    "answers": [
+      "1685",
+      "1685",
+      "1685"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f85cf0aef237190062601d",
+    "prediction": "the end",
+    "answers": [
+      "freedom of ceremony",
+      "freedom",
+      "wine as well as the bread"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726241189a1e219009ac2e2",
+    "prediction": "the end",
+    "answers": [
+      "five to ten years",
+      "five to ten years",
+      "five to ten years",
+      "five to ten years",
+      "five to ten years"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5727fc37ff5b5019007d9a1b",
+    "prediction": "the end",
+    "answers": [
+      "machine labor",
+      "machine labor",
+      "machine labor"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5729fb003f37b31900478629",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "hormones",
+      "hormones",
+      "hormones"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56bebd713aeaaa14008c9331",
+    "prediction": "the end of the city",
+    "answers": [
+      "a week",
+      "a week",
+      "week"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5705f36452bb89140068971b",
+    "prediction": "the Teded",
+    "answers": [
+      "Tehachapis",
+      "the Tehachapis",
+      "Tehachapis"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5725d2ef271a42140099d257",
+    "prediction": "Marar",
+    "answers": [
+      "third stage",
+      "third",
+      "third stage",
+      "second stage"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57283dbeff5b5019007d9fc7",
+    "prediction": "the Pedan",
+    "answers": [
+      "over 200",
+      "over 200",
+      "over 200"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5728185f3acd2414000df45c",
+    "prediction": "the Senen",
+    "answers": [
+      "2010",
+      "the 2010 series",
+      "the 2010 series"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56e1a564cd28a01900c67a4a",
+    "prediction": "milil",
+    "answers": [
+      "worst-case time complexity",
+      "worst-case time complexity",
+      "the worst-case time complexity"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5730de74f6cb411900e244fc",
+    "prediction": "the Puly",
+    "answers": [
+      "Baptism",
+      "Baptism",
+      "Baptism"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5733f309d058e614000b6649",
+    "prediction": "the Tessa",
+    "answers": [
+      "killed many of the Canadians, including their commanding officer, Joseph Coulon de Jumonville",
+      "many of the Canadians, including their commanding officer, Joseph Coulon de Jumonville",
+      "Canadians, including their commanding officer",
+      "many of the Canadians, including their commanding officer, Joseph Coulon de Jumonville"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56d722330d65d214001983a7",
+    "prediction": "the Tedlean",
+    "answers": [
+      "Death Wish Coffee",
+      "Death Wish Coffee",
+      "Death Wish Coffee"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572f609ca23a5019007fc5af",
+    "prediction": "the Silili",
+    "answers": [
+      "westward",
+      "westward",
+      "westward"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5730a4d02461fd1900a9cf29",
+    "prediction": "the end",
+    "answers": [
+      "1830",
+      "1830",
+      "1830",
+      "1830",
+      "1830"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572825a92ca10214002d9f02",
+    "prediction": "the end",
+    "answers": [
+      "successfully preventing it from being cut down",
+      "successfully preventing it from being cut down",
+      "successfully preventing it from being cut down",
+      "successfully preventing it from being cut down",
+      "preventing it from being cut down"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726722bdd62a815002e852b",
+    "prediction": "the end of the garden",
+    "answers": [
+      "356 \u00b1 47 tonnes per hectare",
+      "356 \u00b1 47 tonnes per hectare",
+      "356 \u00b1 47 tonnes per hectare",
+      "356 \u00b1 47 tonnes per hectare"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572a142e3f37b319004786b9",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "carbohydrates",
+      "carbohydrates",
+      "carbohydrates"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57281d494b864d19001644c0",
+    "prediction": "the end of the day of the city",
+    "answers": [
+      "Jacksonville Consolidation",
+      "Jacksonville Consolidation",
+      "Jacksonville Consolidation"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572fcd86947a6a140053ccdb",
+    "prediction": "the Tuesday",
+    "answers": [
+      "the Scottish Government",
+      "Scottish Government",
+      "the Scottish Government"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5729fe5c3f37b31900478631",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "thymus and bone marrow",
+      "thymus and bone marrow",
+      "thymus and bone marrow"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57280f974b864d1900164370",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "constitutional impasse",
+      "her or his capacity as public official",
+      "capacity as public official",
+      "constitutional impasse"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572a02483f37b3190047864c",
+    "prediction": "the Teded",
+    "answers": [
+      "pathogens, an allograft",
+      "pathogens, an allograft",
+      "pathogens, an allograft"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572819864b864d190016447f",
+    "prediction": "Maram",
+    "answers": [
+      "Mankind",
+      "Mankind",
+      "Mankind"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56e74faf00c9c71400d76f94",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "members",
+      "members",
+      "members"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "571c83f3dd7acb1400e4c0d8",
+    "prediction": "the end of the Ted",
+    "answers": [
+      "covalent double bond",
+      "a covalent double bond",
+      "a covalent double bond that results from the filling of molecular orbitals formed from the atomic orbitals of the individual oxygen atoms",
+      "a covalent double bond",
+      "a covalent double bond that results from the filling of molecular orbitals formed from the atomic orbitals of the individual oxygen atoms"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.09523809523809523
+  },
+  {
+    "id": "5725b9db38643c19005acbe1",
+    "prediction": "the end",
+    "answers": [
+      "comb jellies",
+      "comb jellies",
+      "comb jellies"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57268a37f1498d1400e8e33d",
+    "prediction": "the end",
+    "answers": [
+      "chum salmon",
+      "chum salmon",
+      "chum salmon"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56e0f6aa231d4119001ac4f0",
+    "prediction": "the melel",
+    "answers": [
+      "force-free magnetic fields",
+      "waves in plasmas",
+      "in force-free magnetic fields"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572669a9dd62a815002e841a",
+    "prediction": "the end",
+    "answers": [
+      "Charles Darwin",
+      "Charles Darwin",
+      "Charles Darwin",
+      "Charles Darwin"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56d9b389dc89441400fdb6ec",
+    "prediction": "the Puzo",
+    "answers": [
+      "Super Bowl City",
+      "\"Super Bowl City\"",
+      "Super Bowl City"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "573081c2069b531400832137",
+    "prediction": "the end of the day of the day of the day,",
+    "answers": [
+      "seaborne",
+      "land",
+      "sea and trade routes",
+      "sea"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f845dba6d7ea1400e1751d",
+    "prediction": "the Puly",
+    "answers": [
+      "antichrist",
+      "antichrist of 2 Thessalonians 2",
+      "The antichrist of 2 Thessalonians 2"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572849b4ff5b5019007da0f4",
+    "prediction": "198",
+    "answers": [
+      "around $200 million",
+      "$200 million",
+      "$200 million",
+      "$200 million"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5733ef47d058e614000b662e",
+    "prediction": "Mayan",
+    "answers": [
+      "December 12",
+      "December 12",
+      "December 12",
+      "December 12",
+      "December 12"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5730b1e28ab72b1400f9c6af",
+    "prediction": "the end",
+    "answers": [
+      "all women",
+      "unacceptable pregnancy. In",
+      "women"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5730d3adaca1c71400fe5af7",
+    "prediction": "surry",
+    "answers": [
+      "bishop has read the appointments at the session of the Annual Conference",
+      "Until the bishop has read the appointments at the session of the Annual Conference,",
+      "the bishop has read the appointments at the session of the Annual Conference"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57263ea0271a42140099d7c5",
+    "prediction": "the Puzo",
+    "answers": [
+      "Initially built with three layers, it later (1982) evolved into a seven-layer OSI-compliant networking protocol",
+      "seven",
+      "seven"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56d9c5e7dc89441400fdb7dc",
+    "prediction": "the Teded",
+    "answers": [
+      "a deficit.",
+      "a deficit",
+      "deficit"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572925491d046914007790c4",
+    "prediction": "the Teded",
+    "answers": [
+      "Half",
+      "Half",
+      "Half"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57296f85af94a219006aa404",
+    "prediction": "the Puzo",
+    "answers": [
+      "roughly spherical",
+      "roughly spherical",
+      "spherical"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56e190bce3433e1400422fc8",
+    "prediction": "the end of the day of the day, the two of them",
+    "answers": [
+      "Decision problems",
+      "Decision problems",
+      "Decision"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f84a60aef2371900625f9e",
+    "prediction": "the Senen",
+    "answers": [
+      "Jerome Schurf",
+      "Jerome Schurf",
+      "Schurf"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5705edcd52bb8914006896cb",
+    "prediction": "the Teded",
+    "answers": [
+      "11",
+      "11",
+      "11"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572741aaf1498d1400e8f53f",
+    "prediction": "Mayan",
+    "answers": [
+      "$500,000",
+      "$500,000",
+      "$500,000"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57264fe65951b619008f6fa4",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "October 2011",
+      "October 2011",
+      "October 2011"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57281f203acd2414000df4f6",
+    "prediction": "Maya",
+    "answers": [
+      "The logo for the Twelfth Doctor",
+      "The logo for the Twelfth Doctor",
+      "The logo for the Twelfth Doctor"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57273abef1498d1400e8f4da",
+    "prediction": "the Teded",
+    "answers": [
+      "Time Warner Cable",
+      "Time Warner Cable",
+      "Time Warner Cable"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5727d9c43acd2414000dee17",
+    "prediction": "Mayan",
+    "answers": [
+      "2003",
+      "2003",
+      "2003"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5729e2b76aef0514001550d2",
+    "prediction": "the end",
+    "answers": [
+      "gender inequality in education",
+      "low economic growth",
+      "continued gender inequality in education"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "573088da069b53140083216c",
+    "prediction": "the Senen",
+    "answers": [
+      "Britain",
+      "Britain",
+      "Britain",
+      "Britain",
+      "Britain"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57286951ff5b5019007da211",
+    "prediction": "Mararon",
+    "answers": [
+      "Jon Corzine",
+      "Jon Corzine",
+      "Jon Corzine"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5729e2316aef0514001550c4",
+    "prediction": "the Senenen",
+    "answers": [
+      "moist broadleaf forest",
+      "moist broadleaf forest",
+      "tropical"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57293e983f37b3190047818b",
+    "prediction": "the Teded",
+    "answers": [
+      "2001",
+      "2001",
+      "2001"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5733f5f24776f419006615c3",
+    "prediction": "the end of the day of the day,000",
+    "answers": [
+      "Approximately 1,000 British soldiers were killed or injured.",
+      "Approximately 1,000",
+      "1,000 British soldiers",
+      "1,000",
+      "1,000 British soldiers"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57268e2bf1498d1400e8e3b1",
+    "prediction": "Marar",
+    "answers": [
+      "1992",
+      "1992",
+      "1992",
+      "1992"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5728d4c03acd2414000dffa0",
+    "prediction": "the Senen",
+    "answers": [
+      "the British",
+      "British",
+      "Egyptians against the British occupation in the 1919 Revolution.",
+      "British occupation",
+      "communist governments"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572666d9dd62a815002e83b6",
+    "prediction": "the end of the day of the town",
+    "answers": [
+      "25-foot",
+      "25-foot",
+      "25-foot (7.6 m) high"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5711163bb654c5140001fb17",
+    "prediction": "Mararon",
+    "answers": [
+      "Trinity-St. Paul's Episcopal Church",
+      "Trinity-St. Paul's Episcopal Church",
+      "Trinity-St. Paul's Episcopal Church"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57060df252bb891400689821",
+    "prediction": "the Teded",
+    "answers": [
+      "Riverside",
+      "Riverside",
+      "Downtown Riverside"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57286d4f2ca10214002da329",
+    "prediction": "198",
+    "answers": [
+      "between 1268 and 1273",
+      "between 1268 and 1273",
+      "between 1268 and 1273"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "571cde695efbb31900334e19",
+    "prediction": "the Tororor",
+    "answers": [
+      "proteins",
+      "proteins",
+      "proteins",
+      "proteins",
+      "proteins"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5729f1c13f37b319004785e9",
+    "prediction": "the end",
+    "answers": [
+      "women",
+      "women",
+      "women"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57263c78ec44d21400f3dc7b",
+    "prediction": "the Puzo",
+    "answers": [
+      "1969",
+      "1969",
+      "1969"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5729efab3f37b319004785d1",
+    "prediction": "the dararon",
+    "answers": [
+      "T cells",
+      "T cells",
+      "T cells"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572a07a86aef0514001551d6",
+    "prediction": "the end",
+    "answers": [
+      "greater equality",
+      "greater equality",
+      "greater equality but not per capita income"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "571cda1bdd7acb1400e4c197",
+    "prediction": "the end",
+    "answers": [
+      "liquid",
+      "as a liquid",
+      "liquid",
+      "as a liquid in specially insulated tankers"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57373f80c3c5551400e51e92",
+    "prediction": "the end",
+    "answers": [
+      "Galileo",
+      "Galileo",
+      "Galileo Galilei",
+      "Galileo",
+      "Galileo",
+      "Galileo"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572754cd5951b619008f8864",
+    "prediction": "Mayan",
+    "answers": [
+      "the Mamluks of Egypt",
+      "Mamluks",
+      "the Mamluks of Egypt"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f86b44a6d7ea1400e175f7",
+    "prediction": "the end",
+    "answers": [
+      "the translation",
+      "translation",
+      "translation"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f8074faef2371900625d7b",
+    "prediction": "the Ted",
+    "answers": [
+      "friends of Luther",
+      "friends of Luther",
+      "friends of Luther"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572878942ca10214002da3a2",
+    "prediction": "the end",
+    "answers": [
+      "The political unity of China and much of central Asia",
+      "political unity of China and much of central Asia",
+      "political unity"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57300888b2c2fd1400568778",
+    "prediction": "the Senenen",
+    "answers": [
+      "Ubiorum",
+      "oppidum Ubiorum",
+      "oppidum Ubiorum"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56e0ed557aa994140058e7e0",
+    "prediction": "the Puzo",
+    "answers": [
+      "Tesla",
+      "Tesla",
+      "Tesla"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572fe1d404bcaa1900d76e37",
+    "prediction": "the Puzor",
+    "answers": [
+      "Europe",
+      "Central and Western Europe",
+      "Germany",
+      "Germany"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f84e63aef2371900625fc3",
+    "prediction": "the Puzel",
+    "answers": [
+      "mad dogs",
+      "Murderous, Thieving Hordes",
+      "mad dogs"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "571136b8a58dae1900cd6d24",
+    "prediction": "the end",
+    "answers": [
+      "lengthening rubbing surfaces of the valve",
+      "lengthening rubbing surfaces",
+      "lengthening rubbing surfaces of the valve"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56dfaa047aa994140058dfbf",
+    "prediction": "Maya",
+    "answers": [
+      "60",
+      "60",
+      "60"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5728f2e26aef051400154899",
+    "prediction": "the Tororor",
+    "answers": [
+      "HIV/AIDS",
+      "HIV/AIDS",
+      "HIV/AIDS"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5725b92e38643c19005acbd6",
+    "prediction": "the end",
+    "answers": [
+      "Until the oil shock",
+      "the oil shock",
+      "the oil shock",
+      "Until the oil shock",
+      "the oil shock"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56e0f32d231d4119001ac4cc",
+    "prediction": "the Teded",
+    "answers": [
+      "Mark Twain",
+      "Mark Twain",
+      "Mark Twain"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5725f239271a42140099d35d",
+    "prediction": "the end",
+    "answers": [
+      "special Apollo TV camera",
+      "Apollo TV camera",
+      "Apollo TV",
+      "Apollo TV camera",
+      "Apollo TV camera"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726660d5951b619008f71b2",
+    "prediction": "the Sebel",
+    "answers": [
+      "Tyne",
+      "the River Tyne",
+      "the River Tyne"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56e11c24e3433e1400422c19",
+    "prediction": "198",
+    "answers": [
+      "6 feet 2 inches",
+      "6 feet 2 inches",
+      "6 feet 2 inches (1.88 m)"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572914441d04691400779029",
+    "prediction": "the Todd",
+    "answers": [
+      "of the United States, Britain, Germany and France",
+      "governments",
+      "governments of the United States, Britain, Germany and France"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572811434b864d190016438d",
+    "prediction": "Marar",
+    "answers": [
+      "Mickey Smith (Noel Clarke) and Jack Harkness (John Barrowman)",
+      "Mickey Smith (Noel Clarke) and Jack Harkness (John Barrowman)",
+      "Mickey Smith (Noel Clarke) and Jack Harkness (John Barrowman)"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572980f9af94a219006aa4d5",
+    "prediction": "the Teded",
+    "answers": [
+      "Fermat primes",
+      "Mersenne",
+      "primorial primes",
+      "primorial primes",
+      "primorial primes"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5725cbb289a1e219009abed4",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "diseases from Europe",
+      "the spread of diseases from Europe",
+      "spread of diseases from Europe"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.2
+  },
+  {
+    "id": "56e057e1231d4119001ac047",
+    "prediction": "the Puzo",
+    "answers": [
+      "Thomas Commerford Martin",
+      "Thomas Commerford Martin",
+      "Thomas Commerford Martin"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5728de0e2ca10214002da9de",
+    "prediction": "the end",
+    "answers": [
+      "Mount Kenya",
+      "Mount Kenya,",
+      "Mount Kenya"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5733d7cbd058e614000b63ac",
+    "prediction": "Marar",
+    "answers": [
+      "Mi'kmaq and the Abenaki",
+      "Mi'kmaq and the Abenaki",
+      "the Mi'kmaq and the Abenaki",
+      "Mi'kmaq and the Abenaki",
+      "the Mi'kmaq and the Abenaki"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726de7a5951b619008f80ac",
+    "prediction": "the Puzor",
+    "answers": [
+      "over 6000",
+      "over 6000",
+      "over 6000"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56d7251d0d65d214001983cd",
+    "prediction": "Marar",
+    "answers": [
+      "Peyton Manning",
+      "Peyton Manning",
+      "Manning"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57340d124776f419006617c1",
+    "prediction": "the Senenen",
+    "answers": [
+      "1769",
+      "1769",
+      "1769",
+      "1769",
+      "1769"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57286d4f2ca10214002da32c",
+    "prediction": "198",
+    "answers": [
+      "drowned",
+      "drowned",
+      "drowned"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57273e50dd62a815002e9a02",
+    "prediction": "the Puly",
+    "answers": [
+      "a trade magazine for the construction industry",
+      "a trade magazine for the construction industry",
+      "trade magazine for the construction industry"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57108198b654c5140001f93a",
+    "prediction": "the Tororor",
+    "answers": [
+      "C\u00e9vennes",
+      "C\u00e9vennes",
+      "C\u00e9vennes mountain region"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5705f36452bb89140068971c",
+    "prediction": "the end of the day of the day",
+    "answers": [
+      "southern",
+      "southern California",
+      "southern California"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56e0fb887aa994140058e86d",
+    "prediction": "the Teded",
+    "answers": [
+      "monkey",
+      "monkey",
+      "a trained monkey"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57268739708984140094c8f1",
+    "prediction": "the Snap",
+    "answers": [
+      "public service",
+      "public service",
+      "public service"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57264228ec44d21400f3dcf9",
+    "prediction": "Melel",
+    "answers": [
+      "Telenet was incorporated in 1973 and started operations in 1975. It went public in 1979 and was then sold to GTE",
+      "GTE",
+      "GTE"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5725f5b1271a42140099d375",
+    "prediction": "1988",
+    "answers": [
+      "December, January and February",
+      "December, January and February",
+      "December, January and February"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56df9e2838dc4217001520f9",
+    "prediction": "the Teded",
+    "answers": [
+      "1943",
+      "1943",
+      "1943"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57293ca73f37b3190047815e",
+    "prediction": "Marar",
+    "answers": [
+      "United Nations Environment Programme",
+      "UNEP",
+      "UNEP"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5728f9cf4b864d1900165169",
+    "prediction": "the Puzor",
+    "answers": [
+      "between June and September",
+      "June and September",
+      "between June and September"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "571c8539dd7acb1400e4c0e5",
+    "prediction": "the end",
+    "answers": [
+      "Antoine Lavoisier",
+      "Antoine Lavoisier",
+      "Antoine Lavoisier",
+      "Antoine Lavoisier",
+      "Lavoisier"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572759dbdd62a815002e9b96",
+    "prediction": "the end of the day",
+    "answers": [
+      "Groton School",
+      "Groton School",
+      "Groton School"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572ffc99947a6a140053cef9",
+    "prediction": "the end of the day of the day, the two of them",
+    "answers": [
+      "1975",
+      "1975",
+      "1975"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "572a10cd6aef051400155226",
+    "prediction": "the end of the garden",
+    "answers": [
+      "immunoinformatics",
+      "immunoinformatics",
+      "immunoinformatics"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "57284b904b864d19001648e2",
+    "prediction": "Mararon",
+    "answers": [
+      "the Main Quadrangles",
+      "Main Quadrangles",
+      "the Main Quadrangles",
+      "the Main Quadrangles"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "5726d8bd708984140094d35d",
+    "prediction": "the \"Sean",
+    "answers": [
+      "sorcery or even poison",
+      "sorcery or even poison",
+      "sorcery",
+      "sorcery"
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  },
+  {
+    "id": "56f88eafaef2371900626197",
+    "prediction": "the Trin",
+    "answers": [
+      "symbolically present",
+      "spiritually or symbolically present",
+      "symbolically present."
+    ],
+    "exact_match": 0.0,
+    "f1": 0.0
+  }
+]

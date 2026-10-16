@@ -1,0 +1,241 @@
+{
+  "models": [
+    {
+      "model": "Lantern",
+      "parameters": 29565952,
+      "before": {
+        "parameters": 29565952,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.055921299572297,
+          "perplexity": 7.8140336232409515,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 6.080586914125578,
+          "perplexity": 437.2857686121178,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 1.1896306818181819,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "after": {
+        "parameters": 29565952,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.564398522045523,
+          "perplexity": 12.992841111457508,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 5.078573963382955,
+          "perplexity": 160.54494963359073,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.78125,
+          "f1": 2.366258882428941,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "stage_seconds": [
+        1228.952592239999,
+        1275.6864611620003
+      ],
+      "stage_peak_vram_bytes": [
+        2649963520,
+        2649963520
+      ],
+      "stage_padded_positions_per_second": [
+        21663.976436611534,
+        20870.33202166986
+      ],
+      "story_loss_increase": 0.5084772224732261,
+      "story_perplexity_ratio": 1.6627572567404174
+    },
+    {
+      "model": "Tide",
+      "parameters": 29579776,
+      "before": {
+        "parameters": 29579776,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.069291810938381,
+          "perplexity": 7.919212831608315,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 6.1416001758720205,
+          "perplexity": 464.79673262287577,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 0.6689274267399267,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "after": {
+        "parameters": 29579776,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.764866471928071,
+          "perplexity": 15.876919834573107,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 5.252986104742367,
+          "perplexity": 191.13616976563156,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 1.114497843013468,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "stage_seconds": [
+        1456.7455790042877,
+        1498.0346717460015
+      ],
+      "stage_peak_vram_bytes": [
+        null,
+        3499230208
+      ],
+      "stage_padded_positions_per_second": [
+        18276.355448559516,
+        17772.61935397595
+      ],
+      "story_loss_increase": 0.6955746609896898,
+      "story_perplexity_ratio": 2.0048608582917273
+    },
+    {
+      "model": "Tide/Lantern",
+      "parameters": 28395520,
+      "before": {
+        "parameters": 28395520,
+        "updates": 6500,
+        "stories": {
+          "loss": 1.990089427978597,
+          "perplexity": 7.316188004959651,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 6.056533874745419,
+          "perplexity": 426.89320422509473,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 0.47646453761755486,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "after": {
+        "parameters": 28395520,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.7691003575044517,
+          "perplexity": 15.944283400644727,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 3.7664971634378013,
+          "perplexity": 43.22837738195249,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.390625,
+          "f1": 3.0154676053113554,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "stage_seconds": [
+        1085.096470909,
+        937.691999548
+      ],
+      "stage_peak_vram_bytes": [
+        null,
+        2314890240
+      ],
+      "stage_padded_positions_per_second": [
+        24536.06726570285,
+        28393.118436366833
+      ],
+      "story_loss_increase": 0.7790109295258547,
+      "story_perplexity_ratio": 2.1793157023624983
+    },
+    {
+      "model": "Tide/A16",
+      "parameters": 26527744,
+      "before": {
+        "parameters": 26527744,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.0518920141107895,
+          "perplexity": 7.782611997029133,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 6.139652967000595,
+          "perplexity": 463.8925568968915,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 0.8209607233044733,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "after": {
+        "parameters": 26527744,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.6468629735038878,
+          "perplexity": 14.109706622838633,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 5.223213129620075,
+          "perplexity": 185.52935724750986,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 0.9916266459235209,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "stage_seconds": [
+        673.7808878810029,
+        701.4240793110002
+      ],
+      "stage_peak_vram_bytes": [
+        1998007296,
+        1998007296
+      ],
+      "stage_padded_positions_per_second": [
+        39514.32947843141,
+        37957.065896785876
+      ],
+      "story_loss_increase": 0.5949709593930983,
+      "story_perplexity_ratio": 1.8129782942056922
+    }
+  ],
+  "data_settings_source_exposure_and_initialization_verified": true,
+  "updates_per_stage": 6500,
+  "padded_positions_per_stage": 26624000,
+  "tests_passed": 733,
+  "limitations": "Single seed; parameter and FFN differences; changed attention dimensions alter later initial RNG draws. Historical timings/backend differences and prior interrupted runs prevent clean runtime attribution. 14M/30M tokenizer/corpus differ. QA EM/F1 is not proof of reasoning or retrieval."
+}
