@@ -7,3 +7,5 @@ LatentAttention mode sma4_key builds the same full-width backbone, independent
 format 3. Existing modes and old snapshots remain supported. Read the runtime,
 definition and tests before further edits. Check results/pretraining/sma4-key-14m
 for run completion; no historical SMA4 report describes this new run.
+
+Training is now complete: 9000 updates / 18,429,440 target tokens. Reports and probes are in results/pretraining/sma4-key-14m. No runtime changes were made during the frozen run.

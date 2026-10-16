@@ -1,0 +1,161 @@
+{
+  "controlled_variants": [
+    {
+      "model": "A16",
+      "branch": "model/001-spoony-a16-14m",
+      "recipe_commit": "00c8cd13db5ce68e5c5c3ea73754248bd8c26805",
+      "parameters": 10375680,
+      "validation_loss": 2.2711286809709335,
+      "perplexity": 9.69033193729666,
+      "training_seconds": 221.2231026119989,
+      "target_tokens": 18429440,
+      "tokens_per_second": 83307.0316002358,
+      "peak_cuda_allocated_bytes": 601039872,
+      "cache_scalars_per_token_per_layer": 32,
+      "gradient_norm_initial": 1.4877653121948242,
+      "gradient_norm_final": 4.2081146240234375,
+      "bf16_cached_max_logit_difference": 0.0,
+      "initial_shared_backbone_sha256": "de4903aceb9aa264226cc1c7f83212797a350fda01f9c3d3c4cea006461ba1b1",
+      "readout_rms_initial": [
+        0.06911645829677582,
+        0.086672842502594,
+        0.08850233256816864,
+        0.0840715542435646,
+        0.10607267171144485,
+        0.10167859494686127
+      ],
+      "readout_rms_final": [
+        0.3318023979663849,
+        0.3138878345489502,
+        0.4448820948600769,
+        0.6150196194648743,
+        0.6311168670654297,
+        0.49978893995285034
+      ],
+      "final_attention_entropies": [
+        3.7755355834960938,
+        4.209451675415039,
+        4.047761917114258,
+        3.263369560241699,
+        1.9371848106384277,
+        2.77693772315979
+      ],
+      "test_count": 507
+    },
+    {
+      "model": "A4",
+      "branch": "model/001-spoony-a4-14m",
+      "recipe_commit": "37799107b4dc43e39281773c79c642103f2d7510",
+      "parameters": 10265088,
+      "validation_loss": 2.4888849699938738,
+      "perplexity": 12.04783493071579,
+      "training_seconds": 234.5510057829997,
+      "target_tokens": 18429440,
+      "tokens_per_second": 78573.27210547296,
+      "peak_cuda_allocated_bytes": 612844544,
+      "cache_scalars_per_token_per_layer": 8,
+      "gradient_norm_initial": 1.479060173034668,
+      "gradient_norm_final": 4.683069229125977,
+      "bf16_cached_max_logit_difference": 0.0625,
+      "initial_shared_backbone_sha256": "de4903aceb9aa264226cc1c7f83212797a350fda01f9c3d3c4cea006461ba1b1",
+      "readout_rms_initial": [
+        0.07049039006233215,
+        0.0798325315117836,
+        0.07100770622491837,
+        0.08568897098302841,
+        0.08737693727016449,
+        0.08780665695667267
+      ],
+      "readout_rms_final": [
+        0.36100074648857117,
+        0.3518908619880676,
+        0.6392833590507507,
+        0.5128974318504333,
+        0.48012956976890564,
+        0.4936741590499878
+      ],
+      "final_attention_entropies": [
+        3.847499132156372,
+        3.9662678241729736,
+        4.290200233459473,
+        2.145195722579956,
+        2.038126230239868,
+        2.6887898445129395
+      ],
+      "test_count": 507
+    },
+    {
+      "model": "SMA4",
+      "branch": "model/001-spoony-sma4-14m",
+      "recipe_commit": "1878061632610dd6e22f0bc613f201370b64a38f",
+      "parameters": 10285968,
+      "validation_loss": 2.6772011032810914,
+      "perplexity": 14.54432820136682,
+      "training_seconds": 274.8082500519995,
+      "target_tokens": 18429440,
+      "tokens_per_second": 67062.90657763282,
+      "peak_cuda_allocated_bytes": 655494144,
+      "cache_scalars_per_token_per_layer": 16,
+      "gradient_norm_initial": 2.0230917930603027,
+      "gradient_norm_final": 3.7562808990478516,
+      "bf16_cached_max_logit_difference": 0.125,
+      "initial_shared_backbone_sha256": "de4903aceb9aa264226cc1c7f83212797a350fda01f9c3d3c4cea006461ba1b1",
+      "readout_rms_initial": [
+        0.30007264018058777,
+        0.3350851535797119,
+        0.3183654844760895,
+        0.3501163721084595,
+        0.34850069880485535,
+        0.3755591809749603
+      ],
+      "readout_rms_final": [
+        0.526566743850708,
+        0.4873766303062439,
+        0.6590680480003357,
+        1.203662633895874,
+        0.9344073534011841,
+        0.8264422416687012
+      ],
+      "final_attention_entropies": [
+        4.431792259216309,
+        4.333935737609863,
+        4.407142162322998,
+        3.690232753753662,
+        2.635303497314453,
+        3.604437828063965
+      ],
+      "test_count": 507
+    },
+    {
+      "model": "SMA4 + independent keys",
+      "parameters": 10295160,
+      "validation_loss": 2.5087313652038574,
+      "perplexity": 12.289329495873456,
+      "training_seconds": 237.82140148599865,
+      "target_tokens": 18429440,
+      "tokens_per_second": 77492.77350501613,
+      "peak_cuda_allocated_bytes": 665837568,
+      "cache_scalars_per_token_per_layer": 20,
+      "recipe_commit": "b491f32f3c7ee1d190ca417914d06f0ec2f2a9cf",
+      "tests_passed": 519
+    }
+  ],
+  "historical_lantern": {
+    "parameters": 12440064,
+    "validation_loss": 2.0183204765673035,
+    "perplexity": 7.525674766392367,
+    "training_seconds": 431.3326097320023,
+    "peak_cuda_allocated_bytes": 802710528
+  },
+  "data_fingerprints_verified_equal": true,
+  "shared_backbone_initial_values_verified_equal": true,
+  "limitations": [
+    "Single seed, TinyStories only.",
+    "Lantern reference differs in head structure, RoPE, parameter count and unchanged-backbone initialization.",
+    "SMA4 uses requested biases and twice the A4 cache; A16 has four times the A4 cache.",
+    "Wall times include validation and checkpoint saving; sequential laptop measurements are not isolated kernel benchmarks.",
+    "No reasoning/retrieval capability evaluation.",
+    "Independent-key SMA adds 4 cache scalars/token/layer and 9192 weights over SMA4. Backbone initial values match; common attention initial values are not exactly matched."
+  ],
+  "keyed_sma_data_and_backbone_fingerprints_match": true
+}

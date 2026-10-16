@@ -44,3 +44,32 @@ score sharpness and response magnitude; that coupling is deliberately unchanged.
 Key cache/parameters increase slightly, and attention initialization is not an
 exact common-parameter match, so any loss change is not a perfectly isolated
 causal estimate of selection/content coupling. Results are single-seed TinyStories.
+
+## Completed run
+
+All 519 tests and Ruff lint/format checks passed before training. The run completed all 9000 updates / 18,429,440 target tokens. Initial/final logits and gradients were finite. Training-data/tokenizer fingerprints and initial shared-backbone weight hash match the previous SMA4 run. Current runtime source hashes match the frozen manifest.
+
+| Model | Parameters | Loss | Perplexity | Minutes | Target tokens/s | Peak GiB | Cache scalars/token/layer |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| A16 | 10,375,680 | 2.271129 | 9.690332 | 3.69 | 83,307 | 0.560 | 32 |
+| A4 | 10,265,088 | 2.488885 | 12.047835 | 3.91 | 78,573 | 0.571 | 8 |
+| SMA4 | 10,285,968 | 2.677201 | 14.544328 | 4.58 | 67,063 | 0.610 | 16 |
+| SMA4 + independent keys | 10,295,160 | 2.508731 | 12.289329 | 3.96 | 77,493 | 0.620 | 20 |
+
+Independent-key loss minus original SMA4: -0.168470; minus A4: +0.019846. These are observed single-seed differences, not proof of the mechanism responsible. Keys separate token selection from matrix content, but query magnitude still changes both score sharpness and response amplitude.
+
+Fixed-batch gradient norm before clipping: 1.962352 initially, 4.229872 finally. The optimizer clips at 1.0. Layer output RMS, attention entropy, query RMS and matrix singular values are in the probes. Peak memory/time refer to training including validation/checkpoint saves, excluding probes, benchmark and samples.
+
+## Fixed-prompt sample
+
+Once upon a time, there was a little girl named Lily. She loved to play outside in the garden. One day, she saw a big, scary dog. She wanted to help her.
+Lily asked her mom, "Can I play with you?" Her mom said, "Yes, I can help you."
+Lily was so happy to see her mom. She said,
+
+All fixed prompts and the complete validation curve are in training-report.json. Samples follow the established greedy/best-saved-checkpoint protocol; table metrics use update 9000. Large checkpoints and datasets remain ignored.
+
+The trained checkpoint also passed full-sequence versus 7-token cached chunks
+on the fixed 21-token prompt: maximum logit difference 1.24e-05
+in FP32 and 5.92e-14 in FP64.
+See trained-cache-equivalence.json. This supplements the pre-training reference,
+causal and snapshot tests; it does not require bitwise BF16 chunk equivalence.
