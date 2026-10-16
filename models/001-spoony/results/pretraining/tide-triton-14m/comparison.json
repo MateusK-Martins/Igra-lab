@@ -1,0 +1,33 @@
+{
+  "original": {
+    "training_seconds_including_validation_and_saving": 378.9706799070009,
+    "peak_allocated_vram_bytes": 1072384000,
+    "training_state": {
+      "updates": 9000,
+      "batches": 9000,
+      "tokens": 18429440,
+      "completed_epochs": 2,
+      "last_loss": 2.1718764305114746,
+      "last_validation_loss": 2.010153390743114,
+      "last_validation_perplexity": 7.464462238918839,
+      "batches_in_epoch": 2728
+    }
+  },
+  "triton": {
+    "training_seconds_including_validation_and_saving": 270.17558778600505,
+    "peak_allocated_vram_bytes": 779937792,
+    "training_state": {
+      "updates": 9000,
+      "batches": 9000,
+      "tokens": 18429440,
+      "completed_epochs": 2,
+      "last_loss": 2.1716933250427246,
+      "last_validation_loss": 2.0101632188867637,
+      "last_validation_perplexity": 7.464535601086496,
+      "batches_in_epoch": 2728
+    }
+  },
+  "training_speedup": 1.4026829108156431,
+  "validation_loss_difference": 9.828143649581733e-06,
+  "comparison": "Same data hashes, resolved training settings, seed, parameter count and token exposure. Historical timing comparison, not interleaved controlled hardware runs. Parallel scan rounding differs. Single seed."
+}
