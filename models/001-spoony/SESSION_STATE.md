@@ -1,1 +1,8 @@
-Current model codename: Tide, branch model/001-spoony-tide. Continuously ranged initialization with global RMSNorm and independent signed write gate. Recipe744e1ca/results563ab4a; loss2.010153/PPL7.464462. Naming change only; source/config/checkpoint/manifests unchanged. Historical training branch model/001-spoony-fluxv-global-init-range preserved remotely. See INITIALIZATION_CONTROLS.md.
+Tide/Lantern14M hybrid completed: branch model/001-spoony-tide-lantern-14m.
+Pattern Tide,Tide,Lantern x2; width384,FFN1024,13,329,408params (4Tide/2GQA).
+9000updates/18,429,440target tokens, loss1.983779589/PPL7.270169377.
+301.3006s inclvalidation/saving, peak790,150,144bytes.727tests/Ruff passed;
+fixed-batch initial/final BF16 probes have finite gradients/outputs.
+Same original14M tokenizer/dataset/settings hashes. See HYBRID_14M.md.
+Separate30M hybrid branch also completed mixed+QA; see its HYBRID_30M.md.
+No trainer remains. Checkpoints/data ignored, reports/weights preserved locally.

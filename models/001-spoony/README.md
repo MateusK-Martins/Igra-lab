@@ -1,3 +1,8 @@
+# Tide/Lantern hybrid14M
+
+Current experiment: [HYBRID_14M.md](HYBRID_14M.md).
+The material below is inherited historical context.
+
 # Tide
 
 Tide is the continuously ranged-initialized No-K model with independent write gates and global RMSNorm. It has 13,774,080 parameters and 384 FP32 recurrent state values per layer.

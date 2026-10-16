@@ -33,3 +33,9 @@ parameters. This does not establish general superiority or retrieval/reasoning
 capability. Lantern's exact parameter count is recorded in comparison.json.
 Fixed greedy generations and full validation curve are in training-report.json.
 Source code is frozen at recipe commitac33073;727tests/Ruff passed before training.
+
+Fixed held-out BF16 probes (recorded without optimizer updates) report finite
+outputs and gradients at initialization and after training. Gradient norms:
+2.799136 initial,1.744679 final. Full gate/state/output statistics are preserved
+in initial-probe.json and final-probe.json. Diagnostic feature bins under global
+RMSNorm are not independently normalized or proven semantic heads.
