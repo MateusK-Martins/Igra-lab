@@ -52,3 +52,33 @@ The expanded nonlinear features can encode statistics not available from only
 the mean 4D response; they do not create information absent from the original
 responses. Comparison is single-seed and introduces additional parameters and
 computation; it cannot prove general architectural superiority.
+
+## Completed results
+
+All 9000 updates / 18,429,440 target tokens completed. Dataset/tokenizer artifact hashes and initial shared-backbone weights match the prior run. Runtime sources remained identical to the frozen manifest. Initial/final logits and gradients are finite.
+
+| Model | Parameters | Loss | Perplexity | Minutes | Target tokens/s | Peak GiB | Cache scalars/token/layer |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| A16 | 10,375,680 | 2.271129 | 9.690332 | 3.69 | 83,307 | 0.560 | 32 |
+| A4 | 10,265,088 | 2.488885 | 12.047835 | 3.91 | 78,573 | 0.571 | 8 |
+| SMA4 | 10,285,968 | 2.677201 | 14.544328 | 4.58 | 67,063 | 0.610 | 16 |
+| SMA4 + independent keys | 10,295,160 | 2.508731 | 12.289329 | 3.96 | 77,493 | 0.620 | 20 |
+| SMA4 keys + GELU16 contributions | 10,323,288 | 2.503748 | 12.228245 | 6.14 | 49,987 | 0.996 | 20 |
+
+Loss difference versus independent-key SMA4: -0.004983. This measures the combined effect of nonlinear per-response expansion and a wider output decoder under the same data/update budget. It does not isolate nonlinearity from decoder width or prove a general advantage. Cache cost is unchanged; training compute and memory increase.
+
+Fixed-batch gradient norm before clipping: 1.596952 initially → 3.934815 finally. All parameters had finite gradients; configured clipping remains 1.0. See initial/final-probe.json for layer RMS, entropy, query magnitude and matrix singular values.
+
+## Fixed-prompt generation
+
+Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she went to the park with her mom. She saw a big tree with a big, red ball. She picked it up and started to climb it.
+Lily was very happy to see the birds. She loved to play with her toys and play with her
+
+All fixed prompts and the full validation curve are in training-report.json. Generations use the best saved validation checkpoint and the existing greedy protocol; table metrics use the final update. Times include validation/checkpoint saving, excluding benchmark, probes and generations. Datasets/checkpoints remain ignored.
+
+Final trained-cache verification passed on the fixed 21-token prompt, using
+7-token chunks: maximum FP32 logit difference 1.34e-05,
+FP64 3.38e-14.
+See trained-cache-equivalence.json. The modest loss improvement is not enough
+to establish a reliable gain from this single seed, particularly given higher
+training cost. A4 still has lower validation loss with a smaller cache.
