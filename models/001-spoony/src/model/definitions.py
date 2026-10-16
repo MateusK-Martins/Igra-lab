@@ -9,7 +9,7 @@ from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheEntry, StateEntry
 from src.model.cumulative import CumulativeMixerImpl
 from src.model.feedforward import LinearImpl, SwiGLUImpl
-from src.model.gmlp import GMLPImpl
+from src.model.gmlp import CompressedGMLPImpl, GMLPImpl
 from src.model.multikey import MultiKeyMixerImpl
 from src.model.no_k_variant import NoKVariantImpl
 from src.model.position import PositionRotation
@@ -654,4 +654,36 @@ class GMLP(BlockDefinition):
             f"GMLPImpl-w{self.window_size}-{layer_id}",
             torch.empty(0, 1, 0),
             torch.empty(0, 1, self.window_size * self.hidden_features // 2),
+        )
+
+
+@dataclass(frozen=True)
+class CompressedGMLP(BlockDefinition):
+    input_features: int
+    latent_features: int = 16
+    hidden_features: int = 64
+    window_size: int = 64
+    residual: bool = False
+
+    @property
+    def output_features(self):
+        return self.input_features
+
+    def __post_init__(self):
+        _positive_integer(self.input_features, "input_features")
+        GMLP(
+            self.latent_features, self.hidden_features, self.window_size, self.residual
+        )
+
+    def build(self):
+        return CompressedGMLPImpl(
+            self.input_features,
+            self.latent_features,
+            self.hidden_features,
+            self.window_size,
+        )
+
+    def cache(self, layer_id):
+        return GMLP(self.latent_features, self.hidden_features, self.window_size).cache(
+            f"compressed-{layer_id}"
         )

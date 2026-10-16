@@ -53,3 +53,21 @@ class GMLPImpl(nn.Module):
             saved = windows[:, -1].reshape(batch, 1, -1)
             cache.write_state(self.layer_id, saved[:, :, :0], saved, length)
         return self.down(u * mixed)
+
+
+class CompressedGMLPImpl(nn.Module):
+    """Independent full-width branch with a residual gMLP in latent space."""
+
+    def __init__(self, features, latent_features, hidden_features, window_size):
+        super().__init__()
+        self.input_proj = nn.Linear(features, latent_features, bias=False)
+        self.gmlp = GMLPImpl(latent_features, hidden_features, window_size)
+        self.output_proj = nn.Linear(latent_features, features, bias=False)
+
+    def assign_id(self, layer_id):
+        self.gmlp.assign_id(f"compressed-{layer_id}")
+        self.layer_id = self.gmlp.layer_id
+
+    def forward(self, x, *, cache: CacheStorage | None = None):
+        z = self.input_proj(x)
+        return self.output_proj(z + self.gmlp(z, cache=cache))

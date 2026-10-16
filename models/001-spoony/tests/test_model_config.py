@@ -11,7 +11,7 @@ from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheEntry, CacheStorage, StateEntry
 from src.model.composition import ResidualImpl
 from src.model.feedforward import SwiGLUImpl
-from src.model.gmlp import GMLPImpl
+from src.model.gmlp import CompressedGMLPImpl, GMLPImpl
 from src.model.stability import RMSNormImpl
 
 
@@ -42,9 +42,15 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     assert model.embedding.num_embeddings == tokenizer.vocab_size
     assert model.lm_head.out_features == tokenizer.vocab_size
     assert model.lm_head.weight is model.embedding.weight
-    assert len(model.body) == 24
-    for index in range(0, 24, 4):
-        norm1, attention, feedforward, norm2 = model.body[index : index + 4]
+    assert len(model.body) == 36
+    for index in range(0, 36, 6):
+        norm1, attention, gnorm, gmixer, feedforward, norm2 = model.body[
+            index : index + 6
+        ]
+        assert isinstance(gnorm, RMSNormImpl)
+        assert isinstance(gmixer, ResidualImpl) and isinstance(
+            gmixer.branch, CompressedGMLPImpl
+        )
         assert isinstance(attention, ResidualImpl)
         assert isinstance(attention.branch, GQAAttentionImpl)
         assert isinstance(feedforward, ResidualImpl)
@@ -53,7 +59,7 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
         assert isinstance(norm2, RMSNormImpl)
     assert [
         entry.layer_id for entry in entries if not entry.layer_id.startswith("GMLPImpl")
-    ] == [model.body[index].branch.layer_id for index in range(1, 24, 4)]
+    ] == [model.body[index].branch.layer_id for index in range(1, 36, 6)]
     assert len({entry.layer_id for entry in entries}) == 12
     assert sum(isinstance(entry, StateEntry) for entry in entries) == 6
     assert sum(isinstance(entry, CacheEntry) for entry in entries) == 6
@@ -83,10 +89,10 @@ def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokeni
             if isinstance(first.body[index].branch, GMLPImpl)
             else first.body[index].branch.q_proj.weight
         )
-        for index in range(1, 24, 4)
+        for index in range(1, 36, 6)
     ]
     assert len({weight.data_ptr() for weight in weights}) == 6
-    gates = [first.body[index].branch.gate.weight for index in range(2, 24, 4)]
+    gates = [first.body[index].branch.gate.weight for index in range(4, 36, 6)]
     assert len({weight.data_ptr() for weight in gates}) == 6
     assert all(
         a.data_ptr() != b.data_ptr()

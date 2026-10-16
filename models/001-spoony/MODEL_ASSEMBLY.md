@@ -1,3 +1,5 @@
+> **Active:** [SEPARATED_GMLP_14M.md](SEPARATED_GMLP_14M.md), six A16 layers plus separate compressed-gMLP residuals, no Tide. Prior notes historical.
+
 > **Active:** [NO_TIDE_GMLP_14M.md](NO_TIDE_GMLP_14M.md), all-six-layer A16+compressed gMLP, no Tide. Earlier notes are historical.
 
 > **Active:** [LATENT_GMLP_14M.md](LATENT_GMLP_14M.md), gMLP after16D attention retrieval, before384D output projection. Prior notes below are historical.
