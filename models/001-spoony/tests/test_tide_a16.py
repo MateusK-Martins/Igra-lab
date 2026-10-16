@@ -12,7 +12,7 @@ from src.model.position import rope
 
 def test_configuration_parameter_budget_and_mechanisms():
     model, entries = build_model(SimpleNamespace(vocab_size=8192))
-    assert sum(p.numel() for p in model.parameters()) == 10_410_720
+    assert sum(p.numel() for p in model.parameters()) == 10_780_512
     assert len(entries) == 12
     assert not any(isinstance(m, NoKVariantImpl) for m in model.modules())
     attention = [m for m in model.modules() if isinstance(m, GQAAttentionImpl)]
@@ -27,7 +27,7 @@ def test_configuration_parameter_budget_and_mechanisms():
         )
         assert m.out_proj.weight.shape == (384, 16)
         assert isinstance(m.gmlp, GMLPImpl) and m.gmlp.up.weight.shape == (64, 16)
-        assert m.gmlp.window_size == 64
+        assert m.gmlp.window_size == 256
         assert m.position_rotation.func is rope and m.position_rotation.keywords == {
             "base": 10000.0
         }
@@ -37,23 +37,23 @@ def test_snapshot_restore_and_cache_sizes(tmp_path):
     model, entries = build_model(SimpleNamespace(vocab_size=300))
     model.double().eval()
     cache = CacheStorage(entries, torch.device("cpu"), torch.device("cpu"))
-    ids = torch.randint(300, (2, 81))
+    ids = torch.randint(300, (2, 273))
     with torch.no_grad():
         expected = model(ids)
-        first = model(ids[:, :63], cache=cache)
+        first = model(ids[:, :255], cache=cache)
         cache.save(tmp_path / "cache.pt")
         restored = CacheStorage.load(
             tmp_path / "cache.pt",
             storage_device=torch.device("cpu"),
             read_device=torch.device("cpu"),
         )
-        actual = torch.cat((first, model(ids[:, 63:], cache=restored)), 1)
+        actual = torch.cat((first, model(ids[:, 255:], cache=restored)), 1)
     torch.testing.assert_close(actual, expected, atol=1e-10, rtol=1e-9)
     assert len(restored.states) == len(restored.entries) == 6
-    assert sum(e.value_sum.numel() for e in restored.states.values()) == 2 * 6 * 2048
+    assert sum(e.value_sum.numel() for e in restored.states.values()) == 2 * 6 * 8192
     assert (
         sum(e.keys.numel() + e.values.numel() for e in restored.entries.values())
-        == 2 * 6 * 81 * 32
+        == 2 * 6 * 273 * 32
     )
 
 

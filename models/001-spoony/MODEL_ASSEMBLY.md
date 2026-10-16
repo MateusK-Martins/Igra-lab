@@ -1,3 +1,5 @@
+> **Active:** [GMLP_WINDOW256_14M.md](GMLP_WINDOW256_14M.md), integrated A16/gMLP with256-token spatial windows. Prior notes historical.
+
 > **Active:** [NO_TIDE_GMLP_14M.md](NO_TIDE_GMLP_14M.md), all-six-layer A16+compressed gMLP, no Tide. Earlier notes are historical.
 
 > **Active:** [LATENT_GMLP_14M.md](LATENT_GMLP_14M.md), gMLP after16D attention retrieval, before384D output projection. Prior notes below are historical.

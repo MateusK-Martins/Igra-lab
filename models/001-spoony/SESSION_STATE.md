@@ -1,3 +1,5 @@
+> **Active:** [GMLP_WINDOW256_14M.md](GMLP_WINDOW256_14M.md), integrated A16/gMLP with256-token spatial windows. Prior notes historical.
+
 Completed no-Tide integrated/separated comparison. See NO_TIDE_GMLP_COMPARISON.md. Both9000-update runs complete; source/data/settings and trained cache checks passed.
 
 > **Active:** [NO_TIDE_GMLP_14M.md](NO_TIDE_GMLP_14M.md), all-six-layer A16+compressed gMLP, no Tide. Earlier notes are historical.
