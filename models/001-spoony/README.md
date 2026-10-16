@@ -1,3 +1,5 @@
+> **Active:** [TIDE_A16_30M.md](TIDE_A16_30M.md), scaled Tide/A16 mixed+QA pipeline. Earlier results below are historical.
+
 # Tide/Lantern hybrid
 
 Current experiment: [HYBRID_30M.md](HYBRID_30M.md).

@@ -179,7 +179,7 @@ def test_actual_parameter_count_and_no_k_storage():
     model, entries = build_model(Tokenizer())
     m = model.body[1].branch
     count = sum(p.numel() for p in model.parameters())
-    expected = 28_395_520
+    expected = 26_527_744
     states = [e for e in entries if hasattr(e, "key_sum")]
     assert len(states) == 6 and len(entries) == 9
     assert all(e.key_sum.numel() == 0 for e in states)

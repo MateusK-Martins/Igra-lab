@@ -11,7 +11,7 @@ def test_scaled_architecture_and_exact_ranged_initialization():
         vocab_size = 8192
 
     model, entries = build_model(Tokenizer())
-    assert sum(p.numel() for p in model.parameters()) == 28395520
+    assert sum(p.numel() for p in model.parameters()) == 26527744
     mixers = [m for m in model.modules() if isinstance(m, NoKVariantImpl)]
     assert len(mixers) == 6 and len(entries) == 9
     for m in mixers:
@@ -36,6 +36,6 @@ def test_pipeline_evaluation_stage_and_normalization():
     assert pre_data.context_length == qa_data.context_length == 512
     assert pre_schedule.total_steps == qa_schedule.total_steps == 6500
     assert pre_data.response_prefix == qa_data.response_prefix == "\nAnswer: "
-    assert "pretraining/tide-lantern-30m-v1" in str(pre_checkpoint.directory)
-    assert "sft/tide-lantern-30m-qa-v1" in str(qa_checkpoint.directory)
+    assert "pretraining/tide-a16-30m-v1" in str(pre_checkpoint.directory)
+    assert "sft/tide-a16-30m-qa-v1" in str(qa_checkpoint.directory)
     assert normalize("The, BLUE! cat.") == "blue cat"

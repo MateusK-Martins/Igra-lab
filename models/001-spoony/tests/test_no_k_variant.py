@@ -232,7 +232,7 @@ def test_configuration_parameter_counts_and_state_budget():
 
     model, entries = build_model(Tokenizer())
     m = model.body[1].branch
-    assert sum(p.numel() for p in model.parameters()) == 28_395_520
+    assert sum(p.numel() for p in model.parameters()) == 26_527_744
     states = [e for e in entries if hasattr(e, "value_sum")]
     assert len(states) == 6
     assert all(e.value_sum.shape[-1] == 512 and e.key_sum.numel() == 0 for e in states)
