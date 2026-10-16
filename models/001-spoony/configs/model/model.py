@@ -3,7 +3,7 @@ from src.model.assembler import Model
 from src.model.definitions import ACSwiGLU, Embedding, LMHead, Repeat, RMSNorm
 
 MODE = "a16"
-CONDITIONED = True
+CONDITIONED = False
 
 
 def build_model(tokenizer: Tokenizer):
