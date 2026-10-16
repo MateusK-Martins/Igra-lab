@@ -1,0 +1,39 @@
+{
+  "hybrid_parameters": 13329408,
+  "hybrid": {
+    "updates": 9000,
+    "batches": 9000,
+    "tokens": 18429440,
+    "completed_epochs": 2,
+    "last_loss": 2.1661667823791504,
+    "last_validation_loss": 1.9837795893351235,
+    "last_validation_perplexity": 7.270169376904133,
+    "batches_in_epoch": 2728
+  },
+  "hybrid_training_seconds": 301.30061305800336,
+  "hybrid_peak_cuda_bytes": 790150144,
+  "hybrid_target_tokens_per_second": 61166.28775810738,
+  "tide_historical": {
+    "updates": 9000,
+    "batches": 9000,
+    "tokens": 18429440,
+    "completed_epochs": 2,
+    "last_loss": 2.1718764305114746,
+    "last_validation_loss": 2.010153390743114,
+    "last_validation_perplexity": 7.464462238918839,
+    "batches_in_epoch": 2728
+  },
+  "lantern_historical": {
+    "updates": 9000,
+    "batches": 9000,
+    "tokens": 18429440,
+    "completed_epochs": 2,
+    "last_loss": 2.24531888961792,
+    "last_validation_loss": 2.0183204765673035,
+    "last_validation_perplexity": 7.525674766392367,
+    "batches_in_epoch": 2728
+  },
+  "lantern_parameters": 12440064,
+  "artifacts_and_recipe_verified": true,
+  "limitations": "Single seed, differing parameter counts, historical hardware timings. Hybrid/Tide Triton timings differ from old eager baselines."
+}
