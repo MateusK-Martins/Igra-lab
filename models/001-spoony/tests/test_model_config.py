@@ -8,11 +8,11 @@ from torch.nn import functional as F
 from configs.model.model import build_model
 from src.data.tokenizer import ByteLevelBPETokenizer
 from src.model.attention import GQAAttentionImpl
-from src.model.cache_storage import CacheEntry, CacheStorage, StateEntry
+from src.model.cache_storage import CacheEntry, CacheStorage, HistoryEntry
 from src.model.composition import ResidualImpl
-from src.model.cumulative import CumulativeMixerImpl
 from src.model.feedforward import SwiGLUImpl
 from src.model.stability import RMSNormImpl
+from src.model.tdm import TemporalDifferenceMixerImpl
 
 
 @pytest.fixture(autouse=True)
@@ -42,24 +42,22 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     assert model.embedding.num_embeddings == tokenizer.vocab_size
     assert model.lm_head.out_features == tokenizer.vocab_size
     assert model.lm_head.weight is model.embedding.weight
-    assert len(model.body) == 24
-    for index in range(0, 24, 4):
-        norm1, attention, feedforward, norm2 = model.body[index : index + 4]
-        assert isinstance(attention, ResidualImpl)
-        assert isinstance(
-            attention.branch,
-            GQAAttentionImpl if (index // 4) % 3 == 2 else CumulativeMixerImpl,
+    assert len(model.body) == 25
+    for index in range(0, 24, 6):
+        norm1, attention, norm2, tdm, norm3, feedforward = model.body[index : index + 6]
+        assert all(isinstance(n, RMSNormImpl) for n in (norm1, norm2, norm3))
+        assert isinstance(attention, ResidualImpl) and isinstance(
+            attention.branch, GQAAttentionImpl
         )
-        assert isinstance(feedforward, ResidualImpl)
-        assert isinstance(feedforward.branch, SwiGLUImpl)
-        assert isinstance(norm1, RMSNormImpl)
-        assert isinstance(norm2, RMSNormImpl)
-    assert [entry.layer_id for entry in entries] == [
-        model.body[index].branch.layer_id for index in range(1, 24, 4)
-    ]
-    assert len({entry.layer_id for entry in entries}) == 6
-    assert sum(isinstance(entry, StateEntry) for entry in entries) == 4
-    assert sum(isinstance(entry, CacheEntry) for entry in entries) == 2
+        assert isinstance(tdm, ResidualImpl) and isinstance(
+            tdm.branch, TemporalDifferenceMixerImpl
+        )
+        assert isinstance(feedforward, ResidualImpl) and isinstance(
+            feedforward.branch, SwiGLUImpl
+        )
+    assert len(entries) == 8 and len({e.layer_id for e in entries}) == 8
+    assert sum(isinstance(e, HistoryEntry) for e in entries) == 4
+    assert sum(isinstance(e, CacheEntry) for e in entries) == 4
 
 
 def test_config_forward_and_next_token_loss_backward(tokenizer):
@@ -80,23 +78,17 @@ def test_config_forward_and_next_token_loss_backward(tokenizer):
 def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokenizer):
     first, first_entries = build_model(tokenizer)
     second, second_entries = build_model(tokenizer)
-    weights = [first.body[index].branch.q_proj.weight for index in range(1, 24, 4)]
-    assert len({weight.data_ptr() for weight in weights}) == 6
-    gates = [first.body[index].branch.gate.weight for index in range(2, 24, 4)]
-    assert len({weight.data_ptr() for weight in gates}) == 6
+    weights = [first.body[index].branch.q_proj.weight for index in range(1, 24, 6)]
+    assert len({weight.data_ptr() for weight in weights}) == 4
+    gates = [first.body[index].branch.gate.weight for index in range(5, 24, 6)]
+    assert len({weight.data_ptr() for weight in gates}) == 4
     assert all(
         a.data_ptr() != b.data_ptr()
         for a, b in zip(first.parameters(), second.parameters(), strict=True)
     )
-    assert all(
-        a is not b
-        and (
-            (a.keys is not b.keys and a.values is not b.values)
-            if isinstance(a, CacheEntry)
-            else (a.key_sum is not b.key_sum and a.value_sum is not b.value_sum)
-        )
-        for a, b in zip(first_entries, second_entries, strict=True)
-    )
+    assert all(a is not b for a, b in zip(first_entries, second_entries, strict=True))
+    for a, b in zip(first_entries, second_entries, strict=True):
+        assert a.values is not b.values
     cache = CacheStorage(first_entries, torch.device("cpu"), torch.device("cpu"))
     with torch.no_grad():
         first(torch.tensor([tokenizer.encode("A story.")]), cache=cache)
@@ -124,14 +116,10 @@ def test_config_cached_chunks_match_full_logits_across_window_boundary(tokenizer
     torch.testing.assert_close(actual, expected, rtol=1e-7, atol=1e-9)
     assert all(entry.count == 261 for entry in entries)
     assert all(
-        entry.key_sum.shape == (1, 1, 0)
-        for entry in entries
-        if isinstance(entry, StateEntry)
+        e.values.shape == (1, 63, 384) for e in entries if isinstance(e, HistoryEntry)
     )
     assert all(
-        entry.keys.shape == (1, 2, 261, 48)
-        for entry in entries
-        if isinstance(entry, CacheEntry)
+        e.keys.shape == (1, 2, 261, 48) for e in entries if isinstance(e, CacheEntry)
     )
 
 

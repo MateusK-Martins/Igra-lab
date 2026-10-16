@@ -43,7 +43,7 @@ def test_mixed_cache_snapshot_continuation(tmp_path):
             path, storage_device=torch.device("cpu"), read_device=torch.device("cpu")
         )
         suffix = model(tokens[:, 7:], cache=restored)
-    assert len(restored.states) == 4 and len(restored.entries) == 2
+    assert len(restored.histories) == 4 and len(restored.entries) == 4
     torch.testing.assert_close(
         torch.cat((prefix, suffix), 1), full, rtol=1e-7, atol=1e-9
     )

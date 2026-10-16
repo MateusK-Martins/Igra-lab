@@ -25,10 +25,38 @@ class StateEntry:
     count: int = 0
 
 
+@dataclass
+class HistoryEntry:
+    """Finite chronological history [B,L,D], with L=min(count,capacity)."""
+
+    layer_id: str
+    values: Tensor
+    capacity: int
+    count: int = 0
+
+
+def _validate_history(entry: HistoryEntry) -> None:
+    if not isinstance(entry.layer_id, str) or not entry.layer_id:
+        raise ValueError("History layer_id must be a nonempty string")
+    if type(entry.capacity) is not int or entry.capacity <= 0:
+        raise ValueError("History capacity must be positive")
+    if type(entry.count) is not int or entry.count < 0:
+        raise ValueError("History count must be nonnegative")
+    if (
+        not isinstance(entry.values, Tensor)
+        or entry.values.ndim != 3
+        or not entry.values.is_floating_point()
+        or entry.values.shape[-1] == 0
+        or entry.values.shape[1] != min(entry.count, entry.capacity)
+        or (entry.count and entry.values.shape[0] == 0)
+    ):
+        raise ValueError("Invalid history tensors")
+
+
 class CacheStorage:
     def __init__(
         self,
-        entries: list[CacheEntry | StateEntry],
+        entries: list[CacheEntry | StateEntry | HistoryEntry],
         storage_device: torch.device,
         read_device: torch.device,
     ) -> None:
@@ -37,10 +65,21 @@ class CacheStorage:
 
         self.entries: dict[str, CacheEntry] = {}
         self.states: dict[str, StateEntry] = {}
+        self.histories: dict[str, HistoryEntry] = {}
 
         for entry in entries:
-            if entry.layer_id in self.entries or entry.layer_id in self.states:
+            if (
+                entry.layer_id in self.entries
+                or entry.layer_id in self.states
+                or entry.layer_id in self.histories
+            ):
                 raise ValueError(f"Duplicate cache layer_id: {entry.layer_id!r}")
+
+            if isinstance(entry, HistoryEntry):
+                _validate_history(entry)
+                entry.values = entry.values.to(self.storage_device)
+                self.histories[entry.layer_id] = entry
+                continue
 
             if isinstance(entry, StateEntry):
                 entry.key_sum = entry.key_sum.to(self.storage_device)
@@ -55,7 +94,16 @@ class CacheStorage:
 
     def save(self, path: Path) -> None:
         snapshot = {
-            "format_version": 1,
+            "format_version": 2 if self.histories else 1,
+            "histories": [
+                {
+                    "layer_id": e.layer_id,
+                    "values": e.values.detach().cpu(),
+                    "capacity": e.capacity,
+                    "count": e.count,
+                }
+                for e in self.histories.values()
+            ],
             "states": [
                 {
                     "layer_id": entry.layer_id,
@@ -94,8 +142,15 @@ class CacheStorage:
             map_location="cpu",
             weights_only=True,
         )
-        if not isinstance(snapshot, dict) or snapshot.get("format_version") != 1:
+        if not isinstance(snapshot, dict) or snapshot.get("format_version") not in (
+            1,
+            2,
+        ):
             raise ValueError("Unsupported cache snapshot format_version")
+        if snapshot["format_version"] == 2 and not snapshot.get("histories"):
+            raise ValueError("History snapshot format requires histories")
+        if snapshot["format_version"] == 1 and snapshot.get("histories"):
+            raise ValueError("History entries require snapshot format 2")
         records = snapshot.get("entries")
         if not isinstance(records, list):
             raise TypeError("Cache snapshot entries must be a list")
@@ -161,6 +216,21 @@ class CacheStorage:
                 raise ValueError("Invalid recurrent cache tensors")
             entries.append(entry)
 
+        histories = snapshot.get("histories", [])
+        if not isinstance(histories, list):
+            raise TypeError("Cache histories must be a list")
+        for record in histories:
+            if not isinstance(record, dict) or set(record) != {
+                "layer_id",
+                "values",
+                "capacity",
+                "count",
+            }:
+                raise ValueError("Invalid history snapshot fields")
+            entry = HistoryEntry(**record)
+            _validate_history(entry)
+            entries.append(entry)
+
         return cls(
             entries=entries,
             storage_device=storage_device,
@@ -168,6 +238,8 @@ class CacheStorage:
         )
 
     def step(self, layer_id: str) -> int:
+        if layer_id in self.histories:
+            return self.histories[layer_id].count
         return (
             self.states[layer_id] if layer_id in self.states else self.entries[layer_id]
         ).count
@@ -326,3 +398,30 @@ class CacheStorage:
         values = value_sum.detach().to(self.storage_device).clone()
         entry.key_sum, entry.value_sum = keys, values
         entry.count += tokens
+
+    def read_history(self, layer_id: str) -> HistoryEntry:
+        e = self.histories[layer_id]
+        return HistoryEntry(
+            e.layer_id, e.values.to(self.read_device), e.capacity, e.count
+        )
+
+    def write_history(self, layer_id: str, values: Tensor) -> None:
+        e = self.histories[layer_id]
+        if (
+            values.ndim != 3
+            or not values.is_floating_point()
+            or values.shape[-1] != e.values.shape[-1]
+            or values.shape[0] == 0
+        ):
+            raise ValueError("Invalid history update")
+        if e.count and (
+            values.shape[0] != e.values.shape[0] or values.dtype != e.values.dtype
+        ):
+            raise ValueError("History batch or dtype changed")
+        if not values.shape[1]:
+            return
+        incoming = values.detach().to(self.storage_device)
+        previous = e.values if e.count else incoming[:, :0]
+        retained = torch.cat((previous, incoming), dim=1)[:, -e.capacity :].clone()
+        e.values = retained
+        e.count += values.shape[1]

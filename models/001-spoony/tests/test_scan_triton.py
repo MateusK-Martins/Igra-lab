@@ -118,27 +118,22 @@ def test_causality_and_noncontiguous_incoming_gradient():
         torch.testing.assert_close(a, e, rtol=3e-5, atol=3e-5)
 
 
-def test_full_tide_logits_and_parameter_gradients_match_reference(monkeypatch):
-    from types import SimpleNamespace
-
+def test_recurrent_module_gradients_match_reference(monkeypatch):
     import src.model.scan_triton as scan_module
-    from configs.model.model import build_model
+    from src.model.no_k_variant import NoKVariantImpl
     from src.model.scan import affine_prefix_sum
 
     torch.manual_seed(42)
-    model, _ = build_model(SimpleNamespace(vocab_size=8192))
-    assert sum(p.numel() for p in model.parameters()) == 13_329_408
-    model.cuda()
-    tokens = torch.randint(0, 8192, (2, 17), device="cuda")
+    model = NoKVariantImpl(16, 1e-6, 0.99, "write_gate", 4).cuda()
+    x = torch.randn(2, 17, 16, device="cuda")
     with torch.autocast("cuda", dtype=torch.bfloat16):
-        actual = model(tokens)
-        loss = actual.float().square().mean()
-    loss.backward()
+        actual = model(x)
+        actual.float().square().mean().backward()
     gradients = {n: p.grad.clone() for n, p in model.named_parameters()}
     model.zero_grad(set_to_none=True)
     monkeypatch.setattr(scan_module, "affine_prefix_sum_triton", affine_prefix_sum)
     with torch.autocast("cuda", dtype=torch.bfloat16):
-        expected = model(tokens)
+        expected = model(x)
         expected.float().square().mean().backward()
     torch.testing.assert_close(actual, expected, rtol=0.02, atol=0.005)
     for n, p in model.named_parameters():

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from torch import nn
 
 from src.data.tokenizer import Tokenizer
-from src.model.cache_storage import CacheEntry, StateEntry
+from src.model.cache_storage import CacheEntry, HistoryEntry, StateEntry
 from src.model.composition import build_block
 from src.model.definitions import (
     BlockDefinition,
@@ -86,13 +86,15 @@ class Model:
         ):
             raise ValueError("Tied LM head input width must match embedding width")
 
-    def assemble(self) -> tuple[ModelImpl, list[CacheEntry | StateEntry]]:
+    def assemble(
+        self,
+    ) -> tuple[ModelImpl, list[CacheEntry | StateEntry | HistoryEntry]]:
         self.validate()
 
         vocab_size = self.tokenizer.vocab_size
         embedding = self.input.build(vocab_size=vocab_size)
 
-        cache_entries: list[CacheEntry | StateEntry] = []
+        cache_entries: list[CacheEntry | StateEntry | HistoryEntry] = []
         blocks = self._unpack_blocks()
 
         body = nn.ModuleList()

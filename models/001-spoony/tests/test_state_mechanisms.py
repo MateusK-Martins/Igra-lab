@@ -177,11 +177,6 @@ def test_actual_parameter_count_and_no_k_storage():
         vocab_size = 8192
 
     model, entries = build_model(Tokenizer())
-    m = model.body[1].branch
-    count = sum(p.numel() for p in model.parameters())
-    expected = 13_329_408
-    states = [e for e in entries if hasattr(e, "key_sum")]
-    assert len(states) == 4 and len(entries) == 6
-    assert all(e.key_sum.numel() == 0 for e in states)
-    assert m.mode == "write_gate"
-    assert count == expected
+    assert sum(p.numel() for p in model.parameters()) == 13_481_856
+    assert len(entries) == 8
+    assert sum(hasattr(e, "capacity") for e in entries) == 4

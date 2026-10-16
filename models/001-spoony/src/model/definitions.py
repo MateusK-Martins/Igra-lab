@@ -6,7 +6,7 @@ import torch
 from torch import nn
 
 from src.model.attention import GQAAttentionImpl
-from src.model.cache_storage import CacheEntry, StateEntry
+from src.model.cache_storage import CacheEntry, HistoryEntry, StateEntry
 from src.model.cumulative import CumulativeMixerImpl
 from src.model.feedforward import LinearImpl, SwiGLUImpl
 from src.model.multikey import MultiKeyMixerImpl
@@ -14,6 +14,7 @@ from src.model.no_k_variant import NoKVariantImpl
 from src.model.position import PositionRotation
 from src.model.stability import RMSNormImpl
 from src.model.state_mechanisms import MassNormalizedImpl, SignedStateImpl
+from src.model.tdm import TemporalDifferenceMixerImpl
 
 
 def _positive_integer(value: int, name: str) -> None:
@@ -34,7 +35,7 @@ class BlockDefinition(Protocol):
 
     def build(self) -> nn.Module: ...
 
-    def cache(self, layer_id: int) -> CacheEntry | StateEntry | None:
+    def cache(self, layer_id: int) -> CacheEntry | StateEntry | HistoryEntry | None:
         return None
 
     def unpack(self) -> list["BlockDefinition"]:
@@ -598,4 +599,39 @@ class NoKVariant(BlockDefinition):
             f"NoKVariantImpl-{self.mode}{suffix}-{layer_id}",
             torch.empty(0, 1, 0),
             torch.empty(0, 1, self.input_features),
+        )
+
+
+@dataclass(frozen=True)
+class TemporalDifferenceMixer(BlockDefinition):
+    input_features: int
+    scales: tuple[int, ...] = (1, 2, 4, 8, 16, 32)
+    residual: bool = False
+
+    @property
+    def output_features(self) -> int:
+        return self.input_features
+
+    def __post_init__(self):
+        _positive_integer(self.input_features, "input_features")
+        if (
+            not isinstance(self.scales, tuple)
+            or not self.scales
+            or any(type(m) is not int or m <= 0 for m in self.scales)
+            or tuple(sorted(set(self.scales))) != self.scales
+        ):
+            raise ValueError(
+                "scales must be a nonempty increasing tuple of positive integers"
+            )
+        if type(self.residual) is not bool:
+            raise ValueError("residual must be a boolean")
+
+    def build(self):
+        return TemporalDifferenceMixerImpl(self.input_features, self.scales)
+
+    def cache(self, layer_id: int):
+        return HistoryEntry(
+            f"TemporalDifferenceMixerImpl-{layer_id}",
+            torch.empty(0, 0, self.input_features),
+            2 * max(self.scales) - 1,
         )
