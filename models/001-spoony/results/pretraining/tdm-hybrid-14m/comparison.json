@@ -1,0 +1,61 @@
+{
+  "models": [
+    {
+      "model": "Lantern",
+      "parameters": 12440064,
+      "validation_loss": 2.0183204765673035,
+      "perplexity": 7.525674766392367,
+      "training_seconds": 431.3326097320023,
+      "peak_cuda_allocated_bytes": 802710528,
+      "benchmark_update_seconds": 0.042788316280093566
+    },
+    {
+      "model": "Tide",
+      "parameters": 13774080,
+      "validation_loss": 2.010153390743114,
+      "perplexity": 7.464462238918839,
+      "training_seconds": 378.9706799070009,
+      "peak_cuda_allocated_bytes": 1072384000,
+      "benchmark_update_seconds": 0.04045936098009406
+    },
+    {
+      "model": "Tide/Lantern",
+      "parameters": 13329408,
+      "validation_loss": 1.9837795893351235,
+      "perplexity": 7.270169376904133,
+      "training_seconds": 301.30061305800336,
+      "peak_cuda_allocated_bytes": 790150144,
+      "benchmark_update_seconds": 0.03195281955042446
+    },
+    {
+      "model": "TDM/attention",
+      "parameters": 13481856,
+      "validation_loss": 1.9969557965243303,
+      "perplexity": 7.36659651179372,
+      "training_seconds": 493.29000732800023,
+      "peak_cuda_allocated_bytes": 841324032,
+      "benchmark_update_seconds": 0.05295695081998474
+    }
+  ],
+  "updates": 9000,
+  "target_tokens": 18429440,
+  "target_tokens_per_second": 37360.2540619596,
+  "scales": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32
+  ],
+  "mean_routing_over_four_layers_one_validation_batch": [
+    0.28123779222369194,
+    0.17885565757751465,
+    0.1415625587105751,
+    0.13883979246020317,
+    0.13089672103524208,
+    0.12860746681690216
+  ],
+  "dataset_settings_source_hashes_verified": true,
+  "limitations": "Single seed; different counts/depth/attention frequency/norm placement. Not a matched TDM-vs-attention/convolution ablation. Routing is descriptive, not evidence of semantic specialization. Historical timings may differ in hardware conditions and scan backend."
+}

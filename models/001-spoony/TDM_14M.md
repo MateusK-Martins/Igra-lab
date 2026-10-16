@@ -44,3 +44,54 @@ attention+TDM architecture keeps the experiment near14M without altering FFN wid
 A matched attention-only or convolution control would be needed to attribute gains
 to temporal differences specifically. No such extra run is included. Single seed,
 no novelty claim, no inference of semantic state tracking from these metrics.
+
+## Completed result
+
+All9000updates/18,429,440target tokens completed from scratch. Frozen source hashes, dataset/tokenizer hashes and resolved training settings were verified after completion. No architecture/hyperparameter changes occurred during training.
+
+| Model | Parameters | Validation loss | PPL | Training min |
+|---|---:|---:|---:|---:|
+| Lantern | 12,440,064 | 2.018320 | 7.525675 | 7.19 |
+| Tide | 13,774,080 | 2.010153 | 7.464462 | 6.32 |
+| Tide/Lantern | 13,329,408 | 1.983780 | 7.270169 | 5.02 |
+| TDM/attention | 13,481,856 | 1.996956 | 7.366597 | 8.22 |
+
+TDM peak CUDA allocated841,324,032bytes (0.784GiB); throughput37,360target tokens/s including validation/saving. Benchmark52.957ms/update versus31.953ms for the previous hybrid. Timing is a historical run comparison, not an interleaved hardware trial. The best saved checkpoint is step9000.
+
+### Interpretation
+
+The implemented model is numerically stable and learns language under this recipe. It improves loss slightly over pure Tide/Lantern references but is worse than the earlier Tide/Lantern hybrid and slower. This is not evidence that temporal differences themselves help or hurt: depth, attention frequency, FFN count and normalization layout also changed. A matched attention-only and causal-convolution control would be needed to isolate the mechanism; no extra run has been started. This test does not establish semantic change tracking, long-range recall, reasoning or architectural novelty.
+
+### Scale diagnostics
+
+One fixed held-out batch, averaged across four TDM layers:
+
+| Scale | Mean routing weight |
+|---|---:|
+| 1 | 0.281238 |
+| 2 | 0.178856 |
+| 4 | 0.141563 |
+| 8 | 0.138840 |
+| 16 | 0.130897 |
+| 32 | 0.128607 |
+
+Initial routing was uniform1/6 with entropy1.79176. Final per-layer mean token entropy ranges1.40827–1.62918. Smaller scales receive larger average weights, but the mixture does not concentrate entirely on one scale in this probe. Routing weights alone are not output contribution magnitudes or proof of timescale semantics. Full difference RMS, projection norms, per-scale gradient norms and output RMS are in initial/final-probe.json. All measured outputs/gradients remain finite; fixed-batch gradient norm1.37831 initially and2.03775 finally.
+
+### Fixed generations
+
+Prompt: Once upon a time, there was a little girl named Lily.
+
+> Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, scary dog. The dog was barking and running towards her. Lily was scared and didn't know what to do.
+> Suddenly, a big dog came running towards her. The dog barked and ran towards her. Lily was scared and ran
+
+Prompt: Tom found a small dog outside his house. The dog was
+
+> Tom found a small dog outside his house. The dog was very friendly and wanted to play with the dog.
+> Tom said, "Hi, I am Tom. Do you want to play with me?" The dog wagged his tail and barked. Tom said, "Yes, I want to play with you!" They played with the dog and had fun. They were happy and had
+
+Prompt: One day, a boy lost his favorite toy. He felt
+
+> One day, a boy lost his favorite toy. He felt sad and lonely. He wanted to find his toy, but he was too small. He looked everywhere, but he could not find it.
+> The boy saw a big tree. He wanted to find it. He looked around and saw a big tree. He was very happy. He wanted to find the toy. He
+
+Samples are readable but retain repetition/inconsistency. Perplexity alone does not demonstrate recall or reasoning. Full validation curve and samples are in training-report.json. Raw data and large checkpoints remain ignored by Git.

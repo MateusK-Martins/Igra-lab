@@ -1,3 +1,8 @@
+# Temporal Difference Mixer hybrid14M
+
+Current experiment: [TDM_14M.md](TDM_14M.md).
+Inherited historical model notes follow below.
+
 # Tide/Lantern hybrid14M
 
 Current experiment: [HYBRID_14M.md](HYBRID_14M.md).
