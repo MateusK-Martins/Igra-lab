@@ -43,3 +43,56 @@ softmax/matrix-vector equations and all parameter gradients, FP64 gradcheck,
 future-gradient isolation, residual once, single-token and chunked cached decoding,
 snapshot/restoration, exact cache size, full-rank learned matrices, query sensitivity,
 BF16 CPU/CUDA stability, long/zero inputs, exact counts and shared initialization.
+
+## Completed results
+
+All runs completed 9,000 fresh updates / 18,429,440 target tokens. Dataset and tokenizer fingerprints match historical Lantern. Initial shared-backbone weight hashes match across A16/A4/SMA4. Sources remained identical to each frozen training manifest.
+
+| Model | Parameters | Loss | Perplexity | Minutes | Target tokens/s | Peak GiB | Cache scalars/token/layer |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| A16 | 10,375,680 | 2.271129 | 9.690332 | 3.69 | 83,307 | 0.560 | 32 |
+| A4 | 10,265,088 | 2.488885 | 12.047835 | 3.91 | 78,573 | 0.571 | 8 |
+| SMA4 | 10,285,968 | 2.677201 | 14.544328 | 4.58 | 67,063 | 0.610 | 16 |
+| Lantern (historical) | 12,440,064 | 2.018320 | 7.525675 | 7.19 | 42,727 | 0.748 | 192 |
+
+The backbone remains full width 384 and FFN width 1024. The approximately 14M pipeline does not make the compressed variants 14M models: removing most attention parameters yields the counts above. No padding or FFN changes were made.
+
+A16 versus A4 isolates latent width with the same conventional attention mechanism. SMA4 versus A4 tests query-conditioned content at the same query/readout width, but with 16 versus 8 cached scalars per token, 20,880 additional parameters, and the explicitly requested biases. SMA4 versus A16 uses half the cache but a narrower query/readout. These are useful trade-off comparisons, not fully parameter/cache-matched ablations.
+
+SMA4 scores satisfy uᵀ Mᵢ q = (Mᵢᵀu)ᵀq. Its selection remains a four-dimensional effective-key dot product. The distinct operation is its content: Mᵢ q varies with the query. The implementation still stores the full, unconstrained 4×4 matrix and computes responses before scores; it does not replace it with KV attention.
+
+Observed SMA4 minus A4 loss: +0.188316; SMA4 minus A16: +0.406072. The matrix response did not improve on A4 in this run. This does not establish a general architectural advantage or demonstrate reasoning/retrieval. All comparisons are single-seed and limited to the same TinyStories budget.
+
+Historical Lantern is a contextual reference, not a clean cache-type ablation: it uses GQA, RoPE, more attention parameters, and a different original RNG consumption pattern. All three current variants omit positional rotation to follow the supplied equations.
+
+## Stability and samples
+
+Initial and final fixed-batch logits and gradients were finite for all variants; BF16 training completed without nonfinite-gradient failures. Diagnostic gradient norms are measured before the configured clipping at 1.0. Readout RMS, attention entropy, gradient norms, BF16 cached-logit differences, and SMA matrix singular values are recorded in initial-probe.json and final-probe.json. FP64 cache equivalence is tested separately, so BF16 kernel-rounding differences are not mistaken for changed causal semantics.
+
+### A16
+
+Gradient norm before clipping: 1.487765 initially → 4.208115 finally.
+
+Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, red ball. It was so pretty and shiny. She wanted to play with it, but it was too high for her to reach.
+Lily's mom saw her and said, "Mommy, can I play with the ball?" Her
+
+### A4
+
+Gradient norm before clipping: 1.479060 initially → 4.683069 finally.
+
+Once upon a time, there was a little girl named Lily. She loved to play with her toys and run around outside. One day, she saw a big, shiny toy car. She wanted to play with it, but it was too high. 
+Lily's mom said, "I can't find it. It's too high." 
+Lily was sad and didn't
+
+### SMA4
+
+Gradient norm before clipping: 2.023092 initially → 3.756281 finally.
+
+Once upon a time, there was a little girl named Lily. She loved to play with her toys and run around in the park. One day, she saw a big, shiny rock in the sky. She was so excited to see what was. She was so excited!
+Lily was so excited! She asked her mom if she could go to the park. Her mom said yes
+
+Samples use the same fixed prompts and greedy decoding from the best saved validation checkpoint, following the existing pipeline. Final table metrics use update 9000. All prompts and full validation curves are in training-report.json.
+
+## Reproducibility
+
+Each branch contains the same interchangeable implementation and mechanism tests, with only its mode/output paths changed. Each branch passed 507 tests and Ruff lint/format checks before training. Runtime manifests record exact recipe commits, sources, environment, artifact hashes and settings. Checkpoints and raw data remain local and ignored. comparison.json contains cross-run numeric results; per-run reports/probes remain under results/pretraining/<mode>-14m.
