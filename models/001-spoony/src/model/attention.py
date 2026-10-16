@@ -3,6 +3,7 @@ from torch import Tensor, nn
 from torch.nn import functional as F
 
 from src.model.cache_storage import CacheStorage
+from src.model.gmlp import GMLPImpl
 from src.model.position import PositionRotation
 
 
@@ -18,6 +19,8 @@ class GQAAttentionImpl(nn.Module):
         dropout: float,
         bias: bool,
         position_rotation: PositionRotation,
+        gmlp_hidden_features: int = 0,
+        gmlp_window_size: int = 64,
     ) -> None:
         super().__init__()
         self.input_features = input_features
@@ -55,13 +58,29 @@ class GQAAttentionImpl(nn.Module):
             bias=bias,
         )
 
+        self.gmlp = (
+            GMLPImpl(
+                num_query_heads * head_features, gmlp_hidden_features, gmlp_window_size
+            )
+            if gmlp_hidden_features
+            else None
+        )
+
     def assign_id(self, layer_id: int) -> None:
         self.layer_id = f"GQAAttentionImpl-{layer_id}"
+        if self.gmlp is not None:
+            self.layer_id = f"GQAAttentionImpl-gmlp-{layer_id}"
+            self.gmlp.assign_id(f"attention-{layer_id}")
 
     def forward(self, x: Tensor, *, cache: CacheStorage | None = None) -> Tensor:
         batch_size, sequence_length, _ = x.shape
 
         start_position = 0 if cache is None else cache.step(self.layer_id)
+        if cache is not None and self.gmlp is not None:
+            if torch.is_grad_enabled():
+                raise RuntimeError("External attention/gMLP cache is inference-only")
+            if cache.step(self.gmlp.layer_id) != start_position:
+                raise ValueError("Attention and gMLP cache positions disagree")
 
         positions = torch.arange(
             start_position,
@@ -138,4 +157,6 @@ class GQAAttentionImpl(nn.Module):
             self.num_query_heads * self.head_features,
         )
 
+        if self.gmlp is not None:
+            attended = attended + self.gmlp(attended, cache=cache)
         return self.out_proj(attended)

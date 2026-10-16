@@ -35,7 +35,9 @@ class BlockDefinition(Protocol):
 
     def build(self) -> nn.Module: ...
 
-    def cache(self, layer_id: int) -> CacheEntry | StateEntry | None:
+    def cache(
+        self, layer_id: int
+    ) -> CacheEntry | StateEntry | list[CacheEntry | StateEntry] | None:
         return None
 
     def unpack(self) -> list["BlockDefinition"]:
@@ -286,8 +288,19 @@ class GQAAttention(BlockDefinition):
     position_rotation: PositionRotation
     bias: bool = False
     residual: bool = False
+    gmlp_hidden_features: int = 0
+    gmlp_window_size: int = 64
 
     def __post_init__(self) -> None:
+        if (
+            type(self.gmlp_hidden_features) is not int
+            or self.gmlp_hidden_features < 0
+            or self.gmlp_hidden_features % 2
+        ):
+            raise ValueError(
+                "gmlp_hidden_features must be zero or a positive even integer"
+            )
+        _positive_integer(self.gmlp_window_size, "gmlp_window_size")
         _positive_integer(self.input_features, "input_features")
         _positive_integer(self.output_features, "output_features")
         _positive_integer(self.num_query_heads, "num_query_heads")
@@ -324,9 +337,11 @@ class GQAAttention(BlockDefinition):
             self.dropout,
             self.bias,
             self.position_rotation,
+            self.gmlp_hidden_features,
+            self.gmlp_window_size,
         )
 
-    def cache(self, layer_id: int) -> CacheEntry:
+    def cache(self, layer_id: int) -> CacheEntry | list[CacheEntry | StateEntry]:
         shape = (
             0,
             self.num_kv_heads,
@@ -334,7 +349,7 @@ class GQAAttention(BlockDefinition):
             self.head_features,
         )
 
-        return CacheEntry(
+        entry = CacheEntry(
             layer_id=f"GQAAttentionImpl-{layer_id}",
             bounded=False,
             keys=torch.empty(shape),
@@ -342,6 +357,16 @@ class GQAAttention(BlockDefinition):
             count=0,
             pointer=0,
         )
+
+        if not self.gmlp_hidden_features:
+            return entry
+        entry.layer_id = f"GQAAttentionImpl-gmlp-{layer_id}"
+        spatial = GMLP(
+            self.num_query_heads * self.head_features,
+            self.gmlp_hidden_features,
+            self.gmlp_window_size,
+        ).cache(f"attention-{layer_id}")
+        return [entry, spatial]
 
 
 @dataclass(frozen=True)

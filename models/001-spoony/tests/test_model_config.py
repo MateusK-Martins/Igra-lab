@@ -49,17 +49,19 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
         assert isinstance(attention, ResidualImpl)
         assert isinstance(
             attention.branch,
-            (CumulativeMixerImpl, GMLPImpl, GQAAttentionImpl)[(index // 4) % 3],
+            (CumulativeMixerImpl, CumulativeMixerImpl, GQAAttentionImpl)[
+                (index // 4) % 3
+            ],
         )
         assert isinstance(feedforward, ResidualImpl)
         assert isinstance(feedforward.branch, SwiGLUImpl)
         assert isinstance(norm1, RMSNormImpl)
         assert isinstance(norm2, RMSNormImpl)
-    assert [entry.layer_id for entry in entries] == [
-        model.body[index].branch.layer_id for index in range(1, 24, 4)
-    ]
-    assert len({entry.layer_id for entry in entries}) == 6
-    assert sum(isinstance(entry, StateEntry) for entry in entries) == 4
+    assert [
+        entry.layer_id for entry in entries if not entry.layer_id.startswith("GMLPImpl")
+    ] == [model.body[index].branch.layer_id for index in range(1, 24, 4)]
+    assert len({entry.layer_id for entry in entries}) == 8
+    assert sum(isinstance(entry, StateEntry) for entry in entries) == 6
     assert sum(isinstance(entry, CacheEntry) for entry in entries) == 2
 
 

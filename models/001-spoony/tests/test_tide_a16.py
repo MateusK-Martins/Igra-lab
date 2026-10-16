@@ -12,8 +12,8 @@ from src.model.position import rope
 
 def test_hybrid_configuration_count_and_gate_initialization():
     model, entries = build_model(SimpleNamespace(vocab_size=8192))
-    assert sum(p.numel() for p in model.parameters()) == 12_652_160
-    assert len(entries) == 6
+    assert sum(p.numel() for p in model.parameters()) == 12_652_960
+    assert len(entries) == 8
     for i in range(6):
         m = model.body[4 * i + 1].branch
         if i % 3 == 2:
@@ -25,13 +25,13 @@ def test_hybrid_configuration_count_and_gate_initialization():
                 == (16, 384)
             )
             assert m.out_proj.weight.shape == (384, 16)
+            assert isinstance(m.gmlp, GMLPImpl)
+            assert m.gmlp.up.weight.shape == (64, 16)
             assert m.window_size == 0 and m.dropout == 0
             assert (
                 m.position_rotation.func is rope
                 and m.position_rotation.keywords == {"base": 10000.0}
             )
-        elif i % 3 == 1:
-            assert isinstance(m, GMLPImpl) and m.window_size == 64
         else:
             assert isinstance(m, NoKVariantImpl) and m.normalization_scope == "global"
             torch.testing.assert_close(
@@ -57,9 +57,9 @@ def test_hybrid_snapshot_restore_and_mixed_cache_sizes(tmp_path):
         )
         actual = torch.cat((first, model(ids[:, 8:], cache=restored)), 1)
     torch.testing.assert_close(actual, expected, atol=1e-10, rtol=1e-9)
-    assert len(restored.states) == 4 and len(restored.entries) == 2
+    assert len(restored.states) == 6 and len(restored.entries) == 2
     assert sum(e.value_sum.numel() for e in restored.states.values()) == 2 * (
-        2 * 384 + 2 * 64 * 512
+        4 * 384 + 2 * 64 * 32
     )
     assert (
         sum(e.keys.numel() + e.values.numel() for e in restored.entries.values())
