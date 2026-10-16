@@ -1,0 +1,16 @@
+{
+  "status": "recovered_and_completed",
+  "last_logged_update": 6275,
+  "latest_checkpoint": "checkpoints/step-00006000.pt",
+  "latest_validation_update": 6000,
+  "latest_validation_loss": 2.0014195327452797,
+  "failure": "CUDA unspecified launch failure after system suspend/resume; NVIDIA kernel log Xid31 and Xid154, UVM global fatal error, Node Reboot Required; fresh CUDA initialization also fails.",
+  "first_attempt_log_birth_unix": 1792122465,
+  "first_attempt_log_modified_unix": 1792123465,
+  "first_attempt_wall_seconds_approx_including_suspend": 1000,
+  "note": "Approximate attempt wall time from log timestamps; includes failed/replayed work and suspend time. Full-run first-attempt CUDA peak unavailable. Preserve source/config/data; resume6000 with optimizer/RNG/loader state.",
+  "checkpoint_tokens": 24576000,
+  "checkpoint_and_frozen_source_verified": true,
+  "completed_updates": 6500,
+  "recovered_from_update": 6000
+}

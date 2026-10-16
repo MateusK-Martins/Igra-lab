@@ -1,3 +1,8 @@
+# Tide/Lantern hybrid
+
+Current experiment: [HYBRID_30M.md](HYBRID_30M.md).
+The material below is inherited historical context.
+
 # Tide 30M
 
 Completed scaled story/QA pipeline: [TIDE_30M.md](TIDE_30M.md).

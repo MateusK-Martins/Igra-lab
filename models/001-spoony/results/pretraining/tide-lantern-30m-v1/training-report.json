@@ -1,0 +1,55 @@
+{
+  "stage": "pretrain",
+  "parameters": 28395520,
+  "training_seconds_including_loading_validation_and_saving": 1085.096470909,
+  "peak_allocated_vram_bytes": null,
+  "training_state": {
+    "updates": 6500,
+    "batches": 6500,
+    "tokens": 26624000,
+    "completed_epochs": 0,
+    "last_loss": 1.9085361957550049,
+    "last_validation_loss": 1.990089427978597,
+    "last_validation_perplexity": 7.316188004959651,
+    "batches_in_epoch": 6500
+  },
+  "recipe_commit": "11edbe9e43a062eb8eabac783264770bad296083",
+  "validation_curve": [
+    {
+      "update": 1000,
+      "loss": 2.8136749267578125
+    },
+    {
+      "update": 2000,
+      "loss": 2.441126823425293
+    },
+    {
+      "update": 3000,
+      "loss": 2.2593343257904053
+    },
+    {
+      "update": 4000,
+      "loss": 2.1313300132751465
+    },
+    {
+      "update": 5000,
+      "loss": 2.047126054763794
+    },
+    {
+      "update": 6000,
+      "loss": 2.0014195442199707
+    },
+    {
+      "update": 6500,
+      "loss": 1.9900894165039062
+    }
+  ],
+  "tokens_per_second_padded_positions": 24536.06726570285,
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "torch_cpu_threads": 4,
+  "seed": 42,
+  "resume_from": "results/pretraining/tide-lantern-30m-v1/checkpoints/step-00006000.pt",
+  "elapsed_seconds_this_attempt": 85.096470909,
+  "peak_allocated_vram_bytes_this_attempt": 2316069888,
+  "timing_note": "Approximate aggregate attempt wall time, includes suspend and failed/replayed work; first-attempt CUDA peak unavailable."
+}
