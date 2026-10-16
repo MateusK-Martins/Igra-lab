@@ -1,0 +1,17 @@
+{
+  "tests_passed": 757,
+  "pytest_seconds": 10.32,
+  "ruff_lint": "passed",
+  "ruff_format": "passed",
+  "source_and_data_hashes_verified": true,
+  "training_settings_and_exact_exposure_verified": true,
+  "qa_initialized_from_own_mixed_checkpoint_verified": true,
+  "trained_cache_dtypes": [
+    "float32",
+    "float64"
+  ],
+  "trained_cache_tokens": 105,
+  "recipe_commit": "1228b93",
+  "checkpoint_location": "/var/tmp/igra-tide-a16-latent-gmlp-30m",
+  "sleep_inhibited_during_pipeline": true
+}

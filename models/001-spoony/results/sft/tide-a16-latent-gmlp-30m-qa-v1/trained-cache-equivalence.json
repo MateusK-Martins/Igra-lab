@@ -1,0 +1,12 @@
+{
+  "torch.float32": {
+    "max_logit_difference": 8.106231689453125e-06,
+    "allclose_passed": true,
+    "tokens": 105
+  },
+  "torch.float64": {
+    "max_logit_difference": 2.842170943040401e-14,
+    "allclose_passed": true,
+    "tokens": 105
+  }
+}
