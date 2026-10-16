@@ -1,3 +1,5 @@
+> **Active:** [AC_SWIGLU_30M.md](AC_SWIGLU_30M.md), 14-layer29.705M A16 AC-SwiGLU. Historical notes follow.
+
 Both AC-SwiGLU and matched control training complete. See AC_SWIGLU_COMPARISON.md.575tests/Ruff, shared initial tensor fingerprints and both trained-cache checks passed.
 
 > **Active:** [AC_SWIGLU_14M.md](AC_SWIGLU_14M.md), A16-conditioned SwiGLU and matched pre-FFN-normalized control. Prior notes historical.

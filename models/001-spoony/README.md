@@ -1,3 +1,5 @@
+> **Active:** [AC_SWIGLU_30M.md](AC_SWIGLU_30M.md), 14-layer29.705M A16 AC-SwiGLU. Historical notes follow.
+
 > **Active:** [AC_SWIGLU_14M.md](AC_SWIGLU_14M.md), A16-conditioned SwiGLU and matched pre-FFN-normalized control. Prior notes historical.
 
 > **Active experiment:** compressed attention with RoPE. See [ROPE_COMPARISON.md](ROPE_COMPARISON.md). Previous reports below are historical.

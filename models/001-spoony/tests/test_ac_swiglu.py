@@ -12,6 +12,13 @@ from src.model.definitions import ACSwiGLU
 from src.model.position import rope
 
 
+@pytest.fixture(autouse=True)
+def original_14m_config(monkeypatch):
+    monkeypatch.setattr("configs.model.model.MODEL_WIDTH", 384)
+    monkeypatch.setattr("configs.model.model.LAYERS", 6)
+    monkeypatch.setattr("configs.model.model.FFN_HIDDEN", 1024)
+
+
 def reference(m, x):
     a = (
         x

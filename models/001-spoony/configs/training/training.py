@@ -4,10 +4,10 @@ from src.config.types import LoggingConfig, TrainingConfig
 training_config = TrainingConfig(
     accumulation_steps=1,
     max_grad_norm=1.0,
-    validation_interval=500,
+    validation_interval=1000,
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/a16-ac-swiglu-14m/tensorboard"),
-    interval=10,
+    directory=results_path("pretraining/a16-ac-swiglu-30m-v1/tensorboard"),
+    interval=25,
 )

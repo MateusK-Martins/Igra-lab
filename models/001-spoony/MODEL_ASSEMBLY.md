@@ -1,3 +1,5 @@
+> **Active:** [AC_SWIGLU_30M.md](AC_SWIGLU_30M.md), 14-layer29.705M A16 AC-SwiGLU. Historical notes follow.
+
 > **Active:** [AC_SWIGLU_14M.md](AC_SWIGLU_14M.md), A16-conditioned SwiGLU and matched pre-FFN-normalized control. Prior notes historical.
 
 > **Codename branch:** the active larger TinyStories recipe and comparison
