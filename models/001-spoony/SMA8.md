@@ -24,4 +24,21 @@ Tests independently check equations/all gradients, RoPE, future isolation,
 FP64gradcheck, chunks/single tokens/snapshots, shape mismatch withoutmutation,
 BF16forward/backward CPU/CUDA and oldSMA4compatibility.
 
-Results pending. Frozen source commit and data hashes are recorded per run.
+Frozen source commit and data hashes are recorded per run.
+
+## Completed comparison
+
+| Model | Parameters | Loss | Perplexity | Time (min) | Tokens/s | Peak CUDA GiB |
+|---|---:|---:|---:|---:|---:|---:|
+| SMA4 + keys + GELU16 + RoPE | 10,323,288 | 2.375902 | 10.760712 | 6.39 | 48,083 | 0.996 |
+| SMA8 + keys + GELU16 + RoPE | 10,453,008 | 2.249660 | 9.484512 | 6.67 | 46,028 | 1.048 |
+| A16 + RoPE | 10,375,680 | 2.170240 | 8.760389 | 3.59 | 85,589 | 0.560 |
+
+SMA8 minus matched SMA4 loss: -0.126242. The wider operator changes both query/key width and matrix capacity, so this does not isolate matrix size alone. Compare A16 cautiously: its fixed-value attention has different cache and parameter costs. Neither loss nor matrix singular values prove associative retrieval or reasoning capability. This is one seed on TinyStories.
+
+All571tests and Ruff pass. Exact seven-artifact fingerprints, training settings and unchanged-backbone initialization match SMA4. Both process18,429,440 target tokens. FP32/FP64 trained full/cached inference agrees over273tokens. BF16 activation/gradient probes are finite. Full validation curves, fixed-prompt samples, initial/final per-layer RMS, entropy and singular-value diagnostics are retained inresults. CUDA memory is allocated memory, not total device use. Runtime includes validation/saving.
+
+### Sample
+
+Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, red ball. She wanted to play with it, but it was too high.
+Lily's friend, Timmy, came over to play. "Hi, Lily! What are you doing?" asked Lily. "I'm playing with my

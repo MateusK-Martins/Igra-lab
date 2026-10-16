@@ -1,0 +1,35 @@
+{
+  "models": [
+    {
+      "model": "SMA4 + keys + GELU16 + RoPE",
+      "parameters": 10323288,
+      "loss": 2.3759017167267973,
+      "perplexity": 10.760711926597372,
+      "seconds": 383.28263015799894,
+      "tokens_per_second": 48083.15991883825,
+      "peak_cuda_gib": 0.9958305358886719
+    },
+    {
+      "model": "SMA8 + keys + GELU16 + RoPE",
+      "parameters": 10453008,
+      "loss": 2.249660129900332,
+      "perplexity": 9.484511786544298,
+      "seconds": 400.3930488429978,
+      "tokens_per_second": 46028.37150458762,
+      "peak_cuda_gib": 1.0483016967773438
+    },
+    {
+      "model": "A16 + RoPE",
+      "parameters": 10375680,
+      "loss": 2.170240353654932,
+      "perplexity": 8.760389379323737,
+      "seconds": 215.32605484799933,
+      "tokens_per_second": 85588.527654071,
+      "peak_cuda_gib": 0.5599451065063477
+    }
+  ],
+  "same_data_and_protocol_verified": true,
+  "same_shared_initial_backbone_verified": true,
+  "tests": 571,
+  "limitations": "One seed; different parameter counts and cache sizes. Latest keyed/GELU SMA4 reference, not original response-scored SMA4. No QA or retrieval benchmark."
+}
