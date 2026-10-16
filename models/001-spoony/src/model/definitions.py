@@ -5,7 +5,7 @@ from typing import Protocol
 import torch
 from torch import nn
 
-from src.model.cache_storage import CacheEntry, StateEntry
+from src.model.cache_storage import StateEntry
 from src.model.feedforward import LinearImpl, SwiGLUImpl
 from src.model.stability import RMSNormImpl
 from src.model.tide import TideMixerImpl
@@ -29,7 +29,7 @@ class BlockDefinition(Protocol):
 
     def build(self) -> nn.Module: ...
 
-    def cache(self, layer_id: int) -> CacheEntry | StateEntry | None:
+    def cache(self, layer_id: int) -> StateEntry | None:
         return None
 
     def unpack(self) -> list["BlockDefinition"]:

@@ -1,141 +1,46 @@
+"""Recurrent cache persistence, validation and device transfers."""
+
 import pytest
 import torch
 
-from src.model.cache_storage import CacheEntry, CacheStorage
+from src.model.cache_storage import CacheStorage, StateEntry
 
 
-def test_first_write_rejects_mismatched_dtypes_without_mutating_entry(tmp_path):
-    entry = CacheEntry(
-        "layer", False, torch.empty(0, 2, 0, 3), torch.empty(0, 2, 0, 3), 0, 0
+def storage(device="cpu", read="cpu"):
+    return CacheStorage(
+        [StateEntry("layer", torch.empty(0, 1, 0), torch.empty(0, 1, 4))],
+        torch.device(device),
+        torch.device(read),
     )
-    storage = CacheStorage([entry], torch.device("cpu"), torch.device("cpu"))
-    original_keys, original_values = entry.keys, entry.values
-    keys = torch.ones(1, 2, 4, 3, dtype=torch.float32)
-    values = torch.ones(1, 2, 4, 3, dtype=torch.float64)
 
-    with pytest.raises(ValueError, match="Keys and values must have matching dtypes"):
-        storage.write("layer", keys, values)
 
-    assert entry.keys is original_keys
-    assert entry.values is original_values
-    assert entry.count == 0
-    assert entry.pointer == 0
-
-    # A rejected write must not prevent a valid first write and snapshot restore.
-    values = values.to(keys.dtype)
-    storage.write("layer", keys, values)
+def test_write_snapshot_restore_and_continue(tmp_path):
+    cache = storage()
+    state = torch.randn(2, 1, 4, requires_grad=True)
+    cache.write_state("layer", torch.empty(2, 1, 0), state, 7)
+    assert cache.step("layer") == 7
+    assert not cache.read_state("layer").value_sum.requires_grad
     path = tmp_path / "cache.pt"
-    storage.save(path)
+    cache.save(path)
     restored = CacheStorage.load(
         path, storage_device=torch.device("cpu"), read_device=torch.device("cpu")
     )
-    torch.testing.assert_close(restored.read_all("layer").keys, keys)
-    torch.testing.assert_close(restored.read_all("layer").values, values)
-    assert restored.step("layer") == 4
-
-
-@pytest.mark.parametrize("capacity", [1, 2, 5])
-@pytest.mark.parametrize(
-    "chunk_sizes", [(0, 1, 2, 7, 0, 13), (5, 5, 5), (1, 1, 1, 1, 1, 1)]
-)
-def test_bulk_ring_writes_match_token_by_token_reference(
-    tmp_path, capacity, chunk_sizes
-) -> None:
-    shape = (2, 3, capacity, 4)
-    entry = CacheEntry("layer", True, torch.zeros(shape), torch.zeros(shape), 0, 0)
-    storage = CacheStorage([entry], torch.device("cpu"), torch.device("cpu"))
-    expected_keys = torch.zeros(shape)
-    expected_values = torch.zeros(shape)
-    pointer = count = 0
-    for size in chunk_sizes:
-        keys = (
-            torch.arange(2 * 3 * size * 4, dtype=torch.float32).reshape(2, 3, size, 4)
-            + count
-        )
-        values = keys + 1000
-        for index in range(size):
-            expected_keys[:, :, pointer, :] = keys[:, :, index, :]
-            expected_values[:, :, pointer, :] = values[:, :, index, :]
-            pointer = (pointer + 1) % capacity
-            count += 1
-        storage.write("layer", keys, values)
-        torch.testing.assert_close(entry.keys, expected_keys)
-        torch.testing.assert_close(entry.values, expected_values)
-        assert entry.pointer == pointer
-        assert storage.step("layer") == count
-
-
-def test_unbounded_cache_appends_and_keeps_layers_independent(tmp_path) -> None:
-    entries = [
-        CacheEntry(name, False, torch.empty(1, 2, 0, 3), torch.empty(1, 2, 0, 3), 0, 0)
-        for name in ("a", "b")
-    ]
-    storage = CacheStorage(entries, torch.device("cpu"), torch.device("cpu"))
-    for size in (2, 3):
-        storage.write("a", torch.ones(1, 2, size, 3), torch.full((1, 2, size, 3), 2.0))
-    assert storage.step("a") == 5
-    assert storage.step("b") == 0
-    torch.testing.assert_close(entries[0].keys, torch.ones(1, 2, 5, 3))
-    torch.testing.assert_close(entries[0].values, torch.full((1, 2, 5, 3), 2.0))
-
-
-@pytest.mark.parametrize(
-    "bounded,size", [(True, 0), (True, 2), (True, 8), (False, 0), (False, 8)]
-)
-def test_snapshot_restores_buffers_and_continues_writing(tmp_path, bounded, size):
-    capacity = 5 if bounded else 0
-    entry = CacheEntry(
-        "layer",
-        bounded,
-        torch.zeros(1, 2, capacity, 3),
-        torch.zeros(1, 2, capacity, 3),
-        0,
-        0,
-    )
-    original = CacheStorage([entry], torch.device("cpu"), torch.device("cpu"))
-    keys = torch.arange(6 * size, dtype=torch.float32).reshape(1, 2, size, 3)
-    original.write("layer", keys, keys + 100)
-    path = tmp_path / "nested" / "cache.pt"
-    original.save(path)
-    restored = CacheStorage.load(
-        path, storage_device=torch.device("cpu"), read_device=torch.device("cpu")
-    )
-    for storage in (original, restored):
-        storage.write("layer", torch.ones(1, 2, 3, 3), torch.full((1, 2, 3, 3), 200.0))
-    actual = restored.entries["layer"]
-    expected = original.entries["layer"]
-    assert actual.count == expected.count
-    assert actual.pointer == expected.pointer
-    assert actual.bounded == expected.bounded
-    torch.testing.assert_close(actual.keys, expected.keys)
-    torch.testing.assert_close(actual.values, expected.values)
+    torch.testing.assert_close(restored.read_state("layer").value_sum, state)
+    for item in (cache, restored):
+        item.write_state("layer", torch.empty(2, 1, 0), state.detach() + 1, 3)
+        assert item.step("layer") == 10
     torch.testing.assert_close(
-        restored.read_all("layer").keys, original.read_all("layer").keys
-    )
-    torch.testing.assert_close(
-        restored.read_all("layer").values, original.read_all("layer").values
+        cache.read_state("layer").value_sum, restored.read_state("layer").value_sum
     )
 
 
-def test_snapshot_is_plain_detached_cpu_data(tmp_path):
-    entry = CacheEntry(
-        "layer",
-        False,
-        torch.ones(1, 1, 2, 3, requires_grad=True),
-        torch.ones(1, 1, 2, 3, requires_grad=True),
-        2,
-        0,
-    )
-    storage = CacheStorage([entry], torch.device("cpu"), torch.device("cpu"))
-    path = tmp_path / "cache.pt"
-    storage.save(path)
-    snapshot = torch.load(path, weights_only=True)
-    assert snapshot["format_version"] == 1
-    for name in ("keys", "values"):
-        tensor = snapshot["entries"][0][name]
-        assert tensor.device.type == "cpu"
-        assert not tensor.requires_grad
-    assert entry.keys.requires_grad
+def test_invalid_write_does_not_mutate_cache():
+    cache = storage()
+    previous = cache.states["layer"].value_sum
+    with pytest.raises(ValueError):
+        cache.write_state("layer", torch.empty(2, 1, 0), torch.ones(2, 1, 5), 1)
+    assert cache.states["layer"].value_sum is previous
+    assert cache.step("layer") == 0
 
 
 @pytest.mark.parametrize(
@@ -144,10 +49,11 @@ def test_snapshot_is_plain_detached_cpu_data(tmp_path):
         {"format_version": 2, "entries": []},
         {"format_version": 1, "entries": None},
         {"format_version": 1, "entries": [{}]},
+        {"format_version": 1, "entries": [], "states": [{}]},
     ],
 )
-def test_load_rejects_invalid_snapshot(tmp_path, snapshot):
-    path = tmp_path / "cache.pt"
+def test_reject_invalid_or_attention_snapshot(tmp_path, snapshot):
+    path = tmp_path / "bad.pt"
     torch.save(snapshot, path)
     with pytest.raises((ValueError, TypeError)):
         CacheStorage.load(
@@ -155,40 +61,23 @@ def test_load_rejects_invalid_snapshot(tmp_path, snapshot):
         )
 
 
-@pytest.mark.parametrize(
-    "field,value", [("count", -1), ("pointer", 4), ("bounded", 1), ("keys", "bad")]
-)
-def test_load_rejects_invalid_entry(tmp_path, field, value):
-    record = {
-        "layer_id": "layer",
-        "bounded": True,
-        "keys": torch.zeros(1, 1, 5, 3),
-        "values": torch.zeros(1, 1, 5, 3),
-        "count": 2,
-        "pointer": 2,
-    }
-    record[field] = value
-    path = tmp_path / "cache.pt"
-    torch.save({"format_version": 1, "entries": [record]}, path)
-    with pytest.raises((ValueError, TypeError)):
-        CacheStorage.load(
-            path, storage_device=torch.device("cpu"), read_device=torch.device("cpu")
-        )
+def test_duplicate_layers_rejected():
+    entry = StateEntry("layer", torch.empty(0, 1, 0), torch.empty(0, 1, 4))
+    with pytest.raises(ValueError, match="Duplicate"):
+        CacheStorage([entry, entry], torch.device("cpu"), torch.device("cpu"))
 
 
-@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA unavailable")
-def test_snapshot_can_restore_on_a_different_device(tmp_path):
-    entry = CacheEntry(
-        "layer", False, torch.ones(1, 1, 2, 3), torch.ones(1, 1, 2, 3), 2, 0
-    )
-    storage = CacheStorage([entry], torch.device("cuda"), torch.device("cuda"))
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")
+def test_device_transfer_and_snapshot(tmp_path):
+    cache = storage("cpu", "cuda")
+    state = torch.randn(2, 1, 4, device="cuda")
+    cache.write_state("layer", state.new_empty(2, 1, 0), state, 2)
+    assert cache.states["layer"].value_sum.device.type == "cpu"
+    torch.testing.assert_close(cache.read_state("layer").value_sum, state)
     path = tmp_path / "cache.pt"
-    storage.save(path)
+    cache.save(path)
     restored = CacheStorage.load(
-        path, storage_device=torch.device("cpu"), read_device=torch.device("cuda")
+        path, storage_device=torch.device("cuda"), read_device=torch.device("cpu")
     )
-    assert restored.entries["layer"].keys.device.type == "cpu"
-    assert restored.read_all("layer").keys.device.type == "cuda"
-    torch.testing.assert_close(
-        restored.read_all("layer").keys, storage.read_all("layer").keys
-    )
+    assert restored.states["layer"].value_sum.device.type == "cuda"
+    torch.testing.assert_close(restored.read_state("layer").value_sum, state.cpu())

@@ -16,7 +16,7 @@ class SFTDataset(Dataset[tuple[Tensor, Tensor]]):
     """One instruction/response per window; reject oversized examples.
 
     Encode prompt and response separately to make their token boundary explicit.
-    Right padding cannot affect earlier real tokens in causal attention. Padding
+    Right padding cannot affect earlier real tokens in a causal model. Padding
     and prompt labels are ignored; the response and its end token are supervised.
     Examples are held in RAM; no packing or silent truncation is performed.
     """

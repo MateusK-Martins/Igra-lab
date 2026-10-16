@@ -43,9 +43,9 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     assert model.lm_head.weight is model.embedding.weight
     assert len(model.body) == 24
     for index in range(0, 24, 4):
-        norm1, attention, feedforward, norm2 = model.body[index : index + 4]
-        assert isinstance(attention, ResidualImpl)
-        assert isinstance(attention.branch, TideMixerImpl)
+        norm1, mixer, feedforward, norm2 = model.body[index : index + 4]
+        assert isinstance(mixer, ResidualImpl)
+        assert isinstance(mixer.branch, TideMixerImpl)
         assert isinstance(feedforward, ResidualImpl)
         assert isinstance(feedforward.branch, SwiGLUImpl)
         assert isinstance(norm1, RMSNormImpl)

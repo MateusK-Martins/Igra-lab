@@ -53,4 +53,7 @@ from weights. Earlier architectures and results remain on their model branches.
 
 See MODEL_ASSEMBLY.md, CHECKPOINTS.md and SFT.md for the shared contracts.
 
-Cleanup verification:436 tests and Ruff passed. Exact seeded initial parameters, RNG state and FP32 logits match the original Tide under matched CPU threading.
+Cleanup verification:419 tests and Ruff passed. Unused attention KV-cache storage
+and the fixed-decay scan helper have been removed; only recurrent state storage
+and the token-dependent affine scan remain. Recurrent format-v1 snapshots remain
+readable; snapshots containing attention KV entries are explicitly rejected. Exact seeded initial parameters, RNG state and FP32 logits match the original Tide under matched CPU threading.

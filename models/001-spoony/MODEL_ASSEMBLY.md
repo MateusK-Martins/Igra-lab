@@ -24,7 +24,9 @@ persistent cache. Optional external CacheStorage stores raw S as value_sum
 [B,1,D] and an empty key_sum [B,1,0]. Cached calls require no_grad.
 StateEntry IDs are TideMixerImpl-<expanded_index>. Full sequence, chunks,
 single tokens and saved/restored cache states produce equivalent outputs.
-Generic cache storage utilities retain their existing serialization contracts.
+CacheStorage handles recurrent StateEntry objects only. The empty key_sum field
+and format-v1 snapshot schema are retained for recurrent snapshot compatibility;
+attention KV snapshots are rejected. There is no ring buffer or growing KV cache.
 
 A temporary initialization tensor preserves the historical RNG draw formerly
 consumed by an unused parent projection. It is not a parameter, projection,

@@ -2,7 +2,7 @@ import pytest
 import torch
 
 from src.model.decay import TokenDecayImpl
-from src.model.scan import affine_prefix_sum, decayed_prefix_sum
+from src.model.scan import affine_prefix_sum
 
 
 def sequential(update, decay, initial):
@@ -50,7 +50,8 @@ def test_affine_constant_gate_matches_diagonal_and_zero_gate_resets_history():
     x = torch.randn(2, 17, 4, dtype=torch.float64)
     decay = torch.tensor([0, 0.3, 0.99, 1], dtype=torch.float64)
     torch.testing.assert_close(
-        affine_prefix_sum(x, decay.expand_as(x)), decayed_prefix_sum(x, decay)
+        affine_prefix_sum(x, decay.expand_as(x)),
+        sequential(x, decay.expand_as(x), torch.zeros(2, 1, 4, dtype=x.dtype)),
     )
     torch.testing.assert_close(
         affine_prefix_sum(x, torch.zeros_like(x), torch.ones(2, 1, 4, dtype=x.dtype)), x

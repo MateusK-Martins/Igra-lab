@@ -73,4 +73,4 @@ def test_stateless_blocks_ignore_cache_and_preserve_gradients(recipe, dtype):
     plain_grad = torch.autograd.grad(plain.square().sum(), x)[0]
     cached_grad = torch.autograd.grad(cached.square().sum(), x)[0]
     torch.testing.assert_close(cached_grad, plain_grad)
-    assert cache.entries == {}
+    assert cache.states == {}
