@@ -1,3 +1,5 @@
+> **Active experiment:** A4 compressed attention with the Lantern backbone. See [ATTENTION_COMPARISON.md](ATTENTION_COMPARISON.md) for architecture, controlled protocol, completed results and limitations. Historical notes follow.
+
 > **Codename branch:** the active larger TinyStories recipe and comparison
 > protocol are documented in [CODENAME.md](CODENAME.md). The historical
 > Spoony notes below describe earlier configurations.
