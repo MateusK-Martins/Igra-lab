@@ -1,3 +1,5 @@
+Completed no-Tide integrated/separated comparison. See NO_TIDE_GMLP_COMPARISON.md. Both9000-update runs complete; source/data/settings and trained cache checks passed.
+
 > **Active:** [SEPARATED_GMLP_14M.md](SEPARATED_GMLP_14M.md), six A16 layers plus separate compressed-gMLP residuals, no Tide. Prior notes historical.
 
 > **Active:** [NO_TIDE_GMLP_14M.md](NO_TIDE_GMLP_14M.md), all-six-layer A16+compressed gMLP, no Tide. Earlier notes are historical.

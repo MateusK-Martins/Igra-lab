@@ -1,0 +1,122 @@
+{
+  "body.3.branch.gmlp": {
+    "spatial_weight_lower": {
+      "rms": 1.1287329471088015e-05,
+      "min": -5.377580600907095e-05,
+      "max": 5.693488128599711e-05,
+      "finite": true
+    },
+    "spatial_bias": {
+      "rms": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "finite": true
+    },
+    "output": {
+      "rms": 0.16045249998569489,
+      "min": -0.55859375,
+      "max": 0.53125,
+      "finite": true
+    }
+  },
+  "body.9.branch.gmlp": {
+    "spatial_weight_lower": {
+      "rms": 1.0964479770336766e-05,
+      "min": -5.708981552743353e-05,
+      "max": 4.356333374744281e-05,
+      "finite": true
+    },
+    "spatial_bias": {
+      "rms": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "finite": true
+    },
+    "output": {
+      "rms": 0.15206046402454376,
+      "min": -0.546875,
+      "max": 0.671875,
+      "finite": true
+    }
+  },
+  "body.15.branch.gmlp": {
+    "spatial_weight_lower": {
+      "rms": 1.1145200915052556e-05,
+      "min": -5.406353739090264e-05,
+      "max": 5.043928467785008e-05,
+      "finite": true
+    },
+    "spatial_bias": {
+      "rms": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "finite": true
+    },
+    "output": {
+      "rms": 0.12676511704921722,
+      "min": -0.5234375,
+      "max": 0.470703125,
+      "finite": true
+    }
+  },
+  "body.21.branch.gmlp": {
+    "spatial_weight_lower": {
+      "rms": 1.076634998753434e-05,
+      "min": -4.684062150772661e-05,
+      "max": 4.6378230763366446e-05,
+      "finite": true
+    },
+    "spatial_bias": {
+      "rms": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "finite": true
+    },
+    "output": {
+      "rms": 0.15134795010089874,
+      "min": -0.5546875,
+      "max": 0.53515625,
+      "finite": true
+    }
+  },
+  "body.27.branch.gmlp": {
+    "spatial_weight_lower": {
+      "rms": 1.0811288120748941e-05,
+      "min": -5.043841156293638e-05,
+      "max": 4.373645788291469e-05,
+      "finite": true
+    },
+    "spatial_bias": {
+      "rms": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "finite": true
+    },
+    "output": {
+      "rms": 0.16853958368301392,
+      "min": -0.578125,
+      "max": 0.6171875,
+      "finite": true
+    }
+  },
+  "body.33.branch.gmlp": {
+    "spatial_weight_lower": {
+      "rms": 1.1278852980467491e-05,
+      "min": -4.579366577672772e-05,
+      "max": 4.770384111907333e-05,
+      "finite": true
+    },
+    "spatial_bias": {
+      "rms": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "finite": true
+    },
+    "output": {
+      "rms": 0.14169545471668243,
+      "min": -0.60546875,
+      "max": 0.54296875,
+      "finite": true
+    }
+  }
+}

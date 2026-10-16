@@ -1,0 +1,15 @@
+{
+  "model": "Separated A16 + gMLP",
+  "branch": "model/001-spoony-a16-separated-gmlp-14m",
+  "parameters": 10486752,
+  "validation_loss": 2.192682486993295,
+  "perplexity": 8.95921388414525,
+  "training_seconds": 259.2826297720021,
+  "target_tokens": 18429440,
+  "target_tokens_per_second_including_validation_and_saving": 71078.57559222446,
+  "benchmark_tokens_per_second": 73447.15771419698,
+  "peak_cuda_allocated_gib": 0.6150197982788086,
+  "tests_passed": 764,
+  "initial_gradient_norm": 1.4863909907991337,
+  "final_gradient_norm": 4.061954924090378
+}

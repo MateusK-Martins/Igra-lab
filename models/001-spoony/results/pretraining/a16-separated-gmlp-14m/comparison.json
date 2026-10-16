@@ -1,0 +1,54 @@
+{
+  "models": [
+    {
+      "model": "Integrated A16 + gMLP",
+      "branch": "model/001-spoony-a16-latent-gmlp-14m",
+      "parameters": 10410720,
+      "validation_loss": 2.168634785546197,
+      "perplexity": 8.746335262955826,
+      "training_seconds": 239.5579515319987,
+      "target_tokens": 18429440,
+      "target_tokens_per_second_including_validation_and_saving": 76931.03018347653,
+      "benchmark_tokens_per_second": 81011.02826548419,
+      "peak_cuda_allocated_gib": 0.5691871643066406,
+      "tests_passed": 754,
+      "initial_gradient_norm": 1.5453416407391452,
+      "final_gradient_norm": 5.860907696243287
+    },
+    {
+      "model": "Separated A16 + gMLP",
+      "branch": "model/001-spoony-a16-separated-gmlp-14m",
+      "parameters": 10486752,
+      "validation_loss": 2.192682486993295,
+      "perplexity": 8.95921388414525,
+      "training_seconds": 259.2826297720021,
+      "target_tokens": 18429440,
+      "target_tokens_per_second_including_validation_and_saving": 71078.57559222446,
+      "benchmark_tokens_per_second": 73447.15771419698,
+      "peak_cuda_allocated_gib": 0.6150197982788086,
+      "tests_passed": 764,
+      "initial_gradient_norm": 1.4863909907991337,
+      "final_gradient_norm": 4.061954924090378
+    },
+    {
+      "model": "A16/RoPE alone",
+      "parameters": 10375680,
+      "validation_loss": 2.170240353654932,
+      "perplexity": 8.760389379323737,
+      "training_seconds": 215.32605484799933,
+      "peak_cuda_allocated_gib": 0.5599451065063477
+    },
+    {
+      "model": "Tide/A16 + compressed gMLP",
+      "parameters": 12652960,
+      "validation_loss": 2.0235166637985795,
+      "perplexity": 7.564881355693617,
+      "training_seconds": 253.20562062099634,
+      "peak_cuda_allocated_gib": 0.6726760864257812
+    }
+  ],
+  "same_artifacts_and_training_settings_verified": true,
+  "updates": 9000,
+  "actual_target_tokens": 18429440,
+  "limitations": "Single seed; altered construction changes subsequent initial RNG draws. Separated adds projections, RMSNorm and a different residual/input path. Not an exact parameter/input-matched ablation."
+}
