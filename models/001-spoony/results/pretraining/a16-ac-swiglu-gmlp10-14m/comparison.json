@@ -1,0 +1,26 @@
+{
+  "models": [
+    {
+      "model": "A16 + AC-SwiGLU",
+      "parameters": 10476288,
+      "loss": 2.111417982313368,
+      "perplexity": 8.25994544106696,
+      "seconds": 267.54010790800385,
+      "tokens_per_second": 68884.77448897918,
+      "peak_cuda_gib": 0.7155952453613281
+    },
+    {
+      "model": "A16 + full-width gMLP10 + AC-SwiGLU",
+      "parameters": 14032788,
+      "loss": 2.0564175005312317,
+      "perplexity": 7.817911916344757,
+      "seconds": 363.06816995799454,
+      "tokens_per_second": 50760.274584610954,
+      "peak_cuda_gib": 0.9386892318725586
+    }
+  ],
+  "same_data_and_protocol_verified": true,
+  "same_shared_initial_parameters_verified": true,
+  "tests": 586,
+  "limitations": "Single seed; added3.56Mparameters and a new residual/norm branch. No parameter-matched or gMLP-without-token-mixing control. No QA evaluation."
+}

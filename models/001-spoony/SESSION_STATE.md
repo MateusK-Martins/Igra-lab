@@ -1,4 +1,4 @@
-> **Active:** [AC_GMLP10.md](AC_GMLP10.md): A16 + full-width10-token gMLP + AC-SwiGLU. Previous notes below are historical.
+> **Active:** [AC_GMLP10.md](AC_GMLP10.md): A16 + full-width 10-token gMLP + AC-SwiGLU, completed 9,000 updates: loss 2.056418, perplexity 7.817912. 586 tests/Ruff and trained-cache checks pass. Previous notes below are historical.
 
 Both AC-SwiGLU and matched control training complete. See AC_SWIGLU_COMPARISON.md.575tests/Ruff, shared initial tensor fingerprints and both trained-cache checks passed.
 
