@@ -1,10 +1,12 @@
 import torch
+from torch.utils.data import ConcatDataset
 
 from configs.data.dataloader import (
     chunking_config,
     train_loader_config,
     validation_loader_config,
 )
+from configs.data.qa_corpus import qa_config
 from configs.model.model import build_model
 from configs.tokenizers.preparation import preparation_config
 from configs.training.checkpoint import checkpoint_config
@@ -14,12 +16,13 @@ from configs.training.run import run_config
 from configs.training.scheduler import scheduler_config
 from configs.training.training import logging_config, training_config
 from src.config.paths import project_root
-from src.data.dataloader import build_split_dataloader
+from src.data.dataloader import build_dataloader, build_split_dataloader
 from src.data.tokenizer import ByteLevelBPETokenizer
+from src.sft.data import SFTDataset
 from src.training.checkpoint import load_checkpoint
 from src.training.logging import build_writer
 from src.training.loop import train_loop
-from src.training.manifest import build_manifest, save_manifest
+from src.training.manifest import build_manifest, file_sha256, save_manifest
 from src.training.optimizer import build_optimizer
 from src.training.precision import build_precision
 from src.training.scheduler import build_scheduler
@@ -43,6 +46,17 @@ def main() -> None:
         validation_loader_config,
     )
 
+    if qa_config is not None:
+        train_loader = build_dataloader(
+            ConcatDataset(
+                [
+                    train_loader.dataset,
+                    SFTDataset(qa_config.train_path, tokenizer, qa_config),
+                ]
+            ),
+            train_loader_config,
+        )
+
     model, _ = build_model(tokenizer)
     model = model.to(device)
 
@@ -63,6 +77,18 @@ def main() -> None:
             "device": run_config.device,
         },
     )
+
+    if qa_config is not None:
+        manifest["settings"]["qa_format"] = {
+            "instruction_prefix": qa_config.instruction_prefix,
+            "response_prefix": qa_config.response_prefix,
+            "end_token": qa_config.end_token,
+            "context_length": qa_config.context_length,
+        }
+        manifest["artifacts"]["qa-train.jsonl"] = file_sha256(qa_config.train_path)
+        manifest["artifacts"]["qa-validation.jsonl"] = file_sha256(
+            qa_config.validation_path
+        )
 
     state = None
 

@@ -2,6 +2,6 @@ from src.config.paths import results_path
 from src.config.types import CheckpointConfig
 
 checkpoint_config = CheckpointConfig(
-    directory=results_path("pretraining/tide-a16-latent-gmlp-14m") / "checkpoints",
-    interval=1000,
+    directory=results_path("pretraining/tide-a16-latent-gmlp-30m-v1") / "checkpoints",
+    interval=2000,
 )

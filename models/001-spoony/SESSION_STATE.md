@@ -1,3 +1,5 @@
+> **Active:** [LATENT_GMLP_30M.md](LATENT_GMLP_30M.md), scaled compressed-output gMLP, unchanged64-token windows, established mixed+QA pipeline. Prior notes below are historical.
+
 Completed compressed-output gMLP experiment: final TinyStoriesloss2.023516664/PPL7.564881356,12,652,960parameters,9000updates.754tests+Ruff passed; trained105-token full/cache checks passedFP32/FP64. See LATENT_GMLP_14M.md.
 
 > **Active:** [LATENT_GMLP_14M.md](LATENT_GMLP_14M.md), gMLP after16D attention retrieval, before384D output projection. Prior notes below are historical.

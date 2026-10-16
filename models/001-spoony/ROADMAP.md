@@ -1,3 +1,5 @@
+> **Active:** [LATENT_GMLP_30M.md](LATENT_GMLP_30M.md), scaled compressed-output gMLP, unchanged64-token windows, established mixed+QA pipeline. Prior notes below are historical.
+
 > **Active:** [LATENT_GMLP_14M.md](LATENT_GMLP_14M.md), gMLP after16D attention retrieval, before384D output projection. Prior notes below are historical.
 
 > **Active:** [GMLP_TIDE_A16.md](GMLP_TIDE_A16.md), `[Tide,gMLP,A16/RoPE] ×2`,64-token fixed gMLP windows. Notes below are historical.
