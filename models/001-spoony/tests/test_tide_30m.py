@@ -11,9 +11,9 @@ def test_scaled_architecture_and_exact_ranged_initialization():
         vocab_size = 8192
 
     model, entries = build_model(Tokenizer())
-    assert sum(p.numel() for p in model.parameters()) == 29579776
+    assert sum(p.numel() for p in model.parameters()) == 28395520
     mixers = [m for m in model.modules() if isinstance(m, NoKVariantImpl)]
-    assert len(mixers) == len(entries) == 9
+    assert len(mixers) == 6 and len(entries) == 9
     for m in mixers:
         assert m.features == 512 and m.num_heads == 4
         assert type(m.value_norm) is RMSNormImpl
@@ -24,7 +24,9 @@ def test_scaled_architecture_and_exact_ranged_initialization():
         assert torch.count_nonzero(m.value_decay_gate.weight) == 0
         assert torch.count_nonzero(m.write_gate.weight) == 0
     assert all(
-        e.key_sum.numel() == 0 and e.value_sum.shape == (0, 1, 512) for e in entries
+        e.key_sum.numel() == 0 and e.value_sum.shape == (0, 1, 512)
+        for e in entries
+        if hasattr(e, "key_sum")
     )
 
 
@@ -34,6 +36,6 @@ def test_pipeline_evaluation_stage_and_normalization():
     assert pre_data.context_length == qa_data.context_length == 512
     assert pre_schedule.total_steps == qa_schedule.total_steps == 6500
     assert pre_data.response_prefix == qa_data.response_prefix == "\nAnswer: "
-    assert "pretraining/tide-30m-v1" in str(pre_checkpoint.directory)
-    assert "sft/tide-30m-qa-v1" in str(qa_checkpoint.directory)
+    assert "pretraining/tide-lantern-30m-v1" in str(pre_checkpoint.directory)
+    assert "sft/tide-lantern-30m-qa-v1" in str(qa_checkpoint.directory)
     assert normalize("The, BLUE! cat.") == "blue cat"

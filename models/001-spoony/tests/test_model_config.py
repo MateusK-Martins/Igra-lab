@@ -7,7 +7,8 @@ from torch.nn import functional as F
 
 from configs.model.model import build_model
 from src.data.tokenizer import ByteLevelBPETokenizer
-from src.model.cache_storage import CacheStorage
+from src.model.attention import GQAAttentionImpl
+from src.model.cache_storage import CacheEntry, CacheStorage, StateEntry
 from src.model.composition import ResidualImpl
 from src.model.cumulative import CumulativeMixerImpl
 from src.model.feedforward import SwiGLUImpl
@@ -45,7 +46,10 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     for index in range(0, 36, 4):
         norm1, attention, feedforward, norm2 = model.body[index : index + 4]
         assert isinstance(attention, ResidualImpl)
-        assert isinstance(attention.branch, CumulativeMixerImpl)
+        assert isinstance(
+            attention.branch,
+            GQAAttentionImpl if (index // 4) % 3 == 2 else CumulativeMixerImpl,
+        )
         assert isinstance(feedforward, ResidualImpl)
         assert isinstance(feedforward.branch, SwiGLUImpl)
         assert isinstance(norm1, RMSNormImpl)
@@ -54,7 +58,8 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
         model.body[index].branch.layer_id for index in range(1, 36, 4)
     ]
     assert len({entry.layer_id for entry in entries}) == 9
-    assert all(entry.key_sum.shape == (0, 1, 0) for entry in entries)
+    assert sum(isinstance(entry, StateEntry) for entry in entries) == 6
+    assert sum(isinstance(entry, CacheEntry) for entry in entries) == 3
 
 
 def test_config_forward_and_next_token_loss_backward(tokenizer):
@@ -84,7 +89,12 @@ def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokeni
         for a, b in zip(first.parameters(), second.parameters(), strict=True)
     )
     assert all(
-        a is not b and a.key_sum is not b.key_sum and a.value_sum is not b.value_sum
+        a is not b
+        and (
+            (a.keys is not b.keys and a.values is not b.values)
+            if isinstance(a, CacheEntry)
+            else (a.key_sum is not b.key_sum and a.value_sum is not b.value_sum)
+        )
         for a, b in zip(first_entries, second_entries, strict=True)
     )
     cache = CacheStorage(first_entries, torch.device("cpu"), torch.device("cpu"))
@@ -113,7 +123,16 @@ def test_config_cached_chunks_match_full_logits_across_window_boundary(tokenizer
         )
     torch.testing.assert_close(actual, expected, rtol=1e-7, atol=1e-9)
     assert all(entry.count == 261 for entry in entries)
-    assert all(entry.key_sum.shape == (1, 1, 0) for entry in entries)
+    assert all(
+        entry.key_sum.shape == (1, 1, 0)
+        for entry in entries
+        if isinstance(entry, StateEntry)
+    )
+    assert all(
+        entry.keys.shape == (1, 2, 261, 64)
+        for entry in entries
+        if isinstance(entry, CacheEntry)
+    )
 
 
 def test_config_state_dict_round_trip_preserves_logits_and_tying(tokenizer):

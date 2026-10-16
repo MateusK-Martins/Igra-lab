@@ -80,7 +80,17 @@ class NoKVariantImpl(SignedStateImpl):
                 ):
                     raise ValueError("No-K variant cache dimensions or dtype changed")
                 initial = previous.value_sum
-        state = affine_prefix_sum(u, self.value_decay_gate(x).to(dtype), initial)
+        decay = self.value_decay_gate(x).to(dtype)
+        if u.is_cuda and dtype == torch.float32:
+            from src.model.scan_triton import affine_prefix_sum_triton
+
+            state = affine_prefix_sum_triton(
+                u.contiguous(),
+                decay.contiguous(),
+                None if initial is None else initial.contiguous(),
+            )
+        else:
+            state = affine_prefix_sum(u, decay, initial)
         read = self.value_norm(state)
         if self.read_down is not None:
             read = self.read_up(self.read_down(read.to(self.read_down.weight.dtype)))

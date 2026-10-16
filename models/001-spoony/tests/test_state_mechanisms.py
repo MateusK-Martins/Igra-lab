@@ -179,21 +179,9 @@ def test_actual_parameter_count_and_no_k_storage():
     model, entries = build_model(Tokenizer())
     m = model.body[1].branch
     count = sum(p.numel() for p in model.parameters())
-    if hasattr(m, "mode"):
-        expected = {
-            "write_gate": 29579776,
-            "signed_readout": 12887040,
-            "lowrank": 13034496,
-        }[m.mode]
-        assert all(e.key_sum.numel() == 0 for e in entries)
-    elif hasattr(m, "num_keys"):
-        assert m.num_keys == 2 and not m.tied_query
-        expected = 15552768
-    elif hasattr(m, "token_decay"):
-        expected = 12887040 if m.token_decay else 12002304
-        assert not hasattr(m, "k_proj") and not hasattr(m, "key_norm")
-        assert all(e.key_sum.numel() == 0 for e in entries)
-    else:
-        expected = 13769472
-        assert not hasattr(m, "key_norm") and not hasattr(m, "value_norm")
+    expected = 28_395_520
+    states = [e for e in entries if hasattr(e, "key_sum")]
+    assert len(states) == 6 and len(entries) == 9
+    assert all(e.key_sum.numel() == 0 for e in states)
+    assert m.mode == "write_gate"
     assert count == expected
