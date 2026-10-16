@@ -6,3 +6,5 @@ SMA rotates columns M_i R_i^T, Q rotates R_t q, independent keys rotate R_i k.
 Cached rotary values are written once, offsets use count. No Tide experiment
 is running; partial tide-a16 branch is preserved. Check results for completion.
 Checkpoint links use /var/tmp/igra-rope-14m because home is nearly full.
+
+All five 9000-update RoPE reruns have completed; see ROPE_COMPARISON.md and the per-branch results. Sources were frozen during training.

@@ -1,0 +1,93 @@
+{
+  "mode": "sma4_key_gelu16",
+  "phase": "final",
+  "parameters": 10323288,
+  "initial_shared_backbone_sha256": "de4903aceb9aa264226cc1c7f83212797a350fda01f9c3d3c4cea006461ba1b1",
+  "fixed_batch_loss": 2.3579273223876953,
+  "finite_logits": true,
+  "finite_gradients": true,
+  "gradient_norm_before_clipping": 4.958826065063477,
+  "layers": [
+    {
+      "layer": 1,
+      "output_rms": 0.3795258104801178,
+      "query_rms": 1.2223066091537476,
+      "mean_attention_entropy": 3.8752832412719727,
+      "mean_singular_values": [
+        3.451672077178955,
+        1.9497212171554565,
+        0.9560092687606812,
+        0.2771664261817932
+      ],
+      "mean_matrix_norm": 4.126767635345459
+    },
+    {
+      "layer": 5,
+      "output_rms": 0.5480772256851196,
+      "query_rms": 1.4352893829345703,
+      "mean_attention_entropy": 3.513871908187866,
+      "mean_singular_values": [
+        4.089944839477539,
+        2.000598907470703,
+        1.0140914916992188,
+        0.26187700033187866
+      ],
+      "mean_matrix_norm": 4.7476887702941895
+    },
+    {
+      "layer": 9,
+      "output_rms": 0.6734381318092346,
+      "query_rms": 1.690104365348816,
+      "mean_attention_entropy": 3.1919662952423096,
+      "mean_singular_values": [
+        3.000966787338257,
+        1.6545096635818481,
+        0.7576274871826172,
+        0.21894606947898865
+      ],
+      "mean_matrix_norm": 3.56789493560791
+    },
+    {
+      "layer": 13,
+      "output_rms": 0.7461223602294922,
+      "query_rms": 2.3324081897735596,
+      "mean_attention_entropy": 2.2655248641967773,
+      "mean_singular_values": [
+        3.773202419281006,
+        2.1547811031341553,
+        1.0580730438232422,
+        0.32705825567245483
+      ],
+      "mean_matrix_norm": 4.551144599914551
+    },
+    {
+      "layer": 17,
+      "output_rms": 0.8960691094398499,
+      "query_rms": 2.7125589847564697,
+      "mean_attention_entropy": 1.8901532888412476,
+      "mean_singular_values": [
+        3.237854480743408,
+        1.6701154708862305,
+        0.8629000782966614,
+        0.2359658181667328
+      ],
+      "mean_matrix_norm": 3.8191723823547363
+    },
+    {
+      "layer": 21,
+      "output_rms": 0.6601189374923706,
+      "query_rms": 1.9950270652770996,
+      "mean_attention_entropy": 2.9361462593078613,
+      "mean_singular_values": [
+        3.05233097076416,
+        1.6419646739959717,
+        0.8408415913581848,
+        0.27202269434928894
+      ],
+      "mean_matrix_norm": 3.6264290809631348
+    }
+  ],
+  "bf16_cached_max_logit_difference": 0.03125,
+  "cached_tokens": 32,
+  "cache_tensor_elements": 3840
+}
