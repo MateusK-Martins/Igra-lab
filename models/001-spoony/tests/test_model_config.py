@@ -51,15 +51,16 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
         assert isinstance(layer.ffn_norm, RMSNormImpl)
         assert isinstance(norm2, RMSNormImpl)
         assert layer.attention.mode == MODE
-    assert [entry.layer_id for entry in entries] == [
+    assert [entry.layer_id for entry in entries[::2]] == [
         model.body[i].layer_id for i in range(0, 12, 2)
     ]
-    assert len({entry.layer_id for entry in entries}) == 6
+    assert len({entry.layer_id for entry in entries}) == 12
     assert all(
         (
             entry.matrices.shape == (0, 0, 4, 4)
             if MODE in ("sma4", "sma4_key", "sma4_key_gelu16")
-            else entry.keys.shape == (0, 1, 0, 16 if MODE == "a16" else 4)
+            else entry.keys.shape
+            == ((0, 1, 10, 512) if entry.bounded else (0, 1, 0, 16))
         )
         for entry in entries
     )
@@ -122,7 +123,8 @@ def test_config_cached_chunks_match_full_logits_across_window_boundary(tokenizer
         (
             entry.matrices.shape == (1, 261, 4, 4)
             if MODE in ("sma4", "sma4_key", "sma4_key_gelu16")
-            else entry.keys.shape == (1, 1, 261, 16 if MODE == "a16" else 4)
+            else entry.keys.shape
+            == ((1, 1, 10, 512) if entry.bounded else (1, 1, 261, 16))
         )
         for entry in entries
     )

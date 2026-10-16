@@ -1,3 +1,5 @@
+> **Active:** [AC_GMLP10.md](AC_GMLP10.md): A16 + full-width10-token gMLP + AC-SwiGLU. Previous notes below are historical.
+
 > **Active:** [AC_SWIGLU_14M.md](AC_SWIGLU_14M.md), A16-conditioned SwiGLU and matched pre-FFN-normalized control. Prior notes historical.
 
 > **Codename branch:** the active larger TinyStories recipe and comparison

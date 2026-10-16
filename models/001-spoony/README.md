@@ -1,3 +1,5 @@
+> **Active:** [AC_GMLP10.md](AC_GMLP10.md): A16 + full-width10-token gMLP + AC-SwiGLU. Previous notes below are historical.
+
 > **Active:** [AC_SWIGLU_14M.md](AC_SWIGLU_14M.md), A16-conditioned SwiGLU and matched pre-FFN-normalized control. Prior notes historical.
 
 > **Active experiment:** compressed attention with RoPE. See [ROPE_COMPARISON.md](ROPE_COMPARISON.md). Previous reports below are historical.

@@ -12,6 +12,11 @@ from src.model.definitions import ACSwiGLU
 from src.model.position import rope
 
 
+@pytest.fixture(autouse=True)
+def original_ac_configuration(monkeypatch):
+    monkeypatch.setattr("configs.model.model.GMLP_HIDDEN_FEATURES", 0)
+
+
 def reference(m, x):
     a = (
         x

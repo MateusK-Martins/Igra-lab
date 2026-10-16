@@ -32,7 +32,9 @@ class BlockDefinition(Protocol):
 
     def build(self) -> nn.Module: ...
 
-    def cache(self, layer_id: int) -> CacheEntry | MatrixCacheEntry | None:
+    def cache(
+        self, layer_id: int
+    ) -> CacheEntry | MatrixCacheEntry | list[CacheEntry] | None:
         return None
 
     def unpack(self) -> list["BlockDefinition"]:
@@ -397,12 +399,23 @@ class ACSwiGLU(BlockDefinition):
     alpha: float = 0.1
     conditioned: bool = True
     residual: bool = False
+    gmlp_hidden_features: int = 0
+    gmlp_window_size: int = 10
 
     @property
     def output_features(self):
         return self.input_features
 
     def __post_init__(self):
+        if (
+            type(self.gmlp_hidden_features) is not int
+            or self.gmlp_hidden_features < 0
+            or self.gmlp_hidden_features % 2
+        ):
+            raise ValueError(
+                "gmlp_hidden_features must be zero or positive even integer"
+            )
+        _positive_integer(self.gmlp_window_size, "gmlp_window_size")
         _positive_integer(self.hidden_features, "hidden_features")
         RMSNorm(self.input_features, self.eps)
         LatentAttention(self.input_features, "a16", rope_base=self.rope_base)
@@ -425,9 +438,23 @@ class ACSwiGLU(BlockDefinition):
             self.rope_base,
             self.alpha,
             self.conditioned,
+            self.gmlp_hidden_features,
+            self.gmlp_window_size,
         )
 
     def cache(self, layer_id):
-        return LatentAttention(
+        attention = LatentAttention(
             self.input_features, "a16", rope_base=self.rope_base
         ).cache(layer_id)
+        if not self.gmlp_hidden_features:
+            return attention
+        shape = (0, 1, self.gmlp_window_size, self.gmlp_hidden_features // 2)
+        history = CacheEntry(
+            f"GMLPImpl-w{self.gmlp_window_size}-ac-{layer_id}",
+            True,
+            torch.empty(shape),
+            torch.empty(shape),
+            0,
+            0,
+        )
+        return [attention, history]

@@ -101,7 +101,7 @@ class Model:
             cache = block.cache(block_id)
 
             if cache is not None:
-                cache_entries.append(cache)
+                cache_entries.extend(cache if isinstance(cache, list) else [cache])
 
             block_module = build_block(block, block_id)
 

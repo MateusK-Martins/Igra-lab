@@ -4,6 +4,8 @@ from src.model.definitions import ACSwiGLU, Embedding, LMHead, Repeat, RMSNorm
 
 MODE = "a16"
 CONDITIONED = True
+GMLP_HIDDEN_FEATURES = 1024
+GMLP_WINDOW_SIZE = 10
 
 
 def build_model(tokenizer: Tokenizer):
@@ -21,6 +23,8 @@ def build_model(tokenizer: Tokenizer):
                         rope_base=10000.0,
                         alpha=0.1,
                         conditioned=CONDITIONED,
+                        gmlp_hidden_features=GMLP_HIDDEN_FEATURES,
+                        gmlp_window_size=GMLP_WINDOW_SIZE,
                     ),
                     RMSNorm(input_features=384, eps=1e-6),
                 ],

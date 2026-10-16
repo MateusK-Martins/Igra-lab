@@ -8,6 +8,6 @@ training_config = TrainingConfig(
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/a16-ac-swiglu-14m/tensorboard"),
+    directory=results_path("pretraining/a16-ac-swiglu-gmlp10-14m/tensorboard"),
     interval=10,
 )
