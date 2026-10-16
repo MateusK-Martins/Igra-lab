@@ -1,4 +1,4 @@
-> **Active experiment:** SMA4 compressed attention with the Lantern backbone. See [ATTENTION_COMPARISON.md](ATTENTION_COMPARISON.md) for architecture, controlled protocol, completed results and limitations. Historical notes follow.
+> **Active experiment:** SMA4 with independent 4D keys; see [SMA4_KEY.md](SMA4_KEY.md). Historical SMA4 compressed attention with the Lantern backbone. See [ATTENTION_COMPARISON.md](ATTENTION_COMPARISON.md) for architecture, controlled protocol, completed results and limitations. Historical notes follow.
 
 > **Codename branch:** the active larger TinyStories recipe and comparison
 > protocol are documented in [CODENAME.md](CODENAME.md). The historical

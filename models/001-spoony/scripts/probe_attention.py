@@ -50,12 +50,16 @@ def main():
         def hook(module, args, output, index=index):
             x = args[0]
             q = module.q_proj(x).float()
-            if MODE == "sma4":
+            if MODE in ("sma4", "sma4_key"):
                 matrices = module.matrix_proj(x).float().reshape(*x.shape[:2], 4, 4)
                 responses = torch.einsum("bsij,btj->btsi", matrices, q)
-                scores = (
-                    torch.einsum("btsi,i->bts", responses, module.scoring.float()) / 2
-                )
+                if MODE == "sma4_key":
+                    scores = q @ module.k_proj(x).float().transpose(-1, -2) / 2
+                else:
+                    scores = (
+                        torch.einsum("btsi,i->bts", responses, module.scoring.float())
+                        / 2
+                    )
                 singular = torch.linalg.svdvals(matrices.detach())
                 extra = {
                     "mean_singular_values": singular.mean((0, 1)).tolist(),
@@ -63,7 +67,11 @@ def main():
                     .norm(dim=(-2, -1))
                     .mean()
                     .item(),
-                    "scoring_vector_norm": module.scoring.detach().norm().item(),
+                    **(
+                        {"scoring_vector_norm": module.scoring.detach().norm().item()}
+                        if MODE == "sma4"
+                        else {}
+                    ),
                 }
             else:
                 k = module.k_proj(x).float()
@@ -127,7 +135,10 @@ def main():
         "cache_tensor_elements": sum(
             e.keys.numel() + e.values.numel() for e in cache.entries.values()
         )
-        + sum(e.matrices.numel() for e in cache.matrices.values()),
+        + sum(
+            e.matrices.numel() + (0 if e.keys is None else e.keys.numel())
+            for e in cache.matrices.values()
+        ),
     }
     if not all_finite or not report["finite_logits"]:
         raise RuntimeError("Nonfinite diagnostic")

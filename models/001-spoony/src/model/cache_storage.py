@@ -20,6 +20,7 @@ class MatrixCacheEntry:
     layer_id: str
     matrices: Tensor
     count: int = 0
+    keys: Tensor | None = None
 
 
 class CacheStorage:
@@ -49,6 +50,13 @@ class CacheStorage:
                     or not entry.matrices.is_floating_point()
                 ):
                     raise ValueError("Invalid matrix cache state")
+                if entry.keys is not None:
+                    if (
+                        entry.keys.shape != (*entry.matrices.shape[:2], 4)
+                        or entry.keys.dtype != entry.matrices.dtype
+                    ):
+                        raise ValueError("Invalid matrix cache keys")
+                    entry.keys = entry.keys.to(self.storage_device)
                 entry.matrices = entry.matrices.to(self.storage_device)
                 self.matrices[entry.layer_id] = entry
                 continue
@@ -59,12 +67,17 @@ class CacheStorage:
 
     def save(self, path: Path) -> None:
         snapshot = {
-            "format_version": 2 if self.matrices else 1,
+            "format_version": (
+                3 if any(e.keys is not None for e in self.matrices.values()) else 2
+            )
+            if self.matrices
+            else 1,
             "matrices": [
                 {
                     "layer_id": e.layer_id,
                     "matrices": e.matrices.detach().cpu(),
                     "count": e.count,
+                    **({"keys": e.keys.detach().cpu()} if e.keys is not None else {}),
                 }
                 for e in self.matrices.values()
             ],
@@ -102,6 +115,7 @@ class CacheStorage:
         if not isinstance(snapshot, dict) or snapshot.get("format_version") not in (
             1,
             2,
+            3,
         ):
             raise ValueError("Unsupported cache snapshot format_version")
         records = snapshot.get("entries")
@@ -138,21 +152,26 @@ class CacheStorage:
                 raise ValueError("Invalid unbounded cache count or pointer")
             entries.append(entry)
 
-        if snapshot["format_version"] == 2:
+        if snapshot["format_version"] in (2, 3):
             records = snapshot.get("matrices")
             if not isinstance(records, list):
                 raise ValueError("Matrix snapshot records must be a list")
             for record in records:
-                if not isinstance(record, dict) or set(record) != {
-                    "layer_id",
-                    "matrices",
-                    "count",
-                }:
+                fields = {"layer_id", "matrices", "count"}
+                if (
+                    snapshot["format_version"] == 3
+                    and isinstance(record, dict)
+                    and "keys" in record
+                ):
+                    fields.add("keys")
+                if not isinstance(record, dict) or set(record) != fields:
                     raise ValueError("Invalid matrix snapshot fields")
                 if not isinstance(record["layer_id"], str) or not record["layer_id"]:
                     raise ValueError("Invalid matrix layer ID")
                 if not isinstance(record["matrices"], Tensor):
                     raise TypeError("Invalid matrix tensor")
+                if "keys" in record and not isinstance(record["keys"], Tensor):
+                    raise TypeError("Invalid matrix key tensor")
                 entries.append(MatrixCacheEntry(**record))
         return cls(
             entries=entries,
@@ -282,20 +301,47 @@ class CacheStorage:
             pointer=0,
         )
 
-    def write_matrices(self, layer_id: str, matrices: Tensor) -> None:
+    def write_matrices(
+        self, layer_id: str, matrices: Tensor, *, keys: Tensor | None = None
+    ) -> None:
         entry = self.matrices[layer_id]
         if matrices.ndim != 4 or matrices.shape[-2:] != (4, 4):
             raise ValueError("Matrix cache expects [batch, tokens, 4, 4]")
+        if (keys is None) != (entry.keys is None):
+            raise ValueError("Matrix cache key mode mismatch")
+        if keys is not None and (
+            keys.shape != (*matrices.shape[:2], 4) or keys.dtype != matrices.dtype
+        ):
+            raise ValueError("Matrix cache key shape or dtype mismatch")
         matrices = matrices.detach().to(self.storage_device)
-        if entry.count == 0 and entry.matrices.shape[0] == 0:
-            entry.matrices = matrices.new_empty((matrices.shape[0], 0, 4, 4))
-        if (
+        first_write = entry.count == 0 and entry.matrices.shape[0] == 0
+        if not first_write and (
             matrices.shape[0] != entry.matrices.shape[0]
             or matrices.dtype != entry.matrices.dtype
         ):
             raise ValueError("Matrix cache batch or dtype mismatch")
-        entry.matrices = torch.cat((entry.matrices, matrices), dim=1)
+        # Validate both tensors before changing either part of the cache.
+        previous = (
+            matrices.new_empty((matrices.shape[0], 0, 4, 4))
+            if first_write
+            else entry.matrices
+        )
+        next_matrices = torch.cat((previous, matrices), dim=1)
+        if keys is not None:
+            keys = keys.detach().to(self.storage_device)
+            previous_keys = (
+                keys.new_empty((keys.shape[0], 0, 4)) if first_write else entry.keys
+            )
+            next_keys = torch.cat((previous_keys, keys), dim=1)
+            entry.keys = next_keys
+        entry.matrices = next_matrices
         entry.count += matrices.shape[1]
 
     def read_matrices(self, layer_id: str) -> Tensor:
         return self.matrices[layer_id].matrices.to(self.read_device)
+
+    def read_matrix_keys(self, layer_id: str) -> Tensor:
+        keys = self.matrices[layer_id].keys
+        if keys is None:
+            raise ValueError("Matrix cache has no independent keys")
+        return keys.to(self.read_device)
