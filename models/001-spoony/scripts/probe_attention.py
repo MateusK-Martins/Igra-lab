@@ -15,6 +15,7 @@ from configs.training.training import logging_config
 from src.data.dataloader import build_split_dataloader
 from src.data.tokenizer import ByteLevelBPETokenizer
 from src.model.cache_storage import CacheStorage
+from src.model.position import rope
 from src.training.loss import next_token_loss
 
 
@@ -49,12 +50,25 @@ def main():
 
         def hook(module, args, output, index=index):
             x = args[0]
-            q = module.q_proj(x).float()
+            q = module.q_proj(x)
+            positions = torch.arange(x.shape[1], device=x.device)
+            if module.rope_base is not None:
+                q = rope(q.unsqueeze(1), positions, base=module.rope_base).squeeze(1)
+            q = q.float()
             if MODE in ("sma4", "sma4_key", "sma4_key_gelu16"):
                 matrices = module.matrix_proj(x).float().reshape(*x.shape[:2], 4, 4)
+                if module.rope_base is not None:
+                    matrices = rope(
+                        matrices.transpose(1, 2), positions, base=module.rope_base
+                    ).transpose(1, 2)
                 responses = torch.einsum("bsij,btj->btsi", matrices, q)
                 if MODE in ("sma4_key", "sma4_key_gelu16"):
-                    scores = q @ module.k_proj(x).float().transpose(-1, -2) / 2
+                    k = module.k_proj(x)
+                    if module.rope_base is not None:
+                        k = rope(
+                            k.unsqueeze(1), positions, base=module.rope_base
+                        ).squeeze(1)
+                    scores = q @ k.float().transpose(-1, -2) / 2
                 else:
                     scores = (
                         torch.einsum("btsi,i->bts", responses, module.scoring.float())
@@ -74,7 +88,12 @@ def main():
                     ),
                 }
             else:
-                k = module.k_proj(x).float()
+                k = module.k_proj(x)
+                if module.rope_base is not None:
+                    k = rope(k.unsqueeze(1), positions, base=module.rope_base).squeeze(
+                        1
+                    )
+                k = k.float()
                 scores = q @ k.transpose(-1, -2) / module.latent_features**0.5
                 extra = {}
             mask = torch.ones(

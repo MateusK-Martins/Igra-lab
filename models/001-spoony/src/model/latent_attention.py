@@ -5,11 +5,13 @@ from torch import nn
 from torch.nn import functional as F
 
 from src.model.cache_storage import CacheStorage
+from src.model.position import rope
 
 
 class LatentAttentionImpl(nn.Module):
-    def __init__(self, width: int, mode: str):
+    def __init__(self, width: int, mode: str, *, rope_base: float | None = None):
         super().__init__()
+        self.rope_base = rope_base
         self.mode = mode
         self.latent_features = 16 if mode == "a16" else 4
         self.q_proj = nn.Linear(
@@ -38,18 +40,30 @@ class LatentAttentionImpl(nn.Module):
             self.response_proj = nn.Linear(4, 16, bias=True)
 
     def assign_id(self, layer_id):
-        self.layer_id = f"LatentAttentionImpl-{layer_id}"
+        self.layer_id = f"LatentAttentionImpl{'-rope' if self.rope_base is not None else ''}-{layer_id}"
 
     def forward(self, x, *, cache: CacheStorage | None = None):
         if cache is not None and torch.is_grad_enabled():
             raise RuntimeError("Cached attention is inference-only; use no_grad")
         start = 0 if cache is None else cache.step(self.layer_id)
         q = self.q_proj(x)
+        positions = start + torch.arange(x.shape[1], device=x.device)
+        if self.rope_base is not None:
+            q = rope(q.unsqueeze(1), positions, base=self.rope_base).squeeze(1)
         if self.mode in ("sma4", "sma4_key", "sma4_key_gelu16"):
             matrices = self.matrix_proj(x).unflatten(-1, (4, 4))
             keys = (
                 self.k_proj(x) if self.mode in ("sma4_key", "sma4_key_gelu16") else None
             )
+            if self.rope_base is not None:
+                # Rotate matrix rows as vectors of column coordinates: M_i R_i^T.
+                matrices = rope(
+                    matrices.transpose(1, 2), positions, base=self.rope_base
+                ).transpose(1, 2)
+                if keys is not None:
+                    keys = rope(
+                        keys.unsqueeze(1), positions, base=self.rope_base
+                    ).squeeze(1)
             if cache is not None:
                 cache.write_matrices(self.layer_id, matrices, keys=keys)
                 matrices = cache.read_matrices(self.layer_id)
@@ -90,6 +104,8 @@ class LatentAttentionImpl(nn.Module):
             return self.out_proj(z.to(q.dtype))
         q = q.unsqueeze(1)
         k, v = self.k_proj(x).unsqueeze(1), self.v_proj(x).unsqueeze(1)
+        if self.rope_base is not None:
+            k = rope(k, positions, base=self.rope_base)
         if cache is not None:
             cache.write(self.layer_id, k, v)
             entry = cache.read_all(self.layer_id)

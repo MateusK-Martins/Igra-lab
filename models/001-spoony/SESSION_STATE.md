@@ -1,10 +1,8 @@
-# SMA4 nonlinear contribution experiment — 2026-10-16
+# RoPE comparison reruns — 2026-10-16
 
-Branch model/001-spoony-sma4-gelu16-14m. Read SMA4_GELU16.md and the actual
-LatentAttention definition/runtime before changes. Mode sma4_key_gelu16 keeps
-independent 4D keys and 4x4 matrices, projects each Mq response through biased
-Linear(4,16)+GELU before aggregation, then decodes 16-to-384. Existing cache
-format and older attention modes are preserved. Frozen recipe/outputs are in
-results/pretraining/sma4-gelu16-14m. Inherited reports describe earlier models.
-
-The fresh 9000-update run is complete; see SMA4_GELU16.md and results/pretraining/sma4-gelu16-14m. All 529 tests and Ruff passed before training.
+See ROPE_COMPARISON.md. Active A16/A4/SMA4/key/GELU16 RoPE branches preserve
+all prior no-RoPE runs. Positional definitions/runtime/tests have been read;
+SMA rotates columns M_i R_i^T, Q rotates R_t q, independent keys rotate R_i k.
+Cached rotary values are written once, offsets use count. No Tide experiment
+is running; partial tide-a16 branch is preserved. Check results for completion.
+Checkpoint links use /var/tmp/igra-rope-14m because home is nearly full.

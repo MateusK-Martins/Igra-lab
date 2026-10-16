@@ -345,6 +345,7 @@ class LatentAttention(BlockDefinition):
     input_features: int
     mode: str
     residual: bool = False
+    rope_base: float | None = None
 
     @property
     def output_features(self):
@@ -354,16 +355,25 @@ class LatentAttention(BlockDefinition):
         _positive_integer(self.input_features, "input_features")
         if self.mode not in ("a16", "a4", "sma4", "sma4_key", "sma4_key_gelu16"):
             raise ValueError("mode must be a16, a4, sma4, sma4_key or sma4_key_gelu16")
+        if self.rope_base is not None and (
+            isinstance(self.rope_base, bool)
+            or not isinstance(self.rope_base, (int, float))
+            or not math.isfinite(self.rope_base)
+            or self.rope_base <= 0
+        ):
+            raise ValueError("rope_base must be finite and positive or None")
         if type(self.residual) is not bool:
             raise ValueError("residual must be a boolean")
 
     def build(self):
         # Different projection sizes cannot shift initialization of the shared FFNs.
         with torch.random.fork_rng(devices=[]):
-            return LatentAttentionImpl(self.input_features, self.mode)
+            return LatentAttentionImpl(
+                self.input_features, self.mode, rope_base=self.rope_base
+            )
 
     def cache(self, layer_id):
-        name = f"LatentAttentionImpl-{layer_id}"
+        name = f"LatentAttentionImpl{'-rope' if self.rope_base is not None else ''}-{layer_id}"
         if self.mode in ("sma4", "sma4_key", "sma4_key_gelu16"):
             return MatrixCacheEntry(
                 name,

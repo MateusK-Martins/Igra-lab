@@ -2,7 +2,7 @@ from src.data.tokenizer import Tokenizer
 from src.model.assembler import Model
 from src.model.definitions import *
 
-MODE = "sma4_key_gelu16"
+MODE = "a16"
 
 
 def build_model(tokenizer: Tokenizer):
@@ -14,7 +14,9 @@ def build_model(tokenizer: Tokenizer):
                 times=6,
                 blocks=[
                     RMSNorm(input_features=384, eps=1e-6),
-                    LatentAttention(input_features=384, mode=MODE, residual=True),
+                    LatentAttention(
+                        input_features=384, mode=MODE, residual=True, rope_base=10000.0
+                    ),
                     SwiGLU(
                         input_features=384,
                         hidden_features=1024,
