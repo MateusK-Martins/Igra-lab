@@ -15,10 +15,17 @@ class CacheEntry:
     pointer: int
 
 
+@dataclass
+class MatrixCacheEntry:
+    layer_id: str
+    matrices: Tensor
+    count: int = 0
+
+
 class CacheStorage:
     def __init__(
         self,
-        entries: list[CacheEntry],
+        entries: list[CacheEntry | MatrixCacheEntry],
         storage_device: torch.device,
         read_device: torch.device,
     ) -> None:
@@ -26,11 +33,25 @@ class CacheStorage:
         self.read_device = read_device
 
         self.entries: dict[str, CacheEntry] = {}
+        self.matrices: dict[str, MatrixCacheEntry] = {}
 
         for entry in entries:
-            if entry.layer_id in self.entries:
+            if entry.layer_id in self.entries or entry.layer_id in self.matrices:
                 raise ValueError(f"Duplicate cache layer_id: {entry.layer_id!r}")
 
+            if isinstance(entry, MatrixCacheEntry):
+                if (
+                    entry.matrices.ndim != 4
+                    or entry.matrices.shape[-2:] != (4, 4)
+                    or type(entry.count) is not int
+                    or entry.count < 0
+                    or entry.matrices.shape[1] != entry.count
+                    or not entry.matrices.is_floating_point()
+                ):
+                    raise ValueError("Invalid matrix cache state")
+                entry.matrices = entry.matrices.to(self.storage_device)
+                self.matrices[entry.layer_id] = entry
+                continue
             entry.keys = entry.keys.to(self.storage_device)
             entry.values = entry.values.to(self.storage_device)
 
@@ -38,7 +59,15 @@ class CacheStorage:
 
     def save(self, path: Path) -> None:
         snapshot = {
-            "format_version": 1,
+            "format_version": 2 if self.matrices else 1,
+            "matrices": [
+                {
+                    "layer_id": e.layer_id,
+                    "matrices": e.matrices.detach().cpu(),
+                    "count": e.count,
+                }
+                for e in self.matrices.values()
+            ],
             "entries": [
                 {
                     "layer_id": entry.layer_id,
@@ -52,6 +81,8 @@ class CacheStorage:
             ],
         }
 
+        if not self.matrices:
+            snapshot.pop("matrices")
         path.parent.mkdir(parents=True, exist_ok=True)
         torch.save(snapshot, path)
 
@@ -68,7 +99,10 @@ class CacheStorage:
             map_location="cpu",
             weights_only=True,
         )
-        if not isinstance(snapshot, dict) or snapshot.get("format_version") != 1:
+        if not isinstance(snapshot, dict) or snapshot.get("format_version") not in (
+            1,
+            2,
+        ):
             raise ValueError("Unsupported cache snapshot format_version")
         records = snapshot.get("entries")
         if not isinstance(records, list):
@@ -104,6 +138,22 @@ class CacheStorage:
                 raise ValueError("Invalid unbounded cache count or pointer")
             entries.append(entry)
 
+        if snapshot["format_version"] == 2:
+            records = snapshot.get("matrices")
+            if not isinstance(records, list):
+                raise ValueError("Matrix snapshot records must be a list")
+            for record in records:
+                if not isinstance(record, dict) or set(record) != {
+                    "layer_id",
+                    "matrices",
+                    "count",
+                }:
+                    raise ValueError("Invalid matrix snapshot fields")
+                if not isinstance(record["layer_id"], str) or not record["layer_id"]:
+                    raise ValueError("Invalid matrix layer ID")
+                if not isinstance(record["matrices"], Tensor):
+                    raise TypeError("Invalid matrix tensor")
+                entries.append(MatrixCacheEntry(**record))
         return cls(
             entries=entries,
             storage_device=storage_device,
@@ -111,6 +161,8 @@ class CacheStorage:
         )
 
     def step(self, layer_id: str) -> int:
+        if layer_id in self.matrices:
+            return self.matrices[layer_id].count
         return self.entries[layer_id].count
 
     def write(
@@ -229,3 +281,21 @@ class CacheStorage:
             count=entry.count,
             pointer=0,
         )
+
+    def write_matrices(self, layer_id: str, matrices: Tensor) -> None:
+        entry = self.matrices[layer_id]
+        if matrices.ndim != 4 or matrices.shape[-2:] != (4, 4):
+            raise ValueError("Matrix cache expects [batch, tokens, 4, 4]")
+        matrices = matrices.detach().to(self.storage_device)
+        if entry.count == 0 and entry.matrices.shape[0] == 0:
+            entry.matrices = matrices.new_empty((matrices.shape[0], 0, 4, 4))
+        if (
+            matrices.shape[0] != entry.matrices.shape[0]
+            or matrices.dtype != entry.matrices.dtype
+        ):
+            raise ValueError("Matrix cache batch or dtype mismatch")
+        entry.matrices = torch.cat((entry.matrices, matrices), dim=1)
+        entry.count += matrices.shape[1]
+
+    def read_matrices(self, layer_id: str) -> Tensor:
+        return self.matrices[layer_id].matrices.to(self.read_device)

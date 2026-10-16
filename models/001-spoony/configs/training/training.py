@@ -8,6 +8,6 @@ training_config = TrainingConfig(
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/codename-tinystories-v1/tensorboard"),
+    directory=results_path("pretraining/a16-14m/tensorboard"),
     interval=10,
 )

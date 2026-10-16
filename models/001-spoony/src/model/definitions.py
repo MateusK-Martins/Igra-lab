@@ -6,8 +6,9 @@ import torch
 from torch import nn
 
 from src.model.attention import GQAAttentionImpl
-from src.model.cache_storage import CacheEntry
+from src.model.cache_storage import CacheEntry, MatrixCacheEntry
 from src.model.feedforward import LinearImpl, SwiGLUImpl
+from src.model.latent_attention import LatentAttentionImpl
 from src.model.position import PositionRotation
 from src.model.stability import RMSNormImpl
 
@@ -337,3 +338,34 @@ class GQAAttention(BlockDefinition):
             count=0,
             pointer=0,
         )
+
+
+@dataclass(frozen=True)
+class LatentAttention(BlockDefinition):
+    input_features: int
+    mode: str
+    residual: bool = False
+
+    @property
+    def output_features(self):
+        return self.input_features
+
+    def __post_init__(self):
+        _positive_integer(self.input_features, "input_features")
+        if self.mode not in ("a16", "a4", "sma4"):
+            raise ValueError("mode must be a16, a4 or sma4")
+        if type(self.residual) is not bool:
+            raise ValueError("residual must be a boolean")
+
+    def build(self):
+        # Different projection sizes cannot shift initialization of the shared FFNs.
+        with torch.random.fork_rng(devices=[]):
+            return LatentAttentionImpl(self.input_features, self.mode)
+
+    def cache(self, layer_id):
+        name = f"LatentAttentionImpl-{layer_id}"
+        if self.mode == "sma4":
+            return MatrixCacheEntry(name, torch.empty(0, 0, 4, 4))
+        features = 16 if self.mode == "a16" else 4
+        shape = (0, 1, 0, features)
+        return CacheEntry(name, False, torch.empty(shape), torch.empty(shape), 0, 0)
