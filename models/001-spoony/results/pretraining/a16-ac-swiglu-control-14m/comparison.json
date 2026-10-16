@@ -1,0 +1,42 @@
+{
+  "models": [
+    {
+      "model": "Historical A16/RoPE, no pre-FFN RMSNorm",
+      "parameters": 10375680,
+      "validation_loss": 2.170240353654932,
+      "perplexity": 8.760389379323737,
+      "training_seconds": 215.32605484799933,
+      "peak_cuda_allocated_gib": 0.5599451065063477
+    },
+    {
+      "model": "Matched pre-FFN RMSNorm control",
+      "parameters": 10377984,
+      "validation_loss": 2.1115663758030645,
+      "perplexity": 8.261171254144756,
+      "training_seconds": 222.95497241200064,
+      "actual_target_tokens": 18429440,
+      "target_tokens_per_second_including_validation_and_saving": 82659.91917840729,
+      "benchmark_tokens_per_second": 85633.20157299897,
+      "peak_cuda_allocated_gib": 0.5956611633300781,
+      "tests_passed": 575
+    },
+    {
+      "model": "A16-conditioned SwiGLU",
+      "parameters": 10476288,
+      "validation_loss": 2.111417982313368,
+      "perplexity": 8.25994544106696,
+      "training_seconds": 267.54010790800385,
+      "actual_target_tokens": 18429440,
+      "target_tokens_per_second_including_validation_and_saving": 68884.77448897918,
+      "benchmark_tokens_per_second": 70772.65885916706,
+      "peak_cuda_allocated_gib": 0.7155952453613281,
+      "tests_passed": 575
+    }
+  ],
+  "same_artifacts_training_protocol_verified": true,
+  "initial_shared_parameter_sha256": "886d6ed9ac52bd4e9427552a0db508576db1e495b460b5a7fbd7951ffcbf83f7",
+  "exact_initial_fixed_batch_loss_shared": 9.043853759765625,
+  "ac_minus_matched_control_loss": -0.000148393489696641,
+  "control_minus_historical_a16_loss": -0.058673977851867676,
+  "limitations": "One seed,TinyStories only. No task-switching/QA experiment. Historical baseline differs in pre-FFN normalization. Use matched control to assess conditioning."
+}

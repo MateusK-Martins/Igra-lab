@@ -1,0 +1,12 @@
+{
+  "model": "Matched pre-FFN RMSNorm control",
+  "parameters": 10377984,
+  "validation_loss": 2.1115663758030645,
+  "perplexity": 8.261171254144756,
+  "training_seconds": 222.95497241200064,
+  "actual_target_tokens": 18429440,
+  "target_tokens_per_second_including_validation_and_saving": 82659.91917840729,
+  "benchmark_tokens_per_second": 85633.20157299897,
+  "peak_cuda_allocated_gib": 0.5956611633300781,
+  "tests_passed": 575
+}

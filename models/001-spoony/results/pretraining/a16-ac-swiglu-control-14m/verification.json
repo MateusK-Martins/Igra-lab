@@ -1,0 +1,20 @@
+{
+  "pytest_passed": 575,
+  "ruff_lint": "passed",
+  "ruff_format": "passed",
+  "recipe_commit": "4570840",
+  "source_frozen_verified": true,
+  "trained_cache": {
+    "torch.float32": {
+      "max_logit_difference": 1.7642974853515625e-05,
+      "allclose_passed": true,
+      "tokens": 273
+    },
+    "torch.float64": {
+      "max_logit_difference": 4.618527782440651e-14,
+      "allclose_passed": true,
+      "tokens": 273
+    }
+  },
+  "sleep_inhibited_during_training": true
+}
