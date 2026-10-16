@@ -1,10 +1,10 @@
 # Training checkpoints and resume
 
 `configs/training/checkpoint.py` selects the checkpoint directory and interval
-(currently 100 successful optimizer updates). Pass that config and a settings
+(currently 1,000 successful optimizer updates). Pass that config and a settings
 manifest to `train_loop(checkpoint_config=..., checkpoint_settings=...)` to
 save periodically and after the final update. Files are named
-`step-00000100.pt` under `results/pretraining/local/checkpoints/` by default.
+`step-00001000.pt` under `results/pretraining/tide/checkpoints/` by default.
 Saving follows that update's validation and logging. Skipped FP16 updates do
 not trigger saves. Checkpoints are written to a temporary file in the same
 directory, then replaced atomically; failed writes preserve the previous file.

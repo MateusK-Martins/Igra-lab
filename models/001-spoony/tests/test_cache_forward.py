@@ -1,14 +1,11 @@
 from dataclasses import dataclass
-from functools import partial
 from types import SimpleNamespace
-from unittest.mock import patch
 
 import pytest
 import torch
 from torch import nn
 
 from src.model.assembler import Model
-from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheStorage
 from src.model.definitions import (
     BlockDefinition,
@@ -20,7 +17,6 @@ from src.model.definitions import (
     Sequential,
     SwiGLU,
 )
-from src.model.position import rope
 
 
 class RecorderImpl(nn.Module):
@@ -78,41 +74,3 @@ def test_stateless_blocks_ignore_cache_and_preserve_gradients(recipe, dtype):
     cached_grad = torch.autograd.grad(cached.square().sum(), x)[0]
     torch.testing.assert_close(cached_grad, plain_grad)
     assert cache.entries == {}
-
-
-@pytest.mark.parametrize("residual", [False, True])
-def test_attention_receives_storage_through_model(residual):
-    from src.model.definitions import GQAAttention
-
-    model, entries = Model(
-        SimpleNamespace(vocab_size=7),
-        Embedding(4),
-        [
-            GQAAttention(
-                4,
-                4,
-                2,
-                1,
-                2,
-                0,
-                0.0,
-                position_rotation=partial(rope, base=10000.0),
-                residual=residual,
-            )
-        ],
-        LMHead(4),
-    ).assemble()
-    cache = CacheStorage(entries, torch.device("cpu"), torch.device("cpu"))
-    received = []
-
-    def forward(module, x, *, cache=None):
-        received.append((module.layer_id, cache))
-        return x * 2
-
-    tokens = torch.tensor([[1, 2]])
-    with patch.object(GQAAttentionImpl, "forward", forward):
-        output = model(tokens, cache=cache)
-    assert received == [(entries[0].layer_id, cache)]
-    torch.testing.assert_close(
-        output, model.lm_head(model.embedding(tokens) * (3 if residual else 2))
-    )

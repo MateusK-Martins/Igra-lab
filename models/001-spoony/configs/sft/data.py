@@ -6,8 +6,8 @@ from src.sft.config import SFTDataConfig
 data_config = SFTDataConfig(
     train_path=data_path("raw/sft/train.jsonl"),
     validation_path=data_path("raw/sft/validation.jsonl"),
-    tokenizer_path=data_path("processed/shakespeare/tokenizer.json"),
-    context_length=128,
+    tokenizer_path=data_path("processed/tinystories/tokenizer.json"),
+    context_length=256,
 )
 train_loader_config = DataLoaderConfig(8, True, 0, True, False, 42)
 validation_loader_config = DataLoaderConfig(8, False, 0, True, False, 42)

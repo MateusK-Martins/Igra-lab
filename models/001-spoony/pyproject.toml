@@ -1,7 +1,7 @@
 [project]
-name = "spoony"
+name = "tide-template"
 version = "0.0.0"
-description = "Spoony, an independent decoder-only Transformer experiment"
+description = "Tide, a selective-write recurrent language model template"
 requires-python = ">=3.13,<3.14"
 dependencies = []
 

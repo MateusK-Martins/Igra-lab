@@ -21,36 +21,3 @@ class RMSNormImpl(nn.Module):
         normalized = working * torch.rsqrt(mean_square + self.eps)
 
         return (normalized * self.weights).to(dtype=x.dtype)
-
-
-class SoftRMSNormImpl(nn.Module):
-    """Compress feature RMS smoothly; do not amplify small input vectors.
-
-    No learned gain: the denominator is at least one and the Jacobian at zero
-    is the identity. This changes only the internal cumulative normalizations.
-    """
-
-    def __init__(self, features: int) -> None:
-        super().__init__()
-        self.features = features
-
-    def forward(self, x: Tensor, *, cache: CacheStorage | None = None) -> Tensor:
-        working = x.float() if x.dtype in (torch.float16, torch.bfloat16) else x
-        mean_square = working.square().mean(dim=-1, keepdim=True)
-        return (working * torch.rsqrt(1.0 + mean_square)).to(x.dtype)
-
-
-class HeadRMSNormImpl(RMSNormImpl):
-    """Independent head statistics with the original flat per-feature gain."""
-
-    def __init__(self, features: int, eps: float, num_heads: int):
-        super().__init__(features, eps)
-        self.num_heads = num_heads
-
-    def forward(self, x: Tensor, *, cache: CacheStorage | None = None) -> Tensor:
-        working = x.float() if x.dtype in (torch.float16, torch.bfloat16) else x
-        heads = working.reshape(*x.shape[:-1], self.num_heads, -1)
-        normalized = heads * torch.rsqrt(
-            heads.square().mean(-1, keepdim=True) + self.eps
-        )
-        return (normalized.flatten(-2) * self.weights).to(x.dtype)

@@ -1,19 +1,14 @@
 import math
 from dataclasses import dataclass
-from typing import Literal, Protocol
+from typing import Protocol
 
 import torch
 from torch import nn
 
-from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheEntry, StateEntry
-from src.model.cumulative import CumulativeMixerImpl
 from src.model.feedforward import LinearImpl, SwiGLUImpl
-from src.model.multikey import MultiKeyMixerImpl
-from src.model.no_k_variant import NoKVariantImpl
-from src.model.position import PositionRotation
 from src.model.stability import RMSNormImpl
-from src.model.state_mechanisms import MassNormalizedImpl, SignedStateImpl
+from src.model.tide import TideMixerImpl
 
 
 def _positive_integer(value: int, name: str) -> None:
@@ -273,261 +268,11 @@ class LMHead(LMHeadDefinition):
 
 
 @dataclass(frozen=True)
-class GQAAttention(BlockDefinition):
-    input_features: int
-    output_features: int
-
-    num_query_heads: int
-    num_kv_heads: int
-    head_features: int
-    window_size: int
-    dropout: float
-    position_rotation: PositionRotation
-    bias: bool = False
-    residual: bool = False
-
-    def __post_init__(self) -> None:
-        _positive_integer(self.input_features, "input_features")
-        _positive_integer(self.output_features, "output_features")
-        _positive_integer(self.num_query_heads, "num_query_heads")
-        _positive_integer(self.num_kv_heads, "num_kv_heads")
-        _positive_integer(self.head_features, "head_features")
-
-        if type(self.window_size) is not int or self.window_size < 0:
-            raise ValueError("window_size must be a non-negative integer")
-
-        if (
-            type(self.dropout) not in (int, float)
-            or not math.isfinite(self.dropout)
-            or not 0 <= self.dropout < 1
-        ):
-            raise ValueError("dropout must be finite and in [0, 1)")
-
-        if type(self.bias) is not bool:
-            raise ValueError("bias must be a boolean")
-
-        if type(self.residual) is not bool:
-            raise ValueError("residual must be a boolean")
-
-        if self.num_query_heads % self.num_kv_heads != 0:
-            raise ValueError("num_query_heads must be divisible by num_kv_heads")
-
-    def build(self) -> nn.Module:
-        return GQAAttentionImpl(
-            self.input_features,
-            self.output_features,
-            self.num_query_heads,
-            self.num_kv_heads,
-            self.head_features,
-            self.window_size,
-            self.dropout,
-            self.bias,
-            self.position_rotation,
-        )
-
-    def cache(self, layer_id: int) -> CacheEntry:
-        shape = (
-            0,
-            self.num_kv_heads,
-            0,
-            self.head_features,
-        )
-
-        return CacheEntry(
-            layer_id=f"GQAAttentionImpl-{layer_id}",
-            bounded=False,
-            keys=torch.empty(shape),
-            values=torch.empty(shape),
-            count=0,
-            pointer=0,
-        )
-
-
-@dataclass(frozen=True)
-class CumulativeMixer(BlockDefinition):
+class TideMixer(BlockDefinition):
     input_features: int
     eps: float = 1e-6
-    residual: bool = False
-    bias: bool = False
-    normalization: Literal["rms", "soft_rms"] = "rms"
-    key_decay: bool = False
-    value_decay: bool = False
-    decay_init: float = 0.99
-    decay_mode: Literal["diagonal", "token"] = "diagonal"
-
-    @property
-    def output_features(self) -> int:
-        return self.input_features
-
-    def __post_init__(self) -> None:
-        _positive_integer(self.input_features, "input_features")
-        if (
-            type(self.eps) not in (int, float)
-            or not math.isfinite(self.eps)
-            or self.eps <= 0
-        ):
-            raise ValueError("eps must be finite and greater than zero")
-        if self.normalization not in ("rms", "soft_rms"):
-            raise ValueError("normalization must be rms or soft_rms")
-        if (
-            type(self.decay_init) not in (int, float)
-            or not math.isfinite(self.decay_init)
-            or not 0 < self.decay_init < 1
-        ):
-            raise ValueError(
-                "decay_init must be finite and strictly between zero and one"
-            )
-        if self.decay_mode not in ("diagonal", "token"):
-            raise ValueError("decay_mode must be diagonal or token")
-        for name in ("residual", "bias", "key_decay", "value_decay"):
-            if type(getattr(self, name)) is not bool:
-                raise ValueError(f"{name} must be a boolean")
-
-    def build(self) -> nn.Module:
-        return CumulativeMixerImpl(
-            self.input_features,
-            self.eps,
-            bias=self.bias,
-            normalization=self.normalization,
-            key_decay=self.key_decay,
-            value_decay=self.value_decay,
-            decay_init=self.decay_init,
-            decay_mode=self.decay_mode,
-        )
-
-    def cache(self, layer_id: int) -> StateEntry:
-        return StateEntry(
-            f"CumulativeMixerImpl-{layer_id}",
-            torch.empty(0, 1, self.input_features),
-            torch.empty(0, 1, self.input_features),
-        )
-
-
-@dataclass
-class SignedState(BlockDefinition):
-    input_features: int
-    token_decay: bool = True
-    eps: float = 1e-6
-    decay_init: float = 0.99
-    residual: bool = False
-
-    @property
-    def output_features(self):
-        return self.input_features
-
-    def __post_init__(self):
-        CumulativeMixer(
-            self.input_features,
-            eps=self.eps,
-            decay_init=self.decay_init,
-            residual=self.residual,
-        )
-        if type(self.token_decay) is not bool:
-            raise ValueError("token_decay must be boolean")
-
-    def build(self):
-        return SignedStateImpl(
-            self.input_features, self.eps, self.decay_init, self.token_decay
-        )
-
-    def cache(self, layer_id: int):
-        return StateEntry(
-            f"SignedStateImpl-{layer_id}",
-            torch.empty(0, 1, 0),
-            torch.empty(0, 1, self.input_features),
-        )
-
-
-@dataclass
-class MassNormalized(BlockDefinition):
-    input_features: int
-    eps: float = 1e-6
-    decay_init: float = 0.99
-    residual: bool = False
-
-    @property
-    def output_features(self):
-        return self.input_features
-
-    def __post_init__(self):
-        CumulativeMixer(
-            self.input_features,
-            eps=self.eps,
-            decay_init=self.decay_init,
-            residual=self.residual,
-        )
-
-    def build(self):
-        return MassNormalizedImpl(self.input_features, self.eps, self.decay_init)
-
-    def cache(self, layer_id: int):
-        return StateEntry(
-            f"MassNormalizedImpl-{layer_id}",
-            torch.empty(0, 1, 2 * self.input_features),
-            torch.empty(0, 1, 2 * self.input_features),
-        )
-
-
-@dataclass
-class MultiKeyMixer(BlockDefinition):
-    input_features: int
-    num_keys: int = 4
-    tied_query: bool = True
-    eps: float = 1e-6
-    decay_init: float = 0.99
-    residual: bool = False
-
-    @property
-    def output_features(self) -> int:
-        return self.input_features
-
-    def __post_init__(self):
-        _positive_integer(self.input_features, "input_features")
-        _positive_integer(self.num_keys, "num_keys")
-        for name in ("tied_query", "residual"):
-            if type(getattr(self, name)) is not bool:
-                raise ValueError(f"{name} must be boolean")
-        if (
-            type(self.eps) not in (int, float)
-            or not math.isfinite(self.eps)
-            or self.eps <= 0
-        ):
-            raise ValueError("eps must be finite and positive")
-        if (
-            type(self.decay_init) not in (int, float)
-            or not math.isfinite(self.decay_init)
-            or not 0 < self.decay_init < 1
-        ):
-            raise ValueError("decay_init must be strictly between zero and one")
-
-    def build(self):
-        return MultiKeyMixerImpl(
-            self.input_features,
-            self.num_keys,
-            self.tied_query,
-            self.eps,
-            self.decay_init,
-        )
-
-    def cache(self, layer_id: int) -> StateEntry:
-        return StateEntry(
-            f"MultiKeyMixerImpl-{layer_id}",
-            torch.empty(0, 1, self.num_keys * self.input_features),
-            torch.empty(0, 1, self.input_features),
-        )
-
-
-@dataclass
-class NoKVariant(BlockDefinition):
-    input_features: int
-    mode: Literal["write_gate", "signed_readout", "lowrank"] = "write_gate"
-    rank: int = 32
-    num_heads: int = 1
-    normalization_scope: Literal["head", "global"] = "head"
     retention_initials: tuple[float, ...] | None = None
     write_initials: tuple[float, ...] | None = None
-    eps: float = 1e-6
-    decay_init: float = 0.99
     residual: bool = False
 
     @property
@@ -535,67 +280,26 @@ class NoKVariant(BlockDefinition):
         return self.input_features
 
     def __post_init__(self):
-        CumulativeMixer(
-            self.input_features,
-            eps=self.eps,
-            decay_init=self.decay_init,
-            residual=self.residual,
-        )
-        if self.mode not in ("write_gate", "signed_readout", "lowrank"):
-            raise ValueError("mode must be write_gate, signed_readout or lowrank")
-        _positive_integer(self.rank, "rank")
-        if self.mode == "lowrank" and self.rank > self.input_features:
-            raise ValueError("rank must not exceed feature width")
-
-        if self.normalization_scope not in ("head", "global"):
-            raise ValueError("normalization_scope must be head or global")
-        _positive_integer(self.num_heads, "num_heads")
-        if self.input_features % self.num_heads:
-            raise ValueError("feature width must be divisible by num_heads")
-        if self.mode != "write_gate" and (
-            self.num_heads != 1
-            or self.retention_initials is not None
-            or self.write_initials is not None
-        ):
-            raise ValueError("head and gate preferences require write_gate mode")
+        RMSNorm(self.input_features, self.eps, self.residual)
         for values in (self.retention_initials, self.write_initials):
             if values is not None:
-                if not isinstance(values, tuple) or len(values) not in (
-                    self.num_heads,
-                    self.input_features,
-                ):
+                if not isinstance(values, tuple) or len(values) != self.input_features:
                     raise ValueError(
-                        "gate preferences must contain one probability per head or feature"
+                        "gate preferences require one probability per feature"
                     )
-                if any(
-                    isinstance(v, bool)
-                    or not isinstance(v, (int, float))
-                    or not 0 < v < 1
-                    for v in values
-                ):
+                if any(type(v) not in (int, float) or not 0 < v < 1 for v in values):
                     raise ValueError(
                         "gate probabilities must be strictly between zero and one"
                     )
 
     def build(self):
-        return NoKVariantImpl(
-            self.input_features,
-            self.eps,
-            self.decay_init,
-            self.mode,
-            self.rank,
-            self.num_heads,
-            self.retention_initials,
-            self.write_initials,
-            self.normalization_scope,
+        return TideMixerImpl(
+            self.input_features, self.eps, self.retention_initials, self.write_initials
         )
 
     def cache(self, layer_id: int):
-        suffix = f"-heads{self.num_heads}" if self.num_heads > 1 else ""
-        if self.num_heads > 1 and self.normalization_scope == "global":
-            suffix += "-global"
         return StateEntry(
-            f"NoKVariantImpl-{self.mode}{suffix}-{layer_id}",
+            f"TideMixerImpl-{layer_id}",
             torch.empty(0, 1, 0),
             torch.empty(0, 1, self.input_features),
         )

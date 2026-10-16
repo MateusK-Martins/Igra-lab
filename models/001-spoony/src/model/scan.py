@@ -1,4 +1,4 @@
-"""Differentiable parallel scans for diagonal, time-invariant recurrences."""
+"""Differentiable parallel scans for vector affine recurrences."""
 
 import torch
 from torch import Tensor

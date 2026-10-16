@@ -1,5 +1,4 @@
 import io
-from functools import partial
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -8,7 +7,6 @@ import torch
 
 from src.model.assembler import Model
 from src.model.definitions import Embedding, LMHead, Repeat, Sequential, SwiGLU
-from src.model.position import rope
 
 
 def definition(tied=True):
@@ -61,31 +59,19 @@ def test_empty_body_and_revalidation_before_build() -> None:
         build.assert_not_called()
 
 
-def test_assembly_collects_cache_entries_for_each_attention_occurrence() -> None:
-    from src.model.attention import GQAAttentionImpl
+def test_assembly_collects_independent_tide_states():
     from src.model.cache_storage import CacheStorage
-    from src.model.definitions import GQAAttention
+    from src.model.definitions import TideMixer
 
-    attention = GQAAttention(
-        4, 4, 2, 1, 2, 0, 0.0, position_rotation=partial(rope, base=10000.0)
-    )
-    recipe = Model(
+    model, entries = Model(
         SimpleNamespace(vocab_size=13),
         Embedding(4),
-        [Repeat(2, [Sequential([attention])]), attention],
+        [Repeat(3, [TideMixer(4)])],
         LMHead(4),
-    )
-    model, entries = recipe.assemble()
-    layers = [m for m in model.modules() if isinstance(m, GQAAttentionImpl)]
-    assert [e.layer_id for e in entries] == [m.layer_id for m in layers]
+    ).assemble()
+    assert [e.layer_id for e in entries] == [m.layer_id for m in model.body]
     assert len({e.layer_id for e in entries}) == 3
-    assert len({id(e.keys) for e in entries}) == 3
-    assert all(e.keys.shape == (0, 1, 0, 2) for e in entries)
     storage = CacheStorage(entries, torch.device("cpu"), torch.device("cpu"))
-    keys = torch.ones(2, 1, 3, 2, dtype=torch.float16)
-    storage.write(entries[0].layer_id, keys, keys + 1)
-    restored = storage.read_all(entries[0].layer_id)
-    torch.testing.assert_close(restored.keys, keys)
-    torch.testing.assert_close(restored.values, keys + 1)
-    assert restored.count == 3
-    assert storage.step(entries[1].layer_id) == 0
+    with torch.no_grad():
+        model(torch.tensor([[1, 2, 3]]), cache=storage)
+    assert all(storage.read_state(e.layer_id).count == 3 for e in entries)

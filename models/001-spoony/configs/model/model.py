@@ -12,15 +12,10 @@ def build_model(tokenizer: Tokenizer):
                 times=6,
                 blocks=[
                     RMSNorm(input_features=384, eps=1e-6),
-                    NoKVariant(
+                    TideMixer(
                         input_features=384,
                         eps=1e-6,
                         residual=True,
-                        decay_init=0.99,
-                        mode="write_gate",
-                        rank=32,
-                        num_heads=4,
-                        normalization_scope="global",
                         retention_initials=tuple(
                             0.90 + 0.095 * j / 383 for j in range(384)
                         ),

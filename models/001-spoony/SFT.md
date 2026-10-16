@@ -39,7 +39,7 @@ Editable settings are separate from pretraining:
 
 The supplied recipe is a starting point, not a validated SFT experiment. Select
 suitable examples and a schedule for their size before training. The default
-initialization points to the best Shakespeare v4 checkpoint. No SFT dataset is
+initialization points to the final Tide checkpoint. No SFT dataset is
 bundled and no SFT run is launched by this change.
 
 ## Start and resume

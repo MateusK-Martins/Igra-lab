@@ -9,9 +9,9 @@ from configs.model.model import build_model
 from src.data.tokenizer import ByteLevelBPETokenizer
 from src.model.cache_storage import CacheStorage
 from src.model.composition import ResidualImpl
-from src.model.cumulative import CumulativeMixerImpl
 from src.model.feedforward import SwiGLUImpl
 from src.model.stability import RMSNormImpl
+from src.model.tide import TideMixerImpl
 
 
 @pytest.fixture(autouse=True)
@@ -45,7 +45,7 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     for index in range(0, 24, 4):
         norm1, attention, feedforward, norm2 = model.body[index : index + 4]
         assert isinstance(attention, ResidualImpl)
-        assert isinstance(attention.branch, CumulativeMixerImpl)
+        assert isinstance(attention.branch, TideMixerImpl)
         assert isinstance(feedforward, ResidualImpl)
         assert isinstance(feedforward.branch, SwiGLUImpl)
         assert isinstance(norm1, RMSNormImpl)

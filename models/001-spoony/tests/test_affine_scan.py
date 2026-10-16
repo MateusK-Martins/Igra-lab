@@ -2,7 +2,6 @@ import pytest
 import torch
 
 from src.model.decay import TokenDecayImpl
-from src.model.definitions import CumulativeMixer
 from src.model.scan import affine_prefix_sum, decayed_prefix_sum
 
 
@@ -56,32 +55,6 @@ def test_affine_constant_gate_matches_diagonal_and_zero_gate_resets_history():
     torch.testing.assert_close(
         affine_prefix_sum(x, torch.zeros_like(x), torch.ones(2, 1, 4, dtype=x.dtype)), x
     )
-
-
-def test_token_gate_initialization_preserves_rng_and_learns_input_dependence():
-    torch.manual_seed(42)
-    plain = CumulativeMixer(4).build()
-    torch.manual_seed(42)
-    token = CumulativeMixer(
-        4, key_decay=True, value_decay=True, decay_mode="token"
-    ).build()
-    for name in ("q_proj", "k_proj", "v_proj"):
-        torch.testing.assert_close(
-            getattr(plain, name).weight, getattr(token, name).weight
-        )
-    gate = token.value_decay_gate
-    assert token.key_decay_gate.weight is not gate.weight
-    x = torch.randn(2, 5, 4)
-    torch.testing.assert_close(gate(x), torch.full_like(x, 0.99))
-    gate(x).sum().backward()
-    assert gate.weight.grad is not None and torch.isfinite(gate.weight.grad).all()
-    with torch.no_grad():
-        gate.weight.copy_(torch.eye(4))
-    actual = gate(x)
-    expected = torch.sigmoid(x + gate.bias)
-    torch.testing.assert_close(actual, expected)
-    assert not torch.equal(actual[:, 0], actual[:, 1])
-    assert (actual > 0).all() and (actual < 1).all()
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")
