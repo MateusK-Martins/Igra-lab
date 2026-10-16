@@ -9,6 +9,12 @@ from src.model.cache_storage import CacheStorage, MatrixCacheEntry
 from src.model.composition import build_block
 from src.model.definitions import LatentAttention
 
+
+@pytest.fixture(autouse=True)
+def original_sma4_configuration(monkeypatch):
+    monkeypatch.setattr("configs.model.model.MATRIX_FEATURES", 4)
+
+
 MODES = ("a16", "a4", "sma4", "sma4_key", "sma4_key_gelu16")
 
 

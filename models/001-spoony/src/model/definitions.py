@@ -346,6 +346,7 @@ class LatentAttention(BlockDefinition):
     mode: str
     residual: bool = False
     rope_base: float | None = None
+    matrix_features: int = 4
 
     @property
     def output_features(self):
@@ -353,6 +354,15 @@ class LatentAttention(BlockDefinition):
 
     def __post_init__(self):
         _positive_integer(self.input_features, "input_features")
+        _positive_integer(self.matrix_features, "matrix_features")
+        if (
+            self.mode.startswith("sma")
+            and self.rope_base is not None
+            and self.matrix_features % 2
+        ):
+            raise ValueError("matrix_features must be even for RoPE")
+        if not self.mode.startswith("sma") and self.matrix_features != 4:
+            raise ValueError("matrix_features only applies to matrix attention")
         if self.mode not in ("a16", "a4", "sma4", "sma4_key", "sma4_key_gelu16"):
             raise ValueError("mode must be a16, a4, sma4, sma4_key or sma4_key_gelu16")
         if self.rope_base is not None and (
@@ -369,16 +379,24 @@ class LatentAttention(BlockDefinition):
         # Different projection sizes cannot shift initialization of the shared FFNs.
         with torch.random.fork_rng(devices=[]):
             return LatentAttentionImpl(
-                self.input_features, self.mode, rope_base=self.rope_base
+                self.input_features,
+                self.mode,
+                rope_base=self.rope_base,
+                matrix_features=self.matrix_features,
             )
 
     def cache(self, layer_id):
-        name = f"LatentAttentionImpl{'-rope' if self.rope_base is not None else ''}-{layer_id}"
+        suffix = (
+            f"-m{self.matrix_features}"
+            if self.mode.startswith("sma") and self.matrix_features != 4
+            else ""
+        )
+        name = f"LatentAttentionImpl{suffix}{'-rope' if self.rope_base is not None else ''}-{layer_id}"
         if self.mode in ("sma4", "sma4_key", "sma4_key_gelu16"):
             return MatrixCacheEntry(
                 name,
-                torch.empty(0, 0, 4, 4),
-                keys=torch.empty(0, 0, 4)
+                torch.empty(0, 0, self.matrix_features, self.matrix_features),
+                keys=torch.empty(0, 0, self.matrix_features)
                 if self.mode in ("sma4_key", "sma4_key_gelu16")
                 else None,
             )

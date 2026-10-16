@@ -43,7 +43,10 @@ class CacheStorage:
             if isinstance(entry, MatrixCacheEntry):
                 if (
                     entry.matrices.ndim != 4
-                    or entry.matrices.shape[-2:] != (4, 4)
+                    or (
+                        entry.matrices.shape[-1] <= 0
+                        or entry.matrices.shape[-2] != entry.matrices.shape[-1]
+                    )
                     or type(entry.count) is not int
                     or entry.count < 0
                     or entry.matrices.shape[1] != entry.count
@@ -52,7 +55,8 @@ class CacheStorage:
                     raise ValueError("Invalid matrix cache state")
                 if entry.keys is not None:
                     if (
-                        entry.keys.shape != (*entry.matrices.shape[:2], 4)
+                        entry.keys.shape
+                        != (*entry.matrices.shape[:2], entry.matrices.shape[-1])
                         or entry.keys.dtype != entry.matrices.dtype
                     ):
                         raise ValueError("Invalid matrix cache keys")
@@ -305,12 +309,15 @@ class CacheStorage:
         self, layer_id: str, matrices: Tensor, *, keys: Tensor | None = None
     ) -> None:
         entry = self.matrices[layer_id]
-        if matrices.ndim != 4 or matrices.shape[-2:] != (4, 4):
-            raise ValueError("Matrix cache expects [batch, tokens, 4, 4]")
+        if matrices.ndim != 4 or matrices.shape[-2:] != entry.matrices.shape[-2:]:
+            raise ValueError(
+                "Matrix cache expects [batch, tokens, D, D] matching its entry"
+            )
         if (keys is None) != (entry.keys is None):
             raise ValueError("Matrix cache key mode mismatch")
         if keys is not None and (
-            keys.shape != (*matrices.shape[:2], 4) or keys.dtype != matrices.dtype
+            keys.shape != (*matrices.shape[:2], matrices.shape[-1])
+            or keys.dtype != matrices.dtype
         ):
             raise ValueError("Matrix cache key shape or dtype mismatch")
         matrices = matrices.detach().to(self.storage_device)
@@ -322,7 +329,7 @@ class CacheStorage:
             raise ValueError("Matrix cache batch or dtype mismatch")
         # Validate both tensors before changing either part of the cache.
         previous = (
-            matrices.new_empty((matrices.shape[0], 0, 4, 4))
+            matrices.new_empty((matrices.shape[0], 0, *matrices.shape[-2:]))
             if first_write
             else entry.matrices
         )
@@ -330,7 +337,9 @@ class CacheStorage:
         if keys is not None:
             keys = keys.detach().to(self.storage_device)
             previous_keys = (
-                keys.new_empty((keys.shape[0], 0, 4)) if first_write else entry.keys
+                keys.new_empty((keys.shape[0], 0, matrices.shape[-1]))
+                if first_write
+                else entry.keys
             )
             next_keys = torch.cat((previous_keys, keys), dim=1)
             entry.keys = next_keys

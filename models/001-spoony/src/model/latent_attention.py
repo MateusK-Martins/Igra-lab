@@ -9,21 +9,30 @@ from src.model.position import rope
 
 
 class LatentAttentionImpl(nn.Module):
-    def __init__(self, width: int, mode: str, *, rope_base: float | None = None):
+    def __init__(
+        self,
+        width: int,
+        mode: str,
+        *,
+        rope_base: float | None = None,
+        matrix_features: int = 4,
+    ):
         super().__init__()
         self.rope_base = rope_base
         self.mode = mode
-        self.latent_features = 16 if mode == "a16" else 4
+        self.latent_features = (
+            matrix_features if mode.startswith("sma") else (16 if mode == "a16" else 4)
+        )
         self.q_proj = nn.Linear(
             width,
             self.latent_features,
             bias=mode in ("sma4", "sma4_key", "sma4_key_gelu16"),
         )
         if mode in ("sma4", "sma4_key", "sma4_key_gelu16"):
-            self.matrix_proj = nn.Linear(width, 16, bias=True)
+            self.matrix_proj = nn.Linear(width, self.latent_features**2, bias=True)
             if mode == "sma4":
-                self.scoring = nn.Parameter(torch.empty(4))
-                nn.init.normal_(self.scoring, std=0.5)
+                self.scoring = nn.Parameter(torch.empty(self.latent_features))
+                nn.init.normal_(self.scoring, std=self.latent_features**-0.5)
         else:
             self.k_proj = nn.Linear(width, self.latent_features, bias=False)
             self.v_proj = nn.Linear(width, self.latent_features, bias=False)
@@ -34,13 +43,18 @@ class LatentAttentionImpl(nn.Module):
         )
 
         if mode in ("sma4_key", "sma4_key_gelu16"):
-            self.k_proj = nn.Linear(width, 4, bias=False)
+            self.k_proj = nn.Linear(width, self.latent_features, bias=False)
 
         if mode == "sma4_key_gelu16":
-            self.response_proj = nn.Linear(4, 16, bias=True)
+            self.response_proj = nn.Linear(self.latent_features, 16, bias=True)
 
     def assign_id(self, layer_id):
-        self.layer_id = f"LatentAttentionImpl{'-rope' if self.rope_base is not None else ''}-{layer_id}"
+        suffix = (
+            f"-m{self.latent_features}"
+            if self.mode.startswith("sma") and self.latent_features != 4
+            else ""
+        )
+        self.layer_id = f"LatentAttentionImpl{suffix}{'-rope' if self.rope_base is not None else ''}-{layer_id}"
 
     def forward(self, x, *, cache: CacheStorage | None = None):
         if cache is not None and torch.is_grad_enabled():
@@ -51,7 +65,9 @@ class LatentAttentionImpl(nn.Module):
         if self.rope_base is not None:
             q = rope(q.unsqueeze(1), positions, base=self.rope_base).squeeze(1)
         if self.mode in ("sma4", "sma4_key", "sma4_key_gelu16"):
-            matrices = self.matrix_proj(x).unflatten(-1, (4, 4))
+            matrices = self.matrix_proj(x).unflatten(
+                -1, (self.latent_features, self.latent_features)
+            )
             keys = (
                 self.k_proj(x) if self.mode in ("sma4_key", "sma4_key_gelu16") else None
             )
@@ -80,12 +96,13 @@ class LatentAttentionImpl(nn.Module):
                 )
                 if keys is not None:
                     scores = (
-                        torch.einsum("btd,bsd->bts", q.to(dtype), keys.to(dtype)) / 2
+                        torch.einsum("btd,bsd->bts", q.to(dtype), keys.to(dtype))
+                        / self.latent_features**0.5
                     )
                 else:
                     scores = (
                         torch.einsum("btsi,i->bts", responses, self.scoring.to(dtype))
-                        / 2
+                        / self.latent_features**0.5
                     )
                 mask = torch.arange(matrices.shape[1], device=x.device)[None, :] <= (
                     start + torch.arange(x.shape[1], device=x.device)[:, None]

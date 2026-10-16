@@ -5,7 +5,7 @@ import pytest
 import torch
 from torch.nn import functional as F
 
-from configs.model.model import MODE, build_model
+from configs.model.model import MATRIX_FEATURES, MODE, build_model
 from src.data.tokenizer import ByteLevelBPETokenizer
 from src.model.cache_storage import CacheStorage
 from src.model.composition import ResidualImpl
@@ -57,7 +57,7 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     assert len({entry.layer_id for entry in entries}) == 6
     assert all(
         (
-            entry.matrices.shape == (0, 0, 4, 4)
+            entry.matrices.shape == (0, 0, MATRIX_FEATURES, MATRIX_FEATURES)
             if MODE in ("sma4", "sma4_key", "sma4_key_gelu16")
             else entry.keys.shape == (0, 1, 0, 16 if MODE == "a16" else 4)
         )
@@ -120,7 +120,7 @@ def test_config_cached_chunks_match_full_logits_across_window_boundary(tokenizer
     assert all(entry.count == 261 for entry in entries)
     assert all(
         (
-            entry.matrices.shape == (1, 261, 4, 4)
+            entry.matrices.shape == (1, 261, MATRIX_FEATURES, MATRIX_FEATURES)
             if MODE in ("sma4", "sma4_key", "sma4_key_gelu16")
             else entry.keys.shape == (1, 1, 261, 16 if MODE == "a16" else 4)
         )

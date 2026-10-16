@@ -56,7 +56,13 @@ def main():
                 q = rope(q.unsqueeze(1), positions, base=module.rope_base).squeeze(1)
             q = q.float()
             if MODE in ("sma4", "sma4_key", "sma4_key_gelu16"):
-                matrices = module.matrix_proj(x).float().reshape(*x.shape[:2], 4, 4)
+                matrices = (
+                    module.matrix_proj(x)
+                    .float()
+                    .reshape(
+                        *x.shape[:2], module.latent_features, module.latent_features
+                    )
+                )
                 if module.rope_base is not None:
                     matrices = rope(
                         matrices.transpose(1, 2), positions, base=module.rope_base
@@ -68,11 +74,13 @@ def main():
                         k = rope(
                             k.unsqueeze(1), positions, base=module.rope_base
                         ).squeeze(1)
-                    scores = q @ k.float().transpose(-1, -2) / 2
+                    scores = (
+                        q @ k.float().transpose(-1, -2) / module.latent_features**0.5
+                    )
                 else:
                     scores = (
                         torch.einsum("btsi,i->bts", responses, module.scoring.float())
-                        / 2
+                        / module.latent_features**0.5
                     )
                 singular = torch.linalg.svdvals(matrices.detach())
                 extra = {
