@@ -129,7 +129,7 @@ def test_config_cached_chunks_match_full_logits_across_window_boundary(tokenizer
         if isinstance(entry, StateEntry)
     )
     assert all(
-        entry.keys.shape == (1, 2, 261, 48)
+        entry.keys.shape == (1, 1, 261, 16)
         for entry in entries
         if isinstance(entry, CacheEntry)
     )

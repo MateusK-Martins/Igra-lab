@@ -1,3 +1,5 @@
+> **Active:** [TIDE_A16.md](TIDE_A16.md), four Tide / two A16+RoPE mixers. Notes below are historical.
+
 # Tide/Lantern hybrid14M
 
 Current experiment: [HYBRID_14M.md](HYBRID_14M.md).

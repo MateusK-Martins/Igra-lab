@@ -1,4 +1,4 @@
-"""Two Tide layers per Lantern GQA layer; preserve the Tide14M FFN and width."""
+"""Two Tide layers per compressed A16 attention layer; preserve the Tide14M FFN and width."""
 
 from functools import partial
 
@@ -22,10 +22,10 @@ def build_model(tokenizer: Tokenizer):
             GQAAttention(
                 input_features=384,
                 output_features=384,
-                num_query_heads=8,
-                num_kv_heads=2,
-                head_features=48,
-                window_size=256,
+                num_query_heads=1,
+                num_kv_heads=1,
+                head_features=16,
+                window_size=0,
                 dropout=0,
                 position_rotation=partial(rope, base=10000.0),
                 residual=True,
