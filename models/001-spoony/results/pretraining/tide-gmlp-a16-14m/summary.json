@@ -1,0 +1,15 @@
+{
+  "parameters": 12652160,
+  "validation_loss": 1.993348823653327,
+  "perplexity": 7.340073261103076,
+  "training_seconds": 247.40892247800366,
+  "target_tokens": 18429440,
+  "training_target_tokens_per_second_including_validation_and_saving": 74489.795337266,
+  "benchmark_target_tokens_per_second": 77040.50382112103,
+  "peak_cuda_allocated_gib": 0.667633056640625,
+  "parent_loss": 2.0250967961770514,
+  "loss_difference_vs_parent": -0.03174797252372441,
+  "source_frozen_verified": true,
+  "data_identical_verified": true,
+  "seed": 42
+}

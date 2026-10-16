@@ -1,0 +1,16 @@
+{
+  "pytest": {
+    "passed": 740,
+    "seconds": 8.26
+  },
+  "ruff_lint": "passed",
+  "ruff_format": "passed",
+  "trained_cache_tokens": 105,
+  "trained_cache_dtypes": [
+    "float32",
+    "float64"
+  ],
+  "recipe_commit": "468abe9",
+  "checkpoint_location": "/var/tmp/igra-tide-gmlp-a16-14m",
+  "sleep_inhibited_during_training": true
+}

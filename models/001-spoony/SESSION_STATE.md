@@ -1,3 +1,5 @@
+Completed Tide–gMLP–A16: loss1.993348824/PPL7.340073261,9000updates,12,652,160parameters,740tests+Ruff passed. Trained105-token full/cache checks passedFP32/FP64. See GMLP_TIDE_A16.md and results/pretraining/tide-gmlp-a16-14m.
+
 > **Active:** [GMLP_TIDE_A16.md](GMLP_TIDE_A16.md), `[Tide,gMLP,A16/RoPE] ×2`,64-token fixed gMLP windows. Notes below are historical.
 
 Tide/A16 hybrid: four Tide and two single-head 16D Q/K/V attention layers,

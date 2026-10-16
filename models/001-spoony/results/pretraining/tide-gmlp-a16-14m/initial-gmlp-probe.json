@@ -1,0 +1,42 @@
+{
+  "body.5.branch": {
+    "spatial_weight_lower": {
+      "rms": 1.0932165423582774e-05,
+      "min": -4.624391294782981e-05,
+      "max": 5.5445863836212084e-05,
+      "finite": true
+    },
+    "spatial_bias": {
+      "rms": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "finite": true
+    },
+    "output": {
+      "rms": 0.19764763116836548,
+      "min": -0.953125,
+      "max": 0.9609375,
+      "finite": true
+    }
+  },
+  "body.17.branch": {
+    "spatial_weight_lower": {
+      "rms": 1.1106512829428539e-05,
+      "min": -5.876542127225548e-05,
+      "max": 5.3245639719534665e-05,
+      "finite": true
+    },
+    "spatial_bias": {
+      "rms": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "finite": true
+    },
+    "output": {
+      "rms": 0.19932474195957184,
+      "min": -0.9453125,
+      "max": 0.92578125,
+      "finite": true
+    }
+  }
+}
