@@ -290,6 +290,7 @@ class GQAAttention(BlockDefinition):
     residual: bool = False
     gmlp_hidden_features: int = 0
     gmlp_window_size: int = 64
+    gmlp_num_heads: int = 1
 
     def __post_init__(self) -> None:
         if (
@@ -301,6 +302,12 @@ class GQAAttention(BlockDefinition):
                 "gmlp_hidden_features must be zero or a positive even integer"
             )
         _positive_integer(self.gmlp_window_size, "gmlp_window_size")
+        _positive_integer(self.gmlp_num_heads, "gmlp_num_heads")
+        if self.gmlp_hidden_features:
+            if (self.gmlp_hidden_features // 2) % self.gmlp_num_heads:
+                raise ValueError("gMLP spatial channels must be divisible by heads")
+        elif self.gmlp_num_heads != 1:
+            raise ValueError("gmlp_num_heads requires enabled gMLP")
         _positive_integer(self.input_features, "input_features")
         _positive_integer(self.output_features, "output_features")
         _positive_integer(self.num_query_heads, "num_query_heads")
@@ -339,6 +346,7 @@ class GQAAttention(BlockDefinition):
             self.position_rotation,
             self.gmlp_hidden_features,
             self.gmlp_window_size,
+            self.gmlp_num_heads,
         )
 
     def cache(self, layer_id: int) -> CacheEntry | list[CacheEntry | StateEntry]:
@@ -360,11 +368,13 @@ class GQAAttention(BlockDefinition):
 
         if not self.gmlp_hidden_features:
             return entry
-        entry.layer_id = f"GQAAttentionImpl-gmlp-{layer_id}"
+        suffix = "" if self.gmlp_num_heads == 1 else f"-heads{self.gmlp_num_heads}"
+        entry.layer_id = f"GQAAttentionImpl-gmlp{suffix}-{layer_id}"
         spatial = GMLP(
             self.num_query_heads * self.head_features,
             self.gmlp_hidden_features,
             self.gmlp_window_size,
+            num_heads=self.gmlp_num_heads,
         ).cache(f"attention-{layer_id}")
         return [entry, spatial]
 
@@ -633,6 +643,7 @@ class GMLP(BlockDefinition):
     hidden_features: int = 1024
     window_size: int = 64
     residual: bool = False
+    num_heads: int = 1
 
     @property
     def output_features(self):
@@ -641,17 +652,23 @@ class GMLP(BlockDefinition):
     def __post_init__(self):
         for name in ("input_features", "hidden_features", "window_size"):
             _positive_integer(getattr(self, name), name)
+        _positive_integer(self.num_heads, "num_heads")
+        if (self.hidden_features // 2) % self.num_heads:
+            raise ValueError("spatial channels must be divisible by num_heads")
         if self.hidden_features % 2:
             raise ValueError("hidden_features must be even")
         if type(self.residual) is not bool:
             raise ValueError("residual must be boolean")
 
     def build(self):
-        return GMLPImpl(self.input_features, self.hidden_features, self.window_size)
+        return GMLPImpl(
+            self.input_features, self.hidden_features, self.window_size, self.num_heads
+        )
 
     def cache(self, layer_id):
+        suffix = "" if self.num_heads == 1 else f"-heads{self.num_heads}"
         return StateEntry(
-            f"GMLPImpl-w{self.window_size}-{layer_id}",
+            f"GMLPImpl-w{self.window_size}{suffix}-{layer_id}",
             torch.empty(0, 1, 0),
             torch.empty(0, 1, self.window_size * self.hidden_features // 2),
         )

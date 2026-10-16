@@ -28,6 +28,7 @@ def build_model(tokenizer: Tokenizer):
             position_rotation=partial(rope, base=10000.0),
             gmlp_hidden_features=64,
             gmlp_window_size=256,
+            gmlp_num_heads=2,
             residual=True,
         )
         blocks.extend(

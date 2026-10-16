@@ -1,3 +1,5 @@
+> **Active:** [GMLP_HEADS2_14M.md](GMLP_HEADS2_14M.md), two temporal gMLP heads, shared normalization and fixed total channels. Prior notes historical.
+
 > **Active:** [GMLP_WINDOW256_14M.md](GMLP_WINDOW256_14M.md), integrated A16/gMLP with256-token spatial windows. Prior notes historical.
 
 > **Active:** [NO_TIDE_GMLP_14M.md](NO_TIDE_GMLP_14M.md), all-six-layer A16+compressed gMLP, no Tide. Earlier notes are historical.

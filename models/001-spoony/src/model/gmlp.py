@@ -8,19 +8,27 @@ from src.model.cache_storage import CacheStorage
 
 
 class GMLPImpl(nn.Module):
-    def __init__(self, features, hidden_features, window_size):
+    def __init__(self, features, hidden_features, window_size, num_heads=1):
         super().__init__()
         self.window_size = window_size
+        self.num_heads = num_heads
         self.channels = hidden_features // 2
         self.up = nn.Linear(features, hidden_features)
         self.norm = nn.LayerNorm(self.channels)
-        self.spatial_weight = nn.Parameter(torch.empty(window_size, window_size))
-        self.spatial_bias = nn.Parameter(torch.ones(window_size))
+        matrix_shape = (
+            (window_size, window_size)
+            if num_heads == 1
+            else (num_heads, window_size, window_size)
+        )
+        bias_shape = (window_size,) if num_heads == 1 else (num_heads, window_size)
+        self.spatial_weight = nn.Parameter(torch.empty(matrix_shape))
+        self.spatial_bias = nn.Parameter(torch.ones(bias_shape))
         nn.init.normal_(self.spatial_weight, std=1e-3 / window_size)
         self.down = nn.Linear(self.channels, features)
 
     def assign_id(self, layer_id):
-        self.layer_id = f"GMLPImpl-w{self.window_size}-{layer_id}"
+        suffix = "" if self.num_heads == 1 else f"-heads{self.num_heads}"
+        self.layer_id = f"GMLPImpl-w{self.window_size}{suffix}-{layer_id}"
 
     def forward(self, x, *, cache: CacheStorage | None = None):
         if cache is not None and torch.is_grad_enabled():
@@ -45,8 +53,15 @@ class GMLPImpl(nn.Module):
         windows = F.pad(joined, (0, 0, 0, padding)).reshape(
             batch, -1, self.window_size, channels
         )
-        mixed = torch.einsum("ij,bnjc->bnic", self.spatial_weight.tril(), windows)
-        mixed = mixed + self.spatial_bias[None, None, :, None]
+        if self.num_heads == 1:
+            mixed = torch.einsum("ij,bnjc->bnic", self.spatial_weight.tril(), windows)
+            mixed = mixed + self.spatial_bias[None, None, :, None]
+        else:
+            heads = windows.reshape(
+                batch, -1, self.window_size, self.num_heads, channels // self.num_heads
+            )
+            mixed = torch.einsum("hij,bnjhc->bnihc", self.spatial_weight.tril(), heads)
+            mixed = mixed + self.spatial_bias.transpose(0, 1)[None, None, :, :, None]
         mixed = mixed.reshape(batch, -1, channels)[:, offset : offset + length]
         if cache is not None:
             # Fixed-size storage; only the current window's populated prefix is read.

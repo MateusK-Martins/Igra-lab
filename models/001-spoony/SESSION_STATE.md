@@ -1,3 +1,5 @@
+> **Active:** [GMLP_HEADS2_14M.md](GMLP_HEADS2_14M.md), two temporal gMLP heads, shared normalization and fixed total channels. Prior notes historical.
+
 Completed256-window integrated run: loss2.146345205,PPL8.553539764,9000updates,757tests/Ruff and trained273-token cache checks passed. See GMLP_WINDOW256_14M.md.
 
 > **Active:** [GMLP_WINDOW256_14M.md](GMLP_WINDOW256_14M.md), integrated A16/gMLP with256-token spatial windows. Prior notes historical.

@@ -21,6 +21,7 @@ class GQAAttentionImpl(nn.Module):
         position_rotation: PositionRotation,
         gmlp_hidden_features: int = 0,
         gmlp_window_size: int = 64,
+        gmlp_num_heads: int = 1,
     ) -> None:
         super().__init__()
         self.input_features = input_features
@@ -60,7 +61,10 @@ class GQAAttentionImpl(nn.Module):
 
         self.gmlp = (
             GMLPImpl(
-                num_query_heads * head_features, gmlp_hidden_features, gmlp_window_size
+                num_query_heads * head_features,
+                gmlp_hidden_features,
+                gmlp_window_size,
+                gmlp_num_heads,
             )
             if gmlp_hidden_features
             else None
@@ -69,7 +73,8 @@ class GQAAttentionImpl(nn.Module):
     def assign_id(self, layer_id: int) -> None:
         self.layer_id = f"GQAAttentionImpl-{layer_id}"
         if self.gmlp is not None:
-            self.layer_id = f"GQAAttentionImpl-gmlp-{layer_id}"
+            suffix = "" if self.gmlp.num_heads == 1 else f"-heads{self.gmlp.num_heads}"
+            self.layer_id = f"GQAAttentionImpl-gmlp{suffix}-{layer_id}"
             self.gmlp.assign_id(f"attention-{layer_id}")
 
     def forward(self, x: Tensor, *, cache: CacheStorage | None = None) -> Tensor:

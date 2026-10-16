@@ -12,7 +12,7 @@ from src.model.position import rope
 
 def test_configuration_parameter_budget_and_mechanisms():
     model, entries = build_model(SimpleNamespace(vocab_size=8192))
-    assert sum(p.numel() for p in model.parameters()) == 10_780_512
+    assert sum(p.numel() for p in model.parameters()) == 11_175_264
     assert len(entries) == 12
     assert not any(isinstance(m, NoKVariantImpl) for m in model.modules())
     attention = [m for m in model.modules() if isinstance(m, GQAAttentionImpl)]
@@ -27,7 +27,9 @@ def test_configuration_parameter_budget_and_mechanisms():
         )
         assert m.out_proj.weight.shape == (384, 16)
         assert isinstance(m.gmlp, GMLPImpl) and m.gmlp.up.weight.shape == (64, 16)
-        assert m.gmlp.window_size == 256
+        assert m.gmlp.window_size == 256 and m.gmlp.num_heads == 2
+        assert m.gmlp.spatial_weight.shape == (2, 256, 256)
+        assert m.gmlp.norm.normalized_shape == (32,)
         assert m.position_rotation.func is rope and m.position_rotation.keywords == {
             "base": 10000.0
         }
