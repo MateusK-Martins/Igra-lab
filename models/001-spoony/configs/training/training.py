@@ -8,6 +8,6 @@ training_config = TrainingConfig(
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/tide-triton-14m/tensorboard"),
+    directory=results_path("pretraining/tide-lantern-14m/tensorboard"),
     interval=10,
 )

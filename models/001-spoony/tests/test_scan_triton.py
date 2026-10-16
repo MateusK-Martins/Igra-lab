@@ -127,7 +127,7 @@ def test_full_tide_logits_and_parameter_gradients_match_reference(monkeypatch):
 
     torch.manual_seed(42)
     model, _ = build_model(SimpleNamespace(vocab_size=8192))
-    assert sum(p.numel() for p in model.parameters()) == 13_774_080
+    assert sum(p.numel() for p in model.parameters()) == 13_329_408
     model.cuda()
     tokens = torch.randint(0, 8192, (2, 17), device="cuda")
     with torch.autocast("cuda", dtype=torch.bfloat16):
