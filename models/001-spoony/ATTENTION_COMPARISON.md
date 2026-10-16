@@ -96,3 +96,20 @@ Samples use the same fixed prompts and greedy decoding from the best saved valid
 ## Reproducibility
 
 Each branch contains the same interchangeable implementation and mechanism tests, with only its mode/output paths changed. Each branch passed 507 tests and Ruff lint/format checks before training. Runtime manifests record exact recipe commits, sources, environment, artifact hashes and settings. Checkpoints and raw data remain local and ignored. comparison.json contains cross-run numeric results; per-run reports/probes remain under results/pretraining/<mode>-14m.
+
+## Trained-cache cross-check
+
+The final trained checkpoints also passed full-sequence versus 7-token cached
+chunks on a fixed 21-token prompt in FP32 (maximum logit differences below
+1.2e-5) and FP64 (below 3.2e-14). See trained-cache-equivalence.json.
+The larger BF16 differences therefore reflect low-precision execution in this
+probe; cached inference should still use suitable precision tolerances rather
+than expect bitwise equality across chunk shapes.
+
+SMA4 additionally couples query scale to response magnitude: multiplying q by c
+multiplies both selection logits and every Mq response by c. This differs from
+A4, where query scaling changes scores but not stored values. That coupling is
+one possible optimization issue, not an experimentally isolated explanation.
+Initial SMA output RMS was also higher than A4 (see probes), and the requested
+SMA biases differ from the conventional attention equations. These results test
+the specified mechanisms rather than a scale/bias-matched auxiliary control.
