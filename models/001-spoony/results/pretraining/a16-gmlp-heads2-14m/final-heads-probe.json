@@ -1,0 +1,414 @@
+{
+  "fixed_batch_loss": 2.0829529762268066,
+  "layers": {
+    "body.1.branch.gmlp": {
+      "temporal_weight_heads": [
+        {
+          "rms": 0.013317462056875229,
+          "norm": 3.4092702865600586,
+          "finite": true
+        },
+        {
+          "rms": 0.013373912312090397,
+          "norm": 3.4237215518951416,
+          "finite": true
+        }
+      ],
+      "temporal_bias_heads": [
+        {
+          "rms": 0.9953445196151733,
+          "norm": 15.925512313842773,
+          "finite": true
+        },
+        {
+          "rms": 0.9908232092857361,
+          "norm": 15.853171348571777,
+          "finite": true
+        }
+      ],
+      "temporal_matrix_cosine": -0.6890338063240051,
+      "temporal_matrix_difference": {
+        "rms": 0.024528743699193,
+        "norm": 6.279358386993408,
+        "finite": true
+      },
+      "shared_normalized_channel_groups": [
+        {
+          "rms": 0.9597669243812561,
+          "norm": 173.73635864257812,
+          "finite": true
+        },
+        {
+          "rms": 1.0242892503738403,
+          "norm": 185.41615295410156,
+          "finite": true
+        }
+      ],
+      "pre_down_head_contributions": [
+        {
+          "rms": 0.41556355357170105,
+          "norm": 75.22503662109375,
+          "finite": true
+        },
+        {
+          "rms": 0.2533177137374878,
+          "norm": 45.85540008544922,
+          "finite": true
+        }
+      ],
+      "temporal_weight_gradient_heads": [
+        {
+          "rms": 3.075067070312798e-05,
+          "norm": 0.007872171700000763,
+          "finite": true
+        },
+        {
+          "rms": 2.9650222131749615e-05,
+          "norm": 0.0075904568657279015,
+          "finite": true
+        }
+      ]
+    },
+    "body.5.branch.gmlp": {
+      "temporal_weight_heads": [
+        {
+          "rms": 0.01014726422727108,
+          "norm": 2.5976996421813965,
+          "finite": true
+        },
+        {
+          "rms": 0.011110957711935043,
+          "norm": 2.844405174255371,
+          "finite": true
+        }
+      ],
+      "temporal_bias_heads": [
+        {
+          "rms": 0.9827841520309448,
+          "norm": 15.724546432495117,
+          "finite": true
+        },
+        {
+          "rms": 0.9863502383232117,
+          "norm": 15.781603813171387,
+          "finite": true
+        }
+      ],
+      "temporal_matrix_cosine": -0.07404333353042603,
+      "temporal_matrix_difference": {
+        "rms": 0.015592193230986595,
+        "norm": 3.9916014671325684,
+        "finite": true
+      },
+      "shared_normalized_channel_groups": [
+        {
+          "rms": 0.907844603061676,
+          "norm": 164.33741760253906,
+          "finite": true
+        },
+        {
+          "rms": 0.9970217347145081,
+          "norm": 180.48020935058594,
+          "finite": true
+        }
+      ],
+      "pre_down_head_contributions": [
+        {
+          "rms": 0.2501217722892761,
+          "norm": 45.276878356933594,
+          "finite": true
+        },
+        {
+          "rms": 0.2422429919242859,
+          "norm": 43.85066223144531,
+          "finite": true
+        }
+      ],
+      "temporal_weight_gradient_heads": [
+        {
+          "rms": 3.599028423195705e-05,
+          "norm": 0.009213512763381004,
+          "finite": true
+        },
+        {
+          "rms": 5.278871321934275e-05,
+          "norm": 0.013513910584151745,
+          "finite": true
+        }
+      ]
+    },
+    "body.9.branch.gmlp": {
+      "temporal_weight_heads": [
+        {
+          "rms": 0.009426732547581196,
+          "norm": 2.413243532180786,
+          "finite": true
+        },
+        {
+          "rms": 0.00992073118686676,
+          "norm": 2.5397071838378906,
+          "finite": true
+        }
+      ],
+      "temporal_bias_heads": [
+        {
+          "rms": 0.9859675168991089,
+          "norm": 15.775480270385742,
+          "finite": true
+        },
+        {
+          "rms": 0.9821991324424744,
+          "norm": 15.71518611907959,
+          "finite": true
+        }
+      ],
+      "temporal_matrix_cosine": 0.019194096326828003,
+      "temporal_matrix_difference": {
+        "rms": 0.013553380034863949,
+        "norm": 3.469665288925171,
+        "finite": true
+      },
+      "shared_normalized_channel_groups": [
+        {
+          "rms": 0.9598539471626282,
+          "norm": 173.75210571289062,
+          "finite": true
+        },
+        {
+          "rms": 0.7795549035072327,
+          "norm": 141.11451721191406,
+          "finite": true
+        }
+      ],
+      "pre_down_head_contributions": [
+        {
+          "rms": 0.24587155878543854,
+          "norm": 44.50750732421875,
+          "finite": true
+        },
+        {
+          "rms": 0.28331953287124634,
+          "norm": 51.28631591796875,
+          "finite": true
+        }
+      ],
+      "temporal_weight_gradient_heads": [
+        {
+          "rms": 3.333013955852948e-05,
+          "norm": 0.008532515726983547,
+          "finite": true
+        },
+        {
+          "rms": 4.262308721081354e-05,
+          "norm": 0.010911510325968266,
+          "finite": true
+        }
+      ]
+    },
+    "body.13.branch.gmlp": {
+      "temporal_weight_heads": [
+        {
+          "rms": 0.011277652345597744,
+          "norm": 2.8870790004730225,
+          "finite": true
+        },
+        {
+          "rms": 0.011237730272114277,
+          "norm": 2.876858949661255,
+          "finite": true
+        }
+      ],
+      "temporal_bias_heads": [
+        {
+          "rms": 0.9822657108306885,
+          "norm": 15.716251373291016,
+          "finite": true
+        },
+        {
+          "rms": 0.9853488206863403,
+          "norm": 15.765581130981445,
+          "finite": true
+        }
+      ],
+      "temporal_matrix_cosine": 0.02413761615753174,
+      "temporal_matrix_difference": {
+        "rms": 0.015727488324046135,
+        "norm": 4.0262370109558105,
+        "finite": true
+      },
+      "shared_normalized_channel_groups": [
+        {
+          "rms": 0.9186021089553833,
+          "norm": 166.28472900390625,
+          "finite": true
+        },
+        {
+          "rms": 0.9116142988204956,
+          "norm": 165.0198211669922,
+          "finite": true
+        }
+      ],
+      "pre_down_head_contributions": [
+        {
+          "rms": 0.28732383251190186,
+          "norm": 52.01116943359375,
+          "finite": true
+        },
+        {
+          "rms": 0.31494396924972534,
+          "norm": 57.010948181152344,
+          "finite": true
+        }
+      ],
+      "temporal_weight_gradient_heads": [
+        {
+          "rms": 6.538471643580124e-05,
+          "norm": 0.016738487407565117,
+          "finite": true
+        },
+        {
+          "rms": 7.226356683531776e-05,
+          "norm": 0.018499473109841347,
+          "finite": true
+        }
+      ]
+    },
+    "body.17.branch.gmlp": {
+      "temporal_weight_heads": [
+        {
+          "rms": 0.011732281185686588,
+          "norm": 3.0034639835357666,
+          "finite": true
+        },
+        {
+          "rms": 0.011631305329501629,
+          "norm": 2.977614164352417,
+          "finite": true
+        }
+      ],
+      "temporal_bias_heads": [
+        {
+          "rms": 0.9825896620750427,
+          "norm": 15.721434593200684,
+          "finite": true
+        },
+        {
+          "rms": 0.9816481471061707,
+          "norm": 15.70637035369873,
+          "finite": true
+        }
+      ],
+      "temporal_matrix_cosine": 0.002980418037623167,
+      "temporal_matrix_difference": {
+        "rms": 0.016496067866683006,
+        "norm": 4.22299337387085,
+        "finite": true
+      },
+      "shared_normalized_channel_groups": [
+        {
+          "rms": 0.9119025468826294,
+          "norm": 165.07199096679688,
+          "finite": true
+        },
+        {
+          "rms": 0.9365168213844299,
+          "norm": 169.52764892578125,
+          "finite": true
+        }
+      ],
+      "pre_down_head_contributions": [
+        {
+          "rms": 0.29446786642074585,
+          "norm": 53.30437469482422,
+          "finite": true
+        },
+        {
+          "rms": 0.2760266661643982,
+          "norm": 49.966163635253906,
+          "finite": true
+        }
+      ],
+      "temporal_weight_gradient_heads": [
+        {
+          "rms": 8.362140215467662e-05,
+          "norm": 0.021407078951597214,
+          "finite": true
+        },
+        {
+          "rms": 7.556936179753393e-05,
+          "norm": 0.019345756620168686,
+          "finite": true
+        }
+      ]
+    },
+    "body.21.branch.gmlp": {
+      "temporal_weight_heads": [
+        {
+          "rms": 0.010200992226600647,
+          "norm": 2.6114540100097656,
+          "finite": true
+        },
+        {
+          "rms": 0.010010911151766777,
+          "norm": 2.562793254852295,
+          "finite": true
+        }
+      ],
+      "temporal_bias_heads": [
+        {
+          "rms": 0.9842419028282166,
+          "norm": 15.747870445251465,
+          "finite": true
+        },
+        {
+          "rms": 0.9834855794906616,
+          "norm": 15.735769271850586,
+          "finite": true
+        }
+      ],
+      "temporal_matrix_cosine": 0.035802267491817474,
+      "temporal_matrix_difference": {
+        "rms": 0.01403446588665247,
+        "norm": 3.5928235054016113,
+        "finite": true
+      },
+      "shared_normalized_channel_groups": [
+        {
+          "rms": 0.8817418217658997,
+          "norm": 159.61231994628906,
+          "finite": true
+        },
+        {
+          "rms": 0.8940988779067993,
+          "norm": 161.84918212890625,
+          "finite": true
+        }
+      ],
+      "pre_down_head_contributions": [
+        {
+          "rms": 0.2472962588071823,
+          "norm": 44.765403747558594,
+          "finite": true
+        },
+        {
+          "rms": 0.25123777985572815,
+          "norm": 45.47889709472656,
+          "finite": true
+        }
+      ],
+      "temporal_weight_gradient_heads": [
+        {
+          "rms": 6.118357850937173e-05,
+          "norm": 0.015662996098399162,
+          "finite": true
+        },
+        {
+          "rms": 5.2145711379125714e-05,
+          "norm": 0.013349302113056183,
+          "finite": true
+        }
+      ]
+    }
+  },
+  "notes": "Channels normalized jointly before partition. Contribution is gated channel RMS before shared down projection; not semantic specialization evidence."
+}

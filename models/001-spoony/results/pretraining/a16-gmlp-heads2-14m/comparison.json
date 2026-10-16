@@ -1,0 +1,42 @@
+{
+  "models": [
+    {
+      "model": "A16/RoPE alone",
+      "parameters": 10375680,
+      "validation_loss": 2.170240353654932,
+      "perplexity": 8.760389379323737,
+      "training_seconds": 215.32605484799933,
+      "peak_cuda_allocated_gib": 0.5599451065063477
+    },
+    {
+      "model": "One gMLP head, window64",
+      "parameters": 10410720,
+      "validation_loss": 2.168634785546197,
+      "perplexity": 8.746335262955826,
+      "training_seconds": 239.5579515319987,
+      "peak_cuda_allocated_gib": 0.5691871643066406
+    },
+    {
+      "model": "One gMLP head, window256",
+      "parameters": 10780512,
+      "validation_loss": 2.146345204777188,
+      "perplexity": 8.553539764176127,
+      "training_seconds": 238.40476311199745,
+      "peak_cuda_allocated_gib": 0.5740022659301758
+    },
+    {
+      "model": "Two temporal gMLP heads, window256",
+      "parameters": 11175264,
+      "validation_loss": 2.153053906228807,
+      "perplexity": 8.611115823161699,
+      "training_seconds": 242.3576113040035,
+      "target_tokens": 18429440,
+      "target_tokens_per_second_including_validation_and_saving": 76042.3404936223,
+      "benchmark_tokens_per_second": 78520.6701161439,
+      "peak_cuda_allocated_gib": 0.5791463851928711,
+      "tests_passed": 771
+    }
+  ],
+  "same_data_tokenizer_and_training_settings_verified": true,
+  "limitations": "Single seed; extra temporal parameters and changed later RNG draws. This compares head count at fixed total width; it is not a parameter-matched widened single-head experiment."
+}

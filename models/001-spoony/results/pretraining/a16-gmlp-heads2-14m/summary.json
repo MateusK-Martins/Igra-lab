@@ -1,0 +1,18 @@
+{
+  "model": "Two temporal gMLP heads, window256",
+  "parameters": 11175264,
+  "validation_loss": 2.153053906228807,
+  "perplexity": 8.611115823161699,
+  "training_seconds": 242.3576113040035,
+  "target_tokens": 18429440,
+  "target_tokens_per_second_including_validation_and_saving": 76042.3404936223,
+  "benchmark_tokens_per_second": 78520.6701161439,
+  "peak_cuda_allocated_gib": 0.5791463851928711,
+  "tests_passed": 771,
+  "loss_difference_vs_one_head256": 0.00670870145161917,
+  "source_artifacts_and_settings_verified": true,
+  "heads": 2,
+  "spatial_channels_total": 32,
+  "spatial_channels_per_head": 16,
+  "window_size": 256
+}
