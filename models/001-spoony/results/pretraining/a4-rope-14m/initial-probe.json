@@ -1,0 +1,51 @@
+{
+  "mode": "a4",
+  "phase": "initial",
+  "parameters": 10265088,
+  "initial_shared_backbone_sha256": "de4903aceb9aa264226cc1c7f83212797a350fda01f9c3d3c4cea006461ba1b1",
+  "fixed_batch_loss": 9.27557373046875,
+  "finite_logits": true,
+  "finite_gradients": true,
+  "gradient_norm_before_clipping": 1.4800846576690674,
+  "layers": [
+    {
+      "layer": 1,
+      "output_rms": 0.07018616050481796,
+      "query_rms": 0.6025949120521545,
+      "mean_attention_entropy": 4.5050811767578125
+    },
+    {
+      "layer": 5,
+      "output_rms": 0.08049178123474121,
+      "query_rms": 0.5142574906349182,
+      "mean_attention_entropy": 4.509428977966309
+    },
+    {
+      "layer": 9,
+      "output_rms": 0.06581605970859528,
+      "query_rms": 0.5463559627532959,
+      "mean_attention_entropy": 4.50429630279541
+    },
+    {
+      "layer": 13,
+      "output_rms": 0.08637775480747223,
+      "query_rms": 0.6001126170158386,
+      "mean_attention_entropy": 4.501717567443848
+    },
+    {
+      "layer": 17,
+      "output_rms": 0.08695966750383377,
+      "query_rms": 0.5502622127532959,
+      "mean_attention_entropy": 4.509240627288818
+    },
+    {
+      "layer": 21,
+      "output_rms": 0.08788930624723434,
+      "query_rms": 0.5485388040542603,
+      "mean_attention_entropy": 4.509607315063477
+    }
+  ],
+  "bf16_cached_max_logit_difference": 0.00390625,
+  "cached_tokens": 32,
+  "cache_tensor_elements": 1536
+}
