@@ -8,6 +8,6 @@ training_config = TrainingConfig(
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/fluxv-init-range/tensorboard"),
+    directory=results_path("pretraining/tide-triton-14m/tensorboard"),
     interval=10,
 )
