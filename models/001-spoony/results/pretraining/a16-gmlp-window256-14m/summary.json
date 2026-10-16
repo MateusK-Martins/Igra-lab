@@ -1,0 +1,15 @@
+{
+  "model": "Integrated gMLP window256",
+  "parameters": 10780512,
+  "validation_loss": 2.146345204777188,
+  "perplexity": 8.553539764176127,
+  "training_seconds": 238.40476311199745,
+  "target_tokens": 18429440,
+  "target_tokens_per_second_including_validation_and_saving": 77303.15350848189,
+  "benchmark_tokens_per_second": 78227.85926257298,
+  "peak_cuda_allocated_gib": 0.5740022659301758,
+  "tests_passed": 757,
+  "loss_difference_vs_window64": -0.02228958076900911,
+  "source_and_training_artifacts_settings_verified": true,
+  "gmlp_window_size": 256
+}

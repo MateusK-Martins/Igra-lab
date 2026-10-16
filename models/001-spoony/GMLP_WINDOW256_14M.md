@@ -9,3 +9,23 @@ Windows remain fixed/non-overlapping, aligned to absolute sequence/cache count, 
 Same existing14M pipeline: identical TinyStories artifacts/tokenizer,seed42,context256,batch8,BF16,AdamW3e-4,warmup300,9000freshupdates/18,429,440actual targettokens, same validation and fixed-prompt generation. Generations follow inherited trailing256-token context evaluation, which resets window alignment if a context is cropped. Independent trained cached checks span273tokens across the new256boundary.
 
 757tests and Ruff pass before training. New tests cover learned nontrivial256window mixing, causal/future gradient isolation, history reset, cached chunks and snapshots across256/512boundaries, constant buffer size, BF16CPU/CUDA training/inference. Configured full-model cache tests cross256tokens; existing independent mathematical/gradient tests retained. Large checkpoints outsideGit at `/var/tmp/igra-a16-gmlp-window256-14m`, through an ignored local symlink. Single-seed comparison; larger window also changes parameter count, computation, cache size and initial random draws. Results follow after completion.
+
+## Completed comparison
+
+All757tests/Ruff and final source/artifact/settings audits passed.9000freshupdates/18,429,440actual targettokens. Trained273-token full versus7-token chunks crossed256boundary and passedFP32/FP64 tolerances.
+
+| Model | Parameters | Validation loss | Perplexity | Training seconds | Peak CUDA GiB |
+|---|---:|---:|---:|---:|---:|
+| A16/RoPE alone | 10,375,680 | 2.170240 | 8.760389 | 215.33 | 0.560 |
+| Integrated gMLP window64 | 10,410,720 | 2.168635 | 8.746335 | 239.56 | 0.569 |
+| Integrated gMLP window256 | 10,780,512 | 2.146345 | 8.553540 | 238.40 | 0.574 |
+
+Window256 versus64 loss difference:-0.022290. Training throughput including validation/saving:77,303targettokens/s; isolated benchmark:78,228tokens/s.
+
+Finite initial/final BF16 held-out gradients and six gMLP output probes passed. Spatial-weight/bias/output RMS statistics, full loss curve, manifests and fixed generations remain in results/pretraining/a16-gmlp-window256-14m. Final validation metrics use update9000; generations use the best saved checkpoint. Larger context mixing is not evidence of reasoning or retrieval ability; one seed cannot establish a robust architecture advantage.
+
+## Interpretation
+
+The256-token spatial window lowered final validation loss by0.022290 and perplexity by about2.2%versus64tokens in this run. Total parameters increased369,792(3.55%), while the per-layer gMLP cache increased4×. Observed training wall time was similar(238.40s versus239.56s); isolated benchmarks were slightly slower for256, so the wall-time difference should not be attributed to a speed improvement from a larger matrix. Peak CUDA allocated memory was0.574GiB versus0.569GiB.
+
+This supports testing longer temporal mixing further, but does not isolate context span from the increased spatial parameter capacity, window-scaled initialization or changed later RNG draws. It remains a single-seed result. No post-result tuning was performed.

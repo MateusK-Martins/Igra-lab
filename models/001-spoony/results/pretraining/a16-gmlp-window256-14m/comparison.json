@@ -1,0 +1,34 @@
+{
+  "models": [
+    {
+      "model": "A16/RoPE alone",
+      "parameters": 10375680,
+      "validation_loss": 2.170240353654932,
+      "perplexity": 8.760389379323737,
+      "training_seconds": 215.32605484799933,
+      "peak_cuda_allocated_gib": 0.5599451065063477
+    },
+    {
+      "model": "Integrated gMLP window64",
+      "parameters": 10410720,
+      "validation_loss": 2.168634785546197,
+      "perplexity": 8.746335262955826,
+      "training_seconds": 239.5579515319987,
+      "peak_cuda_allocated_gib": 0.5691871643066406
+    },
+    {
+      "model": "Integrated gMLP window256",
+      "parameters": 10780512,
+      "validation_loss": 2.146345204777188,
+      "perplexity": 8.553539764176127,
+      "training_seconds": 238.40476311199745,
+      "target_tokens": 18429440,
+      "target_tokens_per_second_including_validation_and_saving": 77303.15350848189,
+      "benchmark_tokens_per_second": 78227.85926257298,
+      "peak_cuda_allocated_gib": 0.5740022659301758,
+      "tests_passed": 757
+    }
+  ],
+  "same_data_tokenizer_and_training_settings_verified": true,
+  "limitations": "Single seed; window changes parameter count, computation, cache, window-dependent initialization scale and subsequent RNG draws. No exact initial-weight pairing."
+}

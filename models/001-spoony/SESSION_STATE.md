@@ -1,3 +1,5 @@
+Completed256-window integrated run: loss2.146345205,PPL8.553539764,9000updates,757tests/Ruff and trained273-token cache checks passed. See GMLP_WINDOW256_14M.md.
+
 > **Active:** [GMLP_WINDOW256_14M.md](GMLP_WINDOW256_14M.md), integrated A16/gMLP with256-token spatial windows. Prior notes historical.
 
 Completed no-Tide integrated/separated comparison. See NO_TIDE_GMLP_COMPARISON.md. Both9000-update runs complete; source/data/settings and trained cache checks passed.
