@@ -1,0 +1,15 @@
+{
+  "model": "Integrated A16 + gMLP",
+  "branch": "model/001-spoony-a16-latent-gmlp-14m",
+  "parameters": 10410720,
+  "validation_loss": 2.168634785546197,
+  "perplexity": 8.746335262955826,
+  "training_seconds": 239.5579515319987,
+  "target_tokens": 18429440,
+  "target_tokens_per_second_including_validation_and_saving": 76931.03018347653,
+  "benchmark_tokens_per_second": 81011.02826548419,
+  "peak_cuda_allocated_gib": 0.5691871643066406,
+  "tests_passed": 754,
+  "initial_gradient_norm": 1.5453416407391452,
+  "final_gradient_norm": 5.860907696243287
+}

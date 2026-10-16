@@ -1,0 +1,122 @@
+{
+  "body.1.branch.gmlp": {
+    "spatial_weight_lower": {
+      "rms": 0.009669225662946701,
+      "min": -0.04056590050458908,
+      "max": 0.04850595071911812,
+      "finite": true
+    },
+    "spatial_bias": {
+      "rms": 0.9796563386917114,
+      "min": 0.937824010848999,
+      "max": 1.0520471334457397,
+      "finite": true
+    },
+    "output": {
+      "rms": 0.1069926768541336,
+      "min": -0.74609375,
+      "max": 0.73046875,
+      "finite": true
+    }
+  },
+  "body.5.branch.gmlp": {
+    "spatial_weight_lower": {
+      "rms": 0.010976075194776058,
+      "min": -0.05445398390293121,
+      "max": 0.0370095930993557,
+      "finite": true
+    },
+    "spatial_bias": {
+      "rms": 0.9889593720436096,
+      "min": 0.8795114755630493,
+      "max": 1.0550748109817505,
+      "finite": true
+    },
+    "output": {
+      "rms": 0.15214894711971283,
+      "min": -0.859375,
+      "max": 0.8984375,
+      "finite": true
+    }
+  },
+  "body.9.branch.gmlp": {
+    "spatial_weight_lower": {
+      "rms": 0.008336251601576805,
+      "min": -0.04271794855594635,
+      "max": 0.04264913126826286,
+      "finite": true
+    },
+    "spatial_bias": {
+      "rms": 0.9841906428337097,
+      "min": 0.8909794092178345,
+      "max": 1.030090570449829,
+      "finite": true
+    },
+    "output": {
+      "rms": 0.2212972790002823,
+      "min": -0.87890625,
+      "max": 0.97265625,
+      "finite": true
+    }
+  },
+  "body.13.branch.gmlp": {
+    "spatial_weight_lower": {
+      "rms": 0.010723909363150597,
+      "min": -0.05768908932805061,
+      "max": 0.045376889407634735,
+      "finite": true
+    },
+    "spatial_bias": {
+      "rms": 0.9738707542419434,
+      "min": 0.8349166512489319,
+      "max": 1.0123862028121948,
+      "finite": true
+    },
+    "output": {
+      "rms": 0.16947786509990692,
+      "min": -1.0625,
+      "max": 0.7109375,
+      "finite": true
+    }
+  },
+  "body.17.branch.gmlp": {
+    "spatial_weight_lower": {
+      "rms": 0.009348321706056595,
+      "min": -0.04017137736082077,
+      "max": 0.05682802572846413,
+      "finite": true
+    },
+    "spatial_bias": {
+      "rms": 0.9774229526519775,
+      "min": 0.9009048342704773,
+      "max": 1.0118966102600098,
+      "finite": true
+    },
+    "output": {
+      "rms": 0.16824603080749512,
+      "min": -1.03125,
+      "max": 0.875,
+      "finite": true
+    }
+  },
+  "body.21.branch.gmlp": {
+    "spatial_weight_lower": {
+      "rms": 0.013912450522184372,
+      "min": -0.08209764212369919,
+      "max": 0.0700710117816925,
+      "finite": true
+    },
+    "spatial_bias": {
+      "rms": 0.9761595726013184,
+      "min": 0.8612086772918701,
+      "max": 1.0087192058563232,
+      "finite": true
+    },
+    "output": {
+      "rms": 0.1690537929534912,
+      "min": -0.828125,
+      "max": 0.796875,
+      "finite": true
+    }
+  }
+}
