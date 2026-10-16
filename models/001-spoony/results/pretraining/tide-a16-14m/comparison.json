@@ -1,0 +1,18 @@
+{
+  "model": "Tide,Tide,A16+RoPE repeated twice",
+  "parameters": 12641280,
+  "validation_loss": 2.0250967961770514,
+  "perplexity": 7.576844318706534,
+  "training_seconds": 249.33785210299902,
+  "target_tokens": 18429440,
+  "tokens_per_second": 73913.52674517698,
+  "peak_cuda_allocated_bytes": 718273536,
+  "recipe_commit": "ba595e36989c035b121e72eb6b9c7e520da9bec0",
+  "historical_tide_loss": 2.010153,
+  "historical_lantern_loss": 2.0183204765673035,
+  "historical_tide_lantern_loss": 1.983779589,
+  "a16_rope_loss": 2.170240353654932,
+  "tests_passed": 730,
+  "checkpoint_storage": "/var/tmp/igra-rope-14m/tide-a16",
+  "single_seed": true
+}

@@ -22,3 +22,32 @@ This resumes the authorized hybrid experiment after correcting the positional
 configuration. Compare against Tide, Lantern, Tide/Lantern and A16+RoPE, while
 accounting for different parameter counts/mixer ratios. Single seed only;
 no reasoning or retrieval conclusions follow from TinyStories perplexity.
+
+## Completed results
+
+All 730 tests and Ruff passed before training. Completed 9000 updates /
+18,429,440 target tokens, final loss 2.025097, perplexity
+7.576844. Training including validation/saving took 249.338s
+(4.16 minutes), throughput 73,914 target tokens/s,
+peak allocated CUDA memory 718,273,536 bytes
+(0.669 GiB).
+
+Reference losses: pure Tide 2.010153; Lantern 2.018320; prior Tide/Lantern
+1.983780; A16+RoPE 2.170240. These comparisons change mixer
+ratios and parameter counts, so they do not isolate only attention width.
+Same data/tokenizer hashes as the original hybrid; runtime source hashes match
+the frozen manifest. Initial and final BF16 probes have finite gradients;
+norms before clipping 2.556218 and
+1.719267. Gate/state statistics remain in probes.
+
+Trained full-versus-cached decoding passed: FP32 maximum logit difference
+9.54e-06, FP64
+2.58e-14. Cache tests also cover
+mixed attention/recurrent snapshot restoration and future-gradient isolation.
+Complete validation curve and all fixed greedy samples are in training-report.json.
+Samples use the best saved checkpoint; final metrics use update 9000.
+
+Fixed generation:
+
+Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, scary dog. The dog was very scary and Lily was scared.
+Lily's mom told her to be careful and not to hurt the dog. She said, "Don't be scared, Lily. The dog is friendly and wants to
