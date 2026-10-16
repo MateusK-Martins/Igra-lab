@@ -1,0 +1,21 @@
+{
+  "pytest_passed": 754,
+  "pytest_seconds": 8.66,
+  "ruff_lint": "passed",
+  "ruff_format": "passed",
+  "trained_cache": {
+    "torch.float32": {
+      "max_logit_difference": 8.58306884765625e-06,
+      "allclose_passed": true,
+      "tokens": 105
+    },
+    "torch.float64": {
+      "max_logit_difference": 2.1316282072803006e-14,
+      "allclose_passed": true,
+      "tokens": 105
+    }
+  },
+  "recipe_commit": "ca430f2",
+  "checkpoint_location": "/var/tmp/igra-tide-a16-latent-gmlp-14m",
+  "sleep_inhibited_during_training": true
+}

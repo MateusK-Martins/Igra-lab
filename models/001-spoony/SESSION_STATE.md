@@ -1,3 +1,5 @@
+Completed compressed-output gMLP experiment: final TinyStoriesloss2.023516664/PPL7.564881356,12,652,960parameters,9000updates.754tests+Ruff passed; trained105-token full/cache checks passedFP32/FP64. See LATENT_GMLP_14M.md.
+
 > **Active:** [LATENT_GMLP_14M.md](LATENT_GMLP_14M.md), gMLP after16D attention retrieval, before384D output projection. Prior notes below are historical.
 
 Completed Tide–gMLP–A16: loss1.993348824/PPL7.340073261,9000updates,12,652,160parameters,740tests+Ruff passed. Trained105-token full/cache checks passedFP32/FP64. See GMLP_TIDE_A16.md and results/pretraining/tide-gmlp-a16-14m.

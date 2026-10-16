@@ -13,3 +13,33 @@ Per-gMLP cache:64×32=2,048values,4KiB BF16/8KiB FP32,16× smaller than prior fu
 Controlled protocol: identical TinyStories artifacts/tokenizer hashes, seed42, context256,batch8,BF16,AdamW3e-4,warmup300,9000updates,18,429,440actual targettokens, inherited validation and fixed-prompt generation. Same seed but later initialization tensors are not explicitly paired when architecture construction changes RNG consumption. Generation follows inherited trailing256-token context evaluation, resetting gMLP alignment when the context is cropped; persistent-cache behavior is checked independently.
 
 Architectural tests cover explicit sequential attention→spatial gate→projection math and parameter/input gradients, float64 joint gradcheck, causality, recovered baseline with zero gMLP output, single-token/chunked execution and snapshots across windows, cache sizes/counts, early rejection of mismatched positions, BF16 CPU/CUDA training/inference and old attention tests. No expensive training until the entire suite and Ruff pass. Data/checkpoints remain outside Git; checkpoint storage `/var/tmp/igra-tide-a16-latent-gmlp-14m` via ignored local symlink. Results follow after completion.
+
+## Completed comparison
+
+Frozen recipe ca430f2; fresh9,000updates/18,429,440targettokens. All source hashes and shared artifact fingerprints verified. All754tests, Ruff lint and formatting passed.
+
+| Model | Parameters | Validation loss | Perplexity |
+|---|---:|---:|---:|
+| Tide/A16 + compressed gMLP |12,652,960|2.023517|7.564881|
+| Tide/full-width gMLP/A16 |12,652,160|1.993349|7.340073|
+| Original Tide/Tide/A16 |12,641,280|2.025097|7.576844|
+| Lantern |12,440,064|2.018320|7.525675|
+| Pure Tide |13,774,080|2.010153|7.464462|
+
+Training time253.21s including validation/saving; throughput72,784actual targettokens/s; isolated benchmark75,940tokens/s. Peak CUDA allocated0.673GiB. Benchmark updates are discarded; main run initializes from scratch.
+
+Loss difference versus original Tide/A16:-0.001580; versus prior full-width gMLP hybrid:+0.030168. The first is the more controlled architecture comparison; the second also changes the number of Tide layers. Same-seed settings do not ensure paired initial tensors after different module construction. Treat all results as single-seed observations rather than evidence of general architectural superiority.
+
+Initial/final BF16 gradient probes were finite. The trained model's105-token full/cached execution crossed64-token windows and passedFP32/FP64 tolerances. gMLP activation diagnostics on one fixed validation batch:
+
+- body.9.branch.gmlp: outputRMS 0.123182 → 0.168700; spatial-weight lower-triangleRMS 0.000011 → 0.010553.
+
+- body.21.branch.gmlp: outputRMS 0.121183 → 0.121490; spatial-weight lower-triangleRMS 0.000011 → 0.009479.
+
+Full validation curve and fixed-prompt generations are in training-report.json; final loss uses update9000, generations use the best saved checkpoint. Learned Tide retention/write statistics and global parameter gradients are in initial-probe.json/final-probe.json. Cache checks, manifests and benchmark are adjacent. Finite sampled statistics do not establish long-range retrieval or semantic specialization.
+
+## Interpretation
+
+Compressed gMLP was nearly tied with original Tide/A16 (loss improvement0.00158) and worse than the standalone full-width gMLP hybrid by0.03017. A difference this small against the direct control is not convincing evidence of a benefit in a single-seed comparison. Spatial weights moved away from near-zero initialization, but learning a nonzero filter did not recreate the full-width result. A plausible hypothesis is that16D retrieved representations limit what temporal gating can transform; however, moving gMLP also restores two Tide layers and changes its ordering relative to attention, so these results do not isolate compression width alone.
+
+The gMLP-specific parameter/cache savings are substantial, but whole-model measured runtime and VRAM did not improve meaningfully: unchanged full-width FFNs, embeddings and Tide/attention dominate this small model. No architecture tuning was performed after the completed run.
