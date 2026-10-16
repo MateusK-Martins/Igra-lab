@@ -1,3 +1,5 @@
+> **Active:** [NO_TIDE_GMLP_14M.md](NO_TIDE_GMLP_14M.md), all-six-layer A16+compressed gMLP, no Tide. Earlier notes are historical.
+
 > **Active:** [LATENT_GMLP_14M.md](LATENT_GMLP_14M.md), gMLP after16D attention retrieval, before384D output projection. Prior notes below are historical.
 
 > **Active:** [GMLP_TIDE_A16.md](GMLP_TIDE_A16.md), `[Tide,gMLP,A16/RoPE] ×2`,64-token fixed gMLP windows. Notes below are historical.

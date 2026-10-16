@@ -1,4 +1,4 @@
-"""Two Tide layers then A16 with compressed-output gMLP; preserve the Tide14M FFN and width."""
+"""Six A16 layers with compressed-output gMLP; unchanged 14M pipeline backbone."""
 
 from functools import partial
 
@@ -8,7 +8,6 @@ from src.model.definitions import (
     Embedding,
     GQAAttention,
     LMHead,
-    NoKVariant,
     RMSNorm,
     SwiGLU,
 )
@@ -18,33 +17,18 @@ from src.model.position import rope
 def build_model(tokenizer: Tokenizer):
     blocks = []
     for layer in range(6):
-        mixer = (
-            GQAAttention(
-                input_features=384,
-                output_features=384,
-                num_query_heads=1,
-                num_kv_heads=1,
-                head_features=16,
-                window_size=0,
-                dropout=0,
-                position_rotation=partial(rope, base=10000.0),
-                gmlp_hidden_features=64,
-                gmlp_window_size=64,
-                residual=True,
-            )
-            if layer % 3 == 2
-            else NoKVariant(
-                input_features=384,
-                eps=1e-6,
-                residual=True,
-                decay_init=0.99,
-                mode="write_gate",
-                rank=32,
-                num_heads=4,
-                normalization_scope="global",
-                retention_initials=tuple(0.90 + 0.095 * j / 383 for j in range(384)),
-                write_initials=tuple(0.20 - 0.18 * j / 383 for j in range(384)),
-            )
+        mixer = GQAAttention(
+            input_features=384,
+            output_features=384,
+            num_query_heads=1,
+            num_kv_heads=1,
+            head_features=16,
+            window_size=0,
+            dropout=0,
+            position_rotation=partial(rope, base=10000.0),
+            gmlp_hidden_features=64,
+            gmlp_window_size=64,
+            residual=True,
         )
         blocks.extend(
             [

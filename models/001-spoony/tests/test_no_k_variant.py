@@ -231,21 +231,10 @@ def test_configuration_parameter_counts_and_state_budget():
         vocab_size = 8192
 
     model, entries = build_model(Tokenizer())
-    m = model.body[1].branch
-    assert sum(p.numel() for p in model.parameters()) == 12_652_960
+    assert sum(p.numel() for p in model.parameters()) == 10_410_720
     states = [e for e in entries if hasattr(e, "value_sum")]
     assert len(states) == 6
-    assert sorted(e.value_sum.shape[-1] for e in states) == [
-        384,
-        384,
-        384,
-        384,
-        2048,
-        2048,
-    ]
-    assert all(e.key_sum.numel() == 0 for e in states)
-    if m.mode == "lowrank":
-        assert m.rank == 32
+    assert all(e.value_sum.shape[-1] == 2048 and e.key_sum.numel() == 0 for e in states)
     for kw in [
         {"mode": "other"},
         {"rank": 0},

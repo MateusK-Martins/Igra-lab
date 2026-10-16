@@ -10,7 +10,6 @@ from src.data.tokenizer import ByteLevelBPETokenizer
 from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheEntry, CacheStorage, StateEntry
 from src.model.composition import ResidualImpl
-from src.model.cumulative import CumulativeMixerImpl
 from src.model.feedforward import SwiGLUImpl
 from src.model.gmlp import GMLPImpl
 from src.model.stability import RMSNormImpl
@@ -47,12 +46,7 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     for index in range(0, 24, 4):
         norm1, attention, feedforward, norm2 = model.body[index : index + 4]
         assert isinstance(attention, ResidualImpl)
-        assert isinstance(
-            attention.branch,
-            (CumulativeMixerImpl, CumulativeMixerImpl, GQAAttentionImpl)[
-                (index // 4) % 3
-            ],
-        )
+        assert isinstance(attention.branch, GQAAttentionImpl)
         assert isinstance(feedforward, ResidualImpl)
         assert isinstance(feedforward.branch, SwiGLUImpl)
         assert isinstance(norm1, RMSNormImpl)
@@ -60,9 +54,9 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     assert [
         entry.layer_id for entry in entries if not entry.layer_id.startswith("GMLPImpl")
     ] == [model.body[index].branch.layer_id for index in range(1, 24, 4)]
-    assert len({entry.layer_id for entry in entries}) == 8
+    assert len({entry.layer_id for entry in entries}) == 12
     assert sum(isinstance(entry, StateEntry) for entry in entries) == 6
-    assert sum(isinstance(entry, CacheEntry) for entry in entries) == 2
+    assert sum(isinstance(entry, CacheEntry) for entry in entries) == 6
 
 
 def test_config_forward_and_next_token_loss_backward(tokenizer):

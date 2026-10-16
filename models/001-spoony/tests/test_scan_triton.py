@@ -122,14 +122,21 @@ def test_full_tide_logits_and_parameter_gradients_match_reference(monkeypatch):
     from types import SimpleNamespace
 
     import src.model.scan_triton as scan_module
-    from configs.model.model import build_model
+    from src.model.assembler import Model
+    from src.model.definitions import Embedding, LMHead, NoKVariant, SwiGLU
     from src.model.scan import affine_prefix_sum
 
+    # Explicit Tide fixture: the active no-Tide experiment must not make this
+    # scan regression pass without exercising the scan.
     torch.manual_seed(42)
-    model, _ = build_model(SimpleNamespace(vocab_size=8192))
-    assert sum(p.numel() for p in model.parameters()) == 12_652_960
+    model, _ = Model(
+        SimpleNamespace(vocab_size=128),
+        Embedding(64, 0.02),
+        [NoKVariant(64, residual=True), SwiGLU(64, 128, 64, residual=True)],
+        LMHead(64, tie_to_embedding=True),
+    ).assemble()
     model.cuda()
-    tokens = torch.randint(0, 8192, (2, 17), device="cuda")
+    tokens = torch.randint(0, 128, (2, 17), device="cuda")
     with torch.autocast("cuda", dtype=torch.bfloat16):
         actual = model(tokens)
         loss = actual.float().square().mean()

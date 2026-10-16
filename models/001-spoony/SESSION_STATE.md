@@ -1,3 +1,5 @@
+> **Active:** [NO_TIDE_GMLP_14M.md](NO_TIDE_GMLP_14M.md), all-six-layer A16+compressed gMLP, no Tide. Earlier notes are historical.
+
 Completed compressed-output gMLP experiment: final TinyStoriesloss2.023516664/PPL7.564881356,12,652,960parameters,9000updates.754tests+Ruff passed; trained105-token full/cache checks passedFP32/FP64. See LATENT_GMLP_14M.md.
 
 > **Active:** [LATENT_GMLP_14M.md](LATENT_GMLP_14M.md), gMLP after16D attention retrieval, before384D output projection. Prior notes below are historical.
