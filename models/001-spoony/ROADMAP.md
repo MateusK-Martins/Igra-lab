@@ -1,3 +1,5 @@
+> **Active:** [AC_SWIGLU_14M.md](AC_SWIGLU_14M.md), A16-conditioned SwiGLU and matched pre-FFN-normalized control. Prior notes historical.
+
 > **Codename branch:** the active larger TinyStories recipe and comparison
 > protocol are documented in [CODENAME.md](CODENAME.md). The historical
 > Spoony notes below describe earlier configurations.

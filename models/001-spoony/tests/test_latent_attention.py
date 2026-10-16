@@ -4,12 +4,42 @@ from unittest.mock import patch
 import pytest
 import torch
 
-from configs.model.model import build_model
+import configs.model.model as model_config
+from src.model.assembler import Model
 from src.model.cache_storage import CacheStorage, MatrixCacheEntry
 from src.model.composition import build_block
-from src.model.definitions import LatentAttention
+from src.model.definitions import (
+    Embedding,
+    LatentAttention,
+    LMHead,
+    Repeat,
+    RMSNorm,
+    SwiGLU,
+)
 
 MODES = ("a16", "a4", "sma4", "sma4_key", "sma4_key_gelu16")
+
+
+def build_model(tokenizer):
+    # Keep the original attention-suite fixtures independent of AC-SwiGLU.
+    return Model(
+        tokenizer,
+        Embedding(384, 0.02),
+        [
+            Repeat(
+                6,
+                [
+                    RMSNorm(384, 1e-6),
+                    LatentAttention(
+                        384, model_config.MODE, residual=True, rope_base=10000.0
+                    ),
+                    SwiGLU(384, 1024, 384, residual=True),
+                    RMSNorm(384, 1e-6),
+                ],
+            )
+        ],
+        LMHead(384, tie_to_embedding=True),
+    ).assemble()
 
 
 def reference(module, x):

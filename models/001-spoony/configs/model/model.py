@@ -1,8 +1,9 @@
 from src.data.tokenizer import Tokenizer
 from src.model.assembler import Model
-from src.model.definitions import *
+from src.model.definitions import ACSwiGLU, Embedding, LMHead, Repeat, RMSNorm
 
 MODE = "a16"
+CONDITIONED = True
 
 
 def build_model(tokenizer: Tokenizer):
@@ -13,15 +14,13 @@ def build_model(tokenizer: Tokenizer):
             Repeat(
                 times=6,
                 blocks=[
-                    RMSNorm(input_features=384, eps=1e-6),
-                    LatentAttention(
-                        input_features=384, mode=MODE, residual=True, rope_base=10000.0
-                    ),
-                    SwiGLU(
+                    ACSwiGLU(
                         input_features=384,
                         hidden_features=1024,
-                        output_features=384,
-                        residual=True,
+                        eps=1e-6,
+                        rope_base=10000.0,
+                        alpha=0.1,
+                        conditioned=CONDITIONED,
                     ),
                     RMSNorm(input_features=384, eps=1e-6),
                 ],

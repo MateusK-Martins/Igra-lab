@@ -1,0 +1,12 @@
+{
+  "reconstructed_artifacts_exactly_match_historical_a16": true,
+  "artifacts": {
+    "tokenizer.json": "ba860d881be0a85b457d6623fe8fdff79c00235776b92a9e2d2d48f43eb2e793",
+    "train/documents.jsonl": "708dd3a0b14ac4766316befa14aba9dac46d0a3d3724f54e56a0a831d886b202",
+    "train/metadata.json": "8e2678ee80201f510e70ab2af5e0b862e59a705b3e40cc71bdca1d9e38fa3a46",
+    "train/tokens.bin": "92b5d1296741f8808bc41a78661b56f320988f563f6ea45851aab3e3063f0e7f",
+    "validation/documents.jsonl": "da7ab1962319ac43c02c6bed744d05674d09a91f747931e3628630ce31338f7c",
+    "validation/metadata.json": "a88a8c445b9300d69334d8d9812f278c7c170794b6954d712ee5c6a941cf7c8b",
+    "validation/tokens.bin": "44e3d4954e0102799db3f39b475b9add58b4163185f986e2f6448673e756dfef"
+  }
+}

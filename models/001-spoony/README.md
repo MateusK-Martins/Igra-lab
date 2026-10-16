@@ -1,3 +1,5 @@
+> **Active:** [AC_SWIGLU_14M.md](AC_SWIGLU_14M.md), A16-conditioned SwiGLU and matched pre-FFN-normalized control. Prior notes historical.
+
 > **Active experiment:** compressed attention with RoPE. See [ROPE_COMPARISON.md](ROPE_COMPARISON.md). Previous reports below are historical.
 
 > **Active experiment:** SMA4 keys + per-response Linear(4→16)/GELU. See [SMA4_GELU16.md](SMA4_GELU16.md). Historical notes follow.

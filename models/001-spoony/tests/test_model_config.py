@@ -7,8 +7,8 @@ from torch.nn import functional as F
 
 from configs.model.model import MODE, build_model
 from src.data.tokenizer import ByteLevelBPETokenizer
+from src.model.ac_swiglu import ACSwiGLUImpl
 from src.model.cache_storage import CacheStorage
-from src.model.composition import ResidualImpl
 from src.model.feedforward import SwiGLUImpl
 from src.model.latent_attention import LatentAttentionImpl
 from src.model.stability import RMSNormImpl
@@ -41,18 +41,18 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     assert model.embedding.num_embeddings == tokenizer.vocab_size
     assert model.lm_head.out_features == tokenizer.vocab_size
     assert model.lm_head.weight is model.embedding.weight
-    assert len(model.body) == 24
-    for index in range(0, 24, 4):
-        norm1, attention, feedforward, norm2 = model.body[index : index + 4]
-        assert isinstance(attention, ResidualImpl)
-        assert isinstance(attention.branch, LatentAttentionImpl)
-        assert isinstance(feedforward, ResidualImpl)
-        assert isinstance(feedforward.branch, SwiGLUImpl)
-        assert isinstance(norm1, RMSNormImpl)
+    assert len(model.body) == 12
+    for index in range(0, 12, 2):
+        layer, norm2 = model.body[index : index + 2]
+        assert isinstance(layer, ACSwiGLUImpl)
+        assert isinstance(layer.attention, LatentAttentionImpl)
+        assert isinstance(layer.ffn, SwiGLUImpl)
+        assert isinstance(layer.attention_norm, RMSNormImpl)
+        assert isinstance(layer.ffn_norm, RMSNormImpl)
         assert isinstance(norm2, RMSNormImpl)
-        assert attention.branch.mode == MODE
+        assert layer.attention.mode == MODE
     assert [entry.layer_id for entry in entries] == [
-        model.body[index].branch.layer_id for index in range(1, 24, 4)
+        model.body[i].layer_id for i in range(0, 12, 2)
     ]
     assert len({entry.layer_id for entry in entries}) == 6
     assert all(
@@ -83,9 +83,9 @@ def test_config_forward_and_next_token_loss_backward(tokenizer):
 def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokenizer):
     first, first_entries = build_model(tokenizer)
     second, second_entries = build_model(tokenizer)
-    weights = [first.body[index].branch.q_proj.weight for index in range(1, 24, 4)]
+    weights = [first.body[index].attention.q_proj.weight for index in range(0, 12, 2)]
     assert len({weight.data_ptr() for weight in weights}) == 6
-    gates = [first.body[index].branch.gate.weight for index in range(2, 24, 4)]
+    gates = [first.body[index].ffn.gate.weight for index in range(0, 12, 2)]
     assert len({weight.data_ptr() for weight in gates}) == 6
     assert all(
         a.data_ptr() != b.data_ptr()

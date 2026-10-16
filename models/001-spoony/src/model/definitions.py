@@ -5,6 +5,7 @@ from typing import Protocol
 import torch
 from torch import nn
 
+from src.model.ac_swiglu import ACSwiGLUImpl
 from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheEntry, MatrixCacheEntry
 from src.model.feedforward import LinearImpl, SwiGLUImpl
@@ -385,3 +386,48 @@ class LatentAttention(BlockDefinition):
         features = 16 if self.mode == "a16" else 4
         shape = (0, 1, 0, features)
         return CacheEntry(name, False, torch.empty(shape), torch.empty(shape), 0, 0)
+
+
+@dataclass(frozen=True)
+class ACSwiGLU(BlockDefinition):
+    input_features: int
+    hidden_features: int = 1024
+    eps: float = 1e-6
+    rope_base: float = 10000.0
+    alpha: float = 0.1
+    conditioned: bool = True
+    residual: bool = False
+
+    @property
+    def output_features(self):
+        return self.input_features
+
+    def __post_init__(self):
+        _positive_integer(self.hidden_features, "hidden_features")
+        RMSNorm(self.input_features, self.eps)
+        LatentAttention(self.input_features, "a16", rope_base=self.rope_base)
+        if (
+            type(self.alpha) not in (int, float)
+            or not math.isfinite(self.alpha)
+            or not 0 < self.alpha < 1
+        ):
+            raise ValueError("alpha must be finite and in (0,1)")
+        if type(self.conditioned) is not bool:
+            raise ValueError("conditioned must be boolean")
+        if self.residual is not False:
+            raise ValueError("ACSwiGLU owns its two internal residuals")
+
+    def build(self):
+        return ACSwiGLUImpl(
+            self.input_features,
+            self.hidden_features,
+            self.eps,
+            self.rope_base,
+            self.alpha,
+            self.conditioned,
+        )
+
+    def cache(self, layer_id):
+        return LatentAttention(
+            self.input_features, "a16", rope_base=self.rope_base
+        ).cache(layer_id)

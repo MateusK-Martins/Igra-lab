@@ -1,3 +1,5 @@
+> **Active:** [AC_SWIGLU_14M.md](AC_SWIGLU_14M.md), A16-conditioned SwiGLU and matched pre-FFN-normalized control. Prior notes historical.
+
 # RoPE comparison reruns — 2026-10-16
 
 See ROPE_COMPARISON.md. Active A16/A4/SMA4/key/GELU16 RoPE branches preserve

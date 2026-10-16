@@ -43,6 +43,10 @@ class LatentAttentionImpl(nn.Module):
         self.layer_id = f"LatentAttentionImpl{'-rope' if self.rope_base is not None else ''}-{layer_id}"
 
     def forward(self, x, *, cache: CacheStorage | None = None):
+        return self.out_proj(self.retrieve(x, cache=cache))
+
+    def retrieve(self, x, *, cache: CacheStorage | None = None):
+        """Return only the compressed retrieval; do not retain it between calls."""
         if cache is not None and torch.is_grad_enabled():
             raise RuntimeError("Cached attention is inference-only; use no_grad")
         start = 0 if cache is None else cache.step(self.layer_id)
@@ -101,7 +105,7 @@ class LatentAttentionImpl(nn.Module):
                         )
                     )
                 z = torch.einsum("bts,btsi->bti", weights, responses)
-            return self.out_proj(z.to(q.dtype))
+            return z.to(q.dtype)
         q = q.unsqueeze(1)
         k, v = self.k_proj(x).unsqueeze(1), self.v_proj(x).unsqueeze(1)
         if self.rope_base is not None:
@@ -114,4 +118,4 @@ class LatentAttentionImpl(nn.Module):
             start + torch.arange(x.shape[1], device=x.device)[:, None]
         )
         z = F.scaled_dot_product_attention(q, k, v, attn_mask=mask)
-        return self.out_proj(z.squeeze(1))
+        return z.squeeze(1)
