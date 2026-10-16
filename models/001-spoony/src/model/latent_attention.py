@@ -13,9 +13,11 @@ class LatentAttentionImpl(nn.Module):
         self.mode = mode
         self.latent_features = 16 if mode == "a16" else 4
         self.q_proj = nn.Linear(
-            width, self.latent_features, bias=mode in ("sma4", "sma4_key")
+            width,
+            self.latent_features,
+            bias=mode in ("sma4", "sma4_key", "sma4_key_gelu16"),
         )
-        if mode in ("sma4", "sma4_key"):
+        if mode in ("sma4", "sma4_key", "sma4_key_gelu16"):
             self.matrix_proj = nn.Linear(width, 16, bias=True)
             if mode == "sma4":
                 self.scoring = nn.Parameter(torch.empty(4))
@@ -24,11 +26,16 @@ class LatentAttentionImpl(nn.Module):
             self.k_proj = nn.Linear(width, self.latent_features, bias=False)
             self.v_proj = nn.Linear(width, self.latent_features, bias=False)
         self.out_proj = nn.Linear(
-            self.latent_features, width, bias=mode in ("sma4", "sma4_key")
+            16 if mode == "sma4_key_gelu16" else self.latent_features,
+            width,
+            bias=mode in ("sma4", "sma4_key", "sma4_key_gelu16"),
         )
 
-        if mode == "sma4_key":
+        if mode in ("sma4_key", "sma4_key_gelu16"):
             self.k_proj = nn.Linear(width, 4, bias=False)
+
+        if mode == "sma4_key_gelu16":
+            self.response_proj = nn.Linear(4, 16, bias=True)
 
     def assign_id(self, layer_id):
         self.layer_id = f"LatentAttentionImpl-{layer_id}"
@@ -38,9 +45,11 @@ class LatentAttentionImpl(nn.Module):
             raise RuntimeError("Cached attention is inference-only; use no_grad")
         start = 0 if cache is None else cache.step(self.layer_id)
         q = self.q_proj(x)
-        if self.mode in ("sma4", "sma4_key"):
+        if self.mode in ("sma4", "sma4_key", "sma4_key_gelu16"):
             matrices = self.matrix_proj(x).unflatten(-1, (4, 4))
-            keys = self.k_proj(x) if self.mode == "sma4_key" else None
+            keys = (
+                self.k_proj(x) if self.mode in ("sma4_key", "sma4_key_gelu16") else None
+            )
             if cache is not None:
                 cache.write_matrices(self.layer_id, matrices, keys=keys)
                 matrices = cache.read_matrices(self.layer_id)
@@ -68,6 +77,15 @@ class LatentAttentionImpl(nn.Module):
                     start + torch.arange(x.shape[1], device=x.device)[:, None]
                 )
                 weights = scores.masked_fill(~mask, -torch.inf).softmax(-1)
+                if self.mode == "sma4_key_gelu16":
+                    # Transform every matrix response BEFORE the token-weighted sum.
+                    responses = F.gelu(
+                        F.linear(
+                            responses,
+                            self.response_proj.weight.to(dtype),
+                            self.response_proj.bias.to(dtype),
+                        )
+                    )
                 z = torch.einsum("bts,btsi->bti", weights, responses)
             return self.out_proj(z.to(q.dtype))
         q = q.unsqueeze(1)

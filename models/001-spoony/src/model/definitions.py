@@ -352,8 +352,8 @@ class LatentAttention(BlockDefinition):
 
     def __post_init__(self):
         _positive_integer(self.input_features, "input_features")
-        if self.mode not in ("a16", "a4", "sma4", "sma4_key"):
-            raise ValueError("mode must be a16, a4, sma4 or sma4_key")
+        if self.mode not in ("a16", "a4", "sma4", "sma4_key", "sma4_key_gelu16"):
+            raise ValueError("mode must be a16, a4, sma4, sma4_key or sma4_key_gelu16")
         if type(self.residual) is not bool:
             raise ValueError("residual must be a boolean")
 
@@ -364,11 +364,13 @@ class LatentAttention(BlockDefinition):
 
     def cache(self, layer_id):
         name = f"LatentAttentionImpl-{layer_id}"
-        if self.mode in ("sma4", "sma4_key"):
+        if self.mode in ("sma4", "sma4_key", "sma4_key_gelu16"):
             return MatrixCacheEntry(
                 name,
                 torch.empty(0, 0, 4, 4),
-                keys=torch.empty(0, 0, 4) if self.mode == "sma4_key" else None,
+                keys=torch.empty(0, 0, 4)
+                if self.mode in ("sma4_key", "sma4_key_gelu16")
+                else None,
             )
         features = 16 if self.mode == "a16" else 4
         shape = (0, 1, 0, features)

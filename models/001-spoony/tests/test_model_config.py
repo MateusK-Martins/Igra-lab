@@ -58,7 +58,7 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     assert all(
         (
             entry.matrices.shape == (0, 0, 4, 4)
-            if MODE in ("sma4", "sma4_key")
+            if MODE in ("sma4", "sma4_key", "sma4_key_gelu16")
             else entry.keys.shape == (0, 1, 0, 16 if MODE == "a16" else 4)
         )
         for entry in entries
@@ -121,7 +121,7 @@ def test_config_cached_chunks_match_full_logits_across_window_boundary(tokenizer
     assert all(
         (
             entry.matrices.shape == (1, 261, 4, 4)
-            if MODE in ("sma4", "sma4_key")
+            if MODE in ("sma4", "sma4_key", "sma4_key_gelu16")
             else entry.keys.shape == (1, 1, 261, 16 if MODE == "a16" else 4)
         )
         for entry in entries

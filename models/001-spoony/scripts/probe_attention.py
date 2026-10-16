@@ -50,10 +50,10 @@ def main():
         def hook(module, args, output, index=index):
             x = args[0]
             q = module.q_proj(x).float()
-            if MODE in ("sma4", "sma4_key"):
+            if MODE in ("sma4", "sma4_key", "sma4_key_gelu16"):
                 matrices = module.matrix_proj(x).float().reshape(*x.shape[:2], 4, 4)
                 responses = torch.einsum("bsij,btj->btsi", matrices, q)
-                if MODE == "sma4_key":
+                if MODE in ("sma4_key", "sma4_key_gelu16"):
                     scores = q @ module.k_proj(x).float().transpose(-1, -2) / 2
                 else:
                     scores = (

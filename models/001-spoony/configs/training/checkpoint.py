@@ -2,6 +2,6 @@ from src.config.paths import results_path
 from src.config.types import CheckpointConfig
 
 checkpoint_config = CheckpointConfig(
-    directory=results_path("pretraining/sma4-key-14m/checkpoints"),
+    directory=results_path("pretraining/sma4-gelu16-14m/checkpoints"),
     interval=1000,
 )

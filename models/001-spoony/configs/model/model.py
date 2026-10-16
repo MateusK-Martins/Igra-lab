@@ -2,7 +2,7 @@ from src.data.tokenizer import Tokenizer
 from src.model.assembler import Model
 from src.model.definitions import *
 
-MODE = "sma4_key"
+MODE = "sma4_key_gelu16"
 
 
 def build_model(tokenizer: Tokenizer):

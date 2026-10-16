@@ -9,22 +9,24 @@ from src.model.cache_storage import CacheStorage, MatrixCacheEntry
 from src.model.composition import build_block
 from src.model.definitions import LatentAttention
 
-MODES = ("a16", "a4", "sma4", "sma4_key")
+MODES = ("a16", "a4", "sma4", "sma4_key", "sma4_key_gelu16")
 
 
 def reference(module, x):
     q = module.q_proj(x)
     outputs = []
     for t in range(x.shape[1]):
-        if module.mode in ("sma4", "sma4_key"):
+        if module.mode in ("sma4", "sma4_key", "sma4_key_gelu16"):
             matrices = module.matrix_proj(x[:, : t + 1]).reshape(
                 x.shape[0], t + 1, 4, 4
             )
             responses = (matrices @ q[:, t, :, None][:, None]).squeeze(-1)
-            if module.mode == "sma4_key":
+            if module.mode in ("sma4_key", "sma4_key_gelu16"):
                 scores = (module.k_proj(x[:, : t + 1]) * q[:, t, None]).sum(-1) / 2
             else:
                 scores = (responses * module.scoring).sum(-1) / 2
+            if module.mode == "sma4_key_gelu16":
+                responses = torch.nn.functional.gelu(module.response_proj(responses))
             z = (scores.softmax(-1)[..., None] * responses).sum(1)
         else:
             k, v = module.k_proj(x[:, : t + 1]), module.v_proj(x[:, : t + 1])
@@ -72,12 +74,12 @@ def test_cache_equivalence_persistence_size_and_no_hidden_cache(mode, chunk, tmp
             module(next_x, cache=restored), module(next_x, cache=cache)
         )
     assert cache.step(module.layer_id) == 14
-    if mode in ("sma4", "sma4_key"):
+    if mode in ("sma4", "sma4_key", "sma4_key_gelu16"):
         assert not cache.entries
         state = cache.matrices[module.layer_id]
         assert state.matrices.numel() == 2 * 14 * 16
         assert torch.linalg.matrix_rank(state.matrices).min() == 4
-        if mode == "sma4_key":
+        if mode in ("sma4_key", "sma4_key_gelu16"):
             assert state.keys.numel() + state.matrices.numel() == 2 * 14 * 20
         else:
             assert state.keys is None
@@ -141,6 +143,7 @@ def test_shared_backbone_initial_values_identical_across_modes():
         assert torch.equal(states[0][name], states[1][name])
         assert torch.equal(states[0][name], states[2][name])
         assert torch.equal(states[0][name], states[3][name])
+        assert torch.equal(states[0][name], states[4][name])
 
 
 @pytest.mark.parametrize("mode", MODES)
@@ -286,3 +289,56 @@ def test_keyed_matrix_cache_cpu_storage_cuda_reads():
     entry = cache.matrices[module.layer_id]
     assert entry.keys.device.type == "cpu" and entry.matrices.device.type == "cpu"
     assert entry.keys.numel() + entry.matrices.numel() == 2 * 17 * 20
+
+
+def test_gelu16_parameter_count_and_aggregation_width():
+    with patch("configs.model.model.MODE", "sma4_key_gelu16"):
+        model, entries = build_model(SimpleNamespace(vocab_size=8192))
+    assert sum(p.numel() for p in model.parameters()) == 10_323_288
+    assert len(entries) == 6
+    for index in range(1, 24, 4):
+        module = model.body[index].branch
+        assert module.q_proj.out_features == module.k_proj.out_features == 4
+        assert module.response_proj.weight.shape == (16, 4)
+        assert module.out_proj.weight.shape == (384, 16)
+
+
+def test_nonlinearity_is_applied_before_weighted_sum():
+    module = build_block(LatentAttention(4, "sma4_key_gelu16"), 0).double()
+    with torch.no_grad():
+        module.q_proj.weight.copy_(torch.eye(4))
+        module.q_proj.bias.zero_()
+        module.k_proj.weight.zero_()  # Uniform selection, independent of content.
+        module.matrix_proj.weight.zero_()
+        module.matrix_proj.bias.zero_()
+        module.response_proj.weight.zero_()
+        module.response_proj.bias.zero_()
+        module.response_proj.weight[0, 0] = 1
+        module.out_proj.weight.zero_()
+        module.out_proj.bias.zero_()
+        module.out_proj.weight[0, 0] = 1
+        a = torch.zeros(4, 4, dtype=torch.float64)
+        a[0, 0] = -2
+        b = -a
+        entry = MatrixCacheEntry(
+            module.layer_id,
+            torch.stack((a, b))[None],
+            2,
+            torch.zeros(1, 2, 4, dtype=torch.float64),
+        )
+        cache = CacheStorage([entry], torch.device("cpu"), torch.device("cpu"))
+        result = module(
+            torch.tensor([[[1.0, 0, 0, 0]]], dtype=torch.float64), cache=cache
+        )
+        expected = torch.nn.functional.gelu(
+            torch.tensor([-2.0, 2.0, 0.0], dtype=torch.float64)
+        ).mean()
+        torch.testing.assert_close(result[0, 0, 0], expected)
+        assert result[0, 0, 0] > 0.6  # GELU(mean([-2,2,0])) would be zero.
+
+
+def test_nonlinear_variant_rejects_previous_checkpoint():
+    with pytest.raises(RuntimeError):
+        LatentAttention(8, "sma4_key_gelu16").build().load_state_dict(
+            LatentAttention(8, "sma4_key").build().state_dict()
+        )

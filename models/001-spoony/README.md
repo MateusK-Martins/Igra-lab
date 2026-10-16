@@ -1,3 +1,5 @@
+> **Active experiment:** SMA4 keys + per-response Linear(4→16)/GELU. See [SMA4_GELU16.md](SMA4_GELU16.md). Historical notes follow.
+
 > **Active experiment:** SMA4 with independent 4D keys; see [SMA4_KEY.md](SMA4_KEY.md). Historical SMA4 compressed attention with the Lantern backbone. See [ATTENTION_COMPARISON.md](ATTENTION_COMPARISON.md) for architecture, controlled protocol, completed results and limitations. Historical notes follow.
 
 > **Codename branch:** the active larger TinyStories recipe and comparison
