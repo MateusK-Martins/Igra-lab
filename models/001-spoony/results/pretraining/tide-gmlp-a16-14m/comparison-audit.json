@@ -1,0 +1,34 @@
+{
+  "same_artifacts_as_parent": true,
+  "same_non_model_training_configuration": true,
+  "artifacts": {
+    "data/processed/codename-tinystories/tokenizer.json": {
+      "sha256": "ba860d881be0a85b457d6623fe8fdff79c00235776b92a9e2d2d48f43eb2e793",
+      "bytes": 553734
+    },
+    "data/processed/codename-tinystories/train/documents.jsonl": {
+      "sha256": "708dd3a0b14ac4766316befa14aba9dac46d0a3d3724f54e56a0a831d886b202",
+      "bytes": 3517674
+    },
+    "data/processed/codename-tinystories/train/tokens.bin": {
+      "sha256": "92b5d1296741f8808bc41a78661b56f320988f563f6ea45851aab3e3063f0e7f",
+      "bytes": 25685116
+    },
+    "data/processed/codename-tinystories/train/metadata.json": {
+      "sha256": "8e2678ee80201f510e70ab2af5e0b862e59a705b3e40cc71bdca1d9e38fa3a46",
+      "bytes": 192
+    },
+    "data/processed/codename-tinystories/validation/documents.jsonl": {
+      "sha256": "da7ab1962319ac43c02c6bed744d05674d09a91f747931e3628630ce31338f7c",
+      "bytes": 29708
+    },
+    "data/processed/codename-tinystories/validation/tokens.bin": {
+      "sha256": "44e3d4954e0102799db3f39b475b9add58b4163185f986e2f6448673e756dfef",
+      "bytes": 221684
+    },
+    "data/processed/codename-tinystories/validation/metadata.json": {
+      "sha256": "a88a8c445b9300d69334d8d9812f278c7c170794b6954d712ee5c6a941cf7c8b",
+      "bytes": 188
+    }
+  }
+}

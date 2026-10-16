@@ -232,10 +232,11 @@ def test_configuration_parameter_counts_and_state_budget():
 
     model, entries = build_model(Tokenizer())
     m = model.body[1].branch
-    assert sum(p.numel() for p in model.parameters()) == 12_641_280
+    assert sum(p.numel() for p in model.parameters()) == 12_652_160
     states = [e for e in entries if hasattr(e, "value_sum")]
     assert len(states) == 4
-    assert all(e.value_sum.shape[-1] == 384 and e.key_sum.numel() == 0 for e in states)
+    assert sorted(e.value_sum.shape[-1] for e in states) == [384, 384, 32768, 32768]
+    assert all(e.key_sum.numel() == 0 for e in states)
     if m.mode == "lowrank":
         assert m.rank == 32
     for kw in [

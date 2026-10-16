@@ -1,3 +1,5 @@
+> **Active:** [GMLP_TIDE_A16.md](GMLP_TIDE_A16.md), `[Tide,gMLP,A16/RoPE] ×2`,64-token fixed gMLP windows. Notes below are historical.
+
 > **Active:** [TIDE_A16.md](TIDE_A16.md), four Tide / two A16+RoPE mixers. Notes below are historical.
 
 # Tide/Lantern hybrid14M

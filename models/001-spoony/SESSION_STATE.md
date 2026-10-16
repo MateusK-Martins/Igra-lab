@@ -1,3 +1,5 @@
+> **Active:** [GMLP_TIDE_A16.md](GMLP_TIDE_A16.md), `[Tide,gMLP,A16/RoPE] ×2`,64-token fixed gMLP windows. Notes below are historical.
+
 Tide/A16 hybrid: four Tide and two single-head 16D Q/K/V attention layers,
 RoPE10000, width384/FFN1024, 12,641,280parameters. See TIDE_A16.md.
 This experiment is queued after the five compressed-attention RoPE reruns.

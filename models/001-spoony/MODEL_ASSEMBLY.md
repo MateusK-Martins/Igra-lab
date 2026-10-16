@@ -1,3 +1,5 @@
+> **Active:** [GMLP_TIDE_A16.md](GMLP_TIDE_A16.md), `[Tide,gMLP,A16/RoPE] ×2`,64-token fixed gMLP windows. Notes below are historical.
+
 Current No-K gate/readout suite: see [GATE_READOUT_TESTS.md](GATE_READOUT_TESTS.md).
 
 Current controlled mechanism suite: see [MECHANISMS.md](MECHANISMS.md). Earlier notes are historical.

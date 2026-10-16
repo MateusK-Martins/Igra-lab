@@ -1,10 +1,11 @@
-"""Two Tide layers per compressed A16 attention layer; preserve the Tide14M FFN and width."""
+"""Tide, fixed-window gMLP, then compressed A16 attention; preserve the Tide14M FFN and width."""
 
 from functools import partial
 
 from src.data.tokenizer import Tokenizer
 from src.model.assembler import Model
 from src.model.definitions import (
+    GMLP,
     Embedding,
     GQAAttention,
     LMHead,
@@ -31,6 +32,10 @@ def build_model(tokenizer: Tokenizer):
                 residual=True,
             )
             if layer % 3 == 2
+            else GMLP(
+                input_features=384, hidden_features=1024, window_size=64, residual=True
+            )
+            if layer % 3 == 1
             else NoKVariant(
                 input_features=384,
                 eps=1e-6,

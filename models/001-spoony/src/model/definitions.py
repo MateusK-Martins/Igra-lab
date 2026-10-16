@@ -9,6 +9,7 @@ from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheEntry, StateEntry
 from src.model.cumulative import CumulativeMixerImpl
 from src.model.feedforward import LinearImpl, SwiGLUImpl
+from src.model.gmlp import GMLPImpl
 from src.model.multikey import MultiKeyMixerImpl
 from src.model.no_k_variant import NoKVariantImpl
 from src.model.position import PositionRotation
@@ -598,4 +599,34 @@ class NoKVariant(BlockDefinition):
             f"NoKVariantImpl-{self.mode}{suffix}-{layer_id}",
             torch.empty(0, 1, 0),
             torch.empty(0, 1, self.input_features),
+        )
+
+
+@dataclass(frozen=True)
+class GMLP(BlockDefinition):
+    input_features: int
+    hidden_features: int = 1024
+    window_size: int = 64
+    residual: bool = False
+
+    @property
+    def output_features(self):
+        return self.input_features
+
+    def __post_init__(self):
+        for name in ("input_features", "hidden_features", "window_size"):
+            _positive_integer(getattr(self, name), name)
+        if self.hidden_features % 2:
+            raise ValueError("hidden_features must be even")
+        if type(self.residual) is not bool:
+            raise ValueError("residual must be boolean")
+
+    def build(self):
+        return GMLPImpl(self.input_features, self.hidden_features, self.window_size)
+
+    def cache(self, layer_id):
+        return StateEntry(
+            f"GMLPImpl-w{self.window_size}-{layer_id}",
+            torch.empty(0, 1, 0),
+            torch.empty(0, 1, self.window_size * self.hidden_features // 2),
         )

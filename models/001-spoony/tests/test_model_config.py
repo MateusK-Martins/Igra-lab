@@ -12,6 +12,7 @@ from src.model.cache_storage import CacheEntry, CacheStorage, StateEntry
 from src.model.composition import ResidualImpl
 from src.model.cumulative import CumulativeMixerImpl
 from src.model.feedforward import SwiGLUImpl
+from src.model.gmlp import GMLPImpl
 from src.model.stability import RMSNormImpl
 
 
@@ -48,7 +49,7 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
         assert isinstance(attention, ResidualImpl)
         assert isinstance(
             attention.branch,
-            GQAAttentionImpl if (index // 4) % 3 == 2 else CumulativeMixerImpl,
+            (CumulativeMixerImpl, GMLPImpl, GQAAttentionImpl)[(index // 4) % 3],
         )
         assert isinstance(feedforward, ResidualImpl)
         assert isinstance(feedforward.branch, SwiGLUImpl)
@@ -80,7 +81,14 @@ def test_config_forward_and_next_token_loss_backward(tokenizer):
 def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokenizer):
     first, first_entries = build_model(tokenizer)
     second, second_entries = build_model(tokenizer)
-    weights = [first.body[index].branch.q_proj.weight for index in range(1, 24, 4)]
+    weights = [
+        (
+            first.body[index].branch.up.weight
+            if isinstance(first.body[index].branch, GMLPImpl)
+            else first.body[index].branch.q_proj.weight
+        )
+        for index in range(1, 24, 4)
+    ]
     assert len({weight.data_ptr() for weight in weights}) == 6
     gates = [first.body[index].branch.gate.weight for index in range(2, 24, 4)]
     assert len({weight.data_ptr() for weight in gates}) == 6
