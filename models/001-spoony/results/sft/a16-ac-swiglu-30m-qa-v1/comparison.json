@@ -1,0 +1,183 @@
+{
+  "models": [
+    {
+      "model": "Lantern",
+      "parameters": 29565952,
+      "before": {
+        "parameters": 29565952,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.055921299572297,
+          "perplexity": 7.8140336232409515,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 6.080586914125578,
+          "perplexity": 437.2857686121178,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 1.1896306818181819,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "after": {
+        "parameters": 29565952,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.564398522045523,
+          "perplexity": 12.992841111457508,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 5.078573963382955,
+          "perplexity": 160.54494963359073,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.78125,
+          "f1": 2.366258882428941,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "stage_seconds": [
+        1228.952592239999,
+        1275.6864611620003
+      ],
+      "stage_peak_vram_bytes": [
+        2649963520,
+        2649963520
+      ],
+      "stage_padded_positions_per_second": [
+        21663.976436611534,
+        20870.33202166986
+      ],
+      "story_loss_increase": 0.5084772224732261,
+      "story_perplexity_ratio": 1.6627572567404174
+    },
+    {
+      "model": "Tide/A16",
+      "parameters": 26527744,
+      "before": {
+        "parameters": 26527744,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.0518920141107895,
+          "perplexity": 7.782611997029133,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 6.139652967000595,
+          "perplexity": 463.8925568968915,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 0.8209607233044733,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "after": {
+        "parameters": 26527744,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.6468629735038878,
+          "perplexity": 14.109706622838633,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 5.223213129620075,
+          "perplexity": 185.52935724750986,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 0.9916266459235209,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "stage_seconds": [
+        673.7808878810029,
+        701.4240793110002
+      ],
+      "stage_peak_vram_bytes": [
+        1998007296,
+        1998007296
+      ],
+      "stage_padded_positions_per_second": [
+        39514.32947843141,
+        37957.065896785876
+      ],
+      "story_loss_increase": 0.5949709593930983,
+      "story_perplexity_ratio": 1.8129782942056922
+    },
+    {
+      "model": "A16 + AC-SwiGLU",
+      "parameters": 29705216,
+      "before": {
+        "parameters": 29705216,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.195472199649097,
+          "perplexity": 8.98424241147157,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 6.2578234860618505,
+          "perplexity": 522.0813851932854,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.0,
+          "f1": 0.26041666666666663,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "after": {
+        "parameters": 29705216,
+        "updates": 6500,
+        "stories": {
+          "loss": 2.7541548415301316,
+          "perplexity": 15.707759745061475,
+          "examples": 374
+        },
+        "qa_answers": {
+          "loss": 5.2516829105986265,
+          "perplexity": 190.887244462764,
+          "examples": 1000
+        },
+        "qa_generation": {
+          "exact_match": 0.390625,
+          "f1": 1.2688956351579708,
+          "examples": 256
+        },
+        "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+      },
+      "stage_seconds": [
+        1070.553671585003,
+        1111.6576605489972
+      ],
+      "stage_peak_vram_bytes": [
+        3099728896,
+        3099728896
+      ],
+      "stage_padded_positions_per_second": [
+        24869.37433093099,
+        23949.81921579312
+      ],
+      "story_loss_increase": 0.5586826418810347,
+      "story_perplexity_ratio": 1.7483677560842472
+    }
+  ],
+  "data_settings_source_exposure_and_initialization_verified": true,
+  "updates_per_stage": 6500,
+  "padded_positions_per_stage": 26624000,
+  "tests_passed": 578,
+  "limitations": "Single seed;14AC layers versus9historical layers. Capacity,depth,norm and mixer differences prevent conditioning-only attribution. No matched30M unconditioned control. 14M/30M corpus/tokenizer differ; QA loss/EM/F1 do not establish reasoning."
+}

@@ -1,0 +1,139 @@
+{
+  "artifacts": {
+    "qa-train.jsonl": "b33c4cda869fc661bc27d20593a397e75e8c7a123256da6e122b0316bf907fbe",
+    "qa-validation.jsonl": "a5d7d4d674052e6eb444c7060874b985b8427ae0b55bce9aa40c706332c08682",
+    "tokenizer.json": "95bba7ce33e8c63e72841967d817dd2883c74bca9b31bb75bfbc72847bd6e667",
+    "train/documents.jsonl": "4f1cdae73438163263354e3edd77c0bd492bf51fdaeea503a2d723dd1d71e9d0",
+    "train/metadata.json": "45419fec3d58ad4956d8fdcf606a7780e58d32d5342afa8729cd837f4919dd60",
+    "train/tokens.bin": "eba1d62dc2a7a9aec93fd09393c59a2cc7fe0666ff241e906a19210cde5caf61",
+    "validation/documents.jsonl": "81455934456763722e200039e0d6d6d0364a81c999611295da5336fce23f7f87",
+    "validation/metadata.json": "29796baa5c9173ef83069f1a6f5df85b2ccdb805ec2b8cf732f943332e95ddfc",
+    "validation/tokens.bin": "ceb69d889c82ff5dc277f65990e74a1a3af7755062b2f0ea858befabb550dfc5"
+  },
+  "code": {
+    "files": {
+      "configs/model/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "configs/model/model.py": "9ca2f6f10ae1e2e5451830c264fbe80050e058596954d8a80a54bdc4db99af76",
+      "scripts/__init__.py": "5c33cae409def9bff5513f5690f573989507df8c28740e1305843f8cf73c0383",
+      "scripts/benchmark.py": "7b22dae8a79c6a9439157d089e934abf57ebfde43e303fbea7d0fe793d9284a6",
+      "scripts/materialize_corpus.py": "e464866924c8b5abe1f83bb254a3b2389ad56a70b6f54ce6d753c2b47cd0f4b2",
+      "scripts/prepare_data.py": "5414a87e0d85f06988c5df578059ea89b1e0bd3139beee40a6cd55b531e14aa2",
+      "scripts/prepare_qa_stage.py": "48aaa6c15c5b360e8ee3fea76b97776acc5edece4342bbbc9389f85a61290d98",
+      "scripts/probe_attention.py": "afb2d9d9d55c2bef2c3737e32b40f4b282cd2aa546ac979b713e9aa6f1a64e38",
+      "scripts/run_baseline.py": "c464c5a139815178d4b8083b2f19948d5c3b10422c64bd3770f4d5dfd360aa72",
+      "scripts/sft.py": "bba14123e243623b489c831429246b89df315a1168a790a82ca364785a41f932",
+      "scripts/train.py": "d5d9e9136a18fbe2ac1d428d6ecaaebcf605c1470d37624a8b5b3622e3289271",
+      "scripts/validate_comparison.py": "326b6e4f8d5968b44cd84a6584098ef0e03d78b18e27a9ed849d799b448b24ea",
+      "src/__init__.py": "6f11f770803a959fcd6f2bd3778ea3d045ad41f4c6172d7b12e370e63b374ae4",
+      "src/config/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/config/errors.py": "6a79c217e4d373cddf22e8b43883a48186c30be7d58a629283b20bb64be27af9",
+      "src/config/paths.py": "60daeef1f6689415c89520a995dc684d009b9c1426a7285ac7fd87b392308b6c",
+      "src/config/snapshot.py": "e69891f84f5a519ebd610783456cf2a3dfbb55fc331929df75694d7e23690834",
+      "src/config/types.py": "2d87998913e3693525900511be30d0cd5a2d2fda785f3694ca6fdcb40bbcdb53",
+      "src/data/__init__.py": "a94612ff54080f81a81aa22736313796e39657db100128c6ee0c7f3fc1abd569",
+      "src/data/chunker.py": "c9b9ee5785faeab199e082ab711d67b5e0174adbc0864cf3fc927263f4a4b2e0",
+      "src/data/dataloader.py": "8a2e194801afc88738d04b754df8c39fa370fdc34220e7dcadb9d98ffa89fba5",
+      "src/data/pipeline.py": "10943f8140b0d1d034e1a72439012311770156842c063226b8eda4e58aabb191",
+      "src/data/prepare.py": "3f7dcadf79280b30f2a626b57c7dc6e54ff724bb91189f048c1b814730b7d569",
+      "src/data/schemas.py": "0090f458a581caff1b81aee41664d73936d4a1bfdf2a3d845e537730a6b2af30",
+      "src/data/serialization.py": "226b9dfa65bf89099ddbace41b20060e1be692dca2c40eee46c7a517be3d9342",
+      "src/data/sources.py": "67c4b069661a51c5bcceba43a8ea4fae2e52cafb452d61a5061163c87d27b708",
+      "src/data/tokenizer.py": "05c8aa13289c46aca862d5b1e5d812ddcb01342355596e700d2a03272c1f2cbd",
+      "src/model/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/model/ac_swiglu.py": "9a2b34245a5ce2a0ab82b3f992018b1bf25dcd4a642f5fbc0502e2dbb3009630",
+      "src/model/assembler.py": "470ee27a151f2731748b221846bc3d8a52a6c7beb2c930d0bec06e5c95993a30",
+      "src/model/attention.py": "e99d7772d367a49e2be63e74404d920828956ad4e0677e623e74a76ab3cb7e0b",
+      "src/model/cache_storage.py": "867f487c3b2adcc9447e927f9978506402e962244adafd3e6724c4d6505e8c86",
+      "src/model/composition.py": "6cac8dae3b909d8b22249299783774d99b55595d62c2aa1aacfbb3d12cefcb34",
+      "src/model/definitions.py": "fd47fb9b03b38e40a8777b454bedb8148669fd38bd80dcfba6e2d9fd5f534e6c",
+      "src/model/feedforward.py": "d2d13203dadce539b4c64dbeadcb96cb0d1a69f6a9ebf1931aca331a2980271f",
+      "src/model/language_model.py": "5c0f28b8e69ca123c616c4cafd257b5118749a38cfe98e37bb12f8d0d85caded",
+      "src/model/latent_attention.py": "501431bc47d0e665bea764526ec4bd18fd965845ef3ef33650ea297ad9f48045",
+      "src/model/position.py": "4b19f2e49c20cb0593d7bf7ffeccef2a540cdeb36d9251a3594454803b48e4a9",
+      "src/model/stability.py": "10edb89a3b1748e86365bf11bcef8db888d762f51110fd3fe64fe3f7a748eaf7",
+      "src/sft/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/sft/config.py": "8b639b4b1ba681dbed33c2fa67502b31a585edfbc971951e809ef64eb3450497",
+      "src/sft/data.py": "39b91e71b7e584a3dbcf419ff53c0e573fdd951eebe1fa4fc0cb173b2a9535be",
+      "src/training/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/training/checkpoint.py": "a58366ddb93fd416385b66fe5c205ac2c872e0a11a5dcdd1509eb5dd2e36e5b2",
+      "src/training/logging.py": "e4375898bb8b813680fc6f2b334b72ddd7aa004f62127027daf85882e1e35328",
+      "src/training/loop.py": "0c7e65263346ff64237412f0d40a5c86731a63d9b75b76fe4b53a639dc8a5b33",
+      "src/training/loss.py": "6490a7a4d7275717a740cc2b864bf795de00bde6b2a945788de24b90ab7ff363",
+      "src/training/manifest.py": "d1bb25c883b6fa4caf1224403c4e5b720a96bc3d173457d2ebf515d3f3ba8c1b",
+      "src/training/optimizer.py": "f5685111800abdf1b70ab6376a2a1c717238689fa2f66540e5574d7c1cae476b",
+      "src/training/precision.py": "9ae26dfabacecfdfd4435913ad80a8bb08a581ac889fedccd4555b3f8b4c958a",
+      "src/training/scheduler.py": "0a976506ebd947fc85dfced3445be12a6e96ca2ddfad6c81cf61ea8db108c44e",
+      "src/training/state.py": "e2adb57e287d65058698f1ca3ccd24b4236569121007d5fbfe30d0d50d41c7c6",
+      "src/training/step.py": "7f1ca5b1f8e1000219a4a0c5a94644a3e1ae66afeef392f4280ff342b645f151",
+      "src/training/validation.py": "5ba33dd4dce26e04b107a205efe11d56fdf347fb07317e1693e815687b348c6e"
+    },
+    "git_commit": "a2d8fd96e3190a7e15f8c1a2cb974da22157d1e8"
+  },
+  "environment": {
+    "cuda": "12.8",
+    "cuda_devices": [
+      {
+        "capability": [
+          8,
+          9
+        ],
+        "name": "NVIDIA GeForce RTX 4050 Laptop GPU"
+      }
+    ],
+    "machine": "x86_64",
+    "python": "3.13.3",
+    "torch": "2.11.0+cu128"
+  },
+  "format_version": 1,
+  "settings": {
+    "chunking": {
+      "context_length": 512,
+      "stride": 512
+    },
+    "device": "cuda",
+    "optimizer": {
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "eps": 1e-08,
+      "learning_rate": 0.0003,
+      "weight_decay": 0.01
+    },
+    "precision": {
+      "mode": "bf16"
+    },
+    "qa_format": {
+      "context_length": 512,
+      "end_token": "<|eot|>",
+      "instruction_prefix": "Context:\n",
+      "response_prefix": "\nAnswer: "
+    },
+    "scheduler": {
+      "min_lr_ratio": 0.1,
+      "total_steps": 6500,
+      "warmup_steps": 200
+    },
+    "train_loader": {
+      "batch_size": 8,
+      "drop_last": false,
+      "num_workers": 0,
+      "pin_memory": true,
+      "seed": 42,
+      "shuffle": true
+    },
+    "training": {
+      "accumulation_steps": 1,
+      "max_grad_norm": 1.0,
+      "validation_interval": 1000
+    },
+    "validation_loader": {
+      "batch_size": 8,
+      "drop_last": false,
+      "num_workers": 0,
+      "pin_memory": true,
+      "seed": 42,
+      "shuffle": false
+    }
+  }
+}
