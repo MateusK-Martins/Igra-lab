@@ -1,6 +1,18 @@
-Clean template/tide: standalone TideMixer/TideMixerImpl, same14M architecture/init/weights behavior. Old experimental architectures, tests, reports and historical docs removed. Shared training/data/SFT/cache utilities retained. No training launched. See README.md.
+# T16 template continuation
 
-Follow-up cleanup: removed unused attention CacheEntry/ring-buffer/read_all paths
-and fixed-decay scan helper; recurrent format-v1 snapshots remain compatible.
-Replaced obsolete KV tests with recurrent persistence/validation/device tests.
-419 tests and Ruff passed. Triton work remains on model/001-spoony-tide.
+Local template/t16 is the new starting template; template/tide is preserved.
+Promoted the existing 30M hybrid architecture from model/001-spoony-t16-50m
+at 5200a64: width 512, nine layers, SwiGLU 1152, two Tide layers per one
+causal A16 RoPE attention layer. Standalone TideMixerImpl and restored
+attention/KV storage exclude experiment-only mechanisms and reports.
+Template data/training defaults remain starting settings, not a reproduction
+of the source mixed-corpus/QA pipeline. No training was launched.
+
+Exact seeded state dictionaries, RNG and FP32 logits matched the source with
+vocabulary 8192, seed 42 and matched CPU threads. Parameter count at that
+vocabulary is 26,527,744. Recurrent cache IDs are renamed; recreate old caches.
+Historical full training manifests cannot resume against changed source/configs.
+
+505 tests passed, including attention/RoPE references, mixed-cache snapshot
+continuation, recurrent tests and shared training/data/SFT checks. Ruff lint
+and formatting passed. The original working checkout was untouched.

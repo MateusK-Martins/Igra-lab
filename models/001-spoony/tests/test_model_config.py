@@ -7,7 +7,8 @@ from torch.nn import functional as F
 
 from configs.model.model import build_model
 from src.data.tokenizer import ByteLevelBPETokenizer
-from src.model.cache_storage import CacheStorage
+from src.model.attention import GQAAttentionImpl
+from src.model.cache_storage import CacheEntry, CacheStorage, StateEntry
 from src.model.composition import ResidualImpl
 from src.model.feedforward import SwiGLUImpl
 from src.model.stability import RMSNormImpl
@@ -41,27 +42,31 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     assert model.embedding.num_embeddings == tokenizer.vocab_size
     assert model.lm_head.out_features == tokenizer.vocab_size
     assert model.lm_head.weight is model.embedding.weight
-    assert len(model.body) == 24
-    for index in range(0, 24, 4):
-        norm1, mixer, feedforward, norm2 = model.body[index : index + 4]
-        assert isinstance(mixer, ResidualImpl)
-        assert isinstance(mixer.branch, TideMixerImpl)
+    assert len(model.body) == 36
+    for index in range(0, 36, 4):
+        norm1, attention, feedforward, norm2 = model.body[index : index + 4]
+        assert isinstance(attention, ResidualImpl)
+        assert isinstance(
+            attention.branch,
+            GQAAttentionImpl if (index // 4) % 3 == 2 else TideMixerImpl,
+        )
         assert isinstance(feedforward, ResidualImpl)
         assert isinstance(feedforward.branch, SwiGLUImpl)
         assert isinstance(norm1, RMSNormImpl)
         assert isinstance(norm2, RMSNormImpl)
     assert [entry.layer_id for entry in entries] == [
-        model.body[index].branch.layer_id for index in range(1, 24, 4)
+        model.body[index].branch.layer_id for index in range(1, 36, 4)
     ]
-    assert len({entry.layer_id for entry in entries}) == 6
-    assert all(entry.key_sum.shape == (0, 1, 0) for entry in entries)
+    assert len({entry.layer_id for entry in entries}) == 9
+    assert sum(isinstance(entry, StateEntry) for entry in entries) == 6
+    assert sum(isinstance(entry, CacheEntry) for entry in entries) == 3
 
 
 def test_config_forward_and_next_token_loss_backward(tokenizer):
     model, _ = build_model(tokenizer)
-    tokens = torch.randint(tokenizer.vocab_size, (2, 257))
+    tokens = torch.randint(tokenizer.vocab_size, (2, 513))
     logits = model(tokens[:, :-1])
-    assert logits.shape == (2, 256, tokenizer.vocab_size)
+    assert logits.shape == (2, 512, tokenizer.vocab_size)
     loss = F.cross_entropy(
         logits.reshape(-1, tokenizer.vocab_size), tokens[:, 1:].reshape(-1)
     )
@@ -75,16 +80,21 @@ def test_config_forward_and_next_token_loss_backward(tokenizer):
 def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokenizer):
     first, first_entries = build_model(tokenizer)
     second, second_entries = build_model(tokenizer)
-    weights = [first.body[index].branch.q_proj.weight for index in range(1, 24, 4)]
-    assert len({weight.data_ptr() for weight in weights}) == 6
-    gates = [first.body[index].branch.gate.weight for index in range(2, 24, 4)]
-    assert len({weight.data_ptr() for weight in gates}) == 6
+    weights = [first.body[index].branch.q_proj.weight for index in range(1, 36, 4)]
+    assert len({weight.data_ptr() for weight in weights}) == 9
+    gates = [first.body[index].branch.gate.weight for index in range(2, 36, 4)]
+    assert len({weight.data_ptr() for weight in gates}) == 9
     assert all(
         a.data_ptr() != b.data_ptr()
         for a, b in zip(first.parameters(), second.parameters(), strict=True)
     )
     assert all(
-        a is not b and a.key_sum is not b.key_sum and a.value_sum is not b.value_sum
+        a is not b
+        and (
+            (a.keys is not b.keys and a.values is not b.values)
+            if isinstance(a, CacheEntry)
+            else (a.key_sum is not b.key_sum and a.value_sum is not b.value_sum)
+        )
         for a, b in zip(first_entries, second_entries, strict=True)
     )
     cache = CacheStorage(first_entries, torch.device("cpu"), torch.device("cpu"))
@@ -113,7 +123,16 @@ def test_config_cached_chunks_match_full_logits_across_window_boundary(tokenizer
         )
     torch.testing.assert_close(actual, expected, rtol=1e-7, atol=1e-9)
     assert all(entry.count == 261 for entry in entries)
-    assert all(entry.key_sum.shape == (1, 1, 0) for entry in entries)
+    assert all(
+        entry.key_sum.shape == (1, 1, 0)
+        for entry in entries
+        if isinstance(entry, StateEntry)
+    )
+    assert all(
+        entry.keys.shape == (1, 1, 261, 16)
+        for entry in entries
+        if isinstance(entry, CacheEntry)
+    )
 
 
 def test_config_state_dict_round_trip_preserves_logits_and_tying(tokenizer):
@@ -143,3 +162,23 @@ def test_configured_embedding_scale_and_initial_next_token_loss(tokenizer):
     # The wider tied head has higher initial self-token confidence; reject the
     # old unscaled initialization, allowing two nats above uniform here.
     assert abs(loss.item() - math.log(tokenizer.vocab_size)) < 2.0
+
+
+def test_mixed_cache_snapshot_continues_full_sequence(tokenizer, tmp_path):
+    model, entries = build_model(tokenizer)
+    model.double().eval()
+    cache = CacheStorage(entries, torch.device("cpu"), torch.device("cpu"))
+    tokens = torch.randint(tokenizer.vocab_size, (1, 19))
+    with torch.no_grad():
+        expected = model(tokens)
+        prefix = model(tokens[:, :7], cache=cache)
+        path = tmp_path / "mixed.pt"
+        cache.save(path)
+        restored = CacheStorage.load(
+            path, storage_device=torch.device("cpu"), read_device=torch.device("cpu")
+        )
+        actual = torch.cat([prefix, model(tokens[:, 7:], cache=restored)], dim=1)
+    torch.testing.assert_close(actual, expected, rtol=1e-7, atol=1e-9)
+    assert len(restored.states) == 6
+    assert len(restored.entries) == 3
+    assert all(restored.step(key) == 19 for key in restored.states | restored.entries)

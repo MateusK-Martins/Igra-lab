@@ -5,8 +5,10 @@ from typing import Protocol
 import torch
 from torch import nn
 
-from src.model.cache_storage import StateEntry
+from src.model.attention import GQAAttentionImpl
+from src.model.cache_storage import CacheEntry, StateEntry
 from src.model.feedforward import LinearImpl, SwiGLUImpl
+from src.model.position import PositionRotation
 from src.model.stability import RMSNormImpl
 from src.model.tide import TideMixerImpl
 
@@ -29,7 +31,7 @@ class BlockDefinition(Protocol):
 
     def build(self) -> nn.Module: ...
 
-    def cache(self, layer_id: int) -> StateEntry | None:
+    def cache(self, layer_id: int) -> CacheEntry | StateEntry | None:
         return None
 
     def unpack(self) -> list["BlockDefinition"]:
@@ -302,4 +304,75 @@ class TideMixer(BlockDefinition):
             f"TideMixerImpl-{layer_id}",
             torch.empty(0, 1, 0),
             torch.empty(0, 1, self.input_features),
+        )
+
+
+@dataclass(frozen=True)
+class GQAAttention(BlockDefinition):
+    input_features: int
+    output_features: int
+
+    num_query_heads: int
+    num_kv_heads: int
+    head_features: int
+    window_size: int
+    dropout: float
+    position_rotation: PositionRotation
+    bias: bool = False
+    residual: bool = False
+
+    def __post_init__(self) -> None:
+        _positive_integer(self.input_features, "input_features")
+        _positive_integer(self.output_features, "output_features")
+        _positive_integer(self.num_query_heads, "num_query_heads")
+        _positive_integer(self.num_kv_heads, "num_kv_heads")
+        _positive_integer(self.head_features, "head_features")
+
+        if type(self.window_size) is not int or self.window_size < 0:
+            raise ValueError("window_size must be a non-negative integer")
+
+        if (
+            type(self.dropout) not in (int, float)
+            or not math.isfinite(self.dropout)
+            or not 0 <= self.dropout < 1
+        ):
+            raise ValueError("dropout must be finite and in [0, 1)")
+
+        if type(self.bias) is not bool:
+            raise ValueError("bias must be a boolean")
+
+        if type(self.residual) is not bool:
+            raise ValueError("residual must be a boolean")
+
+        if self.num_query_heads % self.num_kv_heads != 0:
+            raise ValueError("num_query_heads must be divisible by num_kv_heads")
+
+    def build(self) -> nn.Module:
+        return GQAAttentionImpl(
+            self.input_features,
+            self.output_features,
+            self.num_query_heads,
+            self.num_kv_heads,
+            self.head_features,
+            self.window_size,
+            self.dropout,
+            self.bias,
+            self.position_rotation,
+        )
+
+    def cache(self, layer_id: int) -> CacheEntry:
+        shape = (
+            0,
+            self.num_kv_heads,
+            0,
+            self.head_features,
+        )
+
+        return CacheEntry(
+            layer_id=f"GQAAttentionImpl-{layer_id}",
+            bounded=False,
+            keys=torch.empty(shape),
+            values=torch.empty(shape),
+            count=0,
+            pointer=0,
         )

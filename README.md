@@ -1,17 +1,5 @@
-# Igra-lab
+# Igra-lab — T16 template
 
-A research repository for independent language models, developed through
-family templates and preserved model branches.
-
-- [Project structure and branch rules](PROJECT_STRUCTURE.md)
-- [Current model](models/001-spoony/README.md)
-- [Implementation roadmap](models/001-spoony/ROADMAP.md)
-- [Declarative model assembly](models/001-spoony/MODEL_ASSEMBLY.md)
-
-The current model has tested data preparation, disk-backed batches, declarative
-model assembly, windowed GQA with RoPE, RMSNorm, and external KV caching. A small
-four-layer decoder is configured. Next-token loss, AdamW construction, and a
-warmup/cosine scheduler, mixed precision, accumulation/clipping, training loop,
-periodic validation, TensorBoard logging, and checkpoint/resume are implemented.
-The training script connects preparation artifacts, run manifests, logging and
-checkpoint resume. No real corpus or training run is configured yet.
+Use [the T16 template](models/001-spoony/README.md) to start an independent
+30M Tide + A16 model. See [project conventions](PROJECT_STRUCTURE.md).
+The historical template/tide branch remains preserved.
