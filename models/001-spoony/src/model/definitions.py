@@ -8,7 +8,7 @@ from torch import nn
 from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheEntry, MatrixCacheEntry
 from src.model.feedforward import LinearImpl, SwiGLUImpl
-from src.model.latent_attention import LatentAttentionImpl
+from src.model.latent_attention import LatentAttentionImpl, ParallelA16Impl
 from src.model.position import PositionRotation
 from src.model.stability import RMSNormImpl
 
@@ -384,4 +384,44 @@ class LatentAttention(BlockDefinition):
             )
         features = 16 if self.mode == "a16" else 4
         shape = (0, 1, 0, features)
+        return CacheEntry(name, False, torch.empty(shape), torch.empty(shape), 0, 0)
+
+
+@dataclass(frozen=True)
+class ParallelA16(BlockDefinition):
+    input_features: int
+    num_heads: int
+    rope_base: float | None = None
+    residual: bool = False
+
+    @property
+    def output_features(self) -> int:
+        return self.input_features
+
+    def __post_init__(self) -> None:
+        _positive_integer(self.input_features, "input_features")
+        _positive_integer(self.num_heads, "num_heads")
+        if self.rope_base is not None and (
+            isinstance(self.rope_base, bool)
+            or not isinstance(self.rope_base, (int, float))
+            or not math.isfinite(self.rope_base)
+            or self.rope_base <= 0
+        ):
+            raise ValueError("rope_base must be finite and positive or None")
+        if type(self.residual) is not bool:
+            raise ValueError("residual must be a boolean")
+
+    def build(self) -> nn.Module:
+        with torch.random.fork_rng(devices=[]):
+            return ParallelA16Impl(
+                self.input_features,
+                self.num_heads,
+                rope_base=self.rope_base,
+            )
+
+    def cache(self, layer_id: int) -> CacheEntry:
+        name = (
+            f"ParallelA16Impl{'-rope' if self.rope_base is not None else ''}-{layer_id}"
+        )
+        shape = (0, self.num_heads, 0, 16)
         return CacheEntry(name, False, torch.empty(shape), torch.empty(shape), 0, 0)

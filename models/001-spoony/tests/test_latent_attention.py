@@ -1,15 +1,50 @@
 from types import SimpleNamespace
-from unittest.mock import patch
 
 import pytest
 import torch
 
-from configs.model.model import build_model
+from src.model.assembler import Model
 from src.model.cache_storage import CacheStorage, MatrixCacheEntry
 from src.model.composition import build_block
-from src.model.definitions import LatentAttention
+from src.model.definitions import (
+    Embedding,
+    LatentAttention,
+    LMHead,
+    Repeat,
+    RMSNorm,
+    SwiGLU,
+)
 
 MODES = ("a16", "a4", "sma4", "sma4_key", "sma4_key_gelu16")
+
+
+def build_latent_model(mode, vocab_size):
+    return Model(
+        tokenizer=SimpleNamespace(vocab_size=vocab_size),
+        input=Embedding(output_features=384, init_std=0.02),
+        blocks=[
+            Repeat(
+                times=6,
+                blocks=[
+                    RMSNorm(input_features=384, eps=1e-6),
+                    LatentAttention(
+                        input_features=384,
+                        mode=mode,
+                        residual=True,
+                        rope_base=10000.0,
+                    ),
+                    SwiGLU(
+                        input_features=384,
+                        hidden_features=1024,
+                        output_features=384,
+                        residual=True,
+                    ),
+                    RMSNorm(input_features=384, eps=1e-6),
+                ],
+            )
+        ],
+        lm_head=LMHead(input_features=384, tie_to_embedding=True),
+    ).assemble()
 
 
 def reference(module, x):
@@ -116,8 +151,7 @@ def test_causality_future_gradient_and_residual_once(mode):
     [("a16", 10375680), ("a4", 10265088), ("sma4", 10285968), ("sma4_key", 10295160)],
 )
 def test_full_backbone_and_parameter_count(mode, count):
-    with patch("configs.model.model.MODE", mode):
-        model, entries = build_model(SimpleNamespace(vocab_size=8192))
+    model, entries = build_latent_model(mode, vocab_size=8192)
     assert sum(p.numel() for p in model.parameters()) == count
     assert model.embedding.weight.shape == (8192, 384)
     assert len(model.body) == 24 and len(entries) == 6
@@ -130,8 +164,7 @@ def test_shared_backbone_initial_values_identical_across_modes():
     states = []
     for mode in MODES:
         torch.manual_seed(42)
-        with patch("configs.model.model.MODE", mode):
-            model, _ = build_model(SimpleNamespace(vocab_size=300))
+        model, _ = build_latent_model(mode, vocab_size=300)
         states.append(
             {
                 k: v
@@ -292,8 +325,7 @@ def test_keyed_matrix_cache_cpu_storage_cuda_reads():
 
 
 def test_gelu16_parameter_count_and_aggregation_width():
-    with patch("configs.model.model.MODE", "sma4_key_gelu16"):
-        model, entries = build_model(SimpleNamespace(vocab_size=8192))
+    model, entries = build_latent_model("sma4_key_gelu16", vocab_size=8192)
     assert sum(p.numel() for p in model.parameters()) == 10_323_288
     assert len(entries) == 6
     for index in range(1, 24, 4):

@@ -5,12 +5,12 @@ import pytest
 import torch
 from torch.nn import functional as F
 
-from configs.model.model import MODE, build_model
+from configs.model.model import build_model
 from src.data.tokenizer import ByteLevelBPETokenizer
 from src.model.cache_storage import CacheStorage
 from src.model.composition import ResidualImpl
 from src.model.feedforward import SwiGLUImpl
-from src.model.latent_attention import LatentAttentionImpl
+from src.model.latent_attention import ParallelA16Impl
 from src.model.stability import RMSNormImpl
 
 
@@ -41,28 +41,22 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     assert model.embedding.num_embeddings == tokenizer.vocab_size
     assert model.lm_head.out_features == tokenizer.vocab_size
     assert model.lm_head.weight is model.embedding.weight
-    assert len(model.body) == 24
-    for index in range(0, 24, 4):
+    assert len(model.body) == 12
+    for index in range(0, 12, 4):
         norm1, attention, feedforward, norm2 = model.body[index : index + 4]
         assert isinstance(attention, ResidualImpl)
-        assert isinstance(attention.branch, LatentAttentionImpl)
+        assert isinstance(attention.branch, ParallelA16Impl)
         assert isinstance(feedforward, ResidualImpl)
         assert isinstance(feedforward.branch, SwiGLUImpl)
         assert isinstance(norm1, RMSNormImpl)
         assert isinstance(norm2, RMSNormImpl)
-        assert attention.branch.mode == MODE
+        assert len(attention.branch.heads) == 2
+        assert feedforward.branch.gate.out_features == 3072
     assert [entry.layer_id for entry in entries] == [
-        model.body[index].branch.layer_id for index in range(1, 24, 4)
+        model.body[index].branch.layer_id for index in range(1, 12, 4)
     ]
-    assert len({entry.layer_id for entry in entries}) == 6
-    assert all(
-        (
-            entry.matrices.shape == (0, 0, 4, 4)
-            if MODE in ("sma4", "sma4_key", "sma4_key_gelu16")
-            else entry.keys.shape == (0, 1, 0, 16 if MODE == "a16" else 4)
-        )
-        for entry in entries
-    )
+    assert len({entry.layer_id for entry in entries}) == 3
+    assert all(entry.keys.shape == (0, 2, 0, 16) for entry in entries)
 
 
 def test_config_forward_and_next_token_loss_backward(tokenizer):
@@ -83,10 +77,14 @@ def test_config_forward_and_next_token_loss_backward(tokenizer):
 def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokenizer):
     first, first_entries = build_model(tokenizer)
     second, second_entries = build_model(tokenizer)
-    weights = [first.body[index].branch.q_proj.weight for index in range(1, 24, 4)]
+    weights = [
+        head.q_proj.weight
+        for index in range(1, 12, 4)
+        for head in first.body[index].branch.heads
+    ]
     assert len({weight.data_ptr() for weight in weights}) == 6
-    gates = [first.body[index].branch.gate.weight for index in range(2, 24, 4)]
-    assert len({weight.data_ptr() for weight in gates}) == 6
+    gates = [first.body[index].branch.gate.weight for index in range(2, 12, 4)]
+    assert len({weight.data_ptr() for weight in gates}) == 3
     assert all(
         a.data_ptr() != b.data_ptr()
         for a, b in zip(first.parameters(), second.parameters(), strict=True)
@@ -118,14 +116,7 @@ def test_config_cached_chunks_match_full_logits_across_window_boundary(tokenizer
         )
     torch.testing.assert_close(actual, expected, rtol=1e-7, atol=1e-9)
     assert all(entry.count == 261 for entry in entries)
-    assert all(
-        (
-            entry.matrices.shape == (1, 261, 4, 4)
-            if MODE in ("sma4", "sma4_key", "sma4_key_gelu16")
-            else entry.keys.shape == (1, 1, 261, 16 if MODE == "a16" else 4)
-        )
-        for entry in entries
-    )
+    assert all(entry.keys.shape == (1, 2, 261, 16) for entry in entries)
 
 
 def test_config_state_dict_round_trip_preserves_logits_and_tying(tokenizer):

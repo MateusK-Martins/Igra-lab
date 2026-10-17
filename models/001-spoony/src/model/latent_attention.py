@@ -115,3 +115,48 @@ class LatentAttentionImpl(nn.Module):
         )
         z = F.scaled_dot_product_attention(q, k, v, attn_mask=mask)
         return self.out_proj(z.squeeze(1))
+
+
+class ParallelA16Impl(nn.Module):
+    """Run independent standard A16 heads in parallel, then combine their outputs."""
+
+    def __init__(self, width: int, num_heads: int, *, rope_base: float | None):
+        super().__init__()
+        self.num_heads = num_heads
+        self.rope_base = rope_base
+        self.heads = nn.ModuleList(
+            [
+                LatentAttentionImpl(width, "a16", rope_base=rope_base)
+                for _ in range(num_heads)
+            ]
+        )
+
+    def assign_id(self, layer_id):
+        self.layer_id = (
+            f"ParallelA16Impl{'-rope' if self.rope_base is not None else ''}-{layer_id}"
+        )
+
+    def forward(self, x, *, cache: CacheStorage | None = None):
+        if cache is not None and torch.is_grad_enabled():
+            raise RuntimeError("Cached attention is inference-only; use no_grad")
+        start = 0 if cache is None else cache.step(self.layer_id)
+        q = torch.stack([head.q_proj(x) for head in self.heads], dim=1)
+        k = torch.stack([head.k_proj(x) for head in self.heads], dim=1)
+        v = torch.stack([head.v_proj(x) for head in self.heads], dim=1)
+        positions = start + torch.arange(x.shape[1], device=x.device)
+        if self.rope_base is not None:
+            q = rope(q, positions, base=self.rope_base)
+            k = rope(k, positions, base=self.rope_base)
+        if cache is not None:
+            cache.write(self.layer_id, k, v)
+            entry = cache.read_all(self.layer_id)
+            k, v = entry.keys, entry.values
+        mask = torch.arange(k.shape[2], device=x.device)[None, :] <= (
+            start + torch.arange(x.shape[1], device=x.device)[:, None]
+        )
+        z = F.scaled_dot_product_attention(q, k, v, attn_mask=mask)
+        outputs = torch.stack(
+            [head.out_proj(z[:, index]) for index, head in enumerate(self.heads)],
+            dim=0,
+        )
+        return outputs.sum(dim=0) / self.num_heads**0.5
