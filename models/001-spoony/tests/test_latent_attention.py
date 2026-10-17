@@ -113,17 +113,17 @@ def test_causality_future_gradient_and_residual_once(mode):
 
 @pytest.mark.parametrize(
     "mode,count",
-    [("a16", 10572360), ("a4", 10461768), ("sma4", 10482648), ("sma4_key", 10491840)],
+    [("a16", 10399140), ("a4", 10343844), ("sma4", 10354284), ("sma4_key", 10358880)],
 )
 def test_full_backbone_and_parameter_count(mode, count):
     with patch("configs.model.model.MODE", mode):
         model, entries = build_model(SimpleNamespace(vocab_size=8192))
     assert sum(p.numel() for p in model.parameters()) == count
     assert model.embedding.weight.shape == (8192, 384)
-    assert len(model.body) == 36 and len(entries) == 12
-    for index in range(1, 36, 6):
+    assert len(model.body) == 24 and len(entries) == 6
+    for index in range(1, 24, 8):
         assert model.body[index].branch.out_proj.out_features == 384
-        assert model.body[index + 3].branch.gate.out_features == 1024
+        assert model.body[index + 1].branch.gate.out_features == 1024
 
 
 def test_shared_backbone_initial_values_identical_across_modes():
@@ -138,7 +138,7 @@ def test_shared_backbone_initial_values_identical_across_modes():
                 for k, v in model.state_dict().items()
                 if not any(
                     k.startswith(f"body.{i}.")
-                    for i in (*range(1, 36, 6), *range(3, 36, 6))
+                    for i in (*range(1, 24, 8), *range(5, 24, 8))
                 )
             }
         )
@@ -297,9 +297,9 @@ def test_keyed_matrix_cache_cpu_storage_cuda_reads():
 def test_gelu16_parameter_count_and_aggregation_width():
     with patch("configs.model.model.MODE", "sma4_key_gelu16"):
         model, entries = build_model(SimpleNamespace(vocab_size=8192))
-    assert sum(p.numel() for p in model.parameters()) == 10_519_968
-    assert len(entries) == 12
-    for index in range(1, 36, 6):
+    assert sum(p.numel() for p in model.parameters()) == 10_372_944
+    assert len(entries) == 6
+    for index in range(1, 24, 8):
         module = model.body[index].branch
         assert module.q_proj.out_features == module.k_proj.out_features == 4
         assert module.response_proj.weight.shape == (16, 4)

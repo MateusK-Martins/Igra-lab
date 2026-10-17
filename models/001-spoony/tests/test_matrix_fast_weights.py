@@ -143,9 +143,9 @@ def test_full_model_configuration(mode, monkeypatch):
 
     monkeypatch.setattr(config, "MATRIX_MODE", mode)
     model, entries = build_model(SimpleNamespace(vocab_size=8192))
-    expected = 10375680 + (6 * (384 + 384 * 64 + 64 + 384 * 8 + 8 + 8 * 384 + 64))
+    expected = 10375680 + 3 * (384 * 64 + 64 + 384 * 8 + 8 + 8 * 384 + 64 - 24576)
     if mode == "multi":
-        expected += 6 * (384 * 4 + 4)
+        expected += 3 * (384 * 4 + 4)
     assert sum(parameter.numel() for parameter in model.parameters()) == expected
-    assert len(model.body) == 36
-    assert len(entries) == 12
+    assert len(model.body) == 24
+    assert len(entries) == 6
