@@ -1,0 +1,199 @@
+{
+  "branch": "model/001-spoony-a16-2head-3layer-14m",
+  "training_seconds_including_validation_and_saving": 247.27601752900227,
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "peak_allocated_vram_bytes": 653228032,
+  "training_state": {
+    "updates": 9000,
+    "batches": 9000,
+    "tokens": 18429440,
+    "completed_epochs": 2,
+    "last_loss": 2.400343894958496,
+    "last_validation_loss": 2.1736646978943437,
+    "last_validation_perplexity": 8.790439389655516,
+    "batches_in_epoch": 2728
+  },
+  "validation_curve": [
+    {
+      "update": 500,
+      "loss": 3.4431309700012207
+    },
+    {
+      "update": 1000,
+      "loss": 2.9882054328918457
+    },
+    {
+      "update": 1500,
+      "loss": 2.795370578765869
+    },
+    {
+      "update": 2000,
+      "loss": 2.6498942375183105
+    },
+    {
+      "update": 2500,
+      "loss": 2.556586742401123
+    },
+    {
+      "update": 3000,
+      "loss": 2.4905591011047363
+    },
+    {
+      "update": 3500,
+      "loss": 2.4296789169311523
+    },
+    {
+      "update": 4000,
+      "loss": 2.3789710998535156
+    },
+    {
+      "update": 4500,
+      "loss": 2.3495988845825195
+    },
+    {
+      "update": 5000,
+      "loss": 2.311471939086914
+    },
+    {
+      "update": 5500,
+      "loss": 2.283738851547241
+    },
+    {
+      "update": 6000,
+      "loss": 2.2459511756896973
+    },
+    {
+      "update": 6500,
+      "loss": 2.230715274810791
+    },
+    {
+      "update": 7000,
+      "loss": 2.213343620300293
+    },
+    {
+      "update": 7500,
+      "loss": 2.197108268737793
+    },
+    {
+      "update": 8000,
+      "loss": 2.1882147789001465
+    },
+    {
+      "update": 8500,
+      "loss": 2.1796700954437256
+    },
+    {
+      "update": 9000,
+      "loss": 2.1736648082733154
+    }
+  ],
+  "best_saved_validation": {
+    "update": 9000,
+    "loss": 2.1736648082733154
+  },
+  "subset": {
+    "dataset": "roneneldan/TinyStories",
+    "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "selection": "first unique nonempty documents in source order",
+    "splits": {
+      "train": {
+        "documents": 30000,
+        "duplicates_or_empty_skipped": 0,
+        "sha256": "69a5f3422b4c51f98ca0692a3514822a6527999dc59c624baaefb1f8f04e65d3",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-train.txt"
+      },
+      "validation": {
+        "documents": 256,
+        "duplicates_or_empty_skipped": 0,
+        "sha256": "ab09f4248a55ca51d899ba51ce90d96a2c990d52a821338aa1743a525fda7d4a",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-valid.txt"
+      }
+    }
+  },
+  "benchmark": {
+    "scheduler": {
+      "warmup_steps": 300,
+      "total_steps": 9000,
+      "min_lr_ratio": 0.1
+    },
+    "optimizer": {
+      "learning_rate": 0.0003,
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01
+    },
+    "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+    "parameters": 13912320,
+    "vocab_size": 8192,
+    "initial_validation_loss": 9.276245682327835,
+    "validation_seconds": 0.3758509440012858,
+    "measured_updates": 100,
+    "mean_update_seconds": 0.026622606300006738,
+    "p95_update_seconds": 0.026922236997052096,
+    "tokens_per_update": 2048,
+    "peak_allocated_vram_bytes": 651917312,
+    "benchmark_final_loss": 6.2254486083984375,
+    "torch_cpu_threads": 4
+  },
+  "torch_cpu_threads": 4,
+  "seed": 42,
+  "comparison": "Single seed, equal-token baseline; include preparation separately and rebenchmark each architecture for equal-time runs.",
+  "greedy_samples_from_best_saved_checkpoint": [
+    {
+      "prompt": "Once upon a time, there was a little girl named Lily.",
+      "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the park. One day, she saw a big, shiny rock. She picked it up and showed it to her mom.\n\"Look, Mommy! I found a big rock!\" Lily said, pointing to the rock.\n\"That's a rock, Lily. It's a rock"
+    },
+    {
+      "prompt": "Tom found a small dog outside his house. The dog was",
+      "text": "Tom found a small dog outside his house. The dog was very happy and said, \"Thank you, Tom! You are very kind.\"\nTom and the dog played together for a while. They had fun. They were happy. They learned that sharing and being kind to others is better than to be kind."
+    },
+    {
+      "prompt": "One day, a boy lost his favorite toy. He felt",
+      "text": "One day, a boy lost his favorite toy. He felt sad and didn't know what to do. He went to his mom and asked, \"Mom, can I help you find your toy?\"\nHis mom smiled and said, \"Yes, you can. But first, you can't find it. It's not safe.\"\nTimmy was sad, but he knew he"
+    }
+  ],
+  "best_checkpoint": "/home/mateus/Documents/Igra-lab-checkpoints/a16-parallel-2head-3layer-14m/step-00009000.pt",
+  "architecture": {
+    "name": "Three-layer, two-parallel-head standard A16",
+    "layers": 3,
+    "model_width": 384,
+    "a16_heads_per_layer": 2,
+    "total_independent_a16_modules": 6,
+    "each_head": "Independent standard A16: 16D Q/K/V projections, causal scaled dot-product retrieval, its own output projection to width 384, RoPE base 10000.",
+    "head_combination": "Sum the two full-width head outputs divided by sqrt(2), then apply the layer residual once.",
+    "feed_forward": "One shared-per-layer SwiGLU after attention-head combination, hidden width 3072 (baseline hidden width 1024).",
+    "parameter_count": 13912320,
+    "parameters_delta_from_standard_a16": 3536640,
+    "cache": "One cache entry per layer with two independent streams; 64 scalars/token/layer and 192 across all three layers."
+  },
+  "final_metrics": {
+    "validation_loss": 2.1736646978943437,
+    "perplexity": 8.790439389655516,
+    "updates": 9000,
+    "tokens_processed": 18429440,
+    "throughput_tokens_per_second": 74529.83182179592,
+    "peak_cuda_allocated_bytes": 653228032,
+    "peak_cuda_allocated_mib": 622.966796875
+  },
+  "baseline_comparison": {
+    "baseline": "standard six-layer RoPE A16; same tokenizer/data hashes, seed, precision, optimizer, context, and update/token schedule",
+    "validation_loss": 2.170240353654932,
+    "perplexity": 8.760389379323737,
+    "training_seconds_including_validation_and_saving": 215.32605484799933,
+    "throughput_tokens_per_second": 85588.527654071,
+    "peak_allocated_vram_bytes": 601236480,
+    "parameter_count": 10375680,
+    "validation_loss_delta": 0.0034243442394115142,
+    "perplexity_delta": 0.03005001033177912,
+    "training_time_delta_percent": 14.837945507131845,
+    "throughput_delta_percent": -12.920768863990483,
+    "peak_memory_delta_mib": 49.5830078125,
+    "interpretation": "Validation is close to baseline on one seed. The model also changes depth, parallel attention count per layer, and FFN width, so the result does not isolate head count alone."
+  },
+  "source_commit": "7f569891ab388f601e1ba7737785520ec28c0e6c",
+  "final_checkpoint_preserved_at": "/home/mateus/Documents/Igra-lab-checkpoints/a16-parallel-2head-3layer-14m/step-00009000.pt",
+  "checkpoint_sha256": "3db1a8d0d4d2467105bbfb3a45a2b2a24e33e0ed15a552de4b94532e0149953c"
+}
