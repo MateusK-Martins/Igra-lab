@@ -4,10 +4,10 @@ from src.config.types import LoggingConfig, TrainingConfig
 training_config = TrainingConfig(
     accumulation_steps=4,
     max_grad_norm=1.0,
-    validation_interval=5000,
+    validation_interval=500,
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/wikipedia-en-600m/tensorboard"),
+    directory=results_path("pretraining/wikipedia-en-100m/tensorboard"),
     interval=25,
 )

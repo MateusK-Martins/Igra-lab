@@ -1,0 +1,20 @@
+{
+  "training_state": {
+    "updates": 6104,
+    "batches": 24414,
+    "tokens": 99999744,
+    "completed_epochs": 1,
+    "last_loss": 2.963090419769287,
+    "last_validation_loss": 3.1807894921693647,
+    "last_validation_perplexity": 24.06574577181039,
+    "batches_in_epoch": 0,
+    "epoch_generator_state": null
+  },
+  "model_sha256": "e06be36ab8d662e63530e85c7dfdaecdbd2728a4eb92283bdab0553694ed292e",
+  "tokenizer_sha256": "1d40abc4915bc2a585c3a52595a2565275a2cae2015476ff51d6aef40f617729",
+  "stored_training_tokens": 100000000,
+  "validation_tokens": 2000000,
+  "parameters": 70006272,
+  "approximate_duration_minutes": 85,
+  "assessment": "Qualitative factual probes show severe greedy repetition and inaccurate sampled continuations. Validation loss does not establish factual recall or instruction following. No factual-accuracy benchmark has been run."
+}

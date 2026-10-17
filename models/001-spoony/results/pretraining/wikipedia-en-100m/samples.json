@@ -1,0 +1,106 @@
+{
+  "model_sha256": "e06be36ab8d662e63530e85c7dfdaecdbd2728a4eb92283bdab0553694ed292e",
+  "tokenizer_sha256": "1d40abc4915bc2a585c3a52595a2565275a2cae2015476ff51d6aef40f617729",
+  "precision": "bf16",
+  "max_new_tokens": 128,
+  "temperature": 0.8,
+  "top_k": 40,
+  "samples": [
+    {
+      "mode": "greedy",
+      "seed": 42,
+      "prompt": "The Solar System consists of",
+      "continuation": " the Solar System, which is a part of the Solar System.\n\nThe Solar System is a part of the Solar System, which is a part of the Solar System. The Solar System is a part of the Solar System.\n\nThe Solar System is a part of the Solar System, which is a part of the Solar System.\n\nThe Solar System is a part of the Solar System.\n\nThe Solar System is a part of the Solar System.\n\nThe Solar System is a part of the Solar System.\n\nThe Solar",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 43,
+      "prompt": "Photosynthesis is the process by which",
+      "continuation": " the tetrahedral is the process of the tetrahedral.\n\nThe tetrahedral is the most important of the tetrahedral, which is the most important of the tetrahedral. The tetrahedral is the most important tetrahedral in the Tetrahedral.\n\nThe tetrahedral is the most important tetrahedral in the Tetrahedral.\n\nThe tetrahedral is the most important tetrahedral in the Tetrahedral.\n\nThe tetrahedral is the most important tetrahedral in the Tet",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 44,
+      "prompt": "The Roman Empire was",
+      "continuation": " the first Roman Empire to be the first Roman Empire to be the first Roman Empire to be the first Roman Empire to be the first Roman Empire to be the first Roman Empire to be the first Roman Empire to be the first Roman Empire to be the second Roman Empire.\n\nThe Roman Empire was the first Roman Empire to be the first Roman Empire to be the first Roman Empire to be the first Roman Empire to be the first Roman Empire to be the first Roman Empire to be the first Roman Empire to be the first Roman Empire to be the second Roman Empire. The Roman Empire was the first Roman Empire to be the first Roman Empire to be",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 45,
+      "prompt": "In mathematics, a prime number is",
+      "continuation": " the same as the number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of number of",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 46,
+      "prompt": "The Amazon River is",
+      "continuation": " a tributary of the Amazon River, which is the source of the Amazon River.\n\nThe Amazon River is a tributary of the Amazon River, which is the source of the Amazon River.\n\nThe Amazon River is a tributary of the Amazon River, which is the source of the Amazon River.\n\nThe Amazon River is a tributary of the Amazon River, which is the source of the Amazon River.\n\nThe Amazon River is a tributary of the Amazon River, which is the source of the Amazon River.",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 47,
+      "prompt": "A computer processor is",
+      "continuation": " a computer processor.\n\nThe computer processor is a computer processor, which is a computer processor. The computer processor is a computer processor, which is a computer processor. The computer processor is a computer processor, which is a computer processor. The computer processor is a computer processor, which is a computer processor. The computer processor is a computer processor, which is a computer processor. The computer processor is a computer processor, which is a computer processor. The computer processor is a computer processor, which is a computer processor.\n\n",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 42,
+      "prompt": "The Solar System consists of",
+      "continuation": " the Solar System and the Solar System, which was the first major power plant to be installed on the Solar System. The Solar System provides 3.1 and 2.6 and is available for powered by the Solar System and Solar System.\n\nThe Solar System and Solar System (SDDR) also uses the Solar System and Solar System (MEDR), which is a monitor from the Solar System for the Solar System and Solar System.\n\nSubsidiomedes \nTogether with the Solar System and Sol",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 43,
+      "prompt": "Photosynthesis is the process by which",
+      "continuation": " the sperm cells are tolerable and are methane.\n\nSee also \nGenetic and Set-molecular phosphorylation\n\nReferences\n\n \nGeneral\nCalcium",
+      "generated_tokens": 48,
+      "stopped_on_eot": true
+    },
+    {
+      "mode": "top_k",
+      "seed": 44,
+      "prompt": "The Roman Empire was",
+      "continuation": " the second-tier title in the Roman Empire. In the Roman Empire the emperor was the emperor of Emperor Xuanzuan, with the second-tier title and the fourth-tier title of king. He became king of the Byzantine Empire in the 12th century, and had to have been the first emperor of Byzantine control. In 1430\u201314, when the Roman Emperor of Rome was created, the emperor and Emperor of Rome the Emperor of Rome was created, and the Emperor of Rome was crowned on the capital, which would be the most important emperor of Rome. In the 14th century, the Emperor of",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 45,
+      "prompt": "In mathematics, a prime number is",
+      "continuation": " the same as a one or more different one, but that is the case of a person in the opposite case, for each group which is known by a noun, the same as the one, and for each group.\n\nSee also\n\nNotes\n\nReferences \n\nHuman mitigation\nKurturing (math)",
+      "generated_tokens": 70,
+      "stopped_on_eot": true
+    },
+    {
+      "mode": "top_k",
+      "seed": 46,
+      "prompt": "The Amazon River is",
+      "continuation": " the only waterway that can be accessed via the Amazon River.\n\nLands\n\nIn the United States, the Amazon Lake is most of the waterway that comes from the Amazon River, which is the first  of waterway to be in the Amazon.  The mouth is an all-new waterway that provides water water to a large waterway, so the waterway would be picnicked.  Lands and other waterways can be reached by water-finding in the park.  The waterway will generally be the largest waterway, so the waterway will",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 47,
+      "prompt": "A computer processor is",
+      "continuation": " the primary source of a computer.\n\nIn many languages, in a way, the computer processor has a function (gas, but not a function) and can also be used to get the tool.  In a way that can be used to transmit a device's function (also called an oral function).  The software may also be used to transmit a user's user's path.\n\nRadio and video\n\nThe \"Radio\" can feature a computer system that can also transmit a program from a computer to a computer or from a computer. The system usually forms a set",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    }
+  ]
+}

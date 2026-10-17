@@ -29,7 +29,7 @@ from src.training.optimizer import build_optimizer
 from src.training.precision import build_precision
 from src.training.scheduler import build_scheduler
 
-expected_artifacts_path = project_root() / "configs/data/wikipedia-artifacts.json"
+expected_artifacts_path = project_root() / "configs/data/wikipedia-100m-artifacts.json"
 
 
 def ensure_prepared_data(data_directory):
