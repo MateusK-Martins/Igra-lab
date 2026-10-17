@@ -155,7 +155,7 @@
       "text": "One day, a boy lost his favorite toy. He felt sad and lonely. He wanted to play with the toy, but he was too small to play with. He wanted to play with the toy car, but he was too small.\nThe boy saw the toy and wanted to play with it. He ran to the boy and said, \"Hi, I am Tom."
     }
   ],
-  "best_checkpoint": "checkpoints/step-00009000.pt",
+  "best_checkpoint": "/home/mateus/Documents/Igra-lab-checkpoints/a16-diagonal-matrix-14m/step-00009000.pt",
   "architecture": {
     "total_mixer_layers": 6,
     "a16_layers": 3,
