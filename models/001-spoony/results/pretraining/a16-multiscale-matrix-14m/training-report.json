@@ -155,7 +155,7 @@
       "text": "One day, a boy lost his favorite toy. He felt sad and scared. He wanted to play with the boy, but he was too shy to be brave. So, he went to the boy and asked if he could play with him. The boy said yes, and the boy was very happy.\nThe boy was happy to have a new toy. He said he would"
     }
   ],
-  "best_checkpoint": "checkpoints/step-00009000.pt",
+  "best_checkpoint": "/home/mateus/Documents/Igra-lab-checkpoints/a16-multiscale-matrix-14m/step-00009000.pt",
   "architecture": {
     "total_mixer_layers": 6,
     "a16_layers": 3,
