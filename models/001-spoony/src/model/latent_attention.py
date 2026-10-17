@@ -13,7 +13,7 @@ class LatentAttentionImpl(nn.Module):
         super().__init__()
         self.rope_base = rope_base
         self.mode = mode
-        self.latent_features = 16 if mode == "a16" else 4
+        self.latent_features = 16 if mode in ("a16", "a16_assoc") else 4
         self.q_proj = nn.Linear(
             width,
             self.latent_features,
@@ -38,6 +38,11 @@ class LatentAttentionImpl(nn.Module):
 
         if mode == "sma4_key_gelu16":
             self.response_proj = nn.Linear(4, 16, bias=True)
+        # Keep these after all ordinary A16 projections so shared weights have
+        # identical initialization under the same seed.
+        if mode == "a16_assoc":
+            self.probe_proj = nn.Linear(width, self.latent_features, bias=False)
+            self.beta = nn.Parameter(torch.zeros(()))
 
     def assign_id(self, layer_id):
         self.layer_id = f"LatentAttentionImpl{'-rope' if self.rope_base is not None else ''}-{layer_id}"
@@ -50,6 +55,13 @@ class LatentAttentionImpl(nn.Module):
         positions = start + torch.arange(x.shape[1], device=x.device)
         if self.rope_base is not None:
             q = rope(q.unsqueeze(1), positions, base=self.rope_base).squeeze(1)
+        probe = None
+        if self.mode == "a16_assoc":
+            probe = self.probe_proj(x)
+            if self.rope_base is not None:
+                probe = rope(
+                    probe.unsqueeze(1), positions, base=self.rope_base
+                ).squeeze(1)
         if self.mode in ("sma4", "sma4_key", "sma4_key_gelu16"):
             matrices = self.matrix_proj(x).unflatten(-1, (4, 4))
             keys = (
@@ -110,6 +122,29 @@ class LatentAttentionImpl(nn.Module):
             cache.write(self.layer_id, k, v)
             entry = cache.read_all(self.layer_id)
             k, v = entry.keys, entry.values
+        if self.mode == "a16_assoc":
+            assert probe is not None
+            causal = torch.arange(k.shape[2], device=x.device)[None, :] <= (
+                start + torch.arange(x.shape[1], device=x.device)[:, None]
+            )
+            # Preserve ordinary A16's SDPA value retrieval. The fast-weight
+            # term uses its causal softmax weights and the factored expression
+            # sum_i alpha_i (k_i dot p_t / sqrt(16)) v_i, without constructing
+            # a [B,T,16,16] matrix.
+            z = F.scaled_dot_product_attention(q, k, v, attn_mask=causal).squeeze(1)
+            dtype = torch.float64 if q.dtype == torch.float64 else torch.float32
+            with torch.autocast(device_type=x.device.type, enabled=False):
+                q_acc = q.squeeze(1).to(dtype)
+                k_acc = k.squeeze(1).to(dtype)
+                v_acc = v.squeeze(1).to(dtype)
+                p_acc = probe.to(dtype)
+                scale = self.latent_features**0.5
+                scores = torch.matmul(q_acc, k_acc.transpose(-2, -1)) / scale
+                weights = scores.masked_fill(~causal, -torch.inf).softmax(-1)
+                probe_scores = torch.matmul(p_acc, k_acc.transpose(-2, -1)) / scale
+                fast_read = torch.matmul(weights * probe_scores, v_acc)
+                combined = z.to(dtype) + self.beta.to(dtype) * fast_read
+            return self.out_proj(combined.to(q.dtype))
         mask = torch.arange(k.shape[2], device=x.device)[None, :] <= (
             start + torch.arange(x.shape[1], device=x.device)[:, None]
         )

@@ -2,7 +2,8 @@ from src.data.tokenizer import Tokenizer
 from src.model.assembler import Model
 from src.model.definitions import *
 
-MODE = "a16"
+MODE = "a16_assoc"
+RUN_NAME = "a16-associative-fast-weights-14m"
 
 
 def build_model(tokenizer: Tokenizer):

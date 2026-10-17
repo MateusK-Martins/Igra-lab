@@ -9,7 +9,7 @@ from src.model.cache_storage import CacheStorage, MatrixCacheEntry
 from src.model.composition import build_block
 from src.model.definitions import LatentAttention
 
-MODES = ("a16", "a4", "sma4", "sma4_key", "sma4_key_gelu16")
+MODES = ("a16", "a16_assoc", "a4", "sma4", "sma4_key", "sma4_key_gelu16")
 
 
 def reference(module, x):
@@ -28,11 +28,25 @@ def reference(module, x):
             if module.mode == "sma4_key_gelu16":
                 responses = torch.nn.functional.gelu(module.response_proj(responses))
             z = (scores.softmax(-1)[..., None] * responses).sum(1)
+        elif module.mode == "a16_assoc":
+            k = module.k_proj(x[:, : t + 1])
+            v = module.v_proj(x[:, : t + 1])
+            probe = module.probe_proj(x[:, t])
+            scores = (k * q[:, t, None]).sum(-1) / 4
+            weights = scores.softmax(-1)
+            z = (weights[..., None] * v).sum(1)
+            matrices = torch.einsum("bsi,bsj->bsij", v, k)
+            fast_matrix = (weights[..., None, None] * matrices).sum(1)
+            fast = (fast_matrix @ probe[..., None]).squeeze(-1) / 4
+            readout = z + module.beta * fast
         else:
             k, v = module.k_proj(x[:, : t + 1]), module.v_proj(x[:, : t + 1])
             scores = (k * q[:, t, None]).sum(-1) / q.shape[-1] ** 0.5
             z = (scores.softmax(-1)[..., None] * v).sum(1)
-        outputs.append(module.out_proj(z))
+            readout = z
+        if module.mode in ("sma4", "sma4_key", "sma4_key_gelu16"):
+            readout = z
+        outputs.append(module.out_proj(readout))
     return torch.stack(outputs, 1)
 
 
@@ -87,7 +101,7 @@ def test_cache_equivalence_persistence_size_and_no_hidden_cache(mode, chunk, tmp
         assert not cache.matrices
         state = cache.entries[module.layer_id]
         assert state.keys.numel() + state.values.numel() == 2 * 14 * (
-            32 if mode == "a16" else 8
+            32 if mode in ("a16", "a16_assoc") else 8
         )
     fresh = CacheStorage(
         [definition.cache(0)], torch.device("cpu"), torch.device("cpu")
@@ -113,7 +127,13 @@ def test_causality_future_gradient_and_residual_once(mode):
 
 @pytest.mark.parametrize(
     "mode,count",
-    [("a16", 10375680), ("a4", 10265088), ("sma4", 10285968), ("sma4_key", 10295160)],
+    [
+        ("a16", 10375680),
+        ("a16_assoc", 10412550),
+        ("a4", 10265088),
+        ("sma4", 10285968),
+        ("sma4_key", 10295160),
+    ],
 )
 def test_full_backbone_and_parameter_count(mode, count):
     with patch("configs.model.model.MODE", mode):
@@ -144,6 +164,51 @@ def test_shared_backbone_initial_values_identical_across_modes():
         assert torch.equal(states[0][name], states[2][name])
         assert torch.equal(states[0][name], states[3][name])
         assert torch.equal(states[0][name], states[4][name])
+        assert torch.equal(states[0][name], states[5][name])
+
+
+def test_zero_beta_is_ordinary_rope_a16_and_shared_weights_match():
+    torch.manual_seed(42)
+    standard = LatentAttention(32, "a16", rope_base=10000.0).build().double()
+    torch.manual_seed(42)
+    associative = LatentAttention(32, "a16_assoc", rope_base=10000.0).build().double()
+    for name in ("q_proj", "k_proj", "v_proj", "out_proj"):
+        torch.testing.assert_close(
+            getattr(standard, name).weight, getattr(associative, name).weight
+        )
+    assert associative.beta.item() == 0
+    x = torch.randn(2, 9, 32, dtype=torch.float64)
+    torch.testing.assert_close(associative(x), standard(x), atol=1e-12, rtol=1e-12)
+
+
+def test_associative_cached_chunks_keep_rope_position_and_kv_only_cache():
+    definition = LatentAttention(32, "a16_assoc", rope_base=10000.0)
+    module = build_block(definition, 0).double().eval()
+    cache = CacheStorage(
+        [definition.cache(0)], torch.device("cpu"), torch.device("cpu")
+    )
+    x = torch.randn(2, 13, 32, dtype=torch.float64)
+    with torch.no_grad():
+        expected = module(x)
+        actual = torch.cat([module(part, cache=cache) for part in x.split(3, 1)], 1)
+    torch.testing.assert_close(actual, expected, atol=1e-12, rtol=1e-12)
+    assert cache.step(module.layer_id) == 13
+    state = cache.entries[module.layer_id]
+    assert state.keys.numel() + state.values.numel() == 2 * 13 * 32
+    assert not cache.matrices
+
+
+def test_associative_probe_parameter_cost_matches_specification():
+    for width, expected_delta in ((384, 384 * 16 + 1), (512, 8193)):
+        standard = LatentAttention(width, "a16").build()
+        associative = LatentAttention(width, "a16_assoc").build()
+        delta = sum(p.numel() for p in associative.parameters()) - sum(
+            p.numel() for p in standard.parameters()
+        )
+        assert delta == expected_delta
+    module = LatentAttention(32, "a16_assoc").build().double()
+    module(torch.randn(2, 5, 32, dtype=torch.float64)).square().sum().backward()
+    assert module.beta.grad is not None and module.beta.grad.abs() > 0
 
 
 @pytest.mark.parametrize("mode", MODES)
