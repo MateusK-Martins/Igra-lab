@@ -8,7 +8,7 @@ from src.model.cache_storage import CacheStorage
 from src.model.composition import build_block
 from src.model.definitions import LatentAttention
 
-MODES = ("a16", "a4", "sma4", "sma4_key", "sma4_key_gelu16")
+MODES = ("a16", "a16_gqa", "a4", "sma4", "sma4_key", "sma4_key_gelu16")
 
 
 def rotation(width, position, *, base=10000.0):
@@ -27,7 +27,11 @@ def reference(module, x, offset=0):
     q = module.q_proj(x)
     outputs = []
     for t in range(x.shape[1]):
-        query = q[:, t] @ rotation(q.shape[-1], t + offset).T
+        if module.mode == "a16_gqa":
+            query = q[:, t].reshape(x.shape[0], 4, 4)
+            query = query @ rotation(4, t + offset).T
+        else:
+            query = q[:, t] @ rotation(q.shape[-1], t + offset).T
         scores, values = [], []
         for i in range(t + 1):
             if module.mode.startswith("sma"):
@@ -44,13 +48,24 @@ def reference(module, x, offset=0):
                 if module.mode == "sma4_key_gelu16":
                     response = F.gelu(module.response_proj(response))
                 values.append(response)
+            elif module.mode == "a16_gqa":
+                key = module.k_proj(x[:, i]).reshape(x.shape[0], 2, 4)
+                key = key @ rotation(4, i + offset).T
+                key = key.repeat_interleave(2, dim=1)
+                value = module.v_proj(x[:, i]).reshape(x.shape[0], 2, 4)
+                score = (query * key).sum(-1) / 2
+                values.append(value.repeat_interleave(2, dim=1))
             else:
                 key = module.k_proj(x[:, i]) @ rotation(q.shape[-1], i + offset).T
                 score = (query * key).sum(-1) / q.shape[-1] ** 0.5
                 values.append(module.v_proj(x[:, i]))
             scores.append(score)
-        weights = torch.stack(scores, 1).softmax(1)
-        z = (weights[..., None] * torch.stack(values, 1)).sum(1)
+        if module.mode == "a16_gqa":
+            weights = torch.stack(scores, -1).softmax(-1)
+            z = (weights[..., None] * torch.stack(values, 2)).sum(2).flatten(1)
+        else:
+            weights = torch.stack(scores, 1).softmax(1)
+            z = (weights[..., None] * torch.stack(values, 1)).sum(1)
         outputs.append(module.out_proj(z))
     return torch.stack(outputs, 1)
 
@@ -103,7 +118,7 @@ def test_rotary_cache_offsets_snapshot_causality_and_size(mode, chunk, tmp_path)
     else:
         entry = restored.entries[m.layer_id]
         assert entry.keys.numel() + entry.values.numel() == 2 * 13 * (
-            32 if mode == "a16" else 8
+            {"a16": 32, "a16_gqa": 16}.get(mode, 8)
         )
 
 

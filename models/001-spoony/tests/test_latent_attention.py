@@ -9,11 +9,17 @@ from src.model.cache_storage import CacheStorage, MatrixCacheEntry
 from src.model.composition import build_block
 from src.model.definitions import LatentAttention
 
-MODES = ("a16", "a4", "sma4", "sma4_key", "sma4_key_gelu16")
+MODES = ("a16", "a16_gqa", "a4", "sma4", "sma4_key", "sma4_key_gelu16")
 
 
 def reference(module, x):
     q = module.q_proj(x)
+    if module.mode == "a16_gqa":
+        q = q.unflatten(-1, (4, 4)).transpose(1, 2)
+        k = module.k_proj(x).unflatten(-1, (2, 4)).transpose(1, 2)
+        v = module.v_proj(x).unflatten(-1, (2, 4)).transpose(1, 2)
+        k = k.repeat_interleave(2, dim=1)
+        v = v.repeat_interleave(2, dim=1)
     outputs = []
     for t in range(x.shape[1]):
         if module.mode in ("sma4", "sma4_key", "sma4_key_gelu16"):
@@ -28,6 +34,10 @@ def reference(module, x):
             if module.mode == "sma4_key_gelu16":
                 responses = torch.nn.functional.gelu(module.response_proj(responses))
             z = (scores.softmax(-1)[..., None] * responses).sum(1)
+        elif module.mode == "a16_gqa":
+            scores = torch.einsum("bhd,bhsd->bhs", q[:, :, t], k[:, :, : t + 1]) / 2
+            z = torch.einsum("bhs,bhsd->bhd", scores.softmax(-1), v[:, :, : t + 1])
+            z = z.flatten(1)
         else:
             k, v = module.k_proj(x[:, : t + 1]), module.v_proj(x[:, : t + 1])
             scores = (k * q[:, t, None]).sum(-1) / q.shape[-1] ** 0.5
@@ -86,9 +96,10 @@ def test_cache_equivalence_persistence_size_and_no_hidden_cache(mode, chunk, tmp
     else:
         assert not cache.matrices
         state = cache.entries[module.layer_id]
-        assert state.keys.numel() + state.values.numel() == 2 * 14 * (
-            32 if mode == "a16" else 8
-        )
+        assert state.keys.numel() + state.values.numel() == 2 * 14 * {
+            "a16": 32,
+            "a16_gqa": 16,
+        }.get(mode, 8)
     fresh = CacheStorage(
         [definition.cache(0)], torch.device("cpu"), torch.device("cpu")
     )
@@ -113,7 +124,13 @@ def test_causality_future_gradient_and_residual_once(mode):
 
 @pytest.mark.parametrize(
     "mode,count",
-    [("a16", 10375680), ("a4", 10265088), ("sma4", 10285968), ("sma4_key", 10295160)],
+    [
+        ("a16", 10375680),
+        ("a16_gqa", 10338816),
+        ("a4", 10265088),
+        ("sma4", 10285968),
+        ("sma4_key", 10295160),
+    ],
 )
 def test_full_backbone_and_parameter_count(mode, count):
     with patch("configs.model.model.MODE", mode):
@@ -140,10 +157,8 @@ def test_shared_backbone_initial_values_identical_across_modes():
             }
         )
     for name in states[0]:
-        assert torch.equal(states[0][name], states[1][name])
-        assert torch.equal(states[0][name], states[2][name])
-        assert torch.equal(states[0][name], states[3][name])
-        assert torch.equal(states[0][name], states[4][name])
+        for state in states[1:]:
+            assert torch.equal(states[0][name], state[name])
 
 
 @pytest.mark.parametrize("mode", MODES)
@@ -175,6 +190,45 @@ def test_matrix_query_changes_response_without_changing_stored_matrix():
         module.out_proj.bias.zero_()
     x = torch.tensor([[[1.0, 0, 0, 0], [0, 1.0, 0, 0]]], dtype=torch.float64)
     torch.testing.assert_close(module(x), x)
+
+
+def test_a16_gqa_uses_four_query_heads_and_two_shared_kv_heads():
+    module = LatentAttention(384, "a16_gqa", rope_base=10000.0).build()
+    assert module.q_proj.weight.shape == (16, 384)
+    assert module.k_proj.weight.shape == (8, 384)
+    assert module.v_proj.weight.shape == (8, 384)
+    assert module.out_proj.weight.shape == (384, 16)
+    entry = LatentAttention(384, "a16_gqa", rope_base=10000.0).cache(3)
+    assert entry.keys.shape == (0, 2, 0, 4)
+    assert entry.values.shape == (0, 2, 0, 4)
+
+
+def test_a16_gqa_full_model_parameter_count():
+    with patch("configs.model.model.MODE", "a16_gqa"):
+        model, entries = build_model(SimpleNamespace(vocab_size=8192))
+    assert sum(parameter.numel() for parameter in model.parameters()) == 10338816
+    assert len(entries) == 6
+    assert all(entry.keys.shape == (0, 2, 0, 4) for entry in entries)
+
+
+def test_a16_gqa_rope_cached_chunks_match_full_sequence():
+    definition = LatentAttention(32, "a16_gqa", rope_base=10000.0)
+    module = build_block(definition, 0).double().eval()
+    storage = CacheStorage(
+        [definition.cache(0)], torch.device("cpu"), torch.device("cpu")
+    )
+    x = torch.randn(2, 11, 32, dtype=torch.float64)
+    with torch.no_grad():
+        expected = module(x)
+        actual = torch.cat(
+            [
+                module(x[:, :3], cache=storage),
+                module(x[:, 3:8], cache=storage),
+                module(x[:, 8:], cache=storage),
+            ],
+            dim=1,
+        )
+    torch.testing.assert_close(actual, expected, rtol=1e-12, atol=1e-12)
 
 
 def test_invalid_matrix_snapshot_and_settings(tmp_path):

@@ -13,7 +13,10 @@ class LatentAttentionImpl(nn.Module):
         super().__init__()
         self.rope_base = rope_base
         self.mode = mode
-        self.latent_features = 16 if mode == "a16" else 4
+        self.latent_features = 16 if mode in ("a16", "a16_gqa") else 4
+        self.query_heads = 4 if mode == "a16_gqa" else 1
+        self.kv_heads = 2 if mode == "a16_gqa" else 1
+        self.head_features = self.latent_features // self.query_heads
         self.q_proj = nn.Linear(
             width,
             self.latent_features,
@@ -25,8 +28,9 @@ class LatentAttentionImpl(nn.Module):
                 self.scoring = nn.Parameter(torch.empty(4))
                 nn.init.normal_(self.scoring, std=0.5)
         else:
-            self.k_proj = nn.Linear(width, self.latent_features, bias=False)
-            self.v_proj = nn.Linear(width, self.latent_features, bias=False)
+            kv_features = self.kv_heads * self.head_features
+            self.k_proj = nn.Linear(width, kv_features, bias=False)
+            self.v_proj = nn.Linear(width, kv_features, bias=False)
         self.out_proj = nn.Linear(
             16 if mode == "sma4_key_gelu16" else self.latent_features,
             width,
@@ -48,6 +52,31 @@ class LatentAttentionImpl(nn.Module):
         start = 0 if cache is None else cache.step(self.layer_id)
         q = self.q_proj(x)
         positions = start + torch.arange(x.shape[1], device=x.device)
+        if self.mode == "a16_gqa":
+            q = q.unflatten(-1, (self.query_heads, self.head_features)).transpose(1, 2)
+            k = (
+                self.k_proj(x)
+                .unflatten(-1, (self.kv_heads, self.head_features))
+                .transpose(1, 2)
+            )
+            v = (
+                self.v_proj(x)
+                .unflatten(-1, (self.kv_heads, self.head_features))
+                .transpose(1, 2)
+            )
+            if self.rope_base is not None:
+                q = rope(q, positions, base=self.rope_base)
+                k = rope(k, positions, base=self.rope_base)
+            if cache is not None:
+                cache.write(self.layer_id, k, v)
+                entry = cache.read_all(self.layer_id)
+                k, v = entry.keys, entry.values
+            mask = torch.arange(k.shape[2], device=x.device)[None, :] <= (
+                start + torch.arange(x.shape[1], device=x.device)[:, None]
+            )
+            z = F.scaled_dot_product_attention(q, k, v, attn_mask=mask, enable_gqa=True)
+            z = z.transpose(1, 2).flatten(-2)
+            return self.out_proj(z)
         if self.rope_base is not None:
             q = rope(q.unsqueeze(1), positions, base=self.rope_base).squeeze(1)
         if self.mode in ("sma4", "sma4_key", "sma4_key_gelu16"):

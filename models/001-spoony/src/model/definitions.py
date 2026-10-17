@@ -353,8 +353,17 @@ class LatentAttention(BlockDefinition):
 
     def __post_init__(self):
         _positive_integer(self.input_features, "input_features")
-        if self.mode not in ("a16", "a4", "sma4", "sma4_key", "sma4_key_gelu16"):
-            raise ValueError("mode must be a16, a4, sma4, sma4_key or sma4_key_gelu16")
+        if self.mode not in (
+            "a16",
+            "a16_gqa",
+            "a4",
+            "sma4",
+            "sma4_key",
+            "sma4_key_gelu16",
+        ):
+            raise ValueError(
+                "mode must be a16, a16_gqa, a4, sma4, sma4_key or sma4_key_gelu16"
+            )
         if self.rope_base is not None and (
             isinstance(self.rope_base, bool)
             or not isinstance(self.rope_base, (int, float))
@@ -382,6 +391,9 @@ class LatentAttention(BlockDefinition):
                 if self.mode in ("sma4_key", "sma4_key_gelu16")
                 else None,
             )
-        features = 16 if self.mode == "a16" else 4
-        shape = (0, 1, 0, features)
+        if self.mode == "a16_gqa":
+            shape = (0, 2, 0, 4)
+        else:
+            features = 16 if self.mode == "a16" else 4
+            shape = (0, 1, 0, features)
         return CacheEntry(name, False, torch.empty(shape), torch.empty(shape), 0, 0)
