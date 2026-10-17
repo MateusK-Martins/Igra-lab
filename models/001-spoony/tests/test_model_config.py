@@ -46,23 +46,26 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     assert model.embedding.num_embeddings == tokenizer.vocab_size
     assert model.lm_head.out_features == tokenizer.vocab_size
     assert model.lm_head.weight is model.embedding.weight
-    assert len(model.body) == 36
-    for index in range(0, 36, 6):
-        norm1, attention, norm2, memory, feedforward, norm3 = model.body[
-            index : index + 6
-        ]
+    assert len(model.body) == 24
+    for index in range(0, 24, 8):
+        norm1, attention, feedforward1, norm2, norm3, memory, feedforward2, norm4 = (
+            model.body[index : index + 8]
+        )
         assert isinstance(attention, ResidualImpl)
         assert isinstance(attention.branch, LatentAttentionImpl)
+        assert isinstance(feedforward1, ResidualImpl)
+        assert isinstance(feedforward1.branch, SwiGLUImpl)
         assert isinstance(memory, ResidualImpl)
         assert memory.branch.__class__.__name__ == "MatrixFastWeightsImpl"
-        assert isinstance(feedforward, ResidualImpl)
-        assert isinstance(feedforward.branch, SwiGLUImpl)
+        assert isinstance(feedforward2, ResidualImpl)
+        assert isinstance(feedforward2.branch, SwiGLUImpl)
         assert isinstance(norm1, RMSNormImpl)
         assert isinstance(norm2, RMSNormImpl)
         assert isinstance(norm3, RMSNormImpl)
+        assert isinstance(norm4, RMSNormImpl)
         assert attention.branch.mode == MODE
-    assert len(entries) == 12
-    assert len({entry.layer_id for entry in entries}) == 12
+    assert len(entries) == 6
+    assert len({entry.layer_id for entry in entries}) == 6
     assert all(
         isinstance(entry, (CacheEntry, MatrixCacheEntry)) for entry in entries[::2]
     )
@@ -87,9 +90,13 @@ def test_config_forward_and_next_token_loss_backward(tokenizer):
 def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokenizer):
     first, first_entries = build_model(tokenizer)
     second, second_entries = build_model(tokenizer)
-    weights = [first.body[index].branch.q_proj.weight for index in range(1, 36, 6)]
-    assert len({weight.data_ptr() for weight in weights}) == 6
-    gates = [first.body[index].branch.gate.weight for index in range(4, 36, 6)]
+    weights = [first.body[index].branch.q_proj.weight for index in range(1, 24, 8)]
+    assert len({weight.data_ptr() for weight in weights}) == 3
+    gates = [
+        first.body[start + offset].branch.gate.weight
+        for start in range(0, 24, 8)
+        for offset in (2, 6)
+    ]
     assert len({weight.data_ptr() for weight in gates}) == 6
     assert all(
         a.data_ptr() != b.data_ptr()
