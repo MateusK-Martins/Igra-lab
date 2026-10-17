@@ -3,8 +3,8 @@ from src.model.assembler import Model
 from src.model.definitions import *
 
 MODE = "a16"
-MATRIX_MODE = "single"
-RUN_NAME = "a16-diagonal-matrix-14m"
+MATRIX_MODE = "multi"
+RUN_NAME = "a16-multiscale-matrix-14m"
 
 SINGLE_SCALE = (0.99,)
 MULTI_SCALE = (0.99, 0.90, 0.99, 0.999)

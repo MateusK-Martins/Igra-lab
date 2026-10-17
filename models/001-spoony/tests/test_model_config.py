@@ -128,7 +128,7 @@ def test_config_cached_chunks_match_full_logits_across_window_boundary(tokenizer
         else:
             assert entry.keys.shape == (1, 1, 261, 16 if MODE == "a16" else 4)
     for entry in entries[1::2]:
-        assert entry.state.shape == (1, 1, 64)
+        assert entry.state.shape == (1, 1, 256)
 
 
 def test_config_state_dict_round_trip_preserves_logits_and_tying(tokenizer):

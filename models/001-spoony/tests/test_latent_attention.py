@@ -113,7 +113,7 @@ def test_causality_future_gradient_and_residual_once(mode):
 
 @pytest.mark.parametrize(
     "mode,count",
-    [("a16", 10563120), ("a4", 10452528), ("sma4", 10473408), ("sma4_key", 10482600)],
+    [("a16", 10572360), ("a4", 10461768), ("sma4", 10482648), ("sma4_key", 10491840)],
 )
 def test_full_backbone_and_parameter_count(mode, count):
     with patch("configs.model.model.MODE", mode):
@@ -297,7 +297,7 @@ def test_keyed_matrix_cache_cpu_storage_cuda_reads():
 def test_gelu16_parameter_count_and_aggregation_width():
     with patch("configs.model.model.MODE", "sma4_key_gelu16"):
         model, entries = build_model(SimpleNamespace(vocab_size=8192))
-    assert sum(p.numel() for p in model.parameters()) == 10_510_728
+    assert sum(p.numel() for p in model.parameters()) == 10_519_968
     assert len(entries) == 12
     for index in range(1, 36, 6):
         module = model.body[index].branch
