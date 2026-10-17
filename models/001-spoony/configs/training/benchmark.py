@@ -1,6 +1,7 @@
-"""Benchmark controls; the measured model is discarded before the fresh run."""
+"""Short measurement only; benchmark weights are discarded."""
 
-WARMUP_UPDATES = 10
-MEASURED_UPDATES = 100
-TRAINING_BUDGET_SECONDS = 1800
-MAX_TRAINING_TOKENS = 26_624_000
+WARMUP_UPDATES = 3
+MEASURED_UPDATES = 10
+
+# None measures the training defaults; smaller values preserve effective batch.
+MICRO_BATCH_SIZE = None

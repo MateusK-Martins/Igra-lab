@@ -1,3 +1,5 @@
+import json
+
 import torch
 from torch.utils.data import ConcatDataset
 
@@ -27,12 +29,37 @@ from src.training.optimizer import build_optimizer
 from src.training.precision import build_precision
 from src.training.scheduler import build_scheduler
 
+expected_artifacts_path = project_root() / "configs/data/wikipedia-artifacts.json"
+
+
+def ensure_prepared_data(data_directory):
+    if not data_directory.exists():
+        from scripts.prepare_wikipedia import main as prepare
+
+        print("Preparing pinned Wikipedia data before training", flush=True)
+        prepare()
+    expected = json.loads(expected_artifacts_path.read_text())
+    for relative, digest in expected.items():
+        path = data_directory / relative
+        if not path.is_file() or file_sha256(path) != digest:
+            raise ValueError(
+                f"Prepared data does not match pinned Wikipedia artifact: {relative}"
+            )
+
 
 def main() -> None:
     device = torch.device(run_config.device)
     context, scaler = build_precision(device, precision_config)
 
+    if run_config.resume_from is None and any(
+        checkpoint_config.directory.glob("step-*.pt")
+    ):
+        raise FileExistsError(
+            "Checkpoints already exist. Use --resume-latest or choose a new run directory."
+        )
+    torch.set_num_threads(4)
     data_directory = preparation_config.output_directory
+    ensure_prepared_data(data_directory)
     tokenizer = ByteLevelBPETokenizer.load(data_directory / "tokenizer.json")
 
     train_loader = build_split_dataloader(
@@ -135,6 +162,39 @@ def main() -> None:
     finally:
         writer.close()
 
+    from src.training.export import export_model
+
+    export_model(
+        logging_config.directory.parent / "model",
+        model=model,
+        tokenizer_path=data_directory / "tokenizer.json",
+        manifest=manifest,
+        state=state,
+    )
+    print(
+        f"Training complete. Model: {logging_config.directory.parent / 'model'}",
+        flush=True,
+    )
+
 
 if __name__ == "__main__":
+    import argparse
+    from dataclasses import replace
+    from pathlib import Path
+
+    parser = argparse.ArgumentParser(
+        description="Prepare pinned Wikipedia data and train the configured model."
+    )
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--resume", type=Path)
+    group.add_argument("--resume-latest", action="store_true")
+    arguments = parser.parse_args()
+    resume = arguments.resume
+    if arguments.resume_latest:
+        candidates = sorted(checkpoint_config.directory.glob("step-*.pt"))
+        if not candidates:
+            parser.error("No checkpoints exist in the configured checkpoint directory")
+        resume = candidates[-1]
+    if resume is not None:
+        run_config = replace(run_config, resume_from=resume)
     main()

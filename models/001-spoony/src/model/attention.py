@@ -108,19 +108,24 @@ class GQAAttentionImpl(nn.Module):
         else:
             key_start_position = start_position
 
-        key_positions = torch.arange(
-            key_start_position,
-            key_start_position + k.shape[2],
-            device=q.device,
-        )
+        causal = cache is None and self.window_size == 0
+        attention_mask = None
+        if not causal:
+            key_positions = torch.arange(
+                key_start_position,
+                key_start_position + k.shape[2],
+                device=q.device,
+            )
 
-        query_positions = positions[:, None]
-        retained_positions = key_positions[None, :]
+            query_positions = positions[:, None]
+            retained_positions = key_positions[None, :]
 
-        attention_mask = retained_positions <= query_positions
+            attention_mask = retained_positions <= query_positions
 
-        if self.window_size > 0:
-            attention_mask &= retained_positions > query_positions - self.window_size
+            if self.window_size > 0:
+                attention_mask &= (
+                    retained_positions > query_positions - self.window_size
+                )
 
         attended = F.scaled_dot_product_attention(
             q,
@@ -128,7 +133,7 @@ class GQAAttentionImpl(nn.Module):
             v,
             attn_mask=attention_mask,
             dropout_p=self.dropout if self.training else 0.0,
-            is_causal=False,
+            is_causal=causal,
             enable_gqa=True,
         )
 

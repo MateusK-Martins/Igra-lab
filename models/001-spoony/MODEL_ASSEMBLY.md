@@ -1,3 +1,10 @@
+Current 70M recipe: width 768, nine layers, unbounded causal attention,
+2048-token training context. See [CLOUD_TRAINING.md](CLOUD_TRAINING.md).
+Uncached unbounded attention uses SDPA is_causal=True with no explicit mask;
+cached/windowed paths retain the position-aware mask and write-before-read policy.
+
+Current experiment: [30M English Wikipedia preparation](WIKIPEDIA_600M.md). No training launched.
+
 Current 30M comparison: see [COMPARISON_30M.md](COMPARISON_30M.md).
 
 > **Codename branch:** the active larger TinyStories recipe and comparison

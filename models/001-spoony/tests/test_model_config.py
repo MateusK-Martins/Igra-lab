@@ -50,13 +50,13 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
         assert isinstance(feedforward.branch, SwiGLUImpl)
         assert isinstance(norm1, RMSNormImpl)
         assert isinstance(norm2, RMSNormImpl)
-        assert attention.branch.window_size == 512
+        assert attention.branch.window_size == 0
         assert attention.branch.dropout == 0
     assert [entry.layer_id for entry in entries] == [
         model.body[index].branch.layer_id for index in range(1, 36, 4)
     ]
     assert len({entry.layer_id for entry in entries}) == 9
-    assert all(entry.keys.shape == (0, 2, 0, 64) for entry in entries)
+    assert all(entry.keys.shape == (0, 2, 0, 96) for entry in entries)
 
 
 def test_config_forward_and_next_token_loss_backward(tokenizer):
@@ -96,7 +96,7 @@ def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokeni
     assert all(entry.count == 0 for entry in second_entries)
 
 
-def test_config_cached_chunks_match_full_logits_across_window_boundary(tokenizer):
+def test_config_cached_chunks_match_full_logits_unbounded(tokenizer):
     model, entries = build_model(tokenizer)
     # Different chunk sizes use different matrix kernels; compare in float64
     # to distinguish cache semantics from accumulated float32 rounding.
@@ -115,7 +115,7 @@ def test_config_cached_chunks_match_full_logits_across_window_boundary(tokenizer
         )
     torch.testing.assert_close(actual, expected, rtol=1e-7, atol=1e-9)
     assert all(entry.count == 517 for entry in entries)
-    assert all(entry.keys.shape == (1, 2, 517, 64) for entry in entries)
+    assert all(entry.keys.shape == (1, 2, 517, 96) for entry in entries)
 
 
 def test_config_state_dict_round_trip_preserves_logits_and_tying(tokenizer):
@@ -137,7 +137,10 @@ def test_configured_embedding_scale_and_initial_next_token_loss():
 
     vocabulary = 8192
     model, _ = build_model(SimpleNamespace(vocab_size=vocabulary))
-    assert model.embedding.weight.std().item() == pytest.approx(0.02, rel=0.02)
+    assert sum(parameter.numel() for parameter in model.parameters()) == 70_006_272
+    assert model.embedding.weight.std().item() == pytest.approx(
+        0.016329931618554522, rel=0.02
+    )
     tokens = torch.randint(vocabulary, (2, 17))
     with torch.no_grad():
         loss = F.cross_entropy(

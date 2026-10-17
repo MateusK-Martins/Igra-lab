@@ -312,3 +312,26 @@ def test_cuda_attention_with_cpu_storage_matches_uncached_forward():
         )
     torch.testing.assert_close(actual, expected)
     assert cache.entries[module.layer_id].keys.device.type == "cpu"
+
+
+def test_unbounded_uncached_uses_causal_kernel_but_cached_offsets_use_mask():
+    recipe = definition()
+    module = build_block(recipe, 0).eval()
+    cache = storage_for(recipe)
+    x = torch.randn(1, 3, 6)
+    original = F.scaled_dot_product_attention
+    with (
+        torch.no_grad(),
+        patch(
+            "src.model.attention.F.scaled_dot_product_attention", wraps=original
+        ) as sdpa,
+    ):
+        expected = module(x)
+        assert sdpa.call_args.kwargs["is_causal"] is True
+        assert sdpa.call_args.kwargs["attn_mask"] is None
+        actual = torch.cat(
+            [module(x[:, :2], cache=cache), module(x[:, 2:], cache=cache)], dim=1
+        )
+        assert sdpa.call_args.kwargs["is_causal"] is False
+        assert sdpa.call_args.kwargs["attn_mask"].shape == (1, 3)
+    torch.testing.assert_close(actual, expected)

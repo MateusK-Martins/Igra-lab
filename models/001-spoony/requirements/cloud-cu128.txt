@@ -1,0 +1,5 @@
+# Linux NVIDIA GPU, Python 3.13, driver compatible with CUDA 12.8.
+--extra-index-url https://download.pytorch.org/whl/cu128
+-r base.txt
+-c cloud-cu128.lock.txt
+torch==2.11.0+cu128
