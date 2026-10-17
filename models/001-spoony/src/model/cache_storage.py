@@ -23,10 +23,19 @@ class MatrixCacheEntry:
     keys: Tensor | None = None
 
 
+@dataclass
+class StateEntry:
+    """Fixed-size recurrent state carried between inference chunks."""
+
+    layer_id: str
+    state: Tensor
+    count: int = 0
+
+
 class CacheStorage:
     def __init__(
         self,
-        entries: list[CacheEntry | MatrixCacheEntry],
+        entries: list[CacheEntry | MatrixCacheEntry | StateEntry],
         storage_device: torch.device,
         read_device: torch.device,
     ) -> None:
@@ -35,10 +44,27 @@ class CacheStorage:
 
         self.entries: dict[str, CacheEntry] = {}
         self.matrices: dict[str, MatrixCacheEntry] = {}
+        self.states: dict[str, StateEntry] = {}
 
         for entry in entries:
-            if entry.layer_id in self.entries or entry.layer_id in self.matrices:
+            if (
+                entry.layer_id in self.entries
+                or entry.layer_id in self.matrices
+                or entry.layer_id in self.states
+            ):
                 raise ValueError(f"Duplicate cache layer_id: {entry.layer_id!r}")
+
+            if isinstance(entry, StateEntry):
+                if (
+                    entry.state.ndim != 3
+                    or not entry.state.is_floating_point()
+                    or type(entry.count) is not int
+                    or entry.count < 0
+                ):
+                    raise ValueError("Invalid recurrent state cache")
+                entry.state = entry.state.to(self.storage_device)
+                self.states[entry.layer_id] = entry
+                continue
 
             if isinstance(entry, MatrixCacheEntry):
                 if (
@@ -92,10 +118,22 @@ class CacheStorage:
                 }
                 for entry in self.entries.values()
             ],
+            "states": [
+                {
+                    "layer_id": e.layer_id,
+                    "state": e.state.detach().cpu(),
+                    "count": e.count,
+                }
+                for e in self.states.values()
+            ],
         }
 
         if not self.matrices:
             snapshot.pop("matrices")
+        if not self.states:
+            snapshot.pop("states")
+        elif snapshot["format_version"] < 4:
+            snapshot["format_version"] = 4
         path.parent.mkdir(parents=True, exist_ok=True)
         torch.save(snapshot, path)
 
@@ -116,6 +154,7 @@ class CacheStorage:
             1,
             2,
             3,
+            4,
         ):
             raise ValueError("Unsupported cache snapshot format_version")
         records = snapshot.get("entries")
@@ -152,14 +191,14 @@ class CacheStorage:
                 raise ValueError("Invalid unbounded cache count or pointer")
             entries.append(entry)
 
-        if snapshot["format_version"] in (2, 3):
+        if snapshot["format_version"] in (2, 3) or "matrices" in snapshot:
             records = snapshot.get("matrices")
             if not isinstance(records, list):
                 raise ValueError("Matrix snapshot records must be a list")
             for record in records:
                 fields = {"layer_id", "matrices", "count"}
                 if (
-                    snapshot["format_version"] == 3
+                    snapshot["format_version"] in (3, 4)
                     and isinstance(record, dict)
                     and "keys" in record
                 ):
@@ -173,6 +212,24 @@ class CacheStorage:
                 if "keys" in record and not isinstance(record["keys"], Tensor):
                     raise TypeError("Invalid matrix key tensor")
                 entries.append(MatrixCacheEntry(**record))
+        if snapshot["format_version"] == 4:
+            records = snapshot.get("states")
+            if not isinstance(records, list):
+                raise ValueError("State snapshot records must be a list")
+            for record in records:
+                if (
+                    not isinstance(record, dict)
+                    or set(record) != {"layer_id", "state", "count"}
+                    or not isinstance(record["layer_id"], str)
+                    or not record["layer_id"]
+                    or not isinstance(record["state"], Tensor)
+                    or record["state"].ndim != 3
+                    or not record["state"].is_floating_point()
+                    or type(record["count"]) is not int
+                    or record["count"] < 0
+                ):
+                    raise ValueError("Invalid recurrent state snapshot")
+                entries.append(StateEntry(**record))
         return cls(
             entries=entries,
             storage_device=storage_device,
@@ -182,7 +239,31 @@ class CacheStorage:
     def step(self, layer_id: str) -> int:
         if layer_id in self.matrices:
             return self.matrices[layer_id].count
+        if layer_id in self.states:
+            return self.states[layer_id].count
         return self.entries[layer_id].count
+
+    def read_state(self, layer_id: str, *, like: Tensor) -> Tensor:
+        entry = self.states[layer_id]
+        if entry.state.shape[0] == 0:
+            state = like.new_zeros((like.shape[0], 1, entry.state.shape[-1]))
+            entry.state = state.to(self.storage_device)
+        if entry.state.shape[0] != like.shape[0]:
+            raise ValueError("Recurrent state cache batch size mismatch")
+        return entry.state.to(device=self.read_device, dtype=like.dtype)
+
+    def write_state(self, layer_id: str, state: Tensor, *, tokens: int) -> None:
+        if state.ndim != 3 or state.shape[1] != 1 or not state.is_floating_point():
+            raise ValueError("Recurrent state must have shape [batch, 1, features]")
+        entry = self.states[layer_id]
+        if entry.state.shape[0] not in (0, state.shape[0]):
+            raise ValueError("Recurrent state cache batch size mismatch")
+        if entry.state.shape[-1] != state.shape[-1]:
+            raise ValueError("Recurrent state cache feature size mismatch")
+        if type(tokens) is not int or tokens < 0:
+            raise ValueError("tokens must be a nonnegative integer")
+        entry.state = state.detach().to(self.storage_device)
+        entry.count += tokens
 
     def write(
         self,
