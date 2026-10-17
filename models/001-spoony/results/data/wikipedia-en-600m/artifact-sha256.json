@@ -1,0 +1,10 @@
+{
+  "data/processed/wikipedia-en-600m/preparation-report.json": "d2419656e823da01a6e19f745e2e9fc13bff476c57f489e0da22e6dbca67e511",
+  "data/processed/wikipedia-en-600m/tokenizer.json": "1d40abc4915bc2a585c3a52595a2565275a2cae2015476ff51d6aef40f617729",
+  "data/processed/wikipedia-en-600m/train/documents.jsonl": "fc1250577ad2302ece0e38fbfe9738a7c853020e8c3933150c4513f661fe3946",
+  "data/processed/wikipedia-en-600m/train/metadata.json": "f02a8013f58c0dd826584909ba0a32f52881dafda2753c4c3886af197ac09d47",
+  "data/processed/wikipedia-en-600m/train/tokens.bin": "751ed4c3a2decbfc0af0f6c146f186822a4a8fe81af9f28902b7a8124a4fc6ec",
+  "data/processed/wikipedia-en-600m/validation/documents.jsonl": "c1917fbeebd7ad9dac5f8b559cc86cb7708a3a08cf62c72e1512d5922b38da56",
+  "data/processed/wikipedia-en-600m/validation/metadata.json": "b8d8238e882213ce4b1ac1187062822b7807194437f8376695d1a466cc9f43d1",
+  "data/processed/wikipedia-en-600m/validation/tokens.bin": "0cb831ae831f2bab2a278cc973ee50d34381789807609a962c9b0f4cf1d60a10"
+}

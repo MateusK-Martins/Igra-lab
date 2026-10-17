@@ -1,3 +1,10 @@
+Current 70M recipe: width 768, nine layers, unbounded causal attention,
+2048-token training context. See [CLOUD_TRAINING.md](CLOUD_TRAINING.md).
+Uncached unbounded attention uses SDPA is_causal=True with no explicit mask;
+cached/windowed paths retain the position-aware mask and write-before-read policy.
+
+Current experiment: [30M English Wikipedia preparation](WIKIPEDIA_600M.md). No training launched.
+
 # T16 model assembly
 
 Editable definitions live in configs/model/model.py; runtime implementation
@@ -9,7 +16,7 @@ independent modules/cache entries for every occurrence.
 Each layer is RMSNorm -> residual TideMixer -> residual SwiGLU -> RMSNorm.
 Embedding and LM head are tied. TideMixer projects full-width Q and signed V,
 plus independent feature-wise retention and write gates. Six layers use TideMixer; layers 3, 6 and 9 use causal GQAAttention with
-one 16-dimensional query/KV head and RoPE. Width is 512; SwiGLU width is 1152.
+one 16-dimensional query/KV head and RoPE. Width is 768; SwiGLU width is 2368.
 
 TideMixer(input_features,eps=1e-6,retention_initials=None,write_initials=None,
 residual=False) accepts per-feature initial probability tuples. None selects
@@ -25,7 +32,7 @@ persistent cache. Optional external CacheStorage stores raw S as value_sum
 StateEntry IDs are TideMixerImpl-<expanded_index>. Full sequence, chunks,
 single tokens and saved/restored cache states produce equivalent outputs.
 CacheStorage handles both recurrent StateEntry and attention CacheEntry objects.
-The six recurrent entries remain constant-size [B,1,512]. The three attention
+The six recurrent entries remain constant-size [B,1,768]. The three attention
 entries append rotated keys and values [B,1,T,16]; memory grows with context.
 Mixed format-v1 snapshots restore both kinds and their token counts. Attention
 uses pre-write counts for absolute positions and explicit causal masks. The

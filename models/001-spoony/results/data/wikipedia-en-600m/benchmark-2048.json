@@ -1,0 +1,37 @@
+{
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "parameters": 69725184,
+  "context_length": 2048,
+  "loader": {
+    "batch_size": 2,
+    "shuffle": true,
+    "num_workers": 0,
+    "pin_memory": true,
+    "drop_last": false,
+    "seed": 42
+  },
+  "training": {
+    "accumulation_steps": 4,
+    "max_grad_norm": 1.0,
+    "validation_interval": 5000
+  },
+  "precision": {
+    "mode": "bf16"
+  },
+  "scheduler": {
+    "warmup_steps": 1000,
+    "total_steps": 36621,
+    "min_lr_ratio": 0.1
+  },
+  "measured_updates": 10,
+  "tokens_per_update": 16384,
+  "mean_update_seconds": 1.4824264558992581,
+  "tokens_per_second": 11052.150300475623,
+  "peak_allocated_vram_bytes": 5232236544,
+  "final_benchmark_loss": 9.01302719116211,
+  "validation_loss": 8.992045207101791,
+  "full_validation_seconds": 46.783176886994625,
+  "training_only_seconds_for_600m_tokens": 54288.07821896698,
+  "weights_save_load_logits_exact": true,
+  "benchmark_weights_discarded": true
+}

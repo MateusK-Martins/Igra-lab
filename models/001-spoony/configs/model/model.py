@@ -1,4 +1,4 @@
-"""Two Tide layers per compressed A16 RoPE layer; preserve the Tide30M FFN and width."""
+"""70M T16: six Tide mixers, three A16 attention layers, FFN width 2368."""
 
 from functools import partial
 
@@ -20,8 +20,8 @@ def build_model(tokenizer: Tokenizer):
     for layer in range(9):
         mixer = (
             GQAAttention(
-                input_features=512,
-                output_features=512,
+                input_features=768,
+                output_features=768,
                 num_query_heads=1,
                 num_kv_heads=1,
                 head_features=16,
@@ -32,29 +32,29 @@ def build_model(tokenizer: Tokenizer):
             )
             if layer % 3 == 2
             else TideMixer(
-                input_features=512,
+                input_features=768,
                 eps=1e-6,
                 residual=True,
-                retention_initials=tuple(0.90 + 0.095 * j / 511 for j in range(512)),
-                write_initials=tuple(0.20 - 0.18 * j / 511 for j in range(512)),
+                retention_initials=tuple(0.90 + 0.095 * j / 767 for j in range(768)),
+                write_initials=tuple(0.20 - 0.18 * j / 767 for j in range(768)),
             )
         )
         blocks.extend(
             [
-                RMSNorm(input_features=512, eps=1e-6),
+                RMSNorm(input_features=768, eps=1e-6),
                 mixer,
                 SwiGLU(
-                    input_features=512,
-                    hidden_features=1152,
-                    output_features=512,
+                    input_features=768,
+                    hidden_features=2368,
+                    output_features=768,
                     residual=True,
                 ),
-                RMSNorm(input_features=512, eps=1e-6),
+                RMSNorm(input_features=768, eps=1e-6),
             ]
         )
     return Model(
         tokenizer=tokenizer,
-        input=Embedding(output_features=512, init_std=0.02),
+        input=Embedding(output_features=768, init_std=0.016329931618554522),
         blocks=blocks,
-        lm_head=LMHead(input_features=512, tie_to_embedding=True),
+        lm_head=LMHead(input_features=768, tie_to_embedding=True),
     ).assemble()

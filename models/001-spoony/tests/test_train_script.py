@@ -57,6 +57,17 @@ def configured_script(tmp_path, monkeypatch):
         "preparation_config",
         replace(train.preparation_config, output_directory=data),
     )
+    expected_path = tmp_path / "expected-artifacts.json"
+    expected_path.write_text(
+        json.dumps(
+            {
+                path.relative_to(data).as_posix(): file_sha256(path)
+                for path in data.rglob("*")
+                if path.is_file()
+            }
+        )
+    )
+    monkeypatch.setattr(train, "expected_artifacts_path", expected_path)
     monkeypatch.setattr(train, "run_config", RunConfig("cpu"))
     monkeypatch.setattr(train, "precision_config", PrecisionConfig("fp32"))
     monkeypatch.setattr(train, "chunking_config", ChunkingConfig(4, 4))
@@ -200,3 +211,55 @@ def test_run_config_rejects_unsupported_device(device):
 def test_run_config_rejects_nonpath_checkpoint(path):
     with pytest.raises(ConfigError, match="resume_from"):
         RunConfig("cpu", path)
+
+
+def test_final_export_reloads_matching_weights_and_tokenizer(configured_script):
+    root, models, _, _ = configured_script
+    train.main()
+    exported = root / "run/model"
+    saved = torch.load(exported / "model.pt", weights_only=True)
+    restored = TinyModel(models[0].embedding.num_embeddings)
+    restored.load_state_dict(saved["model"])
+    models[0].eval()
+    restored.eval()
+    ids = torch.tensor([[1, 2, 3]])
+    with torch.no_grad():
+        torch.testing.assert_close(restored(ids), models[0](ids), rtol=0, atol=0)
+    assert (exported / "tokenizer.json").read_bytes() == (
+        root / "data/tokenizer.json"
+    ).read_bytes()
+    assert json.loads((exported / "training-state.json").read_text())["updates"] == 3
+
+
+def test_fresh_run_refuses_existing_checkpoints(configured_script):
+    train.main()
+    with pytest.raises(FileExistsError, match="resume-latest"):
+        train.main()
+
+
+def test_preflight_rejects_changed_token_bytes(configured_script):
+    root, _, writers, _ = configured_script
+    path = root / "data/train/tokens.bin"
+    content = bytearray(path.read_bytes())
+    content[0] ^= 1
+    path.write_bytes(content)
+    with pytest.raises(ValueError, match="pinned Wikipedia artifact"):
+        train.main()
+    assert not writers
+
+
+def test_missing_data_invokes_preparation_and_verifies_artifacts(
+    configured_script, monkeypatch
+):
+    import shutil
+
+    from scripts import prepare_wikipedia
+
+    root, _, _, _ = configured_script
+    data = root / "data"
+    cached = root / "cached-data"
+    data.rename(cached)
+    prepare = MagicMock(side_effect=lambda: shutil.copytree(cached, data))
+    monkeypatch.setattr(prepare_wikipedia, "main", prepare)
+    train.ensure_prepared_data(data)
+    prepare.assert_called_once_with()

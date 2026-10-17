@@ -152,7 +152,9 @@ def test_configured_embedding_scale_and_initial_next_token_loss(tokenizer):
     import math
 
     model, _ = build_model(tokenizer)
-    assert model.embedding.weight.std().item() == pytest.approx(0.02, rel=0.02)
+    assert model.embedding.weight.std().item() == pytest.approx(
+        0.016329931618554522, rel=0.02
+    )
     tokens = torch.randint(tokenizer.vocab_size, (2, 17))
     with torch.no_grad():
         loss = F.cross_entropy(

@@ -91,6 +91,10 @@ def train_loop(
                 writer.add_scalar("train/loss", loss, state.updates)
                 writer.add_scalar("train/learning_rate", learning_rate, state.updates)
                 writer.add_scalar("train/tokens", state.tokens, state.updates)
+                print(
+                    f"update {state.updates}/{total_steps} tokens={state.tokens} loss={loss:.5f} lr={learning_rate:.3g}",
+                    flush=True,
+                )
 
             if did_update and (
                 state.updates % config.validation_interval == 0

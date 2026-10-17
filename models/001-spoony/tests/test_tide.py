@@ -162,20 +162,20 @@ def test_parameter_count_and_ranged_initialization():
         vocab_size = 8192
 
     model, entries = build_model(Tokenizer())
-    assert sum(p.numel() for p in model.parameters()) == 26_527_744
+    assert sum(p.numel() for p in model.parameters()) == 69_725_184
     assert len(entries) == 9
     assert all(
-        e.key_sum.numel() == 0 and e.value_sum.shape == (0, 1, 512)
+        e.key_sum.numel() == 0 and e.value_sum.shape == (0, 1, 768)
         for e in entries
         if hasattr(e, "key_sum")
     )
     for index in [1, 5, 13, 17, 25, 29]:
         m = model.body[index].branch
         torch.testing.assert_close(
-            m.value_decay_gate.bias.sigmoid(), torch.linspace(0.90, 0.995, 512)
+            m.value_decay_gate.bias.sigmoid(), torch.linspace(0.90, 0.995, 768)
         )
         torch.testing.assert_close(
-            m.write_gate.bias.sigmoid(), torch.linspace(0.20, 0.02, 512)
+            m.write_gate.bias.sigmoid(), torch.linspace(0.20, 0.02, 768)
         )
         assert not hasattr(m, "k_proj")
         assert not hasattr(m, "read_up")

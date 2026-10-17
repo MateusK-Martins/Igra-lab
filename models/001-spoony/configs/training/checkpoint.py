@@ -2,6 +2,6 @@ from src.config.paths import results_path
 from src.config.types import CheckpointConfig
 
 checkpoint_config = CheckpointConfig(
-    directory=results_path("pretraining/t16/checkpoints"),
-    interval=1000,
+    directory=results_path("pretraining/wikipedia-en-600m/checkpoints"),
+    interval=10000,
 )
