@@ -1,0 +1,209 @@
+{
+  "branch": "model/001-spoony-a16-diagonal-matrix-14m",
+  "training_seconds_including_validation_and_saving": 213.3626878139985,
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "peak_allocated_vram_bytes": 607913984,
+  "training_state": {
+    "updates": 9000,
+    "batches": 9000,
+    "tokens": 18429440,
+    "completed_epochs": 2,
+    "last_loss": 2.4890599250793457,
+    "last_validation_loss": 2.2319594798264677,
+    "last_validation_perplexity": 9.31810684482466,
+    "batches_in_epoch": 2728
+  },
+  "validation_curve": [
+    {
+      "update": 500,
+      "loss": 3.4598374366760254
+    },
+    {
+      "update": 1000,
+      "loss": 3.0108094215393066
+    },
+    {
+      "update": 1500,
+      "loss": 2.8201253414154053
+    },
+    {
+      "update": 2000,
+      "loss": 2.6816329956054688
+    },
+    {
+      "update": 2500,
+      "loss": 2.598407745361328
+    },
+    {
+      "update": 3000,
+      "loss": 2.5362391471862793
+    },
+    {
+      "update": 3500,
+      "loss": 2.479694366455078
+    },
+    {
+      "update": 4000,
+      "loss": 2.435166835784912
+    },
+    {
+      "update": 4500,
+      "loss": 2.4047510623931885
+    },
+    {
+      "update": 5000,
+      "loss": 2.3660407066345215
+    },
+    {
+      "update": 5500,
+      "loss": 2.338855743408203
+    },
+    {
+      "update": 6000,
+      "loss": 2.304713487625122
+    },
+    {
+      "update": 6500,
+      "loss": 2.2899231910705566
+    },
+    {
+      "update": 7000,
+      "loss": 2.2700040340423584
+    },
+    {
+      "update": 7500,
+      "loss": 2.256077289581299
+    },
+    {
+      "update": 8000,
+      "loss": 2.2460153102874756
+    },
+    {
+      "update": 8500,
+      "loss": 2.2386116981506348
+    },
+    {
+      "update": 9000,
+      "loss": 2.231959581375122
+    }
+  ],
+  "best_saved_validation": {
+    "update": 9000,
+    "loss": 2.231959581375122
+  },
+  "subset": {
+    "dataset": "roneneldan/TinyStories",
+    "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "selection": "first unique nonempty documents in source order",
+    "splits": {
+      "train": {
+        "documents": 30000,
+        "duplicates_or_empty_skipped": 0,
+        "sha256": "69a5f3422b4c51f98ca0692a3514822a6527999dc59c624baaefb1f8f04e65d3",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-train.txt"
+      },
+      "validation": {
+        "documents": 256,
+        "duplicates_or_empty_skipped": 0,
+        "sha256": "ab09f4248a55ca51d899ba51ce90d96a2c990d52a821338aa1743a525fda7d4a",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-valid.txt"
+      }
+    }
+  },
+  "benchmark": {
+    "scheduler": {
+      "warmup_steps": 300,
+      "total_steps": 9000,
+      "min_lr_ratio": 0.1
+    },
+    "optimizer": {
+      "learning_rate": 0.0003,
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01
+    },
+    "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+    "parameters": 10394520,
+    "vocab_size": 8192,
+    "initial_validation_loss": 9.240924411349825,
+    "validation_seconds": 0.3726749950001249,
+    "measured_updates": 100,
+    "mean_update_seconds": 0.02282445658973302,
+    "p95_update_seconds": 0.023151945999416057,
+    "tokens_per_update": 2048,
+    "peak_allocated_vram_bytes": 600573952,
+    "benchmark_final_loss": 6.301399230957031,
+    "torch_cpu_threads": 4
+  },
+  "torch_cpu_threads": 4,
+  "seed": 42,
+  "comparison": "Single seed, equal-token baseline; include preparation separately and rebenchmark each architecture for equal-time runs.",
+  "greedy_samples_from_best_saved_checkpoint": [
+    {
+      "prompt": "Once upon a time, there was a little girl named Lily.",
+      "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, scary dog. The dog was very big and had a long tail. Lily wanted to help the dog, but she was too small to play with.\nLily's mom saw her and said, \"Don't worry, Lily. We"
+    },
+    {
+      "prompt": "Tom found a small dog outside his house. The dog was",
+      "text": "Tom found a small dog outside his house. The dog was very friendly and had a big smile. He said, \"Hello, little dog. Do you want to play with me?\"\nThe dog barked and wagged his tail. He wanted to play with the dog. The dog barked and wagged his tail. The dog barked and wagged his tail. The dog wagged his tail and"
+    },
+    {
+      "prompt": "One day, a boy lost his favorite toy. He felt",
+      "text": "One day, a boy lost his favorite toy. He felt sad and lonely. He wanted to play with the toy, but he was too small to play with. He wanted to play with the toy car, but he was too small.\nThe boy saw the toy and wanted to play with it. He ran to the boy and said, \"Hi, I am Tom."
+    }
+  ],
+  "best_checkpoint": "checkpoints/step-00009000.pt",
+  "architecture": {
+    "total_mixer_layers": 6,
+    "a16_layers": 3,
+    "matrix_memory_layers": 3,
+    "feedforward_layers": 6,
+    "feedforward_hidden_width": 1024,
+    "mixer_order": [
+      "A16",
+      "matrix-memory",
+      "A16",
+      "matrix-memory",
+      "A16",
+      "matrix-memory"
+    ],
+    "matrix_shape": "8x8",
+    "timescales": [
+      0.99
+    ],
+    "learned_retention_by_matrix_layer": [
+      {
+        "module": "body.5",
+        "learned_retention_mean": 0.9875454306602478,
+        "min": 0.983370304107666,
+        "max": 0.9894808530807495
+      },
+      {
+        "module": "body.13",
+        "learned_retention_mean": 0.9873926639556885,
+        "min": 0.9846776723861694,
+        "max": 0.9897972345352173
+      },
+      {
+        "module": "body.21",
+        "learned_retention_mean": 0.9869381785392761,
+        "min": 0.9840058088302612,
+        "max": 0.9888944625854492
+      }
+    ]
+  },
+  "final_metrics": {
+    "validation_loss": 2.231959581375122,
+    "perplexity": 9.31810779106592,
+    "tokens_per_second_including_validation_and_saving": 86376.11472192405,
+    "training_seconds_including_validation_and_saving": 213.3626878139985,
+    "peak_cuda_allocated_mib": 579.751953125,
+    "parameters": 10394520,
+    "tokens_processed": 18429440
+  },
+  "final_checkpoint_preserved_at": "/home/mateus/Documents/Igra-lab-checkpoints/a16-diagonal-matrix-14m/step-00009000.pt",
+  "checkpoint_sha256": "cf8e62f72f129a3d623502f677effddea4df4f1c48da609c53e8f43133ba966f"
+}

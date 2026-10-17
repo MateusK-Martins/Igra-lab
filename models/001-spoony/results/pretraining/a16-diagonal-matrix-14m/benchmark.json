@@ -14,15 +14,15 @@
     "weight_decay": 0.01
   },
   "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
-  "parameters": 10563120,
+  "parameters": 10394520,
   "vocab_size": 8192,
-  "initial_validation_loss": 9.21799666793258,
-  "validation_seconds": 0.4141842169992742,
+  "initial_validation_loss": 9.240924411349825,
+  "validation_seconds": 0.3726749950001249,
   "measured_updates": 100,
-  "mean_update_seconds": 0.027980779759818688,
-  "p95_update_seconds": 0.028452439997636247,
+  "mean_update_seconds": 0.02282445658973302,
+  "p95_update_seconds": 0.023151945999416057,
   "tokens_per_update": 2048,
-  "peak_allocated_vram_bytes": 674519040,
-  "benchmark_final_loss": 6.254364013671875,
+  "peak_allocated_vram_bytes": 600573952,
+  "benchmark_final_loss": 6.301399230957031,
   "torch_cpu_threads": 4
 }
