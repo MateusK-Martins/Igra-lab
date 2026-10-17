@@ -1,3 +1,4 @@
+from configs.model.model import RUN_NAME
 from src.config.paths import results_path
 from src.config.types import LoggingConfig, TrainingConfig
 
@@ -8,6 +9,6 @@ training_config = TrainingConfig(
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/a16-rope-14m/tensorboard"),
+    directory=results_path(f"pretraining/{RUN_NAME}/tensorboard"),
     interval=10,
 )

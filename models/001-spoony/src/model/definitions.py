@@ -6,7 +6,8 @@ import torch
 from torch import nn
 
 from src.model.attention import GQAAttentionImpl
-from src.model.cache_storage import CacheEntry, MatrixCacheEntry
+from src.model.cache_storage import CacheEntry, MatrixCacheEntry, StateEntry
+from src.model.fast_weights import MatrixFastWeightsImpl
 from src.model.feedforward import LinearImpl, SwiGLUImpl
 from src.model.latent_attention import LatentAttentionImpl
 from src.model.position import PositionRotation
@@ -31,7 +32,7 @@ class BlockDefinition(Protocol):
 
     def build(self) -> nn.Module: ...
 
-    def cache(self, layer_id: int) -> CacheEntry | MatrixCacheEntry | None:
+    def cache(self, layer_id: int) -> CacheEntry | MatrixCacheEntry | StateEntry | None:
         return None
 
     def unpack(self) -> list["BlockDefinition"]:
@@ -385,3 +386,45 @@ class LatentAttention(BlockDefinition):
         features = 16 if self.mode == "a16" else 4
         shape = (0, 1, 0, features)
         return CacheEntry(name, False, torch.empty(shape), torch.empty(shape), 0, 0)
+
+
+@dataclass(frozen=True)
+class MatrixFastWeights(BlockDefinition):
+    input_features: int
+    timescales: tuple[float, ...]
+    learned_decay: bool = True
+    residual: bool = False
+
+    @property
+    def output_features(self) -> int:
+        return self.input_features
+
+    def __post_init__(self) -> None:
+        _positive_integer(self.input_features, "input_features")
+        if not isinstance(self.timescales, tuple) or not self.timescales:
+            raise ValueError("timescales must be a nonempty tuple")
+        if any(
+            isinstance(value, bool)
+            or not isinstance(value, (int, float))
+            or not math.isfinite(value)
+            or not 0 < value < 1
+            for value in self.timescales
+        ):
+            raise ValueError("each timescale retention must be in (0, 1)")
+        if type(self.learned_decay) is not bool or type(self.residual) is not bool:
+            raise ValueError("learned_decay and residual must be booleans")
+
+    def build(self) -> nn.Module:
+        seed = torch.randint(0, 2**63 - 1, ()).item()
+        with torch.random.fork_rng(devices=[]):
+            torch.manual_seed(seed)
+            return MatrixFastWeightsImpl(
+                self.input_features,
+                timescales=self.timescales,
+                learned_decay=self.learned_decay,
+            )
+
+    def cache(self, layer_id: int) -> StateEntry:
+        module_name = f"MatrixFastWeightsImpl-{layer_id}"
+        state_width = len(self.timescales) * 64
+        return StateEntry(module_name, torch.empty(0, 1, state_width))
