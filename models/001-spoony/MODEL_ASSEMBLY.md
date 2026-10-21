@@ -1,3 +1,5 @@
+Active experiment: [Lantern 70M with shared TokenMLP, equal exposure](TOKEN_MLP_70M.md).
+
 Current 70M recipe: width 768, nine layers, unbounded causal attention,
 2048-token training context. See [CLOUD_TRAINING.md](CLOUD_TRAINING.md).
 Uncached unbounded attention uses SDPA is_causal=True with no explicit mask;

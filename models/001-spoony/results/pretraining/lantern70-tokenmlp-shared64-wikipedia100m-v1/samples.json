@@ -1,0 +1,21 @@
+{
+  "mode": "greedy",
+  "max_new_tokens": 64,
+  "samples": [
+    {
+      "prompt": "Once upon a time, there was a little girl named Lily.",
+      "continuation": "Once upon a time, there was a little girl named Lily.\n\nThe name of the name is derived from the name of the name of the name of the name of the name of the name of the name of the name of the name of the name of the name of the name of the name of the name of the name of the name of the name of the name of",
+      "generated_tokens": 64
+    },
+    {
+      "prompt": "Tom found a small dog outside his house. The dog was",
+      "continuation": "Tom found a small dog outside his house. The dog was found in the family home of the family home of the family home of the family home of the family home of the family home of the family home home home home home home home home home home home home home home home home home home home home home home home home home home home home home home home home home home home home",
+      "generated_tokens": 64
+    },
+    {
+      "prompt": "One day, a boy lost his favorite toy. He felt",
+      "continuation": "One day, a boy lost his favorite toy. He felt that the boy was a good friend of the family, and that the boy was a friend of the family, who had a good friend, who had a good friend, who had a good friend, who had a good friend, who had a good friend, who had a good friend, who had a good friend,",
+      "generated_tokens": 64
+    }
+  ]
+}

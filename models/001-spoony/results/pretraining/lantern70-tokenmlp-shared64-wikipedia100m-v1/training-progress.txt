@@ -1,0 +1,375 @@
+update 25/6104 tokens=409600 loss=10.64348 lr=2.5e-05
+update 50/6104 tokens=819200 loss=8.06715 lr=5e-05
+update 75/6104 tokens=1228800 loss=7.46357 lr=7.5e-05
+update 100/6104 tokens=1638400 loss=7.28275 lr=0.0001
+update 125/6104 tokens=2048000 loss=7.33358 lr=0.000125
+update 150/6104 tokens=2457600 loss=7.19382 lr=0.00015
+update 175/6104 tokens=2867200 loss=6.97505 lr=0.000175
+update 200/6104 tokens=3276800 loss=6.75823 lr=0.0002
+update 225/6104 tokens=3686400 loss=6.51212 lr=0.000225
+update 250/6104 tokens=4096000 loss=6.36787 lr=0.00025
+update 275/6104 tokens=4505600 loss=6.04627 lr=0.000275
+update 300/6104 tokens=4915200 loss=5.92335 lr=0.0003
+update 325/6104 tokens=5324800 loss=5.83717 lr=0.0003
+update 350/6104 tokens=5734400 loss=5.68779 lr=0.0003
+update 375/6104 tokens=6144000 loss=5.72170 lr=0.0003
+update 400/6104 tokens=6553600 loss=5.88902 lr=0.0003
+update 425/6104 tokens=6963200 loss=5.64315 lr=0.0003
+update 450/6104 tokens=7372800 loss=5.38230 lr=0.0003
+update 475/6104 tokens=7782400 loss=5.30272 lr=0.000299
+update 500/6104 tokens=8192000 loss=5.01414 lr=0.000299
+validation update=500 loss=5.288491 perplexity=198.044
+update 525/6104 tokens=8601600 loss=5.25894 lr=0.000299
+update 550/6104 tokens=9011200 loss=5.18864 lr=0.000299
+update 575/6104 tokens=9420800 loss=5.11188 lr=0.000299
+update 600/6104 tokens=9830400 loss=5.06423 lr=0.000298
+update 625/6104 tokens=10240000 loss=4.98202 lr=0.000298
+update 650/6104 tokens=10649600 loss=5.03554 lr=0.000298
+update 675/6104 tokens=11059200 loss=5.07615 lr=0.000297
+update 700/6104 tokens=11468800 loss=4.95195 lr=0.000297
+update 725/6104 tokens=11878400 loss=4.82432 lr=0.000296
+update 750/6104 tokens=12288000 loss=4.86345 lr=0.000296
+update 775/6104 tokens=12697600 loss=4.89076 lr=0.000296
+update 800/6104 tokens=13107200 loss=4.78644 lr=0.000295
+update 825/6104 tokens=13516800 loss=4.75893 lr=0.000295
+update 850/6104 tokens=13926400 loss=4.73885 lr=0.000294
+update 875/6104 tokens=14336000 loss=4.83447 lr=0.000294
+update 900/6104 tokens=14745600 loss=4.69503 lr=0.000293
+update 925/6104 tokens=15155200 loss=4.53351 lr=0.000292
+update 950/6104 tokens=15564800 loss=4.84890 lr=0.000292
+update 975/6104 tokens=15974400 loss=4.56208 lr=0.000291
+update 1000/6104 tokens=16384000 loss=4.73111 lr=0.00029
+validation update=1000 loss=4.688012 perplexity=108.637
+update 1025/6104 tokens=16793600 loss=4.78065 lr=0.00029
+update 1050/6104 tokens=17203200 loss=4.80833 lr=0.000289
+update 1075/6104 tokens=17612800 loss=4.57309 lr=0.000288
+update 1100/6104 tokens=18022400 loss=4.65183 lr=0.000288
+update 1125/6104 tokens=18432000 loss=4.54164 lr=0.000287
+update 1150/6104 tokens=18841600 loss=4.70388 lr=0.000286
+update 1175/6104 tokens=19251200 loss=4.57931 lr=0.000285
+update 1200/6104 tokens=19660800 loss=4.50465 lr=0.000284
+update 1225/6104 tokens=20070400 loss=4.44712 lr=0.000283
+update 1250/6104 tokens=20480000 loss=4.62260 lr=0.000283
+update 1275/6104 tokens=20889600 loss=4.58888 lr=0.000282
+update 1300/6104 tokens=21299200 loss=4.60761 lr=0.000281
+update 1325/6104 tokens=21708800 loss=4.37114 lr=0.00028
+update 1350/6104 tokens=22118400 loss=4.36704 lr=0.000279
+update 1375/6104 tokens=22528000 loss=4.43227 lr=0.000278
+update 1400/6104 tokens=22937600 loss=4.35769 lr=0.000277
+update 1425/6104 tokens=23347200 loss=4.28994 lr=0.000276
+update 1450/6104 tokens=23756800 loss=4.50777 lr=0.000275
+update 1475/6104 tokens=24166400 loss=4.19518 lr=0.000274
+update 1500/6104 tokens=24576000 loss=4.36251 lr=0.000273
+validation update=1500 loss=4.348554 perplexity=77.367
+update 1525/6104 tokens=24985600 loss=4.22750 lr=0.000271
+update 1550/6104 tokens=25395200 loss=4.38395 lr=0.00027
+update 1575/6104 tokens=25804800 loss=4.22440 lr=0.000269
+update 1600/6104 tokens=26214400 loss=4.55461 lr=0.000268
+update 1625/6104 tokens=26624000 loss=4.28193 lr=0.000267
+update 1650/6104 tokens=27033600 loss=4.10541 lr=0.000266
+update 1675/6104 tokens=27443200 loss=4.17449 lr=0.000264
+update 1700/6104 tokens=27852800 loss=4.24328 lr=0.000263
+update 1725/6104 tokens=28262400 loss=4.24856 lr=0.000262
+update 1750/6104 tokens=28672000 loss=4.03232 lr=0.000261
+update 1775/6104 tokens=29081600 loss=4.19399 lr=0.000259
+update 1800/6104 tokens=29491200 loss=3.93210 lr=0.000258
+update 1825/6104 tokens=29900800 loss=4.18867 lr=0.000257
+update 1850/6104 tokens=30310400 loss=4.15779 lr=0.000255
+update 1875/6104 tokens=30720000 loss=4.22137 lr=0.000254
+update 1900/6104 tokens=31129600 loss=4.16038 lr=0.000252
+update 1925/6104 tokens=31539200 loss=4.04471 lr=0.000251
+update 1950/6104 tokens=31948800 loss=4.09744 lr=0.00025
+update 1975/6104 tokens=32358400 loss=3.97789 lr=0.000248
+update 2000/6104 tokens=32768000 loss=3.89281 lr=0.000247
+validation update=2000 loss=3.972029 perplexity=53.092
+update 2025/6104 tokens=33177600 loss=4.14420 lr=0.000245
+update 2050/6104 tokens=33587200 loss=4.09707 lr=0.000244
+update 2075/6104 tokens=33996800 loss=4.08779 lr=0.000242
+update 2100/6104 tokens=34406400 loss=3.88355 lr=0.000241
+update 2125/6104 tokens=34816000 loss=4.01918 lr=0.000239
+update 2150/6104 tokens=35225600 loss=3.78081 lr=0.000238
+update 2175/6104 tokens=35635200 loss=3.88877 lr=0.000236
+update 2200/6104 tokens=36044800 loss=3.97142 lr=0.000235
+update 2225/6104 tokens=36454400 loss=4.04095 lr=0.000233
+update 2250/6104 tokens=36864000 loss=3.79333 lr=0.000232
+update 2275/6104 tokens=37273600 loss=4.07327 lr=0.00023
+update 2300/6104 tokens=37683200 loss=3.64210 lr=0.000228
+update 2325/6104 tokens=38092800 loss=3.79745 lr=0.000227
+update 2350/6104 tokens=38502400 loss=3.76771 lr=0.000225
+update 2375/6104 tokens=38912000 loss=3.71407 lr=0.000223
+update 2400/6104 tokens=39321600 loss=3.80170 lr=0.000222
+update 2425/6104 tokens=39731200 loss=3.81075 lr=0.00022
+update 2450/6104 tokens=40140800 loss=3.69495 lr=0.000218
+update 2475/6104 tokens=40550400 loss=3.97743 lr=0.000217
+update 2500/6104 tokens=40960000 loss=3.84569 lr=0.000215
+validation update=2500 loss=3.811296 perplexity=45.209
+update 2525/6104 tokens=41369600 loss=3.78078 lr=0.000213
+update 2550/6104 tokens=41779200 loss=3.79757 lr=0.000212
+update 2575/6104 tokens=42188800 loss=3.76969 lr=0.00021
+update 2600/6104 tokens=42598400 loss=3.80150 lr=0.000208
+update 2625/6104 tokens=43008000 loss=3.90825 lr=0.000206
+update 2650/6104 tokens=43417600 loss=3.76175 lr=0.000205
+update 2675/6104 tokens=43827200 loss=3.85186 lr=0.000203
+update 2700/6104 tokens=44236800 loss=3.96895 lr=0.000201
+update 2725/6104 tokens=44646400 loss=3.58889 lr=0.000199
+update 2750/6104 tokens=45056000 loss=3.69955 lr=0.000198
+update 2775/6104 tokens=45465600 loss=3.77849 lr=0.000196
+update 2800/6104 tokens=45875200 loss=3.76178 lr=0.000194
+update 2825/6104 tokens=46284800 loss=3.85007 lr=0.000192
+update 2850/6104 tokens=46694400 loss=3.73319 lr=0.000191
+update 2875/6104 tokens=47104000 loss=3.63963 lr=0.000189
+update 2900/6104 tokens=47513600 loss=3.64719 lr=0.000187
+update 2925/6104 tokens=47923200 loss=3.61473 lr=0.000185
+update 2950/6104 tokens=48332800 loss=3.60210 lr=0.000183
+update 2975/6104 tokens=48742400 loss=3.79543 lr=0.000182
+update 3000/6104 tokens=49152000 loss=3.65886 lr=0.00018
+validation update=3000 loss=3.717647 perplexity=41.167
+update 3025/6104 tokens=49561600 loss=3.40578 lr=0.000178
+update 3050/6104 tokens=49971200 loss=3.62228 lr=0.000176
+update 3075/6104 tokens=50380800 loss=3.82281 lr=0.000174
+update 3100/6104 tokens=50790400 loss=3.75260 lr=0.000172
+update 3125/6104 tokens=51200000 loss=3.61154 lr=0.000171
+update 3150/6104 tokens=51609600 loss=3.62785 lr=0.000169
+update 3175/6104 tokens=52019200 loss=3.74455 lr=0.000167
+update 3200/6104 tokens=52428800 loss=3.69530 lr=0.000165
+update 3225/6104 tokens=52838400 loss=3.37253 lr=0.000163
+update 3250/6104 tokens=53248000 loss=3.78486 lr=0.000161
+update 3275/6104 tokens=53657600 loss=3.51252 lr=0.00016
+update 3300/6104 tokens=54067200 loss=3.67059 lr=0.000158
+update 3325/6104 tokens=54476800 loss=3.66491 lr=0.000156
+update 3350/6104 tokens=54886400 loss=3.63231 lr=0.000154
+update 3375/6104 tokens=55296000 loss=3.71477 lr=0.000152
+update 3400/6104 tokens=55705600 loss=3.47578 lr=0.000151
+update 3425/6104 tokens=56115200 loss=3.48550 lr=0.000149
+update 3450/6104 tokens=56524800 loss=3.67480 lr=0.000147
+update 3475/6104 tokens=56934400 loss=3.79204 lr=0.000145
+update 3500/6104 tokens=57344000 loss=3.66831 lr=0.000143
+validation update=3500 loss=3.646704 perplexity=38.348
+update 3525/6104 tokens=57753600 loss=3.76575 lr=0.000142
+update 3550/6104 tokens=58163200 loss=3.26442 lr=0.00014
+update 3575/6104 tokens=58572800 loss=3.65020 lr=0.000138
+update 3600/6104 tokens=58982400 loss=3.71596 lr=0.000136
+update 3625/6104 tokens=59392000 loss=3.59726 lr=0.000134
+update 3650/6104 tokens=59801600 loss=3.60930 lr=0.000133
+update 3675/6104 tokens=60211200 loss=3.65419 lr=0.000131
+update 3700/6104 tokens=60620800 loss=3.46282 lr=0.000129
+update 3725/6104 tokens=61030400 loss=3.48470 lr=0.000127
+update 3750/6104 tokens=61440000 loss=3.46423 lr=0.000126
+update 3775/6104 tokens=61849600 loss=3.67987 lr=0.000124
+update 3800/6104 tokens=62259200 loss=3.76919 lr=0.000122
+update 3825/6104 tokens=62668800 loss=3.24510 lr=0.00012
+update 3850/6104 tokens=63078400 loss=3.61666 lr=0.000119
+update 3875/6104 tokens=63488000 loss=3.68666 lr=0.000117
+update 3900/6104 tokens=63897600 loss=3.76538 lr=0.000115
+update 3925/6104 tokens=64307200 loss=3.71191 lr=0.000114
+update 3950/6104 tokens=64716800 loss=3.36852 lr=0.000112
+update 3975/6104 tokens=65126400 loss=3.77297 lr=0.00011
+update 4000/6104 tokens=65536000 loss=3.74291 lr=0.000108
+validation update=4000 loss=3.595105 perplexity=36.420
+update 4025/6104 tokens=65945600 loss=3.47854 lr=0.000107
+update 4050/6104 tokens=66355200 loss=3.56780 lr=0.000105
+update 4075/6104 tokens=66764800 loss=3.36047 lr=0.000104
+update 4100/6104 tokens=67174400 loss=3.50531 lr=0.000102
+update 4125/6104 tokens=67584000 loss=3.69676 lr=0.0001
+update 4150/6104 tokens=67993600 loss=3.65856 lr=9.87e-05
+update 4175/6104 tokens=68403200 loss=3.62710 lr=9.71e-05
+update 4200/6104 tokens=68812800 loss=3.70549 lr=9.56e-05
+update 4225/6104 tokens=69222400 loss=3.75690 lr=9.4e-05
+update 4250/6104 tokens=69632000 loss=3.57435 lr=9.25e-05
+update 4275/6104 tokens=70041600 loss=3.33444 lr=9.09e-05
+update 4300/6104 tokens=70451200 loss=3.78491 lr=8.94e-05
+update 4325/6104 tokens=70860800 loss=3.50398 lr=8.79e-05
+update 4350/6104 tokens=71270400 loss=3.68469 lr=8.64e-05
+update 4375/6104 tokens=71680000 loss=3.65569 lr=8.49e-05
+update 4400/6104 tokens=72089600 loss=3.53204 lr=8.35e-05
+update 4425/6104 tokens=72499200 loss=3.58109 lr=8.2e-05
+update 4450/6104 tokens=72908800 loss=3.63009 lr=8.06e-05
+update 4475/6104 tokens=73318400 loss=3.52550 lr=7.92e-05
+update 4500/6104 tokens=73728000 loss=3.57351 lr=7.78e-05
+validation update=4500 loss=3.557667 perplexity=35.081
+update 4525/6104 tokens=74137600 loss=3.65493 lr=7.64e-05
+update 4550/6104 tokens=74547200 loss=3.40719 lr=7.5e-05
+update 4575/6104 tokens=74956800 loss=3.40344 lr=7.37e-05
+update 4600/6104 tokens=75366400 loss=3.73624 lr=7.23e-05
+update 4625/6104 tokens=75776000 loss=3.54252 lr=7.1e-05
+update 4650/6104 tokens=76185600 loss=3.19202 lr=6.97e-05
+update 4675/6104 tokens=76595200 loss=3.34920 lr=6.84e-05
+update 4700/6104 tokens=77004800 loss=3.34927 lr=6.71e-05
+update 4725/6104 tokens=77414400 loss=3.72807 lr=6.59e-05
+update 4750/6104 tokens=77824000 loss=3.68308 lr=6.47e-05
+update 4775/6104 tokens=78233600 loss=3.49242 lr=6.34e-05
+update 4800/6104 tokens=78643200 loss=3.56222 lr=6.23e-05
+update 4825/6104 tokens=79052800 loss=3.73200 lr=6.11e-05
+update 4850/6104 tokens=79462400 loss=3.66102 lr=5.99e-05
+update 4875/6104 tokens=79872000 loss=3.69659 lr=5.88e-05
+update 4900/6104 tokens=80281600 loss=3.65951 lr=5.77e-05
+update 4925/6104 tokens=80691200 loss=3.48208 lr=5.66e-05
+update 4950/6104 tokens=81100800 loss=3.57898 lr=5.55e-05
+update 4975/6104 tokens=81510400 loss=3.39980 lr=5.44e-05
+update 5000/6104 tokens=81920000 loss=3.63520 lr=5.34e-05
+validation update=5000 loss=3.529693 perplexity=34.113
+update 5025/6104 tokens=82329600 loss=3.33632 lr=5.24e-05
+update 5050/6104 tokens=82739200 loss=3.43988 lr=5.14e-05
+update 5075/6104 tokens=83148800 loss=3.54584 lr=5.04e-05
+update 5100/6104 tokens=83558400 loss=3.67555 lr=4.94e-05
+update 5125/6104 tokens=83968000 loss=3.43327 lr=4.85e-05
+update 5150/6104 tokens=84377600 loss=3.56672 lr=4.76e-05
+update 5175/6104 tokens=84787200 loss=3.23715 lr=4.67e-05
+update 5200/6104 tokens=85196800 loss=3.37552 lr=4.58e-05
+update 5225/6104 tokens=85606400 loss=3.61605 lr=4.5e-05
+update 5250/6104 tokens=86016000 loss=3.43880 lr=4.42e-05
+update 5275/6104 tokens=86425600 loss=3.21421 lr=4.34e-05
+update 5300/6104 tokens=86835200 loss=3.55552 lr=4.26e-05
+update 5325/6104 tokens=87244800 loss=3.20035 lr=4.18e-05
+update 5350/6104 tokens=87654400 loss=3.42128 lr=4.11e-05
+update 5375/6104 tokens=88064000 loss=3.70737 lr=4.04e-05
+update 5400/6104 tokens=88473600 loss=3.66658 lr=3.97e-05
+update 5425/6104 tokens=88883200 loss=3.52244 lr=3.9e-05
+update 5450/6104 tokens=89292800 loss=3.53849 lr=3.84e-05
+update 5475/6104 tokens=89702400 loss=3.66845 lr=3.77e-05
+update 5500/6104 tokens=90112000 loss=3.48478 lr=3.72e-05
+validation update=5500 loss=3.510821 perplexity=33.476
+update 5525/6104 tokens=90521600 loss=3.57281 lr=3.66e-05
+update 5550/6104 tokens=90931200 loss=3.38712 lr=3.6e-05
+update 5575/6104 tokens=91340800 loss=3.61574 lr=3.55e-05
+update 5600/6104 tokens=91750400 loss=3.56953 lr=3.5e-05
+update 5625/6104 tokens=92160000 loss=3.63331 lr=3.45e-05
+update 5650/6104 tokens=92569600 loss=3.66500 lr=3.41e-05
+update 5675/6104 tokens=92979200 loss=3.73054 lr=3.36e-05
+update 5700/6104 tokens=93388800 loss=3.65543 lr=3.32e-05
+update 5725/6104 tokens=93798400 loss=3.48547 lr=3.28e-05
+update 5750/6104 tokens=94208000 loss=3.52124 lr=3.25e-05
+update 5775/6104 tokens=94617600 loss=3.44396 lr=3.21e-05
+update 5800/6104 tokens=95027200 loss=3.66156 lr=3.18e-05
+update 5825/6104 tokens=95436800 loss=3.05683 lr=3.15e-05
+update 5850/6104 tokens=95846400 loss=3.60689 lr=3.13e-05
+update 5875/6104 tokens=96256000 loss=3.44074 lr=3.1e-05
+update 5900/6104 tokens=96665600 loss=3.35364 lr=3.08e-05
+update 5925/6104 tokens=97075200 loss=3.52123 lr=3.06e-05
+update 5950/6104 tokens=97484800 loss=3.52558 lr=3.05e-05
+update 5975/6104 tokens=97894400 loss=3.54562 lr=3.03e-05
+update 6000/6104 tokens=98304000 loss=3.38310 lr=3.02e-05
+validation update=6000 loss=3.498115 perplexity=33.053
+update 6025/6104 tokens=98713600 loss=3.36960 lr=3.01e-05
+update 6050/6104 tokens=99123200 loss=3.29778 lr=3.01e-05
+update 6075/6104 tokens=99532800 loss=3.49856 lr=3e-05
+update 6100/6104 tokens=99942400 loss=3.39879 lr=3e-05
+update 6104/6104 tokens=99999744 loss=3.30454 lr=3e-05
+validation update=6104 loss=3.496407 perplexity=32.997
+Training complete. Model: /home/mateus/.codex/worktrees/lantern-70m-token-mlp/Igra-lab/models/001-spoony/results/pretraining/lantern70-tokenmlp-shared64-wikipedia100m-v1/model
+{
+  "parameters": 20723200,
+  "training_seconds_including_loading_validation_saving_and_export": 3364.1864924439997,
+  "peak_allocated_vram_bytes": 1728516096,
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "seed": 42,
+  "training_state": {
+    "updates": 6104,
+    "batches": 24414,
+    "tokens": 99999744,
+    "completed_epochs": 1,
+    "last_loss": 3.3045363426208496,
+    "last_validation_loss": 3.4964072980353094,
+    "last_validation_perplexity": 32.996691472636286,
+    "batches_in_epoch": 0,
+    "epoch_generator_state": null
+  },
+  "validation_curve": [
+    {
+      "update": 500,
+      "loss": 5.288491249084473
+    },
+    {
+      "update": 1000,
+      "loss": 4.68801212310791
+    },
+    {
+      "update": 1500,
+      "loss": 4.3485541343688965
+    },
+    {
+      "update": 2000,
+      "loss": 3.972029209136963
+    },
+    {
+      "update": 2500,
+      "loss": 3.811295747756958
+    },
+    {
+      "update": 3000,
+      "loss": 3.7176473140716553
+    },
+    {
+      "update": 3500,
+      "loss": 3.6467044353485107
+    },
+    {
+      "update": 4000,
+      "loss": 3.595104932785034
+    },
+    {
+      "update": 4500,
+      "loss": 3.5576670169830322
+    },
+    {
+      "update": 5000,
+      "loss": 3.529693126678467
+    },
+    {
+      "update": 5500,
+      "loss": 3.5108211040496826
+    },
+    {
+      "update": 6000,
+      "loss": 3.498114824295044
+    },
+    {
+      "update": 6104,
+      "loss": 3.4964072704315186
+    }
+  ],
+  "best_saved_validation": {
+    "update": 6104,
+    "loss": 3.4964072704315186
+  },
+  "best_checkpoint": "checkpoints/step-00006104.pt",
+  "final_checkpoint": "checkpoints/step-00006104.pt",
+  "benchmark": {
+    "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+    "parameters": 20723200,
+    "context_length": 2048,
+    "loader": {
+      "batch_size": 2,
+      "shuffle": true,
+      "num_workers": 0,
+      "pin_memory": true,
+      "drop_last": false,
+      "seed": 42
+    },
+    "training": {
+      "accumulation_steps": 4,
+      "max_grad_norm": 1.0,
+      "validation_interval": 500
+    },
+    "precision": {
+      "mode": "bf16"
+    },
+    "scheduler": {
+      "warmup_steps": 300,
+      "total_steps": 6104,
+      "min_lr_ratio": 0.1
+    },
+    "measured_updates": 10,
+    "tokens_per_update": 16384,
+    "mean_update_seconds": 0.5143943370999295,
+    "tokens_per_second": 31851.050484673473,
+    "peak_allocated_vram_bytes": 1728516096,
+    "final_benchmark_loss": 12.149965286254883,
+    "validation_loss": 12.105320865990686,
+    "full_validation_seconds": 17.339297759000146,
+    "training_only_seconds_for_600m_tokens": 18837.683243405623,
+    "weights_save_load_logits_exact": true,
+    "benchmark_weights_discarded": true
+  },
+  "comparison": "Same pinned Wikipedia artifacts, context, microbatch, accumulation, effective batch, optimizer, scheduler, seed and full one-pass training exposure as the completed Lantern 70M baseline."
+}

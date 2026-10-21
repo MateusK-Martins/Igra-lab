@@ -1,3 +1,5 @@
+Active experiment: [Lantern 70M with shared TokenMLP, equal exposure](TOKEN_MLP_70M.md).
+
 # Lantern Wikipedia experiment
 
 Current recipe: 70,006,272 parameters, width 768, nine layers, FFN width 2432,

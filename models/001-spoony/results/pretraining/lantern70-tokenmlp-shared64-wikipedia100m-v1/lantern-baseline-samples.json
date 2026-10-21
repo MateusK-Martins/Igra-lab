@@ -1,0 +1,21 @@
+{
+  "mode": "greedy",
+  "max_new_tokens": 64,
+  "samples": [
+    {
+      "prompt": "Once upon a time, there was a little girl named Lily.",
+      "continuation": "Once upon a time, there was a little girl named Lily.\n\nIn the first season, Lily was a regular in the first season of the season, and was a regular in the first season. Lily was a regular in the first season, but was not a regular in the second season.\n\nIn the second season, Lily was a regular in the first",
+      "generated_tokens": 64
+    },
+    {
+      "prompt": "Tom found a small dog outside his house. The dog was",
+      "continuation": "Tom found a small dog outside his house. The dog was a large dog, and the dog was a dog, and the dog was a dog.\n\nThe dog was a dog, and the dog was a dog, and the dog was a dog. The dog was a dog, and the dog was a dog, and the dog was a dog. The dog was a",
+      "generated_tokens": 64
+    },
+    {
+      "prompt": "One day, a boy lost his favorite toy. He felt",
+      "continuation": "One day, a boy lost his favorite toy. He felt that he was not afraid of the soul, but he was afraid of the soul.\n\nIn the summer of 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17",
+      "generated_tokens": 64
+    }
+  ]
+}

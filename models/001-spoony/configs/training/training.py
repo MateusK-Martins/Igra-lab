@@ -8,6 +8,8 @@ training_config = TrainingConfig(
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/wikipedia-en-100m/tensorboard"),
+    directory=results_path(
+        "pretraining/lantern70-tokenmlp-shared64-wikipedia100m-v1/tensorboard"
+    ),
     interval=25,
 )

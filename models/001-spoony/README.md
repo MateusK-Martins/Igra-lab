@@ -1,3 +1,5 @@
+Active experiment: [Lantern 70M with shared TokenMLP, equal exposure](TOKEN_MLP_70M.md).
+
 # Lantern 70M — English Wikipedia
 
 Self-contained experiment branch `codex/lantern-70m-wikipedia`. Start with

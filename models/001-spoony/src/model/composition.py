@@ -20,8 +20,23 @@ class ResidualImpl(nn.Module):
         super().__init__()
         self.branch = branch
 
-    def forward(self, x: Tensor, *, cache: CacheStorage | None = None) -> Tensor:
-        output = self.branch(x, cache=cache)
+    def forward(
+        self,
+        x: Tensor,
+        *,
+        cache: CacheStorage | None = None,
+        token_vectors: tuple[Tensor, Tensor] | None = None,
+        token_projections: tuple[nn.Module, nn.Module] | None = None,
+    ) -> Tensor:
+        if token_vectors is None:
+            output = self.branch(x, cache=cache)
+        else:
+            output = self.branch(
+                x,
+                cache=cache,
+                token_vectors=token_vectors,
+                token_projections=token_projections,
+            )
         if output.shape != x.shape:
             raise ValueError("ResidualImpl branch output shape must match its input")
         return x + output

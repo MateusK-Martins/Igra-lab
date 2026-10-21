@@ -24,8 +24,7 @@ from configs.training.benchmark import (
 from configs.training.optimizer import optimizer_config
 from configs.training.precision import precision_config
 from configs.training.scheduler import scheduler_config
-from configs.training.training import training_config
-from src.config.paths import results_path
+from configs.training.training import logging_config, training_config
 from src.data.dataloader import build_split_dataloader
 from src.data.tokenizer import ByteLevelBPETokenizer
 from src.training.optimizer import build_optimizer
@@ -137,7 +136,7 @@ def main():
         "weights_save_load_logits_exact": True,
         "benchmark_weights_discarded": True,
     }
-    path = results_path("data/wikipedia-en-600m/benchmark-2048.json")
+    path = logging_config.directory.parent / "benchmark.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report, indent=2), flush=True)

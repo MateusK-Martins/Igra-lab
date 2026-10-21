@@ -1,3 +1,5 @@
+Active experiment: [Lantern 70M with shared TokenMLP, equal exposure](TOKEN_MLP_70M.md).
+
 Current 30M comparison: see [COMPARISON_30M.md](COMPARISON_30M.md).
 
 # Codename baseline completed — 2026-10-13

@@ -107,6 +107,10 @@ def train_loop(
                     device=device,
                 )
 
+                print(
+                    f"validation update={state.updates} loss={validation_loss:.6f} perplexity={perplexity:.3f}",
+                    flush=True,
+                )
                 state.last_validation_loss = validation_loss
                 state.last_validation_perplexity = perplexity
 
