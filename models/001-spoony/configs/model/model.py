@@ -1,4 +1,4 @@
-"""Lantern attention with six shared TokenMLPs; 6,459,904 params at V=8192."""
+"""Five shared TokenMLPs and one original-width SwiGLU in Lantern."""
 
 from functools import partial
 
@@ -9,6 +9,7 @@ from src.model.definitions import (
     GQAAttention,
     LMHead,
     RMSNorm,
+    SwiGLU,
     TokenMLP,
 )
 from src.model.position import rope
@@ -16,13 +17,22 @@ from src.model.position import rope
 
 def build_model(tokenizer: Tokenizer):
     blocks = []
-    for _ in range(6):
-        feedforward = TokenMLP(
-            input_features=384,
-            bottleneck_features=64,
-            chunk_size=2048,
-            init_std=0.02,
-            residual=True,
+    for layer in range(6):
+        feedforward = (
+            SwiGLU(
+                input_features=384,
+                hidden_features=1024,
+                output_features=384,
+                residual=True,
+            )
+            if layer == 2
+            else TokenMLP(
+                input_features=384,
+                bottleneck_features=64,
+                chunk_size=2048,
+                init_std=0.02,
+                residual=True,
+            )
         )
         blocks.extend(
             [

@@ -10,6 +10,7 @@ from src.data.tokenizer import ByteLevelBPETokenizer
 from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheStorage
 from src.model.composition import ResidualImpl
+from src.model.feedforward import SwiGLUImpl
 from src.model.stability import RMSNormImpl
 from src.model.token_mlp import TokenMLPImpl
 
@@ -42,12 +43,16 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     assert model.lm_head.out_features == tokenizer.vocab_size
     assert model.lm_head.weight is model.embedding.weight
     assert len(model.body) == 24
-    for index in range(0, 24, 4):
+    for layer, index in enumerate(range(0, 24, 4)):
         norm1, attention, feedforward, norm2 = model.body[index : index + 4]
         assert isinstance(attention, ResidualImpl)
         assert isinstance(attention.branch, GQAAttentionImpl)
         assert isinstance(feedforward, ResidualImpl)
-        assert isinstance(feedforward.branch, TokenMLPImpl)
+        if layer == 2:
+            assert isinstance(feedforward.branch, SwiGLUImpl)
+            assert feedforward.branch.gate.out_features == 1024
+        else:
+            assert isinstance(feedforward.branch, TokenMLPImpl)
         assert isinstance(norm1, RMSNormImpl)
         assert isinstance(norm2, RMSNormImpl)
         assert attention.branch.q_proj.in_features == 384
@@ -85,7 +90,13 @@ def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokeni
     assert len({weight.data_ptr() for weight in weights}) == 6
     assert len(first.token_mlp_embeddings) == 2
     assert len(first.token_mlp_projections) == 2
-    assert all(not list(first.body[index].parameters()) for index in range(2, 24, 4))
+    assert (
+        sum(
+            isinstance(first.body[index].branch, TokenMLPImpl)
+            for index in range(2, 24, 4)
+        )
+        == 5
+    )
     assert all(
         a.data_ptr() != b.data_ptr()
         for a, b in zip(first.parameters(), second.parameters(), strict=True)
