@@ -342,12 +342,10 @@ class GQAAttention(BlockDefinition):
 
 @dataclass(frozen=True)
 class TokenMLP(BlockDefinition):
-    """Shared bottleneck projections around a token-specific tanh matrix."""
+    """Shared down/up projections with the token-dependent matrix removed."""
 
     input_features: int
     bottleneck_features: int
-    chunk_size: int = 2048
-    init_std: float = 0.02
     residual: bool = False
 
     @property
@@ -357,15 +355,8 @@ class TokenMLP(BlockDefinition):
     def __post_init__(self) -> None:
         _positive_integer(self.input_features, "input_features")
         _positive_integer(self.bottleneck_features, "bottleneck_features")
-        _positive_integer(self.chunk_size, "chunk_size")
         if type(self.residual) is not bool:
             raise ValueError("residual must be a boolean")
-        if (
-            type(self.init_std) not in (int, float)
-            or not math.isfinite(self.init_std)
-            or self.init_std <= 0
-        ):
-            raise ValueError("init_std must be a finite positive number")
 
     def build(self) -> nn.Module:
-        return TokenMLPImpl(self.chunk_size)
+        return TokenMLPImpl()

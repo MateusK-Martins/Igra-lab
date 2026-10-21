@@ -7,7 +7,6 @@ from src.model.cache_storage import CacheEntry
 from src.model.composition import build_block
 from src.model.definitions import (
     BlockDefinition,
-    Embedding,
     EmbeddingDefinition,
     LMHeadDefinition,
     TokenMLP,
@@ -110,24 +109,15 @@ class Model:
             body.append(block_module)
 
         matrix_definitions = [block for block in blocks if isinstance(block, TokenMLP)]
-        token_mlp_embeddings = None
         token_mlp_projections = None
         if matrix_definitions:
             first = matrix_definitions[0]
             if any(
-                (block.input_features, block.bottleneck_features, block.init_std)
-                != (first.input_features, first.bottleneck_features, first.init_std)
+                (block.input_features, block.bottleneck_features)
+                != (first.input_features, first.bottleneck_features)
                 for block in matrix_definitions
             ):
-                raise ValueError(
-                    "Shared TokenMLP tables and projections require matching widths and init_std"
-                )
-            token_mlp_embeddings = nn.ModuleList(
-                Embedding(first.bottleneck_features, first.init_std).build(
-                    vocab_size=vocab_size
-                )
-                for _ in range(2)
-            )
+                raise ValueError("Shared TokenMLP projections require matching widths")
             token_mlp_projections = nn.ModuleList(
                 [
                     nn.Linear(
@@ -149,7 +139,6 @@ class Model:
                 embedding=embedding,
                 body=body,
                 lm_head=lm_head,
-                token_mlp_embeddings=token_mlp_embeddings,
                 token_mlp_projections=token_mlp_projections,
             ),
             cache_entries,

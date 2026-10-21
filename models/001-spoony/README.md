@@ -1,4 +1,4 @@
-> Active variant: [All feed-forwards replaced by shared TokenMLP](TOKEN_MLP_ALL_SHARED.md).
+> Active variant: [TokenMLP without the token matrix](TOKEN_MLP_PROJECTION_ONLY_14M.md).
 > Notes below describe the inherited architecture and historical results.
 
 > **Codename branch:** the active larger TinyStories recipe and comparison
