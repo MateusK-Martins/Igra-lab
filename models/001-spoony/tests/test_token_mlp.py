@@ -71,13 +71,13 @@ def test_shared_tables_looked_up_once_and_accumulate_all_layer_gradients():
 
 def test_parameter_budget():
     model, _ = build_model(SimpleNamespace(vocab_size=8192))
-    assert sum(p.numel() for p in model.parameters()) == 6_459_904
+    assert sum(p.numel() for p in model.parameters()) == 6_829_312
     branches = [
         block.branch
         for block in model.body
         if hasattr(block, "branch") and isinstance(block.branch, TokenMLPImpl)
     ]
-    assert len(branches) == 6
+    assert len(branches) == 7
     assert all(not list(branch.parameters()) for branch in branches)
     tables = model.token_mlp_embeddings
     assert len(tables) == 2

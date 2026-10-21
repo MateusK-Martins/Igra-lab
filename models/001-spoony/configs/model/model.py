@@ -1,4 +1,4 @@
-"""Lantern attention with six shared TokenMLPs; 6,459,904 params at V=8192."""
+"""Lantern attention with seven shared TokenMLPs; 6,829,312 params at V=8192."""
 
 from functools import partial
 
@@ -16,7 +16,7 @@ from src.model.position import rope
 
 def build_model(tokenizer: Tokenizer):
     blocks = []
-    for _ in range(6):
+    for _ in range(7):
         feedforward = TokenMLP(
             input_features=384,
             bottleneck_features=64,
