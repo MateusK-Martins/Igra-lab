@@ -85,7 +85,8 @@ def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokeni
     assert len({weight.data_ptr() for weight in weights}) == 6
     assert len(first.token_mlp_embeddings) == 2
     assert len(first.token_mlp_projections) == 2
-    assert all(not list(first.body[index].parameters()) for index in range(2, 24, 4))
+    gate_weights = [first.body[index].branch.gate.weight for index in range(2, 24, 4)]
+    assert len({weight.data_ptr() for weight in gate_weights}) == 6
     assert all(
         a.data_ptr() != b.data_ptr()
         for a, b in zip(first.parameters(), second.parameters(), strict=True)

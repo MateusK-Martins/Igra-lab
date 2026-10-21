@@ -8,6 +8,8 @@ training_config = TrainingConfig(
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/lantern-token-mlp-all-shared64-v1/tensorboard"),
+    directory=results_path(
+        "pretraining/lantern-tokenmlp-swiglu-gates-14m-v2/tensorboard"
+    ),
     interval=10,
 )

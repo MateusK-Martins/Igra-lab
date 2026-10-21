@@ -1,4 +1,4 @@
-"""Lantern attention with six shared TokenMLPs; 6,459,904 params at V=8192."""
+"""Lantern attention with six shared TokenMLPs and per-layer SwiGLU gates."""
 
 from functools import partial
 

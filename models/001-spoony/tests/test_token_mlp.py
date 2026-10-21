@@ -17,14 +17,21 @@ def test_chunked_output_and_gradients_match_explicit_matrix():
     ]
     x, a, b = inputs
     reference = torch.tanh(torch.einsum("bti,btj->btij", a, b))
-    expected = torch.einsum("btij,btj->bti", reference, x)
-    actual = TokenMLPImpl(chunk_size=2)(
+    transformed = torch.einsum("btij,btj->bti", reference, x)
+    gate = nn.Linear(5, 5, bias=False, dtype=torch.float64)
+    expected = torch.nn.functional.silu(gate(x)) * transformed
+    module = TokenMLPImpl(chunk_size=2, bottleneck_features=5).double()
+    module.gate.load_state_dict(gate.state_dict())
+    actual = module(
         x, token_vectors=(a, b), token_projections=(nn.Identity(), nn.Identity())
     )
     torch.testing.assert_close(actual, expected)
     upstream = torch.randn_like(actual)
-    expected_grads = torch.autograd.grad(expected, inputs, upstream, retain_graph=True)
-    actual_grads = torch.autograd.grad(actual, inputs, upstream)
+    all_inputs = (*inputs, gate.weight)
+    expected_grads = torch.autograd.grad(
+        expected, all_inputs, upstream, retain_graph=True
+    )
+    actual_grads = torch.autograd.grad(actual, (*inputs, module.gate.weight), upstream)
     for actual_grad, expected_grad in zip(actual_grads, expected_grads, strict=True):
         torch.testing.assert_close(actual_grad, expected_grad)
 
@@ -50,11 +57,16 @@ def test_shared_tables_looked_up_once_and_accumulate_all_layer_gradients():
     actual = model(ids)
     assert calls == [1, 1]
     a, b = [table.weight[ids] for table in model.token_mlp_embeddings]
-    matrix = torch.tanh(a.unsqueeze(-1) * b.unsqueeze(-2))
     hidden = model.embedding(ids)
     down, up = model.token_mlp_projections
-    for _ in range(6):
-        hidden = hidden + up((matrix @ down(hidden).unsqueeze(-1)).squeeze(-1))
+    for block in model.body:
+        branch = block.branch
+        bottleneck = down(hidden)
+        transformed = (
+            torch.tanh(a.unsqueeze(-1) * b.unsqueeze(-2)) @ bottleneck.unsqueeze(-1)
+        ).squeeze(-1)
+        gated = torch.nn.functional.silu(branch.gate(bottleneck)) * transformed
+        hidden = hidden + up(gated)
     expected = model.lm_head(hidden)
     torch.testing.assert_close(actual, expected)
     parameters = list(model.parameters())
@@ -62,8 +74,15 @@ def test_shared_tables_looked_up_once_and_accumulate_all_layer_gradients():
     actual.sum().backward()
     for parameter, expected_grad in zip(parameters, expected_grads, strict=True):
         torch.testing.assert_close(parameter.grad, expected_grad)
-    assert len(parameters) == 5
-    assert all(not list(block.parameters()) for block in model.body)
+    assert len(parameters) == 11
+    gates = [
+        block.branch.gate
+        for block in model.body
+        if hasattr(block, "branch") and isinstance(block.branch, TokenMLPImpl)
+    ]
+    assert len(gates) == 6
+    assert len({gate.weight.data_ptr() for gate in gates}) == 6
+    assert all(gate.weight.grad is not None for gate in gates)
     for table in model.token_mlp_embeddings:
         assert torch.count_nonzero(table.weight.grad[[0, 3, 4, 5, 6]]) == 0
         assert torch.count_nonzero(table.weight.grad[[1, 2]]) > 0
@@ -71,14 +90,15 @@ def test_shared_tables_looked_up_once_and_accumulate_all_layer_gradients():
 
 def test_parameter_budget():
     model, _ = build_model(SimpleNamespace(vocab_size=8192))
-    assert sum(p.numel() for p in model.parameters()) == 6_459_904
+    assert sum(p.numel() for p in model.parameters()) == 6_484_480
     branches = [
         block.branch
         for block in model.body
         if hasattr(block, "branch") and isinstance(block.branch, TokenMLPImpl)
     ]
     assert len(branches) == 6
-    assert all(not list(branch.parameters()) for branch in branches)
+    assert all(branch.gate.weight.shape == (64, 64) for branch in branches)
+    assert len({branch.gate.weight.data_ptr() for branch in branches}) == 6
     tables = model.token_mlp_embeddings
     assert len(tables) == 2
     assert all(table.embedding_dim == 64 for table in tables)

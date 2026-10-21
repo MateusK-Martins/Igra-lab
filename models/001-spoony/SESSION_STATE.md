@@ -1,4 +1,4 @@
-> Active variant: [All feed-forwards replaced by shared TokenMLP](TOKEN_MLP_ALL_SHARED.md).
+> Active variant: [Shared TokenMLP with per-layer SwiGLU gates](TOKEN_MLP_SWIGLU_GATES_14M.md), based on the [all-shared baseline](TOKEN_MLP_ALL_SHARED.md).
 > Notes below describe the inherited architecture and historical results.
 
 # Codename baseline completed — 2026-10-13

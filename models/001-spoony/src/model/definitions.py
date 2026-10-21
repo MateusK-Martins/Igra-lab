@@ -368,4 +368,4 @@ class TokenMLP(BlockDefinition):
             raise ValueError("init_std must be a finite positive number")
 
     def build(self) -> nn.Module:
-        return TokenMLPImpl(self.chunk_size)
+        return TokenMLPImpl(self.chunk_size, self.bottleneck_features)

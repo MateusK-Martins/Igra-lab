@@ -2,6 +2,7 @@
 
 import torch
 from torch import Tensor, nn
+from torch.nn import functional as F
 from torch.utils.checkpoint import checkpoint
 
 from src.model.cache_storage import CacheStorage
@@ -17,9 +18,10 @@ _cuda_transform = torch.compile(_fused_transform, fullgraph=True, dynamic=True)
 
 
 class TokenMLPImpl(nn.Module):
-    def __init__(self, chunk_size: int) -> None:
+    def __init__(self, chunk_size: int, bottleneck_features: int) -> None:
         super().__init__()
         self.chunk_size = chunk_size
+        self.gate = nn.Linear(bottleneck_features, bottleneck_features, bias=False)
 
     @staticmethod
     def transform(x: Tensor, a: Tensor, b: Tensor) -> Tensor:
@@ -48,7 +50,8 @@ class TokenMLPImpl(nn.Module):
         flat_a = a.reshape_as(flat_x)
         flat_b = b.reshape_as(flat_x)
         if flat_x.shape[0] == 0:
-            return up(x.clone())
+            empty = x.clone()
+            return up(F.silu(self.gate(empty)) * empty)
         outputs = []
         for start in range(0, flat_x.shape[0], self.chunk_size):
             end = start + self.chunk_size
@@ -58,4 +61,6 @@ class TokenMLPImpl(nn.Module):
             else:
                 output = self.transform(*args)
             outputs.append(output)
-        return up(torch.cat(outputs, dim=0).reshape_as(x))
+        transformed = torch.cat(outputs, dim=0).reshape_as(x)
+        gated = F.silu(self.gate(x)) * transformed
+        return up(gated)
