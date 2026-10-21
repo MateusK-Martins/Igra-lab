@@ -6,12 +6,14 @@ from dataclasses import asdict
 from itertools import cycle
 
 import torch
+from torch.utils.data import ConcatDataset
 
 from configs.data.dataloader import (
     chunking_config,
     train_loader_config,
     validation_loader_config,
 )
+from configs.data.qa_corpus import qa_config
 from configs.model.model import build_model
 from configs.tokenizers.preparation import preparation_config
 from configs.training.benchmark import MEASURED_UPDATES, WARMUP_UPDATES
@@ -19,8 +21,9 @@ from configs.training.optimizer import optimizer_config
 from configs.training.precision import precision_config
 from configs.training.scheduler import scheduler_config
 from configs.training.training import logging_config, training_config
-from src.data.dataloader import build_split_dataloader
+from src.data.dataloader import build_dataloader, build_split_dataloader
 from src.data.tokenizer import ByteLevelBPETokenizer
+from src.sft.data import SFTDataset
 from src.training.optimizer import build_optimizer
 from src.training.precision import build_precision
 from src.training.scheduler import build_scheduler
@@ -38,6 +41,13 @@ def main():
     loader = build_split_dataloader(
         data / "train", chunking_config, train_loader_config
     )
+    if qa_config is not None:
+        loader = build_dataloader(
+            ConcatDataset(
+                [loader.dataset, SFTDataset(qa_config.train_path, tokenizer, qa_config)]
+            ),
+            train_loader_config,
+        )
     validation = build_split_dataloader(
         data / "validation", chunking_config, validation_loader_config
     )

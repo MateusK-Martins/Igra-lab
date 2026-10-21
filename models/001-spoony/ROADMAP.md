@@ -1,3 +1,5 @@
+Active experiment: [Lantern 30M with full shared TokenMLP](TOKEN_MLP_30M.md).
+
 Current 30M comparison: see [COMPARISON_30M.md](COMPARISON_30M.md).
 
 > **Codename branch:** the active larger TinyStories recipe and comparison

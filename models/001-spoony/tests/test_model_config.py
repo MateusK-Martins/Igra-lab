@@ -1,4 +1,5 @@
 import io
+from types import SimpleNamespace
 from unittest.mock import patch
 
 import pytest
@@ -10,8 +11,8 @@ from src.data.tokenizer import ByteLevelBPETokenizer
 from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheStorage
 from src.model.composition import ResidualImpl
-from src.model.feedforward import SwiGLUImpl
 from src.model.stability import RMSNormImpl
+from src.model.token_mlp import TokenMLPImpl
 
 
 @pytest.fixture(autouse=True)
@@ -47,9 +48,13 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
         assert isinstance(attention, ResidualImpl)
         assert isinstance(attention.branch, GQAAttentionImpl)
         assert isinstance(feedforward, ResidualImpl)
-        assert isinstance(feedforward.branch, SwiGLUImpl)
+        assert isinstance(feedforward.branch, TokenMLPImpl)
         assert isinstance(norm1, RMSNormImpl)
         assert isinstance(norm2, RMSNormImpl)
+        assert attention.branch.q_proj.in_features == 512
+        assert attention.branch.q_proj.out_features == 512
+        assert attention.branch.k_proj.out_features == 128
+        assert attention.branch.v_proj.out_features == 128
         assert attention.branch.window_size == 512
         assert attention.branch.dropout == 0
     assert [entry.layer_id for entry in entries] == [
@@ -79,8 +84,9 @@ def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokeni
     second, second_entries = build_model(tokenizer)
     weights = [first.body[index].branch.q_proj.weight for index in range(1, 36, 4)]
     assert len({weight.data_ptr() for weight in weights}) == 9
-    gates = [first.body[index].branch.gate.weight for index in range(2, 36, 4)]
-    assert len({weight.data_ptr() for weight in gates}) == 9
+    assert len(first.token_mlp_embeddings) == 2
+    assert len(first.token_mlp_projections) == 2
+    assert all(not list(first.body[index].parameters()) for index in range(2, 36, 4))
     assert all(
         a.data_ptr() != b.data_ptr()
         for a, b in zip(first.parameters(), second.parameters(), strict=True)
@@ -131,18 +137,20 @@ def test_config_state_dict_round_trip_preserves_logits_and_tying(tokenizer):
     assert restored.lm_head.weight is restored.embedding.weight
 
 
-def test_configured_embedding_scale_and_initial_next_token_loss():
+def test_configured_embedding_scale_and_initial_next_token_loss(tokenizer):
     import math
-    from types import SimpleNamespace
 
+    # The production vocabulary avoids overstating tied-head self-token
+    # confidence with the tiny tokenizer fixture at width 512.
     vocabulary = 8192
     model, _ = build_model(SimpleNamespace(vocab_size=vocabulary))
     assert model.embedding.weight.std().item() == pytest.approx(0.02, rel=0.02)
     tokens = torch.randint(vocabulary, (2, 17))
     with torch.no_grad():
         loss = F.cross_entropy(
-            model(tokens[:, :-1]).reshape(-1, vocabulary), tokens[:, 1:].reshape(-1)
+            model(tokens[:, :-1]).reshape(-1, vocabulary),
+            tokens[:, 1:].reshape(-1),
         )
-    # Check the actual vocabulary size; tiny test vocabularies exaggerate
-    # self-token confidence for a wider tied embedding/head.
+    # The wider tied head has higher initial self-token confidence; reject the
+    # old unscaled initialization, allowing two nats above uniform here.
     assert abs(loss.item() - math.log(vocabulary)) < 2.0

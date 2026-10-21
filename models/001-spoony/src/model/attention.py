@@ -108,19 +108,25 @@ class GQAAttentionImpl(nn.Module):
         else:
             key_start_position = start_position
 
-        key_positions = torch.arange(
-            key_start_position,
-            key_start_position + k.shape[2],
-            device=q.device,
+        # With no history and a window covering this chunk, ordinary causal
+        # attention is identical to the explicit mask and permits fused SDPA.
+        is_causal = cache is None and (
+            self.window_size == 0 or sequence_length <= self.window_size
         )
-
-        query_positions = positions[:, None]
-        retained_positions = key_positions[None, :]
-
-        attention_mask = retained_positions <= query_positions
-
-        if self.window_size > 0:
-            attention_mask &= retained_positions > query_positions - self.window_size
+        attention_mask = None
+        if not is_causal:
+            key_positions = torch.arange(
+                key_start_position,
+                key_start_position + k.shape[2],
+                device=q.device,
+            )
+            query_positions = positions[:, None]
+            retained_positions = key_positions[None, :]
+            attention_mask = retained_positions <= query_positions
+            if self.window_size > 0:
+                attention_mask &= (
+                    retained_positions > query_positions - self.window_size
+                )
 
         attended = F.scaled_dot_product_attention(
             q,
@@ -128,7 +134,7 @@ class GQAAttentionImpl(nn.Module):
             v,
             attn_mask=attention_mask,
             dropout_p=self.dropout if self.training else 0.0,
-            is_causal=False,
+            is_causal=is_causal,
             enable_gqa=True,
         )
 

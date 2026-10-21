@@ -10,6 +10,7 @@ from src.model.cache_storage import CacheEntry
 from src.model.feedforward import LinearImpl, SwiGLUImpl
 from src.model.position import PositionRotation
 from src.model.stability import RMSNormImpl
+from src.model.token_mlp import TokenMLPImpl
 
 
 def _positive_integer(value: int, name: str) -> None:
@@ -337,3 +338,34 @@ class GQAAttention(BlockDefinition):
             count=0,
             pointer=0,
         )
+
+
+@dataclass(frozen=True)
+class TokenMLP(BlockDefinition):
+    """Shared bottleneck projections around a token-specific tanh matrix."""
+
+    input_features: int
+    bottleneck_features: int
+    chunk_size: int = 2048
+    init_std: float = 0.02
+    residual: bool = False
+
+    @property
+    def output_features(self) -> int:
+        return self.input_features
+
+    def __post_init__(self) -> None:
+        _positive_integer(self.input_features, "input_features")
+        _positive_integer(self.bottleneck_features, "bottleneck_features")
+        _positive_integer(self.chunk_size, "chunk_size")
+        if type(self.residual) is not bool:
+            raise ValueError("residual must be a boolean")
+        if (
+            type(self.init_std) not in (int, float)
+            or not math.isfinite(self.init_std)
+            or self.init_std <= 0
+        ):
+            raise ValueError("init_std must be a finite positive number")
+
+    def build(self) -> nn.Module:
+        return TokenMLPImpl(self.chunk_size)

@@ -1,5 +1,6 @@
 from contextlib import AbstractContextManager
 from itertools import islice
+from time import monotonic
 
 import torch
 from torch import Tensor, nn
@@ -46,6 +47,7 @@ def train_loop(
             )
 
     state = TrainingState() if state is None else state
+    started = monotonic()
 
     while state.updates < total_steps:
         iterator = training_iterator(train_loader, state)
@@ -88,6 +90,11 @@ def train_loop(
                 state.updates % logging_config.interval == 0
                 or state.updates == total_steps
             ):
+                print(
+                    f"update={state.updates}/{total_steps} loss={loss:.4f} "
+                    f"tokens={state.tokens} elapsed={monotonic() - started:.1f}s",
+                    flush=True,
+                )
                 writer.add_scalar("train/loss", loss, state.updates)
                 writer.add_scalar("train/learning_rate", learning_rate, state.updates)
                 writer.add_scalar("train/tokens", state.tokens, state.updates)
@@ -103,6 +110,11 @@ def train_loop(
                     device=device,
                 )
 
+                print(
+                    f"validation update={state.updates} loss={validation_loss:.4f} "
+                    f"perplexity={perplexity:.2f}",
+                    flush=True,
+                )
                 state.last_validation_loss = validation_loss
                 state.last_validation_perplexity = perplexity
 

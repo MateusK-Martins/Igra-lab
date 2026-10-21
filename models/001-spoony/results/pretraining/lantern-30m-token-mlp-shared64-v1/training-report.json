@@ -1,0 +1,121 @@
+{
+  "branch": "codex/lantern-30m-token-mlp-shared64",
+  "training_seconds_including_validation_and_saving": 473.84210093300044,
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "peak_allocated_vram_bytes": 1179344896,
+  "training_state": {
+    "updates": 6500,
+    "batches": 6500,
+    "tokens": 26624000,
+    "completed_epochs": 0,
+    "last_loss": 2.199399709701538,
+    "last_validation_loss": 2.284904508029713,
+    "last_validation_perplexity": 9.82474799467781,
+    "batches_in_epoch": 6500
+  },
+  "validation_curve": [
+    {
+      "update": 1000,
+      "loss": 3.055077075958252
+    },
+    {
+      "update": 2000,
+      "loss": 2.682572603225708
+    },
+    {
+      "update": 3000,
+      "loss": 2.5132246017456055
+    },
+    {
+      "update": 4000,
+      "loss": 2.4001576900482178
+    },
+    {
+      "update": 5000,
+      "loss": 2.3299224376678467
+    },
+    {
+      "update": 6000,
+      "loss": 2.2935142517089844
+    },
+    {
+      "update": 6500,
+      "loss": 2.2849044799804688
+    }
+  ],
+  "best_saved_validation": {
+    "update": 6500,
+    "loss": 2.2849044799804688
+  },
+  "subset": {
+    "dataset": "roneneldan/TinyStories",
+    "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "selection": "first unique nonempty documents in source order",
+    "splits": {
+      "train": {
+        "documents": 200000,
+        "duplicates_or_empty_skipped": 2495,
+        "sha256": "70ff573e665d303aaead22f9678ec61c30d1c28f09a356868717061457b16b7d",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-train.txt"
+      },
+      "validation": {
+        "documents": 1000,
+        "duplicates_or_empty_skipped": 50,
+        "sha256": "433b2464937353faff56b647bf6374357834faddc39f8620a8350a540afc1ad2",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-valid.txt"
+      }
+    }
+  },
+  "benchmark": {
+    "scheduler": {
+      "warmup_steps": 200,
+      "total_steps": 6500,
+      "min_lr_ratio": 0.1
+    },
+    "optimizer": {
+      "learning_rate": 0.0003,
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01
+    },
+    "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+    "parameters": 11215872,
+    "vocab_size": 8192,
+    "initial_validation_loss": 10.317093589089133,
+    "validation_seconds": 1.8043144389994268,
+    "measured_updates": 100,
+    "mean_update_seconds": 0.07068462625004031,
+    "p95_update_seconds": 0.07031636099964089,
+    "tokens_per_update": 4096,
+    "peak_allocated_vram_bytes": 1179344896,
+    "benchmark_final_loss": 6.0467376708984375,
+    "torch_cpu_threads": 4
+  },
+  "torch_cpu_threads": 4,
+  "seed": 42,
+  "comparison": "Single seed, equal-token baseline; include preparation separately and rebenchmark each architecture for equal-time runs.",
+  "greedy_samples_from_best_saved_checkpoint": [
+    {
+      "prompt": "Once upon a time, there was a little girl named Lily.",
+      "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, scary monster in the sky. The monster was scared and didn't know what to do.\nLily's mom came in and saw the monster. She said, \"Don't worry, Lily. I will help you. I will help"
+    },
+    {
+      "prompt": "Tom found a small dog outside his house. The dog was",
+      "text": "Tom found a small dog outside his house. The dog was very happy and ran to his mom.\n\"Mom, can I play with you?\" Tom asked.\n\"Sure, Tom. Let's play with the dog. He is very fast and can make it go fast.\" Mom said.\nTom and Tom played with the dog. They had fun and laughed. They"
+    },
+    {
+      "prompt": "One day, a boy lost his favorite toy. He felt",
+      "text": "One day, a boy lost his favorite toy. He felt sad and scared. He wanted to find his toy, but he was too small. He looked around and saw a big, red ball. He was very happy.\nHe ran to the ball and tried to catch it. But the ball was too fast. The ball hit the ball and it broke. The ball fell"
+    }
+  ],
+  "best_checkpoint": "checkpoints/step-00006500.pt",
+  "qa_answer_validation": {
+    "loss": 6.261028190588491,
+    "perplexity": 523.7571855599758,
+    "examples": 1000,
+    "note": "Answer-only loss on the original 1000 held-out QA examples; no EM/F1 generation evaluation."
+  }
+}

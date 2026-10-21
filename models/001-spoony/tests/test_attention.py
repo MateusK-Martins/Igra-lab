@@ -312,3 +312,29 @@ def test_cuda_attention_with_cpu_storage_matches_uncached_forward():
         )
     torch.testing.assert_close(actual, expected)
     assert cache.entries[module.layer_id].keys.device.type == "cpu"
+
+
+@pytest.mark.parametrize(
+    "window, length, causal", [(0, 5, True), (5, 5, True), (4, 5, False)]
+)
+def test_causal_fast_path_preserves_explicit_reference_and_gradients(
+    window, length, causal
+):
+    torch.manual_seed(29)
+    module = definition(window_size=window).build().double()
+    x = torch.randn(2, length, 6, dtype=torch.float64, requires_grad=True)
+    original = F.scaled_dot_product_attention
+    with patch(
+        "src.model.attention.F.scaled_dot_product_attention", wraps=original
+    ) as sdpa:
+        actual = module(x)
+    assert sdpa.call_args.kwargs["is_causal"] is causal
+    assert (sdpa.call_args.kwargs["attn_mask"] is None) is causal
+    expected = reference(module, x)
+    torch.testing.assert_close(actual, expected)
+    params = [x, *module.parameters()]
+    upstream = torch.randn_like(actual)
+    actual_grads = torch.autograd.grad(actual, params, upstream, retain_graph=True)
+    expected_grads = torch.autograd.grad(expected, params, upstream)
+    for a, b in zip(actual_grads, expected_grads, strict=True):
+        torch.testing.assert_close(a, b)
