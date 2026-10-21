@@ -1,4 +1,4 @@
-> Active variant: [All feed-forwards replaced by shared TokenMLP](TOKEN_MLP_ALL_SHARED.md).
+> Active variant: [TokenMLP with RMSNorm context vector](TOKEN_MLP_RMSNORM_14M.md), based on the [shared-64 TokenMLP baseline](TOKEN_MLP_ALL_SHARED.md).
 > Notes below describe the inherited architecture and historical results.
 
 # Codename baseline completed — 2026-10-13

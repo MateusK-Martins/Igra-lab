@@ -1,4 +1,4 @@
-"""Token-specific nonlinear matrices with tables and projections shared by layers."""
+"""Token-specific nonlinear matrices with a hidden-state-derived second vector."""
 
 import torch
 from torch import Tensor, nn
@@ -33,13 +33,18 @@ class TokenMLPImpl(nn.Module):
         self,
         x: Tensor,
         *,
-        token_vectors: tuple[Tensor, Tensor],
+        token_vectors: tuple[Tensor, ...],
         token_projections: tuple[nn.Module, nn.Module],
+        context_norm: nn.Module,
+        context_vector_scale: float,
         cache: CacheStorage | None = None,
     ) -> Tensor:
         down, up = token_projections
         x = down(x)
-        a, b = token_vectors
+        if len(token_vectors) != 1:
+            raise ValueError("TokenMLP expects one learned token vector table")
+        a = token_vectors[0]
+        b = context_norm(x) * context_vector_scale
         if a.shape != x.shape or b.shape != x.shape:
             raise ValueError(
                 "Token vectors must match the projected hidden-state shape"

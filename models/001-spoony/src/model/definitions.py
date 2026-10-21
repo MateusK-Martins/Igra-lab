@@ -342,12 +342,14 @@ class GQAAttention(BlockDefinition):
 
 @dataclass(frozen=True)
 class TokenMLP(BlockDefinition):
-    """Shared bottleneck projections around a token-specific tanh matrix."""
+    """Shared bottleneck with one learned token vector and one context vector."""
 
     input_features: int
     bottleneck_features: int
     chunk_size: int = 2048
     init_std: float = 0.02
+    context_norm_eps: float = 1e-6
+    context_vector_scale: float = 0.02
     residual: bool = False
 
     @property
@@ -366,6 +368,20 @@ class TokenMLP(BlockDefinition):
             or self.init_std <= 0
         ):
             raise ValueError("init_std must be a finite positive number")
+        if (
+            type(self.context_norm_eps) not in (int, float)
+            or not math.isfinite(self.context_norm_eps)
+            or self.context_norm_eps <= 0
+        ):
+            raise ValueError("context_norm_eps must be finite and greater than zero")
+        if (
+            type(self.context_vector_scale) not in (int, float)
+            or not math.isfinite(self.context_vector_scale)
+            or self.context_vector_scale <= 0
+        ):
+            raise ValueError(
+                "context_vector_scale must be finite and greater than zero"
+            )
 
     def build(self) -> nn.Module:
         return TokenMLPImpl(self.chunk_size)

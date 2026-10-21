@@ -12,17 +12,23 @@ from src.model.token_mlp import TokenMLPImpl
 
 def test_chunked_output_and_gradients_match_explicit_matrix():
     torch.manual_seed(13)
-    inputs = [
-        torch.randn(2, 3, 5, dtype=torch.float64, requires_grad=True) for _ in range(3)
-    ]
-    x, a, b = inputs
+    x = torch.randn(2, 3, 5, dtype=torch.float64, requires_grad=True)
+    a = torch.randn(2, 3, 5, dtype=torch.float64, requires_grad=True)
+    norm = nn.RMSNorm(5, eps=1e-6, dtype=torch.float64)
+    scale = 0.02
+    b = norm(x) * scale
     reference = torch.tanh(torch.einsum("bti,btj->btij", a, b))
     expected = torch.einsum("btij,btj->bti", reference, x)
     actual = TokenMLPImpl(chunk_size=2)(
-        x, token_vectors=(a, b), token_projections=(nn.Identity(), nn.Identity())
+        x,
+        token_vectors=(a,),
+        token_projections=(nn.Identity(), nn.Identity()),
+        context_norm=norm,
+        context_vector_scale=scale,
     )
     torch.testing.assert_close(actual, expected)
     upstream = torch.randn_like(actual)
+    inputs = (x, a, norm.weight)
     expected_grads = torch.autograd.grad(expected, inputs, upstream, retain_graph=True)
     actual_grads = torch.autograd.grad(actual, inputs, upstream)
     for actual_grad, expected_grad in zip(actual_grads, expected_grads, strict=True):
@@ -36,7 +42,7 @@ def test_shared_tables_looked_up_once_and_accumulate_all_layer_gradients():
         blocks=[TokenMLP(3, bottleneck_features=2, chunk_size=2, residual=True)] * 6,
         lm_head=LMHead(3, tie_to_embedding=True),
     ).assemble()
-    calls = [0, 0]
+    calls = [0]
 
     def count(index):
         def hook(module, args, output):
@@ -44,17 +50,18 @@ def test_shared_tables_looked_up_once_and_accumulate_all_layer_gradients():
 
         return hook
 
-    for index, table in enumerate(model.token_mlp_embeddings):
-        table.register_forward_hook(count(index))
+    model.token_mlp_embeddings[0].register_forward_hook(count(0))
     ids = torch.tensor([[1, 2, 1]])
     actual = model(ids)
-    assert calls == [1, 1]
-    a, b = [table.weight[ids] for table in model.token_mlp_embeddings]
-    matrix = torch.tanh(a.unsqueeze(-1) * b.unsqueeze(-2))
+    assert calls == [1]
+    a = model.token_mlp_embeddings[0].weight[ids]
     hidden = model.embedding(ids)
     down, up = model.token_mlp_projections
     for _ in range(6):
-        hidden = hidden + up((matrix @ down(hidden).unsqueeze(-1)).squeeze(-1))
+        z = down(hidden)
+        b = model.token_mlp_context_norm(z) * model.token_mlp_context_vector_scale
+        matrix = torch.tanh(a.unsqueeze(-1) * b.unsqueeze(-2))
+        hidden = hidden + up((matrix @ z.unsqueeze(-1)).squeeze(-1))
     expected = model.lm_head(hidden)
     torch.testing.assert_close(actual, expected)
     parameters = list(model.parameters())
@@ -64,14 +71,14 @@ def test_shared_tables_looked_up_once_and_accumulate_all_layer_gradients():
         torch.testing.assert_close(parameter.grad, expected_grad)
     assert len(parameters) == 5
     assert all(not list(block.parameters()) for block in model.body)
-    for table in model.token_mlp_embeddings:
-        assert torch.count_nonzero(table.weight.grad[[0, 3, 4, 5, 6]]) == 0
-        assert torch.count_nonzero(table.weight.grad[[1, 2]]) > 0
+    table = model.token_mlp_embeddings[0]
+    assert torch.count_nonzero(table.weight.grad[[0, 3, 4, 5, 6]]) == 0
+    assert torch.count_nonzero(table.weight.grad[[1, 2]]) > 0
 
 
 def test_parameter_budget():
     model, _ = build_model(SimpleNamespace(vocab_size=8192))
-    assert sum(p.numel() for p in model.parameters()) == 6_459_904
+    assert sum(p.numel() for p in model.parameters()) == 5_935_680
     branches = [
         block.branch
         for block in model.body
@@ -80,9 +87,9 @@ def test_parameter_budget():
     assert len(branches) == 6
     assert all(not list(branch.parameters()) for branch in branches)
     tables = model.token_mlp_embeddings
-    assert len(tables) == 2
+    assert len(tables) == 1
     assert all(table.embedding_dim == 64 for table in tables)
-    assert len({table.weight.data_ptr() for table in tables}) == 2
+    assert model.token_mlp_context_norm.weights.shape == (64,)
     assert model.token_mlp_projections[0].weight.shape == (64, 384)
     assert model.token_mlp_projections[1].weight.shape == (384, 64)
 

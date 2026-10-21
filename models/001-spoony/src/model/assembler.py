@@ -13,6 +13,7 @@ from src.model.definitions import (
     TokenMLP,
 )
 from src.model.language_model import ModelImpl
+from src.model.stability import RMSNormImpl
 
 
 @dataclass(frozen=True)
@@ -112,22 +113,36 @@ class Model:
         matrix_definitions = [block for block in blocks if isinstance(block, TokenMLP)]
         token_mlp_embeddings = None
         token_mlp_projections = None
+        token_mlp_context_norm = None
+        token_mlp_context_vector_scale = 0.02
         if matrix_definitions:
             first = matrix_definitions[0]
             if any(
-                (block.input_features, block.bottleneck_features, block.init_std)
-                != (first.input_features, first.bottleneck_features, first.init_std)
+                (block.input_features, block.bottleneck_features)
+                != (first.input_features, first.bottleneck_features)
+                for block in matrix_definitions
+            ):
+                raise ValueError("Shared TokenMLP projections require matching widths")
+            if any(block.init_std != first.init_std for block in matrix_definitions):
+                raise ValueError("Shared TokenMLP tables require matching init_std")
+            if any(
+                (block.context_norm_eps, block.context_vector_scale)
+                != (first.context_norm_eps, first.context_vector_scale)
                 for block in matrix_definitions
             ):
                 raise ValueError(
-                    "Shared TokenMLP tables and projections require matching widths and init_std"
+                    "Shared TokenMLP context norm requires matching settings"
                 )
             token_mlp_embeddings = nn.ModuleList(
                 Embedding(first.bottleneck_features, first.init_std).build(
                     vocab_size=vocab_size
                 )
-                for _ in range(2)
+                for _ in range(1)
             )
+            token_mlp_context_norm = RMSNormImpl(
+                first.bottleneck_features, first.context_norm_eps
+            )
+            token_mlp_context_vector_scale = first.context_vector_scale
             token_mlp_projections = nn.ModuleList(
                 [
                     nn.Linear(
@@ -151,6 +166,8 @@ class Model:
                 lm_head=lm_head,
                 token_mlp_embeddings=token_mlp_embeddings,
                 token_mlp_projections=token_mlp_projections,
+                token_mlp_context_norm=token_mlp_context_norm,
+                token_mlp_context_vector_scale=token_mlp_context_vector_scale,
             ),
             cache_entries,
         )

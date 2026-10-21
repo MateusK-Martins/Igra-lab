@@ -25,8 +25,10 @@ class ResidualImpl(nn.Module):
         x: Tensor,
         *,
         cache: CacheStorage | None = None,
-        token_vectors: tuple[Tensor, Tensor] | None = None,
+        token_vectors: tuple[Tensor, ...] | None = None,
         token_projections: tuple[nn.Module, nn.Module] | None = None,
+        context_norm: nn.Module | None = None,
+        context_vector_scale: float = 0.02,
     ) -> Tensor:
         if token_vectors is None:
             output = self.branch(x, cache=cache)
@@ -36,6 +38,8 @@ class ResidualImpl(nn.Module):
                 cache=cache,
                 token_vectors=token_vectors,
                 token_projections=token_projections,
+                context_norm=context_norm,
+                context_vector_scale=context_vector_scale,
             )
         if output.shape != x.shape:
             raise ValueError("ResidualImpl branch output shape must match its input")

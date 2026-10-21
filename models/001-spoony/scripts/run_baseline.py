@@ -43,7 +43,9 @@ def main():
         key=lambda row: row["loss"],
     )
     report = {
-        "branch": "codex/lantern-token-matrix-14m",
+        "branch": "codex/lantern-tokenmlp-rmsnorm-14m",
+        "token_mlp_context_norm_eps": 1e-6,
+        "token_mlp_context_vector_scale": 0.02,
         "training_seconds_including_validation_and_saving": elapsed,
         "gpu": torch.cuda.get_device_name(),
         "peak_allocated_vram_bytes": torch.cuda.max_memory_allocated(),
@@ -66,6 +68,7 @@ def main():
         preparation_config.output_directory / "tokenizer.json"
     )
     model, _ = build_model(tokenizer)
+    report["parameters"] = sum(parameter.numel() for parameter in model.parameters())
     best_path = checkpoint_config.directory / f"step-{best['update']:08d}.pt"
     best_checkpoint = torch.load(best_path, map_location="cpu", weights_only=True)
     model.load_state_dict(best_checkpoint["model"])

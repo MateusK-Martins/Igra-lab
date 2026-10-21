@@ -5,7 +5,11 @@ from configs.data.dataloader import (
     train_loader_config,
     validation_loader_config,
 )
-from configs.model.model import build_model
+from configs.model.model import (
+    TOKEN_MLP_CONTEXT_NORM_EPS,
+    TOKEN_MLP_CONTEXT_VECTOR_SCALE,
+    build_model,
+)
 from configs.tokenizers.preparation import preparation_config
 from configs.training.checkpoint import checkpoint_config
 from configs.training.optimizer import optimizer_config
@@ -53,6 +57,8 @@ def main() -> None:
         project_directory=project_root(),
         data_directory=data_directory,
         settings={
+            "token_mlp_context_norm_eps": TOKEN_MLP_CONTEXT_NORM_EPS,
+            "token_mlp_context_vector_scale": TOKEN_MLP_CONTEXT_VECTOR_SCALE,
             "optimizer": optimizer_config,
             "scheduler": scheduler_config,
             "precision": precision_config,

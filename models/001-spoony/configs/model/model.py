@@ -1,4 +1,4 @@
-"""Lantern attention with six shared TokenMLPs; 6,459,904 params at V=8192."""
+"""Lantern attention with six shared TokenMLPs and an RMSNorm context vector."""
 
 from functools import partial
 
@@ -13,6 +13,9 @@ from src.model.definitions import (
 )
 from src.model.position import rope
 
+TOKEN_MLP_CONTEXT_NORM_EPS = 1e-6
+TOKEN_MLP_CONTEXT_VECTOR_SCALE = 0.02
+
 
 def build_model(tokenizer: Tokenizer):
     blocks = []
@@ -22,6 +25,8 @@ def build_model(tokenizer: Tokenizer):
             bottleneck_features=64,
             chunk_size=2048,
             init_std=0.02,
+            context_norm_eps=TOKEN_MLP_CONTEXT_NORM_EPS,
+            context_vector_scale=TOKEN_MLP_CONTEXT_VECTOR_SCALE,
             residual=True,
         )
         blocks.extend(
