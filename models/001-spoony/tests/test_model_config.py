@@ -79,8 +79,8 @@ def test_config_forward_and_next_token_loss_backward(tokenizer):
 
 
 def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokenizer):
-    first, first_entries = build_model(tokenizer)
-    second, second_entries = build_model(tokenizer)
+    first, first_entries = build_model(tokenizer, variant="learned_pair")
+    second, second_entries = build_model(tokenizer, variant="learned_pair")
     weights = [first.body[index].branch.q_proj.weight for index in range(1, 24, 4)]
     assert len({weight.data_ptr() for weight in weights}) == 6
     assert len(first.token_mlp_embeddings) == 2

@@ -1,0 +1,1079 @@
+update=10/9000 loss=9.1637 tokens=20480 elapsed=1.5s
+update=20/9000 loss=9.1225 tokens=40960 elapsed=1.8s
+update=30/9000 loss=9.0152 tokens=61440 elapsed=2.1s
+update=40/9000 loss=8.7533 tokens=81920 elapsed=2.5s
+update=50/9000 loss=8.3931 tokens=102400 elapsed=2.8s
+update=60/9000 loss=7.8784 tokens=122880 elapsed=3.1s
+update=70/9000 loss=7.5847 tokens=143360 elapsed=3.4s
+update=80/9000 loss=7.2355 tokens=163840 elapsed=3.7s
+update=90/9000 loss=6.9298 tokens=184320 elapsed=4.0s
+update=100/9000 loss=6.6573 tokens=204800 elapsed=4.3s
+update=110/9000 loss=6.4210 tokens=225280 elapsed=4.6s
+update=120/9000 loss=6.1417 tokens=245760 elapsed=4.9s
+update=130/9000 loss=6.0423 tokens=266240 elapsed=5.2s
+update=140/9000 loss=5.9435 tokens=286720 elapsed=5.5s
+update=150/9000 loss=5.9270 tokens=307200 elapsed=5.8s
+update=160/9000 loss=5.9044 tokens=327680 elapsed=6.1s
+update=170/9000 loss=5.9939 tokens=348160 elapsed=6.4s
+update=180/9000 loss=5.8975 tokens=368640 elapsed=6.7s
+update=190/9000 loss=5.7711 tokens=389120 elapsed=7.0s
+update=200/9000 loss=5.8110 tokens=409600 elapsed=7.3s
+update=210/9000 loss=5.6788 tokens=430080 elapsed=7.7s
+update=220/9000 loss=5.4626 tokens=450560 elapsed=8.0s
+update=230/9000 loss=5.4547 tokens=471040 elapsed=8.3s
+update=240/9000 loss=5.3323 tokens=491520 elapsed=8.6s
+update=250/9000 loss=5.0367 tokens=512000 elapsed=8.9s
+update=260/9000 loss=4.8699 tokens=532480 elapsed=9.2s
+update=270/9000 loss=4.9453 tokens=552960 elapsed=9.5s
+update=280/9000 loss=4.7778 tokens=573440 elapsed=9.8s
+update=290/9000 loss=4.7339 tokens=593920 elapsed=10.1s
+update=300/9000 loss=4.4166 tokens=614400 elapsed=10.4s
+update=310/9000 loss=4.5199 tokens=634880 elapsed=10.7s
+update=320/9000 loss=4.6246 tokens=655360 elapsed=11.0s
+update=330/9000 loss=4.2901 tokens=675840 elapsed=11.3s
+update=340/9000 loss=4.4389 tokens=696320 elapsed=11.6s
+update=350/9000 loss=4.2790 tokens=716800 elapsed=11.9s
+update=360/9000 loss=4.3510 tokens=737280 elapsed=12.2s
+update=370/9000 loss=4.3157 tokens=757760 elapsed=12.5s
+update=380/9000 loss=4.0145 tokens=778240 elapsed=12.9s
+update=390/9000 loss=4.1658 tokens=798720 elapsed=13.2s
+update=400/9000 loss=4.2256 tokens=819200 elapsed=13.5s
+update=410/9000 loss=4.0801 tokens=839680 elapsed=13.8s
+update=420/9000 loss=4.0590 tokens=860160 elapsed=14.1s
+update=430/9000 loss=4.1015 tokens=880640 elapsed=14.4s
+update=440/9000 loss=3.8535 tokens=901120 elapsed=14.7s
+update=450/9000 loss=3.8914 tokens=921600 elapsed=15.0s
+update=460/9000 loss=3.9717 tokens=942080 elapsed=15.3s
+update=470/9000 loss=4.0689 tokens=962560 elapsed=15.6s
+update=480/9000 loss=3.8958 tokens=983040 elapsed=15.9s
+update=490/9000 loss=4.0343 tokens=1003520 elapsed=16.2s
+update=500/9000 loss=4.0504 tokens=1024000 elapsed=16.5s
+validation update=500 loss=3.6524 perplexity=38.57
+update=510/9000 loss=3.9842 tokens=1044480 elapsed=17.2s
+update=520/9000 loss=4.0770 tokens=1064960 elapsed=17.5s
+update=530/9000 loss=3.7069 tokens=1085440 elapsed=17.8s
+update=540/9000 loss=3.7142 tokens=1105920 elapsed=18.1s
+update=550/9000 loss=3.8198 tokens=1126400 elapsed=18.4s
+update=560/9000 loss=3.9629 tokens=1146880 elapsed=18.7s
+update=570/9000 loss=3.7742 tokens=1167360 elapsed=19.0s
+update=580/9000 loss=3.9317 tokens=1187840 elapsed=19.3s
+update=590/9000 loss=3.7393 tokens=1208320 elapsed=19.6s
+update=600/9000 loss=3.4348 tokens=1228800 elapsed=19.9s
+update=610/9000 loss=3.6607 tokens=1249280 elapsed=20.2s
+update=620/9000 loss=3.6550 tokens=1269760 elapsed=20.6s
+update=630/9000 loss=3.8480 tokens=1290240 elapsed=20.9s
+update=640/9000 loss=3.4700 tokens=1310720 elapsed=21.2s
+update=650/9000 loss=3.5896 tokens=1331200 elapsed=21.5s
+update=660/9000 loss=3.6650 tokens=1351680 elapsed=21.8s
+update=670/9000 loss=3.3792 tokens=1372160 elapsed=22.1s
+update=680/9000 loss=3.4158 tokens=1392640 elapsed=22.4s
+update=690/9000 loss=3.7249 tokens=1413120 elapsed=22.7s
+update=700/9000 loss=3.5103 tokens=1433600 elapsed=23.0s
+update=710/9000 loss=3.4489 tokens=1454080 elapsed=23.3s
+update=720/9000 loss=3.6755 tokens=1474560 elapsed=23.6s
+update=730/9000 loss=3.5352 tokens=1495040 elapsed=23.9s
+update=740/9000 loss=3.6483 tokens=1515520 elapsed=24.2s
+update=750/9000 loss=3.6595 tokens=1536000 elapsed=24.5s
+update=760/9000 loss=3.6382 tokens=1556480 elapsed=24.9s
+update=770/9000 loss=3.5630 tokens=1576960 elapsed=25.2s
+update=780/9000 loss=3.6068 tokens=1597440 elapsed=25.5s
+update=790/9000 loss=3.7404 tokens=1617920 elapsed=25.8s
+update=800/9000 loss=3.5416 tokens=1638400 elapsed=26.1s
+update=810/9000 loss=3.3026 tokens=1658880 elapsed=26.4s
+update=820/9000 loss=3.6019 tokens=1679360 elapsed=26.7s
+update=830/9000 loss=3.6597 tokens=1699840 elapsed=27.0s
+update=840/9000 loss=3.3317 tokens=1720320 elapsed=27.3s
+update=850/9000 loss=3.5051 tokens=1740800 elapsed=27.6s
+update=860/9000 loss=3.6030 tokens=1761280 elapsed=27.9s
+update=870/9000 loss=3.3310 tokens=1781760 elapsed=28.2s
+update=880/9000 loss=3.2815 tokens=1802240 elapsed=28.5s
+update=890/9000 loss=3.5525 tokens=1822720 elapsed=28.8s
+update=900/9000 loss=3.5285 tokens=1843200 elapsed=29.1s
+update=910/9000 loss=3.6085 tokens=1863680 elapsed=29.4s
+update=920/9000 loss=3.2434 tokens=1884160 elapsed=29.8s
+update=930/9000 loss=3.5174 tokens=1904640 elapsed=30.1s
+update=940/9000 loss=3.1760 tokens=1925120 elapsed=30.4s
+update=950/9000 loss=3.2214 tokens=1945600 elapsed=30.7s
+update=960/9000 loss=3.3059 tokens=1966080 elapsed=31.0s
+update=970/9000 loss=3.2361 tokens=1986560 elapsed=31.3s
+update=980/9000 loss=3.5761 tokens=2007040 elapsed=31.6s
+update=990/9000 loss=3.1993 tokens=2027520 elapsed=31.9s
+update=1000/9000 loss=3.5553 tokens=2048000 elapsed=32.2s
+validation update=1000 loss=3.1572 perplexity=23.50
+update=1010/9000 loss=3.1540 tokens=2068480 elapsed=32.9s
+update=1020/9000 loss=3.3969 tokens=2088960 elapsed=33.2s
+update=1030/9000 loss=3.2528 tokens=2109440 elapsed=33.5s
+update=1040/9000 loss=3.3497 tokens=2129920 elapsed=33.8s
+update=1050/9000 loss=3.1344 tokens=2150400 elapsed=34.1s
+update=1060/9000 loss=3.4538 tokens=2170880 elapsed=34.4s
+update=1070/9000 loss=3.4784 tokens=2191360 elapsed=34.7s
+update=1080/9000 loss=3.2448 tokens=2211840 elapsed=35.0s
+update=1090/9000 loss=3.1458 tokens=2232320 elapsed=35.4s
+update=1100/9000 loss=3.5210 tokens=2252800 elapsed=35.7s
+update=1110/9000 loss=3.3447 tokens=2273280 elapsed=36.0s
+update=1120/9000 loss=3.2774 tokens=2293760 elapsed=36.3s
+update=1130/9000 loss=3.5327 tokens=2314240 elapsed=36.6s
+update=1140/9000 loss=3.4116 tokens=2334720 elapsed=36.9s
+update=1150/9000 loss=3.2984 tokens=2355200 elapsed=37.3s
+update=1160/9000 loss=3.1169 tokens=2375680 elapsed=37.6s
+update=1170/9000 loss=3.3324 tokens=2396160 elapsed=37.9s
+update=1180/9000 loss=3.0487 tokens=2416640 elapsed=38.2s
+update=1190/9000 loss=3.4711 tokens=2437120 elapsed=38.5s
+update=1200/9000 loss=3.5414 tokens=2457600 elapsed=38.8s
+update=1210/9000 loss=3.1102 tokens=2478080 elapsed=39.1s
+update=1220/9000 loss=3.2474 tokens=2498560 elapsed=39.4s
+update=1230/9000 loss=3.1767 tokens=2519040 elapsed=39.7s
+update=1240/9000 loss=3.0220 tokens=2539520 elapsed=40.0s
+update=1250/9000 loss=3.3005 tokens=2560000 elapsed=40.3s
+update=1260/9000 loss=3.1791 tokens=2580480 elapsed=40.6s
+update=1270/9000 loss=2.9313 tokens=2600960 elapsed=41.0s
+update=1280/9000 loss=3.3471 tokens=2621440 elapsed=41.3s
+update=1290/9000 loss=3.4102 tokens=2641920 elapsed=41.6s
+update=1300/9000 loss=3.0936 tokens=2662400 elapsed=41.9s
+update=1310/9000 loss=3.3664 tokens=2682880 elapsed=42.2s
+update=1320/9000 loss=3.4346 tokens=2703360 elapsed=42.5s
+update=1330/9000 loss=3.5219 tokens=2723840 elapsed=42.8s
+update=1340/9000 loss=3.5222 tokens=2744320 elapsed=43.1s
+update=1350/9000 loss=3.1695 tokens=2764800 elapsed=43.4s
+update=1360/9000 loss=3.1815 tokens=2785280 elapsed=43.7s
+update=1370/9000 loss=3.4210 tokens=2805760 elapsed=44.1s
+update=1380/9000 loss=3.2431 tokens=2826240 elapsed=44.4s
+update=1390/9000 loss=2.9755 tokens=2846720 elapsed=44.7s
+update=1400/9000 loss=3.2225 tokens=2867200 elapsed=45.0s
+update=1410/9000 loss=3.0914 tokens=2887680 elapsed=45.3s
+update=1420/9000 loss=3.2919 tokens=2908160 elapsed=45.6s
+update=1430/9000 loss=2.8735 tokens=2928640 elapsed=45.9s
+update=1440/9000 loss=3.3274 tokens=2949120 elapsed=46.2s
+update=1450/9000 loss=3.0805 tokens=2969600 elapsed=46.5s
+update=1460/9000 loss=3.0900 tokens=2990080 elapsed=46.9s
+update=1470/9000 loss=3.0166 tokens=3010560 elapsed=47.2s
+update=1480/9000 loss=3.4065 tokens=3031040 elapsed=47.5s
+update=1490/9000 loss=3.0296 tokens=3051520 elapsed=47.8s
+update=1500/9000 loss=3.2116 tokens=3072000 elapsed=48.1s
+validation update=1500 loss=2.9259 perplexity=18.65
+update=1510/9000 loss=3.2682 tokens=3092480 elapsed=48.7s
+update=1520/9000 loss=3.1343 tokens=3112960 elapsed=49.0s
+update=1530/9000 loss=3.2012 tokens=3133440 elapsed=49.3s
+update=1540/9000 loss=3.0560 tokens=3153920 elapsed=49.6s
+update=1550/9000 loss=3.0926 tokens=3174400 elapsed=49.9s
+update=1560/9000 loss=3.2643 tokens=3194880 elapsed=50.2s
+update=1570/9000 loss=3.0255 tokens=3215360 elapsed=50.6s
+update=1580/9000 loss=3.0009 tokens=3235840 elapsed=50.9s
+update=1590/9000 loss=3.1820 tokens=3256320 elapsed=51.2s
+update=1600/9000 loss=2.9216 tokens=3276800 elapsed=51.5s
+update=1610/9000 loss=3.0313 tokens=3297280 elapsed=51.8s
+update=1620/9000 loss=3.2587 tokens=3317760 elapsed=52.1s
+update=1630/9000 loss=3.1366 tokens=3338240 elapsed=52.4s
+update=1640/9000 loss=3.2960 tokens=3358720 elapsed=52.7s
+update=1650/9000 loss=2.9327 tokens=3379200 elapsed=53.0s
+update=1660/9000 loss=2.8481 tokens=3399680 elapsed=53.4s
+update=1670/9000 loss=3.0624 tokens=3420160 elapsed=53.7s
+update=1680/9000 loss=3.1572 tokens=3440640 elapsed=54.0s
+update=1690/9000 loss=3.4264 tokens=3461120 elapsed=54.3s
+update=1700/9000 loss=3.2159 tokens=3481600 elapsed=54.6s
+update=1710/9000 loss=3.1011 tokens=3502080 elapsed=54.9s
+update=1720/9000 loss=2.9468 tokens=3522560 elapsed=55.2s
+update=1730/9000 loss=3.3592 tokens=3543040 elapsed=55.5s
+update=1740/9000 loss=3.0897 tokens=3563520 elapsed=55.8s
+update=1750/9000 loss=2.9708 tokens=3584000 elapsed=56.1s
+update=1760/9000 loss=3.0875 tokens=3604480 elapsed=56.5s
+update=1770/9000 loss=2.9646 tokens=3624960 elapsed=56.8s
+update=1780/9000 loss=3.0551 tokens=3645440 elapsed=57.1s
+update=1790/9000 loss=3.2226 tokens=3665920 elapsed=57.4s
+update=1800/9000 loss=3.1324 tokens=3686400 elapsed=57.7s
+update=1810/9000 loss=3.0760 tokens=3706880 elapsed=58.0s
+update=1820/9000 loss=3.1140 tokens=3727360 elapsed=58.3s
+update=1830/9000 loss=3.3870 tokens=3747840 elapsed=58.6s
+update=1840/9000 loss=2.9317 tokens=3768320 elapsed=58.9s
+update=1850/9000 loss=3.0706 tokens=3788800 elapsed=59.2s
+update=1860/9000 loss=2.8131 tokens=3809280 elapsed=59.6s
+update=1870/9000 loss=3.0176 tokens=3829760 elapsed=59.9s
+update=1880/9000 loss=3.1453 tokens=3850240 elapsed=60.2s
+update=1890/9000 loss=3.0442 tokens=3870720 elapsed=60.5s
+update=1900/9000 loss=3.2032 tokens=3891200 elapsed=60.8s
+update=1910/9000 loss=3.2168 tokens=3911680 elapsed=61.1s
+update=1920/9000 loss=2.7274 tokens=3932160 elapsed=61.4s
+update=1930/9000 loss=3.0707 tokens=3952640 elapsed=61.7s
+update=1940/9000 loss=3.2415 tokens=3973120 elapsed=62.0s
+update=1950/9000 loss=2.6874 tokens=3993600 elapsed=62.4s
+update=1960/9000 loss=2.9600 tokens=4014080 elapsed=62.7s
+update=1970/9000 loss=3.0661 tokens=4034560 elapsed=63.0s
+update=1980/9000 loss=2.8946 tokens=4055040 elapsed=63.3s
+update=1990/9000 loss=2.8775 tokens=4075520 elapsed=63.6s
+update=2000/9000 loss=3.0425 tokens=4096000 elapsed=63.9s
+validation update=2000 loss=2.7659 perplexity=15.89
+update=2010/9000 loss=2.9435 tokens=4116480 elapsed=64.6s
+update=2020/9000 loss=3.1114 tokens=4136960 elapsed=64.9s
+update=2030/9000 loss=3.0943 tokens=4157440 elapsed=65.2s
+update=2040/9000 loss=3.1623 tokens=4177920 elapsed=65.5s
+update=2050/9000 loss=2.9577 tokens=4198400 elapsed=65.8s
+update=2060/9000 loss=2.8654 tokens=4218880 elapsed=66.1s
+update=2070/9000 loss=3.0105 tokens=4239360 elapsed=66.5s
+update=2080/9000 loss=3.1655 tokens=4259840 elapsed=66.8s
+update=2090/9000 loss=2.7709 tokens=4280320 elapsed=67.1s
+update=2100/9000 loss=3.1651 tokens=4300800 elapsed=67.4s
+update=2110/9000 loss=2.7501 tokens=4321280 elapsed=67.7s
+update=2120/9000 loss=3.1095 tokens=4341760 elapsed=68.0s
+update=2130/9000 loss=3.2962 tokens=4362240 elapsed=68.3s
+update=2140/9000 loss=2.9836 tokens=4382720 elapsed=68.6s
+update=2150/9000 loss=3.0170 tokens=4403200 elapsed=68.9s
+update=2160/9000 loss=3.0293 tokens=4423680 elapsed=69.3s
+update=2170/9000 loss=2.8251 tokens=4444160 elapsed=69.6s
+update=2180/9000 loss=2.8653 tokens=4464640 elapsed=69.9s
+update=2190/9000 loss=3.1061 tokens=4485120 elapsed=70.2s
+update=2200/9000 loss=3.2691 tokens=4505600 elapsed=70.5s
+update=2210/9000 loss=2.9218 tokens=4526080 elapsed=70.8s
+update=2220/9000 loss=3.1404 tokens=4546560 elapsed=71.1s
+update=2230/9000 loss=2.9722 tokens=4567040 elapsed=71.5s
+update=2240/9000 loss=2.8518 tokens=4587520 elapsed=71.8s
+update=2250/9000 loss=2.9164 tokens=4608000 elapsed=72.1s
+update=2260/9000 loss=2.7709 tokens=4628480 elapsed=72.4s
+update=2270/9000 loss=2.8319 tokens=4648960 elapsed=72.7s
+update=2280/9000 loss=2.8816 tokens=4669440 elapsed=73.0s
+update=2290/9000 loss=2.7336 tokens=4689920 elapsed=73.3s
+update=2300/9000 loss=3.1758 tokens=4710400 elapsed=73.6s
+update=2310/9000 loss=2.7581 tokens=4730880 elapsed=73.9s
+update=2320/9000 loss=2.6940 tokens=4751360 elapsed=74.3s
+update=2330/9000 loss=2.7017 tokens=4771840 elapsed=74.6s
+update=2340/9000 loss=2.9943 tokens=4792320 elapsed=74.9s
+update=2350/9000 loss=2.9080 tokens=4812800 elapsed=75.2s
+update=2360/9000 loss=3.3082 tokens=4833280 elapsed=75.5s
+update=2370/9000 loss=3.0099 tokens=4853760 elapsed=75.8s
+update=2380/9000 loss=3.0167 tokens=4874240 elapsed=76.1s
+update=2390/9000 loss=2.8903 tokens=4894720 elapsed=76.4s
+update=2400/9000 loss=3.1903 tokens=4915200 elapsed=76.8s
+update=2410/9000 loss=3.0647 tokens=4935680 elapsed=77.1s
+update=2420/9000 loss=2.8023 tokens=4956160 elapsed=77.4s
+update=2430/9000 loss=3.2858 tokens=4976640 elapsed=77.7s
+update=2440/9000 loss=2.8105 tokens=4997120 elapsed=78.0s
+update=2450/9000 loss=2.9319 tokens=5017600 elapsed=78.3s
+update=2460/9000 loss=2.6661 tokens=5038080 elapsed=78.6s
+update=2470/9000 loss=2.8641 tokens=5058560 elapsed=78.9s
+update=2480/9000 loss=2.8123 tokens=5079040 elapsed=79.2s
+update=2490/9000 loss=3.1534 tokens=5099520 elapsed=79.6s
+update=2500/9000 loss=3.0521 tokens=5120000 elapsed=79.9s
+validation update=2500 loss=2.6695 perplexity=14.43
+update=2510/9000 loss=2.8991 tokens=5140480 elapsed=80.5s
+update=2520/9000 loss=3.1355 tokens=5160960 elapsed=80.8s
+update=2530/9000 loss=3.0986 tokens=5181440 elapsed=81.1s
+update=2540/9000 loss=3.2014 tokens=5201920 elapsed=81.4s
+update=2550/9000 loss=3.1591 tokens=5222400 elapsed=81.7s
+update=2560/9000 loss=2.8258 tokens=5242880 elapsed=82.0s
+update=2570/9000 loss=3.1738 tokens=5263360 elapsed=82.3s
+update=2580/9000 loss=2.9567 tokens=5283840 elapsed=82.6s
+update=2590/9000 loss=3.0325 tokens=5304320 elapsed=83.0s
+update=2600/9000 loss=2.9636 tokens=5324800 elapsed=83.3s
+update=2610/9000 loss=2.9551 tokens=5345280 elapsed=83.6s
+update=2620/9000 loss=2.8606 tokens=5365760 elapsed=83.9s
+update=2630/9000 loss=2.8850 tokens=5386240 elapsed=84.2s
+update=2640/9000 loss=2.9525 tokens=5406720 elapsed=84.5s
+update=2650/9000 loss=2.8856 tokens=5427200 elapsed=84.8s
+update=2660/9000 loss=3.1861 tokens=5447680 elapsed=85.1s
+update=2670/9000 loss=2.8679 tokens=5468160 elapsed=85.5s
+update=2680/9000 loss=2.8932 tokens=5488640 elapsed=85.8s
+update=2690/9000 loss=2.8653 tokens=5509120 elapsed=86.1s
+update=2700/9000 loss=2.8785 tokens=5529600 elapsed=86.4s
+update=2710/9000 loss=2.9788 tokens=5550080 elapsed=86.7s
+update=2720/9000 loss=2.4921 tokens=5570560 elapsed=87.0s
+update=2730/9000 loss=3.4157 tokens=5591040 elapsed=87.3s
+update=2740/9000 loss=2.9830 tokens=5611520 elapsed=87.6s
+update=2750/9000 loss=3.0630 tokens=5632000 elapsed=88.0s
+update=2760/9000 loss=2.9867 tokens=5652480 elapsed=88.3s
+update=2770/9000 loss=2.6521 tokens=5672960 elapsed=88.6s
+update=2780/9000 loss=2.8550 tokens=5693440 elapsed=88.9s
+update=2790/9000 loss=2.7964 tokens=5713920 elapsed=89.2s
+update=2800/9000 loss=2.9292 tokens=5734400 elapsed=89.5s
+update=2810/9000 loss=2.7740 tokens=5754880 elapsed=89.8s
+update=2820/9000 loss=3.0692 tokens=5775360 elapsed=90.1s
+update=2830/9000 loss=2.8112 tokens=5795840 elapsed=90.4s
+update=2840/9000 loss=2.8665 tokens=5816320 elapsed=90.7s
+update=2850/9000 loss=2.6976 tokens=5836800 elapsed=91.1s
+update=2860/9000 loss=2.6851 tokens=5857280 elapsed=91.4s
+update=2870/9000 loss=3.0004 tokens=5877760 elapsed=91.7s
+update=2880/9000 loss=2.7024 tokens=5898240 elapsed=92.0s
+update=2890/9000 loss=2.8934 tokens=5918720 elapsed=92.3s
+update=2900/9000 loss=2.9203 tokens=5939200 elapsed=92.6s
+update=2910/9000 loss=2.8374 tokens=5959680 elapsed=92.9s
+update=2920/9000 loss=2.7975 tokens=5980160 elapsed=93.2s
+update=2930/9000 loss=2.7244 tokens=6000640 elapsed=93.5s
+update=2940/9000 loss=2.7761 tokens=6021120 elapsed=93.9s
+update=2950/9000 loss=2.8967 tokens=6041600 elapsed=94.2s
+update=2960/9000 loss=3.0444 tokens=6062080 elapsed=94.5s
+update=2970/9000 loss=2.6995 tokens=6082560 elapsed=94.8s
+update=2980/9000 loss=2.8695 tokens=6103040 elapsed=95.1s
+update=2990/9000 loss=2.6674 tokens=6123520 elapsed=95.4s
+update=3000/9000 loss=2.9887 tokens=6144000 elapsed=95.7s
+validation update=3000 loss=2.5939 perplexity=13.38
+update=3010/9000 loss=3.0331 tokens=6164480 elapsed=96.4s
+update=3020/9000 loss=2.7710 tokens=6184960 elapsed=96.7s
+update=3030/9000 loss=2.7394 tokens=6205440 elapsed=97.0s
+update=3040/9000 loss=2.7716 tokens=6225920 elapsed=97.3s
+update=3050/9000 loss=2.8197 tokens=6246400 elapsed=97.7s
+update=3060/9000 loss=2.5823 tokens=6266880 elapsed=98.0s
+update=3070/9000 loss=2.6654 tokens=6287360 elapsed=98.3s
+update=3080/9000 loss=2.9493 tokens=6307840 elapsed=98.6s
+update=3090/9000 loss=2.9415 tokens=6328320 elapsed=98.9s
+update=3100/9000 loss=3.0567 tokens=6348800 elapsed=99.2s
+update=3110/9000 loss=3.2463 tokens=6369280 elapsed=99.5s
+update=3120/9000 loss=2.7246 tokens=6389760 elapsed=99.9s
+update=3130/9000 loss=3.0848 tokens=6410240 elapsed=100.2s
+update=3140/9000 loss=2.6323 tokens=6429440 elapsed=100.5s
+update=3150/9000 loss=2.8571 tokens=6449920 elapsed=100.8s
+update=3160/9000 loss=2.6572 tokens=6470400 elapsed=101.1s
+update=3170/9000 loss=2.7559 tokens=6490880 elapsed=101.4s
+update=3180/9000 loss=2.8802 tokens=6511360 elapsed=101.7s
+update=3190/9000 loss=2.8141 tokens=6531840 elapsed=102.0s
+update=3200/9000 loss=2.9189 tokens=6552320 elapsed=102.3s
+update=3210/9000 loss=2.7679 tokens=6572800 elapsed=102.7s
+update=3220/9000 loss=2.8455 tokens=6593280 elapsed=103.0s
+update=3230/9000 loss=2.9178 tokens=6613760 elapsed=103.3s
+update=3240/9000 loss=2.7539 tokens=6634240 elapsed=103.6s
+update=3250/9000 loss=2.5757 tokens=6654720 elapsed=103.9s
+update=3260/9000 loss=2.8728 tokens=6675200 elapsed=104.2s
+update=3270/9000 loss=2.6617 tokens=6695680 elapsed=104.5s
+update=3280/9000 loss=2.9772 tokens=6716160 elapsed=104.8s
+update=3290/9000 loss=2.8198 tokens=6736640 elapsed=105.2s
+update=3300/9000 loss=2.7301 tokens=6757120 elapsed=105.5s
+update=3310/9000 loss=2.7959 tokens=6777600 elapsed=105.8s
+update=3320/9000 loss=2.8138 tokens=6798080 elapsed=106.1s
+update=3330/9000 loss=2.5823 tokens=6818560 elapsed=106.4s
+update=3340/9000 loss=2.6564 tokens=6839040 elapsed=106.7s
+update=3350/9000 loss=2.7885 tokens=6859520 elapsed=107.0s
+update=3360/9000 loss=2.7305 tokens=6880000 elapsed=107.3s
+update=3370/9000 loss=2.6469 tokens=6900480 elapsed=107.7s
+update=3380/9000 loss=2.6100 tokens=6920960 elapsed=108.0s
+update=3390/9000 loss=2.8414 tokens=6941440 elapsed=108.3s
+update=3400/9000 loss=2.6803 tokens=6961920 elapsed=108.6s
+update=3410/9000 loss=2.6357 tokens=6982400 elapsed=108.9s
+update=3420/9000 loss=2.7578 tokens=7002880 elapsed=109.2s
+update=3430/9000 loss=2.8527 tokens=7023360 elapsed=109.5s
+update=3440/9000 loss=2.6995 tokens=7043840 elapsed=109.8s
+update=3450/9000 loss=2.8153 tokens=7064320 elapsed=110.1s
+update=3460/9000 loss=3.0096 tokens=7084800 elapsed=110.5s
+update=3470/9000 loss=2.7594 tokens=7105280 elapsed=110.8s
+update=3480/9000 loss=2.8712 tokens=7125760 elapsed=111.1s
+update=3490/9000 loss=2.7038 tokens=7146240 elapsed=111.4s
+update=3500/9000 loss=2.9093 tokens=7166720 elapsed=111.7s
+validation update=3500 loss=2.5315 perplexity=12.57
+update=3510/9000 loss=2.6128 tokens=7187200 elapsed=112.3s
+update=3520/9000 loss=2.8275 tokens=7207680 elapsed=112.7s
+update=3530/9000 loss=2.7359 tokens=7228160 elapsed=113.0s
+update=3540/9000 loss=2.7409 tokens=7248640 elapsed=113.3s
+update=3550/9000 loss=2.8073 tokens=7269120 elapsed=113.6s
+update=3560/9000 loss=2.6023 tokens=7289600 elapsed=113.9s
+update=3570/9000 loss=2.7444 tokens=7310080 elapsed=114.2s
+update=3580/9000 loss=3.1109 tokens=7330560 elapsed=114.6s
+update=3590/9000 loss=2.6727 tokens=7351040 elapsed=114.9s
+update=3600/9000 loss=2.4140 tokens=7371520 elapsed=115.2s
+update=3610/9000 loss=2.7178 tokens=7392000 elapsed=115.5s
+update=3620/9000 loss=2.7014 tokens=7412480 elapsed=115.9s
+update=3630/9000 loss=2.8500 tokens=7432960 elapsed=116.2s
+update=3640/9000 loss=2.7376 tokens=7453440 elapsed=116.5s
+update=3650/9000 loss=2.4903 tokens=7473920 elapsed=116.8s
+update=3660/9000 loss=2.9248 tokens=7494400 elapsed=117.2s
+update=3670/9000 loss=2.8006 tokens=7514880 elapsed=117.5s
+update=3680/9000 loss=2.5968 tokens=7535360 elapsed=117.8s
+update=3690/9000 loss=2.8380 tokens=7555840 elapsed=118.1s
+update=3700/9000 loss=2.7350 tokens=7576320 elapsed=118.4s
+update=3710/9000 loss=2.5912 tokens=7596800 elapsed=118.7s
+update=3720/9000 loss=2.7140 tokens=7617280 elapsed=119.0s
+update=3730/9000 loss=2.7361 tokens=7637760 elapsed=119.3s
+update=3740/9000 loss=2.6731 tokens=7658240 elapsed=119.6s
+update=3750/9000 loss=2.7311 tokens=7678720 elapsed=120.0s
+update=3760/9000 loss=2.5754 tokens=7699200 elapsed=120.3s
+update=3770/9000 loss=2.6563 tokens=7719680 elapsed=120.6s
+update=3780/9000 loss=2.6454 tokens=7740160 elapsed=120.9s
+update=3790/9000 loss=2.6026 tokens=7760640 elapsed=121.2s
+update=3800/9000 loss=2.7825 tokens=7781120 elapsed=121.5s
+update=3810/9000 loss=2.8700 tokens=7801600 elapsed=121.8s
+update=3820/9000 loss=2.7191 tokens=7822080 elapsed=122.1s
+update=3830/9000 loss=2.4361 tokens=7842560 elapsed=122.4s
+update=3840/9000 loss=2.7240 tokens=7863040 elapsed=122.8s
+update=3850/9000 loss=2.7149 tokens=7883520 elapsed=123.1s
+update=3860/9000 loss=2.5901 tokens=7904000 elapsed=123.4s
+update=3870/9000 loss=2.6475 tokens=7924480 elapsed=123.7s
+update=3880/9000 loss=2.7832 tokens=7944960 elapsed=124.0s
+update=3890/9000 loss=2.4889 tokens=7965440 elapsed=124.3s
+update=3900/9000 loss=2.6552 tokens=7985920 elapsed=124.6s
+update=3910/9000 loss=2.8094 tokens=8006400 elapsed=124.9s
+update=3920/9000 loss=2.6226 tokens=8026880 elapsed=125.3s
+update=3930/9000 loss=2.6025 tokens=8047360 elapsed=125.6s
+update=3940/9000 loss=2.6487 tokens=8067840 elapsed=125.9s
+update=3950/9000 loss=2.8306 tokens=8088320 elapsed=126.2s
+update=3960/9000 loss=2.8544 tokens=8108800 elapsed=126.5s
+update=3970/9000 loss=2.4866 tokens=8129280 elapsed=126.8s
+update=3980/9000 loss=2.5298 tokens=8149760 elapsed=127.1s
+update=3990/9000 loss=2.7467 tokens=8170240 elapsed=127.4s
+update=4000/9000 loss=2.7530 tokens=8190720 elapsed=127.7s
+validation update=4000 loss=2.4821 perplexity=11.97
+update=4010/9000 loss=2.6587 tokens=8211200 elapsed=128.4s
+update=4020/9000 loss=2.3213 tokens=8231680 elapsed=128.7s
+update=4030/9000 loss=2.8794 tokens=8252160 elapsed=129.1s
+update=4040/9000 loss=2.8605 tokens=8272640 elapsed=129.4s
+update=4050/9000 loss=2.6034 tokens=8293120 elapsed=129.7s
+update=4060/9000 loss=2.7246 tokens=8313600 elapsed=130.0s
+update=4070/9000 loss=2.5526 tokens=8334080 elapsed=130.3s
+update=4080/9000 loss=2.5135 tokens=8354560 elapsed=130.6s
+update=4090/9000 loss=2.6570 tokens=8375040 elapsed=130.9s
+update=4100/9000 loss=2.9016 tokens=8395520 elapsed=131.2s
+update=4110/9000 loss=2.8745 tokens=8416000 elapsed=131.5s
+update=4120/9000 loss=2.9620 tokens=8436480 elapsed=131.9s
+update=4130/9000 loss=2.9187 tokens=8456960 elapsed=132.2s
+update=4140/9000 loss=2.7308 tokens=8477440 elapsed=132.5s
+update=4150/9000 loss=2.7121 tokens=8497920 elapsed=132.8s
+update=4160/9000 loss=2.7294 tokens=8518400 elapsed=133.1s
+update=4170/9000 loss=2.9177 tokens=8538880 elapsed=133.4s
+update=4180/9000 loss=2.7410 tokens=8559360 elapsed=133.7s
+update=4190/9000 loss=2.9121 tokens=8579840 elapsed=134.1s
+update=4200/9000 loss=2.7443 tokens=8600320 elapsed=134.4s
+update=4210/9000 loss=2.7987 tokens=8620800 elapsed=134.7s
+update=4220/9000 loss=2.7442 tokens=8641280 elapsed=135.0s
+update=4230/9000 loss=2.8055 tokens=8661760 elapsed=135.3s
+update=4240/9000 loss=2.5872 tokens=8682240 elapsed=135.6s
+update=4250/9000 loss=2.4523 tokens=8702720 elapsed=135.9s
+update=4260/9000 loss=2.7364 tokens=8723200 elapsed=136.2s
+update=4270/9000 loss=2.7503 tokens=8743680 elapsed=136.5s
+update=4280/9000 loss=2.8424 tokens=8764160 elapsed=136.9s
+update=4290/9000 loss=2.5031 tokens=8784640 elapsed=137.2s
+update=4300/9000 loss=2.6715 tokens=8805120 elapsed=137.5s
+update=4310/9000 loss=2.6490 tokens=8825600 elapsed=137.8s
+update=4320/9000 loss=2.7705 tokens=8846080 elapsed=138.1s
+update=4330/9000 loss=2.7125 tokens=8866560 elapsed=138.4s
+update=4340/9000 loss=2.3810 tokens=8887040 elapsed=138.7s
+update=4350/9000 loss=2.6989 tokens=8907520 elapsed=139.0s
+update=4360/9000 loss=2.6360 tokens=8928000 elapsed=139.3s
+update=4370/9000 loss=2.8025 tokens=8948480 elapsed=139.6s
+update=4380/9000 loss=2.3254 tokens=8968960 elapsed=140.0s
+update=4390/9000 loss=2.4658 tokens=8989440 elapsed=140.3s
+update=4400/9000 loss=2.5800 tokens=9009920 elapsed=140.6s
+update=4410/9000 loss=2.8353 tokens=9030400 elapsed=140.9s
+update=4420/9000 loss=2.7973 tokens=9050880 elapsed=141.2s
+update=4430/9000 loss=2.8635 tokens=9071360 elapsed=141.5s
+update=4440/9000 loss=2.7898 tokens=9091840 elapsed=141.8s
+update=4450/9000 loss=2.6987 tokens=9112320 elapsed=142.1s
+update=4460/9000 loss=2.7748 tokens=9132800 elapsed=142.5s
+update=4470/9000 loss=2.6701 tokens=9153280 elapsed=142.8s
+update=4480/9000 loss=2.5038 tokens=9173760 elapsed=143.1s
+update=4490/9000 loss=2.7902 tokens=9194240 elapsed=143.4s
+update=4500/9000 loss=2.5027 tokens=9214720 elapsed=143.7s
+validation update=4500 loss=2.4429 perplexity=11.51
+update=4510/9000 loss=2.6248 tokens=9235200 elapsed=144.3s
+update=4520/9000 loss=2.6884 tokens=9255680 elapsed=144.6s
+update=4530/9000 loss=2.4216 tokens=9276160 elapsed=144.9s
+update=4540/9000 loss=2.6788 tokens=9296640 elapsed=145.3s
+update=4550/9000 loss=2.3806 tokens=9317120 elapsed=145.6s
+update=4560/9000 loss=2.9320 tokens=9337600 elapsed=145.9s
+update=4570/9000 loss=2.8231 tokens=9358080 elapsed=146.2s
+update=4580/9000 loss=2.6184 tokens=9378560 elapsed=146.5s
+update=4590/9000 loss=2.4154 tokens=9399040 elapsed=146.8s
+update=4600/9000 loss=2.7858 tokens=9419520 elapsed=147.1s
+update=4610/9000 loss=2.7375 tokens=9440000 elapsed=147.4s
+update=4620/9000 loss=2.6915 tokens=9460480 elapsed=147.7s
+update=4630/9000 loss=2.8932 tokens=9480960 elapsed=148.0s
+update=4640/9000 loss=2.8129 tokens=9501440 elapsed=148.4s
+update=4650/9000 loss=2.4029 tokens=9521920 elapsed=148.7s
+update=4660/9000 loss=2.7157 tokens=9542400 elapsed=149.0s
+update=4670/9000 loss=2.3644 tokens=9562880 elapsed=149.3s
+update=4680/9000 loss=2.6035 tokens=9583360 elapsed=149.6s
+update=4690/9000 loss=2.5468 tokens=9603840 elapsed=149.9s
+update=4700/9000 loss=2.7733 tokens=9624320 elapsed=150.2s
+update=4710/9000 loss=2.6533 tokens=9644800 elapsed=150.5s
+update=4720/9000 loss=2.5403 tokens=9665280 elapsed=150.8s
+update=4730/9000 loss=2.6555 tokens=9685760 elapsed=151.2s
+update=4740/9000 loss=2.5222 tokens=9706240 elapsed=151.5s
+update=4750/9000 loss=2.8208 tokens=9726720 elapsed=151.8s
+update=4760/9000 loss=2.6888 tokens=9747200 elapsed=152.1s
+update=4770/9000 loss=2.6134 tokens=9767680 elapsed=152.4s
+update=4780/9000 loss=2.7615 tokens=9788160 elapsed=152.7s
+update=4790/9000 loss=2.6868 tokens=9808640 elapsed=153.0s
+update=4800/9000 loss=2.5939 tokens=9829120 elapsed=153.3s
+update=4810/9000 loss=2.7289 tokens=9849600 elapsed=153.7s
+update=4820/9000 loss=2.5750 tokens=9870080 elapsed=154.0s
+update=4830/9000 loss=2.6759 tokens=9890560 elapsed=154.3s
+update=4840/9000 loss=2.6234 tokens=9911040 elapsed=154.6s
+update=4850/9000 loss=2.4805 tokens=9931520 elapsed=154.9s
+update=4860/9000 loss=2.5064 tokens=9952000 elapsed=155.2s
+update=4870/9000 loss=2.4125 tokens=9972480 elapsed=155.5s
+update=4880/9000 loss=2.8340 tokens=9992960 elapsed=155.8s
+update=4890/9000 loss=2.7034 tokens=10013440 elapsed=156.2s
+update=4900/9000 loss=2.5403 tokens=10033920 elapsed=156.5s
+update=4910/9000 loss=2.4371 tokens=10054400 elapsed=156.8s
+update=4920/9000 loss=2.5763 tokens=10074880 elapsed=157.1s
+update=4930/9000 loss=2.5357 tokens=10095360 elapsed=157.4s
+update=4940/9000 loss=2.4390 tokens=10115840 elapsed=157.7s
+update=4950/9000 loss=2.7961 tokens=10136320 elapsed=158.0s
+update=4960/9000 loss=2.8766 tokens=10156800 elapsed=158.3s
+update=4970/9000 loss=2.7070 tokens=10177280 elapsed=158.7s
+update=4980/9000 loss=2.6766 tokens=10197760 elapsed=159.0s
+update=4990/9000 loss=2.6203 tokens=10218240 elapsed=159.3s
+update=5000/9000 loss=2.7252 tokens=10238720 elapsed=159.6s
+validation update=5000 loss=2.4098 perplexity=11.13
+update=5010/9000 loss=2.5010 tokens=10259200 elapsed=160.3s
+update=5020/9000 loss=2.6617 tokens=10279680 elapsed=160.6s
+update=5030/9000 loss=2.5751 tokens=10300160 elapsed=160.9s
+update=5040/9000 loss=2.5071 tokens=10320640 elapsed=161.2s
+update=5050/9000 loss=2.7944 tokens=10341120 elapsed=161.5s
+update=5060/9000 loss=2.6123 tokens=10361600 elapsed=161.9s
+update=5070/9000 loss=2.8784 tokens=10382080 elapsed=162.2s
+update=5080/9000 loss=2.8114 tokens=10402560 elapsed=162.5s
+update=5090/9000 loss=2.4721 tokens=10423040 elapsed=162.8s
+update=5100/9000 loss=2.6290 tokens=10443520 elapsed=163.1s
+update=5110/9000 loss=2.8483 tokens=10464000 elapsed=163.4s
+update=5120/9000 loss=2.8338 tokens=10484480 elapsed=163.7s
+update=5130/9000 loss=2.4509 tokens=10504960 elapsed=164.1s
+update=5140/9000 loss=2.6746 tokens=10525440 elapsed=164.4s
+update=5150/9000 loss=2.5108 tokens=10545920 elapsed=164.7s
+update=5160/9000 loss=2.9051 tokens=10566400 elapsed=165.0s
+update=5170/9000 loss=2.6191 tokens=10586880 elapsed=165.3s
+update=5180/9000 loss=2.7573 tokens=10607360 elapsed=165.7s
+update=5190/9000 loss=2.5886 tokens=10627840 elapsed=166.0s
+update=5200/9000 loss=2.5144 tokens=10648320 elapsed=166.3s
+update=5210/9000 loss=2.5341 tokens=10668800 elapsed=166.6s
+update=5220/9000 loss=2.7872 tokens=10689280 elapsed=166.9s
+update=5230/9000 loss=2.6525 tokens=10709760 elapsed=167.2s
+update=5240/9000 loss=2.8198 tokens=10730240 elapsed=167.5s
+update=5250/9000 loss=2.7828 tokens=10750720 elapsed=167.8s
+update=5260/9000 loss=2.6423 tokens=10771200 elapsed=168.2s
+update=5270/9000 loss=2.4299 tokens=10791680 elapsed=168.5s
+update=5280/9000 loss=2.6659 tokens=10812160 elapsed=168.8s
+update=5290/9000 loss=2.5760 tokens=10832640 elapsed=169.1s
+update=5300/9000 loss=2.6805 tokens=10853120 elapsed=169.4s
+update=5310/9000 loss=2.4988 tokens=10873600 elapsed=169.7s
+update=5320/9000 loss=2.5545 tokens=10894080 elapsed=170.0s
+update=5330/9000 loss=2.5154 tokens=10914560 elapsed=170.3s
+update=5340/9000 loss=2.7407 tokens=10935040 elapsed=170.6s
+update=5350/9000 loss=2.6391 tokens=10955520 elapsed=171.0s
+update=5360/9000 loss=2.5230 tokens=10976000 elapsed=171.3s
+update=5370/9000 loss=2.7398 tokens=10996480 elapsed=171.6s
+update=5380/9000 loss=2.8248 tokens=11016960 elapsed=171.9s
+update=5390/9000 loss=2.6980 tokens=11037440 elapsed=172.2s
+update=5400/9000 loss=2.3497 tokens=11057920 elapsed=172.5s
+update=5410/9000 loss=2.7074 tokens=11078400 elapsed=172.8s
+update=5420/9000 loss=2.5461 tokens=11098880 elapsed=173.2s
+update=5430/9000 loss=2.4599 tokens=11119360 elapsed=173.5s
+update=5440/9000 loss=2.6947 tokens=11139840 elapsed=173.8s
+update=5450/9000 loss=2.6406 tokens=11160320 elapsed=174.1s
+update=5460/9000 loss=2.6637 tokens=11180800 elapsed=174.4s
+update=5470/9000 loss=2.8648 tokens=11201280 elapsed=174.7s
+update=5480/9000 loss=2.4570 tokens=11221760 elapsed=175.0s
+update=5490/9000 loss=2.4838 tokens=11242240 elapsed=175.3s
+update=5500/9000 loss=2.7111 tokens=11262720 elapsed=175.6s
+validation update=5500 loss=2.3830 perplexity=10.84
+update=5510/9000 loss=2.3940 tokens=11283200 elapsed=176.3s
+update=5520/9000 loss=2.6564 tokens=11303680 elapsed=176.6s
+update=5530/9000 loss=2.3167 tokens=11324160 elapsed=176.9s
+update=5540/9000 loss=2.5388 tokens=11344640 elapsed=177.2s
+update=5550/9000 loss=2.4410 tokens=11365120 elapsed=177.5s
+update=5560/9000 loss=2.5463 tokens=11385600 elapsed=177.8s
+update=5570/9000 loss=2.6611 tokens=11406080 elapsed=178.1s
+update=5580/9000 loss=2.6708 tokens=11426560 elapsed=178.4s
+update=5590/9000 loss=2.5082 tokens=11447040 elapsed=178.7s
+update=5600/9000 loss=2.6502 tokens=11467520 elapsed=179.1s
+update=5610/9000 loss=2.5082 tokens=11488000 elapsed=179.4s
+update=5620/9000 loss=2.7627 tokens=11508480 elapsed=179.7s
+update=5630/9000 loss=2.7183 tokens=11528960 elapsed=180.0s
+update=5640/9000 loss=2.4045 tokens=11549440 elapsed=180.3s
+update=5650/9000 loss=2.8990 tokens=11569920 elapsed=180.6s
+update=5660/9000 loss=2.6360 tokens=11590400 elapsed=180.9s
+update=5670/9000 loss=2.7820 tokens=11610880 elapsed=181.2s
+update=5680/9000 loss=2.4908 tokens=11631360 elapsed=181.6s
+update=5690/9000 loss=2.4624 tokens=11651840 elapsed=181.9s
+update=5700/9000 loss=2.5710 tokens=11672320 elapsed=182.2s
+update=5710/9000 loss=2.5076 tokens=11692800 elapsed=182.5s
+update=5720/9000 loss=2.7137 tokens=11713280 elapsed=182.8s
+update=5730/9000 loss=2.5044 tokens=11733760 elapsed=183.1s
+update=5740/9000 loss=2.4402 tokens=11754240 elapsed=183.4s
+update=5750/9000 loss=2.6886 tokens=11774720 elapsed=183.7s
+update=5760/9000 loss=2.7589 tokens=11795200 elapsed=184.1s
+update=5770/9000 loss=2.5832 tokens=11815680 elapsed=184.4s
+update=5780/9000 loss=2.7139 tokens=11836160 elapsed=184.7s
+update=5790/9000 loss=2.8404 tokens=11856640 elapsed=185.0s
+update=5800/9000 loss=2.7662 tokens=11877120 elapsed=185.3s
+update=5810/9000 loss=2.4099 tokens=11897600 elapsed=185.6s
+update=5820/9000 loss=2.6551 tokens=11918080 elapsed=185.9s
+update=5830/9000 loss=2.7198 tokens=11938560 elapsed=186.2s
+update=5840/9000 loss=2.7298 tokens=11959040 elapsed=186.5s
+update=5850/9000 loss=2.5982 tokens=11979520 elapsed=186.9s
+update=5860/9000 loss=2.7700 tokens=12000000 elapsed=187.2s
+update=5870/9000 loss=2.3237 tokens=12020480 elapsed=187.5s
+update=5880/9000 loss=2.4399 tokens=12040960 elapsed=187.8s
+update=5890/9000 loss=2.5602 tokens=12061440 elapsed=188.1s
+update=5900/9000 loss=2.6885 tokens=12081920 elapsed=188.4s
+update=5910/9000 loss=2.5954 tokens=12102400 elapsed=188.8s
+update=5920/9000 loss=2.4249 tokens=12122880 elapsed=189.1s
+update=5930/9000 loss=2.5156 tokens=12143360 elapsed=189.4s
+update=5940/9000 loss=2.3720 tokens=12163840 elapsed=189.7s
+update=5950/9000 loss=2.4031 tokens=12184320 elapsed=190.0s
+update=5960/9000 loss=2.6201 tokens=12204800 elapsed=190.3s
+update=5970/9000 loss=2.3420 tokens=12225280 elapsed=190.6s
+update=5980/9000 loss=2.2600 tokens=12245760 elapsed=190.9s
+update=5990/9000 loss=2.3307 tokens=12266240 elapsed=191.2s
+update=6000/9000 loss=2.3381 tokens=12286720 elapsed=191.6s
+validation update=6000 loss=2.3511 perplexity=10.50
+update=6010/9000 loss=2.5551 tokens=12307200 elapsed=192.2s
+update=6020/9000 loss=2.3455 tokens=12327680 elapsed=192.6s
+update=6030/9000 loss=2.5519 tokens=12348160 elapsed=192.9s
+update=6040/9000 loss=2.6753 tokens=12368640 elapsed=193.2s
+update=6050/9000 loss=2.7316 tokens=12389120 elapsed=193.5s
+update=6060/9000 loss=2.2356 tokens=12409600 elapsed=193.8s
+update=6070/9000 loss=2.2377 tokens=12430080 elapsed=194.1s
+update=6080/9000 loss=2.4554 tokens=12450560 elapsed=194.4s
+update=6090/9000 loss=2.6380 tokens=12471040 elapsed=194.7s
+update=6100/9000 loss=2.7036 tokens=12491520 elapsed=195.0s
+update=6110/9000 loss=2.6117 tokens=12512000 elapsed=195.3s
+update=6120/9000 loss=2.6315 tokens=12532480 elapsed=195.7s
+update=6130/9000 loss=2.4679 tokens=12552960 elapsed=196.0s
+update=6140/9000 loss=2.4265 tokens=12573440 elapsed=196.3s
+update=6150/9000 loss=2.8344 tokens=12593920 elapsed=196.6s
+update=6160/9000 loss=2.6525 tokens=12614400 elapsed=196.9s
+update=6170/9000 loss=2.8249 tokens=12634880 elapsed=197.2s
+update=6180/9000 loss=2.5205 tokens=12655360 elapsed=197.5s
+update=6190/9000 loss=2.4765 tokens=12675840 elapsed=197.9s
+update=6200/9000 loss=2.3232 tokens=12696320 elapsed=198.2s
+update=6210/9000 loss=2.4236 tokens=12716800 elapsed=198.5s
+update=6220/9000 loss=2.6962 tokens=12737280 elapsed=198.8s
+update=6230/9000 loss=2.4127 tokens=12757760 elapsed=199.1s
+update=6240/9000 loss=2.6300 tokens=12778240 elapsed=199.4s
+update=6250/9000 loss=2.6515 tokens=12798720 elapsed=199.7s
+update=6260/9000 loss=2.6757 tokens=12819200 elapsed=200.0s
+update=6270/9000 loss=2.6473 tokens=12839680 elapsed=200.4s
+update=6280/9000 loss=2.4860 tokens=12858880 elapsed=200.7s
+update=6290/9000 loss=2.6646 tokens=12879360 elapsed=201.0s
+update=6300/9000 loss=2.3336 tokens=12899840 elapsed=201.3s
+update=6310/9000 loss=2.7284 tokens=12920320 elapsed=201.6s
+update=6320/9000 loss=2.6092 tokens=12940800 elapsed=201.9s
+update=6330/9000 loss=2.5025 tokens=12961280 elapsed=202.2s
+update=6340/9000 loss=2.7417 tokens=12981760 elapsed=202.5s
+update=6350/9000 loss=2.3482 tokens=13002240 elapsed=202.8s
+update=6360/9000 loss=2.1028 tokens=13022720 elapsed=203.2s
+update=6370/9000 loss=2.5589 tokens=13043200 elapsed=203.5s
+update=6380/9000 loss=2.3697 tokens=13063680 elapsed=203.8s
+update=6390/9000 loss=2.3392 tokens=13084160 elapsed=204.1s
+update=6400/9000 loss=2.4207 tokens=13104640 elapsed=204.4s
+update=6410/9000 loss=2.4526 tokens=13125120 elapsed=204.8s
+update=6420/9000 loss=2.3538 tokens=13145600 elapsed=205.1s
+update=6430/9000 loss=2.4994 tokens=13166080 elapsed=205.4s
+update=6440/9000 loss=2.6985 tokens=13186560 elapsed=205.7s
+update=6450/9000 loss=2.3584 tokens=13207040 elapsed=206.1s
+update=6460/9000 loss=2.4798 tokens=13227520 elapsed=206.4s
+update=6470/9000 loss=2.5863 tokens=13248000 elapsed=206.7s
+update=6480/9000 loss=2.3749 tokens=13268480 elapsed=207.0s
+update=6490/9000 loss=2.4578 tokens=13288960 elapsed=207.3s
+update=6500/9000 loss=2.3160 tokens=13309440 elapsed=207.6s
+validation update=6500 loss=2.3383 perplexity=10.36
+update=6510/9000 loss=2.6507 tokens=13329920 elapsed=208.2s
+update=6520/9000 loss=2.5647 tokens=13350400 elapsed=208.5s
+update=6530/9000 loss=2.3757 tokens=13370880 elapsed=208.8s
+update=6540/9000 loss=2.3472 tokens=13391360 elapsed=209.2s
+update=6550/9000 loss=2.3654 tokens=13411840 elapsed=209.5s
+update=6560/9000 loss=2.7137 tokens=13432320 elapsed=209.8s
+update=6570/9000 loss=2.5273 tokens=13452800 elapsed=210.1s
+update=6580/9000 loss=2.5129 tokens=13473280 elapsed=210.4s
+update=6590/9000 loss=2.5023 tokens=13493760 elapsed=210.7s
+update=6600/9000 loss=2.3710 tokens=13514240 elapsed=211.0s
+update=6610/9000 loss=2.4836 tokens=13534720 elapsed=211.3s
+update=6620/9000 loss=2.4529 tokens=13555200 elapsed=211.7s
+update=6630/9000 loss=2.7069 tokens=13575680 elapsed=212.0s
+update=6640/9000 loss=2.5819 tokens=13596160 elapsed=212.3s
+update=6650/9000 loss=2.3435 tokens=13616640 elapsed=212.6s
+update=6660/9000 loss=2.6409 tokens=13637120 elapsed=212.9s
+update=6670/9000 loss=2.2709 tokens=13657600 elapsed=213.2s
+update=6680/9000 loss=2.4484 tokens=13678080 elapsed=213.5s
+update=6690/9000 loss=2.4712 tokens=13698560 elapsed=213.9s
+update=6700/9000 loss=2.4341 tokens=13719040 elapsed=214.2s
+update=6710/9000 loss=2.3085 tokens=13739520 elapsed=214.5s
+update=6720/9000 loss=2.5077 tokens=13760000 elapsed=214.8s
+update=6730/9000 loss=2.6880 tokens=13780480 elapsed=215.1s
+update=6740/9000 loss=2.5914 tokens=13800960 elapsed=215.4s
+update=6750/9000 loss=2.5397 tokens=13821440 elapsed=215.7s
+update=6760/9000 loss=2.3569 tokens=13841920 elapsed=216.0s
+update=6770/9000 loss=2.1145 tokens=13862400 elapsed=216.4s
+update=6780/9000 loss=2.3865 tokens=13882880 elapsed=216.7s
+update=6790/9000 loss=2.7158 tokens=13903360 elapsed=217.0s
+update=6800/9000 loss=2.5351 tokens=13923840 elapsed=217.3s
+update=6810/9000 loss=2.5944 tokens=13944320 elapsed=217.6s
+update=6820/9000 loss=2.5733 tokens=13964800 elapsed=217.9s
+update=6830/9000 loss=2.2496 tokens=13985280 elapsed=218.2s
+update=6840/9000 loss=2.6849 tokens=14005760 elapsed=218.5s
+update=6850/9000 loss=2.4399 tokens=14026240 elapsed=218.9s
+update=6860/9000 loss=2.4929 tokens=14046720 elapsed=219.2s
+update=6870/9000 loss=2.5482 tokens=14067200 elapsed=219.5s
+update=6880/9000 loss=2.6149 tokens=14087680 elapsed=219.8s
+update=6890/9000 loss=2.4852 tokens=14108160 elapsed=220.1s
+update=6900/9000 loss=2.4562 tokens=14128640 elapsed=220.4s
+update=6910/9000 loss=2.4303 tokens=14149120 elapsed=220.7s
+update=6920/9000 loss=2.4979 tokens=14169600 elapsed=221.0s
+update=6930/9000 loss=2.5719 tokens=14190080 elapsed=221.4s
+update=6940/9000 loss=2.5624 tokens=14210560 elapsed=221.7s
+update=6950/9000 loss=2.6107 tokens=14231040 elapsed=222.0s
+update=6960/9000 loss=2.5348 tokens=14251520 elapsed=222.3s
+update=6970/9000 loss=2.4895 tokens=14272000 elapsed=222.6s
+update=6980/9000 loss=2.5746 tokens=14292480 elapsed=222.9s
+update=6990/9000 loss=2.2346 tokens=14312960 elapsed=223.2s
+update=7000/9000 loss=2.5001 tokens=14333440 elapsed=223.5s
+validation update=7000 loss=2.3191 perplexity=10.17
+update=7010/9000 loss=2.4988 tokens=14353920 elapsed=224.2s
+update=7020/9000 loss=2.7822 tokens=14374400 elapsed=224.5s
+update=7030/9000 loss=2.3586 tokens=14394880 elapsed=224.9s
+update=7040/9000 loss=2.2003 tokens=14415360 elapsed=225.2s
+update=7050/9000 loss=2.5508 tokens=14435840 elapsed=225.5s
+update=7060/9000 loss=2.3021 tokens=14456320 elapsed=225.9s
+update=7070/9000 loss=2.1732 tokens=14476800 elapsed=226.2s
+update=7080/9000 loss=2.7638 tokens=14497280 elapsed=226.5s
+update=7090/9000 loss=2.3306 tokens=14517760 elapsed=226.8s
+update=7100/9000 loss=2.5381 tokens=14538240 elapsed=227.1s
+update=7110/9000 loss=2.0404 tokens=14558720 elapsed=227.4s
+update=7120/9000 loss=2.4772 tokens=14579200 elapsed=227.7s
+update=7130/9000 loss=2.4728 tokens=14599680 elapsed=228.0s
+update=7140/9000 loss=2.3772 tokens=14620160 elapsed=228.3s
+update=7150/9000 loss=2.2704 tokens=14640640 elapsed=228.7s
+update=7160/9000 loss=2.5813 tokens=14661120 elapsed=229.0s
+update=7170/9000 loss=2.5462 tokens=14681600 elapsed=229.3s
+update=7180/9000 loss=2.4026 tokens=14702080 elapsed=229.6s
+update=7190/9000 loss=2.6287 tokens=14722560 elapsed=229.9s
+update=7200/9000 loss=2.4630 tokens=14743040 elapsed=230.2s
+update=7210/9000 loss=2.4485 tokens=14763520 elapsed=230.5s
+update=7220/9000 loss=2.6583 tokens=14784000 elapsed=230.8s
+update=7230/9000 loss=2.4675 tokens=14804480 elapsed=231.1s
+update=7240/9000 loss=2.5645 tokens=14824960 elapsed=231.5s
+update=7250/9000 loss=2.5112 tokens=14845440 elapsed=231.8s
+update=7260/9000 loss=2.5397 tokens=14865920 elapsed=232.1s
+update=7270/9000 loss=2.4800 tokens=14886400 elapsed=232.4s
+update=7280/9000 loss=2.6607 tokens=14906880 elapsed=232.7s
+update=7290/9000 loss=2.3577 tokens=14927360 elapsed=233.0s
+update=7300/9000 loss=2.3533 tokens=14947840 elapsed=233.3s
+update=7310/9000 loss=2.7642 tokens=14968320 elapsed=233.6s
+update=7320/9000 loss=2.4371 tokens=14988800 elapsed=234.0s
+update=7330/9000 loss=2.7555 tokens=15009280 elapsed=234.3s
+update=7340/9000 loss=2.5595 tokens=15029760 elapsed=234.6s
+update=7350/9000 loss=2.3746 tokens=15050240 elapsed=234.9s
+update=7360/9000 loss=2.2748 tokens=15070720 elapsed=235.2s
+update=7370/9000 loss=2.5621 tokens=15091200 elapsed=235.5s
+update=7380/9000 loss=2.3770 tokens=15111680 elapsed=235.8s
+update=7390/9000 loss=2.1768 tokens=15132160 elapsed=236.1s
+update=7400/9000 loss=2.7560 tokens=15152640 elapsed=236.4s
+update=7410/9000 loss=2.2987 tokens=15173120 elapsed=236.8s
+update=7420/9000 loss=2.4154 tokens=15193600 elapsed=237.1s
+update=7430/9000 loss=2.6968 tokens=15214080 elapsed=237.4s
+update=7440/9000 loss=2.3176 tokens=15234560 elapsed=237.7s
+update=7450/9000 loss=2.6559 tokens=15255040 elapsed=238.0s
+update=7460/9000 loss=2.4509 tokens=15275520 elapsed=238.3s
+update=7470/9000 loss=2.5004 tokens=15296000 elapsed=238.6s
+update=7480/9000 loss=2.3518 tokens=15316480 elapsed=238.9s
+update=7490/9000 loss=2.3712 tokens=15336960 elapsed=239.3s
+update=7500/9000 loss=2.1551 tokens=15357440 elapsed=239.6s
+validation update=7500 loss=2.3076 perplexity=10.05
+update=7510/9000 loss=2.4044 tokens=15377920 elapsed=240.2s
+update=7520/9000 loss=2.3859 tokens=15398400 elapsed=240.5s
+update=7530/9000 loss=2.5784 tokens=15418880 elapsed=240.8s
+update=7540/9000 loss=2.1611 tokens=15439360 elapsed=241.1s
+update=7550/9000 loss=2.5325 tokens=15459840 elapsed=241.4s
+update=7560/9000 loss=2.4156 tokens=15480320 elapsed=241.7s
+update=7570/9000 loss=2.5240 tokens=15500800 elapsed=242.0s
+update=7580/9000 loss=2.4144 tokens=15521280 elapsed=242.4s
+update=7590/9000 loss=2.3767 tokens=15541760 elapsed=242.7s
+update=7600/9000 loss=2.6046 tokens=15562240 elapsed=243.0s
+update=7610/9000 loss=2.2330 tokens=15582720 elapsed=243.3s
+update=7620/9000 loss=2.3141 tokens=15603200 elapsed=243.6s
+update=7630/9000 loss=2.5774 tokens=15623680 elapsed=243.9s
+update=7640/9000 loss=2.2858 tokens=15644160 elapsed=244.2s
+update=7650/9000 loss=2.4668 tokens=15664640 elapsed=244.5s
+update=7660/9000 loss=2.4533 tokens=15685120 elapsed=244.8s
+update=7670/9000 loss=2.8648 tokens=15705600 elapsed=245.2s
+update=7680/9000 loss=2.4714 tokens=15726080 elapsed=245.5s
+update=7690/9000 loss=2.4691 tokens=15746560 elapsed=245.8s
+update=7700/9000 loss=2.3556 tokens=15767040 elapsed=246.1s
+update=7710/9000 loss=2.5595 tokens=15787520 elapsed=246.4s
+update=7720/9000 loss=2.4550 tokens=15808000 elapsed=246.7s
+update=7730/9000 loss=2.5369 tokens=15828480 elapsed=247.0s
+update=7740/9000 loss=2.6278 tokens=15848960 elapsed=247.4s
+update=7750/9000 loss=2.5349 tokens=15869440 elapsed=247.7s
+update=7760/9000 loss=2.6099 tokens=15889920 elapsed=248.0s
+update=7770/9000 loss=2.3591 tokens=15910400 elapsed=248.3s
+update=7780/9000 loss=2.6988 tokens=15930880 elapsed=248.6s
+update=7790/9000 loss=2.6065 tokens=15951360 elapsed=248.9s
+update=7800/9000 loss=2.3335 tokens=15971840 elapsed=249.2s
+update=7810/9000 loss=2.3524 tokens=15992320 elapsed=249.5s
+update=7820/9000 loss=2.5479 tokens=16012800 elapsed=249.9s
+update=7830/9000 loss=2.6075 tokens=16033280 elapsed=250.2s
+update=7840/9000 loss=2.4806 tokens=16053760 elapsed=250.5s
+update=7850/9000 loss=2.4526 tokens=16074240 elapsed=250.8s
+update=7860/9000 loss=2.3319 tokens=16094720 elapsed=251.1s
+update=7870/9000 loss=2.7958 tokens=16115200 elapsed=251.4s
+update=7880/9000 loss=2.4524 tokens=16135680 elapsed=251.7s
+update=7890/9000 loss=2.4188 tokens=16156160 elapsed=252.0s
+update=7900/9000 loss=2.6732 tokens=16176640 elapsed=252.3s
+update=7910/9000 loss=2.5603 tokens=16197120 elapsed=252.7s
+update=7920/9000 loss=2.4648 tokens=16217600 elapsed=253.0s
+update=7930/9000 loss=2.7131 tokens=16238080 elapsed=253.3s
+update=7940/9000 loss=2.4896 tokens=16258560 elapsed=253.6s
+update=7950/9000 loss=2.4613 tokens=16279040 elapsed=253.9s
+update=7960/9000 loss=2.7282 tokens=16299520 elapsed=254.2s
+update=7970/9000 loss=2.3867 tokens=16320000 elapsed=254.5s
+update=7980/9000 loss=2.9447 tokens=16340480 elapsed=254.8s
+update=7990/9000 loss=2.3857 tokens=16360960 elapsed=255.2s
+update=8000/9000 loss=2.5550 tokens=16381440 elapsed=255.5s
+validation update=8000 loss=2.2992 perplexity=9.97
+update=8010/9000 loss=2.5291 tokens=16401920 elapsed=256.2s
+update=8020/9000 loss=2.3813 tokens=16422400 elapsed=256.5s
+update=8030/9000 loss=2.7886 tokens=16442880 elapsed=256.8s
+update=8040/9000 loss=2.3552 tokens=16463360 elapsed=257.1s
+update=8050/9000 loss=2.2551 tokens=16483840 elapsed=257.4s
+update=8060/9000 loss=2.6094 tokens=16504320 elapsed=257.7s
+update=8070/9000 loss=2.4890 tokens=16524800 elapsed=258.0s
+update=8080/9000 loss=2.6419 tokens=16545280 elapsed=258.3s
+update=8090/9000 loss=2.6188 tokens=16565760 elapsed=258.7s
+update=8100/9000 loss=2.6401 tokens=16586240 elapsed=259.0s
+update=8110/9000 loss=2.2820 tokens=16606720 elapsed=259.3s
+update=8120/9000 loss=2.4295 tokens=16627200 elapsed=259.6s
+update=8130/9000 loss=2.6188 tokens=16647680 elapsed=259.9s
+update=8140/9000 loss=2.6688 tokens=16668160 elapsed=260.2s
+update=8150/9000 loss=2.6158 tokens=16688640 elapsed=260.5s
+update=8160/9000 loss=2.7286 tokens=16709120 elapsed=260.8s
+update=8170/9000 loss=2.6361 tokens=16729600 elapsed=261.2s
+update=8180/9000 loss=2.6962 tokens=16750080 elapsed=261.5s
+update=8190/9000 loss=2.4054 tokens=16770560 elapsed=261.8s
+update=8200/9000 loss=2.5657 tokens=16791040 elapsed=262.1s
+update=8210/9000 loss=2.4739 tokens=16811520 elapsed=262.4s
+update=8220/9000 loss=2.6045 tokens=16832000 elapsed=262.7s
+update=8230/9000 loss=2.6170 tokens=16852480 elapsed=263.0s
+update=8240/9000 loss=2.5506 tokens=16872960 elapsed=263.3s
+update=8250/9000 loss=2.4522 tokens=16893440 elapsed=263.7s
+update=8260/9000 loss=2.4438 tokens=16913920 elapsed=264.0s
+update=8270/9000 loss=2.3535 tokens=16934400 elapsed=264.3s
+update=8280/9000 loss=2.1657 tokens=16954880 elapsed=264.6s
+update=8290/9000 loss=2.4116 tokens=16975360 elapsed=264.9s
+update=8300/9000 loss=2.4436 tokens=16995840 elapsed=265.2s
+update=8310/9000 loss=2.7094 tokens=17016320 elapsed=265.5s
+update=8320/9000 loss=2.3034 tokens=17036800 elapsed=265.9s
+update=8330/9000 loss=2.3626 tokens=17057280 elapsed=266.2s
+update=8340/9000 loss=2.3761 tokens=17077760 elapsed=266.5s
+update=8350/9000 loss=2.7239 tokens=17098240 elapsed=266.8s
+update=8360/9000 loss=2.2882 tokens=17118720 elapsed=267.1s
+update=8370/9000 loss=2.9217 tokens=17139200 elapsed=267.4s
+update=8380/9000 loss=2.4036 tokens=17159680 elapsed=267.7s
+update=8390/9000 loss=2.4942 tokens=17180160 elapsed=268.1s
+update=8400/9000 loss=2.7048 tokens=17200640 elapsed=268.4s
+update=8410/9000 loss=2.3396 tokens=17221120 elapsed=268.7s
+update=8420/9000 loss=2.4600 tokens=17241600 elapsed=269.0s
+update=8430/9000 loss=2.2579 tokens=17262080 elapsed=269.3s
+update=8440/9000 loss=2.5076 tokens=17282560 elapsed=269.6s
+update=8450/9000 loss=2.4347 tokens=17303040 elapsed=269.9s
+update=8460/9000 loss=2.5486 tokens=17323520 elapsed=270.2s
+update=8470/9000 loss=2.3433 tokens=17344000 elapsed=270.6s
+update=8480/9000 loss=2.4566 tokens=17364480 elapsed=270.9s
+update=8490/9000 loss=2.4476 tokens=17384960 elapsed=271.2s
+update=8500/9000 loss=2.5756 tokens=17405440 elapsed=271.5s
+validation update=8500 loss=2.2916 perplexity=9.89
+update=8510/9000 loss=2.4976 tokens=17425920 elapsed=272.1s
+update=8520/9000 loss=2.5283 tokens=17446400 elapsed=272.4s
+update=8530/9000 loss=2.6570 tokens=17466880 elapsed=272.7s
+update=8540/9000 loss=2.3357 tokens=17487360 elapsed=273.0s
+update=8550/9000 loss=2.6892 tokens=17507840 elapsed=273.3s
+update=8560/9000 loss=2.4876 tokens=17528320 elapsed=273.7s
+update=8570/9000 loss=2.3044 tokens=17548800 elapsed=274.0s
+update=8580/9000 loss=2.4211 tokens=17569280 elapsed=274.3s
+update=8590/9000 loss=2.1706 tokens=17589760 elapsed=274.6s
+update=8600/9000 loss=2.5745 tokens=17610240 elapsed=274.9s
+update=8610/9000 loss=2.4412 tokens=17630720 elapsed=275.2s
+update=8620/9000 loss=2.6459 tokens=17651200 elapsed=275.5s
+update=8630/9000 loss=2.3685 tokens=17671680 elapsed=275.8s
+update=8640/9000 loss=2.3260 tokens=17692160 elapsed=276.2s
+update=8650/9000 loss=2.5635 tokens=17712640 elapsed=276.5s
+update=8660/9000 loss=2.5294 tokens=17733120 elapsed=276.8s
+update=8670/9000 loss=2.5127 tokens=17753600 elapsed=277.1s
+update=8680/9000 loss=2.6279 tokens=17774080 elapsed=277.4s
+update=8690/9000 loss=2.2439 tokens=17794560 elapsed=277.7s
+update=8700/9000 loss=2.4420 tokens=17815040 elapsed=278.0s
+update=8710/9000 loss=2.4468 tokens=17835520 elapsed=278.3s
+update=8720/9000 loss=2.5837 tokens=17856000 elapsed=278.7s
+update=8730/9000 loss=2.6346 tokens=17876480 elapsed=279.0s
+update=8740/9000 loss=2.5351 tokens=17896960 elapsed=279.3s
+update=8750/9000 loss=2.3284 tokens=17917440 elapsed=279.6s
+update=8760/9000 loss=2.4253 tokens=17937920 elapsed=279.9s
+update=8770/9000 loss=2.6658 tokens=17958400 elapsed=280.2s
+update=8780/9000 loss=2.3944 tokens=17978880 elapsed=280.5s
+update=8790/9000 loss=2.3683 tokens=17999360 elapsed=280.8s
+update=8800/9000 loss=2.4107 tokens=18019840 elapsed=281.2s
+update=8810/9000 loss=2.5830 tokens=18040320 elapsed=281.5s
+update=8820/9000 loss=2.5011 tokens=18060800 elapsed=281.8s
+update=8830/9000 loss=2.6294 tokens=18081280 elapsed=282.1s
+update=8840/9000 loss=2.4915 tokens=18101760 elapsed=282.4s
+update=8850/9000 loss=2.4582 tokens=18122240 elapsed=282.7s
+update=8860/9000 loss=2.3079 tokens=18142720 elapsed=283.0s
+update=8870/9000 loss=2.1589 tokens=18163200 elapsed=283.3s
+update=8880/9000 loss=2.6336 tokens=18183680 elapsed=283.7s
+update=8890/9000 loss=2.6413 tokens=18204160 elapsed=284.0s
+update=8900/9000 loss=2.3891 tokens=18224640 elapsed=284.3s
+update=8910/9000 loss=2.6020 tokens=18245120 elapsed=284.6s
+update=8920/9000 loss=2.4078 tokens=18265600 elapsed=284.9s
+update=8930/9000 loss=2.3347 tokens=18286080 elapsed=285.2s
+update=8940/9000 loss=2.5079 tokens=18306560 elapsed=285.5s
+update=8950/9000 loss=2.6255 tokens=18327040 elapsed=285.8s
+update=8960/9000 loss=2.3783 tokens=18347520 elapsed=286.2s
+update=8970/9000 loss=2.4635 tokens=18368000 elapsed=286.5s
+update=8980/9000 loss=2.5625 tokens=18388480 elapsed=286.8s
+update=8990/9000 loss=2.2661 tokens=18408960 elapsed=287.1s
+update=9000/9000 loss=2.5499 tokens=18429440 elapsed=287.4s
+validation update=9000 loss=2.2857 perplexity=9.83
+{
+  "branch": "codex/lantern-tokenmlp-sigmoid-14m",
+  "token_mlp_variant": "learned_pair",
+  "training_seconds_including_validation_and_saving": 287.97246004299996,
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "peak_allocated_vram_bytes": 605611008,
+  "training_state": {
+    "updates": 9000,
+    "batches": 9000,
+    "tokens": 18429440,
+    "completed_epochs": 2,
+    "last_loss": 2.549938917160034,
+    "last_validation_loss": 2.2856937249501543,
+    "last_validation_perplexity": 9.832504912577086,
+    "batches_in_epoch": 2728
+  },
+  "validation_curve": [
+    {
+      "update": 500,
+      "loss": 3.6524033546447754
+    },
+    {
+      "update": 1000,
+      "loss": 3.1571712493896484
+    },
+    {
+      "update": 1500,
+      "loss": 2.925884485244751
+    },
+    {
+      "update": 2000,
+      "loss": 2.7659077644348145
+    },
+    {
+      "update": 2500,
+      "loss": 2.6694819927215576
+    },
+    {
+      "update": 3000,
+      "loss": 2.5938665866851807
+    },
+    {
+      "update": 3500,
+      "loss": 2.5314502716064453
+    },
+    {
+      "update": 4000,
+      "loss": 2.482119560241699
+    },
+    {
+      "update": 4500,
+      "loss": 2.442899465560913
+    },
+    {
+      "update": 5000,
+      "loss": 2.4098196029663086
+    },
+    {
+      "update": 5500,
+      "loss": 2.3829681873321533
+    },
+    {
+      "update": 6000,
+      "loss": 2.351055145263672
+    },
+    {
+      "update": 6500,
+      "loss": 2.33833909034729
+    },
+    {
+      "update": 7000,
+      "loss": 2.319103240966797
+    },
+    {
+      "update": 7500,
+      "loss": 2.3076083660125732
+    },
+    {
+      "update": 8000,
+      "loss": 2.299208402633667
+    },
+    {
+      "update": 8500,
+      "loss": 2.2916150093078613
+    },
+    {
+      "update": 9000,
+      "loss": 2.285693645477295
+    }
+  ],
+  "best_saved_validation": {
+    "update": 9000,
+    "loss": 2.285693645477295
+  },
+  "subset": {
+    "dataset": "roneneldan/TinyStories",
+    "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "selection": "first unique nonempty documents in source order",
+    "splits": {
+      "train": {
+        "documents": 30000,
+        "duplicates_or_empty_skipped": 0,
+        "sha256": "69a5f3422b4c51f98ca0692a3514822a6527999dc59c624baaefb1f8f04e65d3",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-train.txt"
+      },
+      "validation": {
+        "documents": 256,
+        "duplicates_or_empty_skipped": 0,
+        "sha256": "ab09f4248a55ca51d899ba51ce90d96a2c990d52a821338aa1743a525fda7d4a",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-valid.txt"
+      }
+    }
+  },
+  "benchmark": {
+    "scheduler": {
+      "warmup_steps": 300,
+      "total_steps": 9000,
+      "min_lr_ratio": 0.1
+    },
+    "optimizer": {
+      "learning_rate": 0.0003,
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01
+    },
+    "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+    "parameters": 6459904,
+    "vocab_size": 8192,
+    "initial_validation_loss": 9.178793447989005,
+    "validation_seconds": 1.747837212000377,
+    "measured_updates": 100,
+    "mean_update_seconds": 0.030525150929934172,
+    "p95_update_seconds": 0.030900300000212155,
+    "tokens_per_update": 2048,
+    "peak_allocated_vram_bytes": 599974912,
+    "benchmark_final_loss": 6.420982360839844,
+    "torch_cpu_threads": 4
+  },
+  "torch_cpu_threads": 4,
+  "seed": 42,
+  "comparison": "Single seed, equal-token baseline; include preparation separately and rebenchmark each architecture for equal-time runs.",
+  "parameters": 6459904,
+  "greedy_samples_from_best_saved_checkpoint": [
+    {
+      "prompt": "Once upon a time, there was a little girl named Lily.",
+      "text": "Once upon a time, there was a little girl named Lily. She loved to play with her toys and run around in the park. One day, she saw a big, scary dog. The dog was scared and ran away. Lily was scared and ran away.\nBut then, a big dog came and saw the dog. The dog was scared and ran away. Lily was scared"
+    },
+    {
+      "prompt": "Tom found a small dog outside his house. The dog was",
+      "text": "Tom found a small dog outside his house. The dog was very happy and thanked the dog for being so kind. From that day on, the dog and the dog became friends and played together every day."
+    },
+    {
+      "prompt": "One day, a boy lost his favorite toy. He felt",
+      "text": "One day, a boy lost his favorite toy. He felt sad and lonely. He wanted to find a friend to play with.\n\"I don't know,\" he said. \"I can't find my toy. It's a toy.\"\n\"I don't know,\" the boy said. \"It's a toy. It's a toy.\"\n\"No, it"
+    }
+  ],
+  "best_checkpoint": "checkpoints/step-00009000.pt"
+}

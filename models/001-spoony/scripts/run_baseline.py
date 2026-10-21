@@ -9,7 +9,7 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 from configs.data.corpus import RAW_DIRECTORY
 from configs.data.dataloader import chunking_config
 from configs.inference_baseline import MAX_NEW_TOKENS, PROMPTS
-from configs.model.model import build_model
+from configs.model.model import TOKEN_MLP_VARIANT, build_model
 from configs.tokenizers.preparation import preparation_config
 from configs.training.checkpoint import checkpoint_config
 from configs.training.scheduler import scheduler_config
@@ -43,7 +43,8 @@ def main():
         key=lambda row: row["loss"],
     )
     report = {
-        "branch": "codex/lantern-token-matrix-14m",
+        "branch": "codex/lantern-tokenmlp-sigmoid-14m",
+        "token_mlp_variant": TOKEN_MLP_VARIANT,
         "training_seconds_including_validation_and_saving": elapsed,
         "gpu": torch.cuda.get_device_name(),
         "peak_allocated_vram_bytes": torch.cuda.max_memory_allocated(),
@@ -66,6 +67,7 @@ def main():
         preparation_config.output_directory / "tokenizer.json"
     )
     model, _ = build_model(tokenizer)
+    report["parameters"] = sum(parameter.numel() for parameter in model.parameters())
     best_path = checkpoint_config.directory / f"step-{best['update']:08d}.pt"
     best_checkpoint = torch.load(best_path, map_location="cpu", weights_only=True)
     model.load_state_dict(best_checkpoint["model"])

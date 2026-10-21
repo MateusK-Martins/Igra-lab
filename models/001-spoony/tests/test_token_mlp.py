@@ -10,14 +10,13 @@ from src.model.definitions import Embedding, LMHead, TokenMLP
 from src.model.token_mlp import TokenMLPImpl
 
 
-def test_chunked_output_and_gradients_match_explicit_matrix():
+def test_chunked_output_and_gradients_match_elementwise_sigmoid_gates():
     torch.manual_seed(13)
     inputs = [
         torch.randn(2, 3, 5, dtype=torch.float64, requires_grad=True) for _ in range(3)
     ]
     x, a, b = inputs
-    reference = torch.tanh(torch.einsum("bti,btj->btij", a, b))
-    expected = torch.einsum("btij,btj->bti", reference, x)
+    expected = x * torch.sigmoid(a) * torch.sigmoid(b)
     actual = TokenMLPImpl(chunk_size=2)(
         x, token_vectors=(a, b), token_projections=(nn.Identity(), nn.Identity())
     )
@@ -29,7 +28,7 @@ def test_chunked_output_and_gradients_match_explicit_matrix():
         torch.testing.assert_close(actual_grad, expected_grad)
 
 
-def test_shared_tables_looked_up_once_and_accumulate_all_layer_gradients():
+def test_shared_token_gates_looked_up_once_and_accumulate_layer_gradients():
     model, _ = Model(
         tokenizer=SimpleNamespace(vocab_size=7),
         input=Embedding(3, init_std=0.02),
@@ -49,12 +48,12 @@ def test_shared_tables_looked_up_once_and_accumulate_all_layer_gradients():
     ids = torch.tensor([[1, 2, 1]])
     actual = model(ids)
     assert calls == [1, 1]
-    a, b = [table.weight[ids] for table in model.token_mlp_embeddings]
-    matrix = torch.tanh(a.unsqueeze(-1) * b.unsqueeze(-2))
+    a, b = [torch.sigmoid(table.weight[ids]) for table in model.token_mlp_embeddings]
     hidden = model.embedding(ids)
     down, up = model.token_mlp_projections
     for _ in range(6):
-        hidden = hidden + up((matrix @ down(hidden).unsqueeze(-1)).squeeze(-1))
+        projected = down(hidden)
+        hidden = hidden + up(projected * a * b)
     expected = model.lm_head(hidden)
     torch.testing.assert_close(actual, expected)
     parameters = list(model.parameters())
@@ -70,7 +69,7 @@ def test_shared_tables_looked_up_once_and_accumulate_all_layer_gradients():
 
 
 def test_parameter_budget():
-    model, _ = build_model(SimpleNamespace(vocab_size=8192))
+    model, _ = build_model(SimpleNamespace(vocab_size=8192), variant="learned_pair")
     assert sum(p.numel() for p in model.parameters()) == 6_459_904
     branches = [
         block.branch
@@ -85,6 +84,33 @@ def test_parameter_budget():
     assert len({table.weight.data_ptr() for table in tables}) == 2
     assert model.token_mlp_projections[0].weight.shape == (64, 384)
     assert model.token_mlp_projections[1].weight.shape == (384, 64)
+
+
+def test_context_variant_generates_second_sigmoid_gate_from_hidden_state():
+    model, _ = Model(
+        tokenizer=SimpleNamespace(vocab_size=7),
+        input=Embedding(3, init_std=0.02),
+        blocks=[
+            TokenMLP(
+                3,
+                bottleneck_features=2,
+                chunk_size=2,
+                gate_mode="context",
+                residual=True,
+            )
+        ],
+        lm_head=LMHead(3, tie_to_embedding=True),
+    ).assemble()
+    ids = torch.tensor([[1, 2]])
+    actual = model(ids)
+    initial = model.embedding(ids)
+    learned_gate = torch.sigmoid(model.token_mlp_embeddings[0](ids))
+    down, up = model.token_mlp_projections
+    projected = down(initial)
+    expected_hidden = initial + up(projected * learned_gate * torch.sigmoid(projected))
+    torch.testing.assert_close(actual, model.lm_head(expected_hidden))
+    assert len(model.token_mlp_embeddings) == 1
+    assert sum(p.numel() for p in model.parameters()) == 7 * 3 + 7 * 2 + 3 * 2 + 2 * 3
 
 
 @pytest.mark.parametrize(
@@ -135,13 +161,12 @@ def test_invalid_bottleneck_width(width):
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
 @pytest.mark.parametrize("dtype", [torch.float32, torch.bfloat16])
-def test_fused_cuda_transform_matches_dense_output_and_gradients(dtype):
+def test_fused_cuda_transform_matches_elementwise_output_and_gradients(dtype):
     torch.manual_seed(71)
     x = torch.randn(6, 5, device="cuda", dtype=dtype, requires_grad=True)
     a = (torch.randn(6, 5, device="cuda") * 1.5).requires_grad_()
     b = (torch.randn(6, 5, device="cuda") * 1.5).requires_grad_()
-    matrix = torch.tanh(a.unsqueeze(-1) * b.unsqueeze(-2))
-    expected = (matrix @ x.float().unsqueeze(-1)).squeeze(-1)
+    expected = x.float() * torch.sigmoid(a.float()) * torch.sigmoid(b.float())
     actual = TokenMLPImpl.transform(x, a, b)
     torch.testing.assert_close(actual, expected, rtol=1e-5, atol=1e-6)
     upstream = torch.randn_like(expected)

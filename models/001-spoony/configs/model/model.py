@@ -13,8 +13,10 @@ from src.model.definitions import (
 )
 from src.model.position import rope
 
+TOKEN_MLP_VARIANT = "context"
 
-def build_model(tokenizer: Tokenizer):
+
+def build_model(tokenizer: Tokenizer, *, variant: str = TOKEN_MLP_VARIANT):
     blocks = []
     for _ in range(6):
         feedforward = TokenMLP(
@@ -22,6 +24,7 @@ def build_model(tokenizer: Tokenizer):
             bottleneck_features=64,
             chunk_size=2048,
             init_std=0.02,
+            gate_mode=variant,
             residual=True,
         )
         blocks.extend(

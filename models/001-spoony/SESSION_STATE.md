@@ -1,4 +1,4 @@
-> Active variant: [All feed-forwards replaced by shared TokenMLP](TOKEN_MLP_ALL_SHARED.md).
+> Active experiment: [Two 14M sigmoid-gate TokenMLP tests](TOKEN_MLP_SIGMOID_14M.md).
 > Notes below describe the inherited architecture and historical results.
 
 # Codename baseline completed — 2026-10-13

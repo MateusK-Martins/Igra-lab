@@ -28,8 +28,9 @@ class ModelImpl(nn.Module):
 
         token_vectors = None
         if self.token_mlp_embeddings is not None:
-            a, b = self.token_mlp_embeddings
-            token_vectors = (a(token_ids), b(token_ids))
+            token_vectors = tuple(
+                table(token_ids) for table in self.token_mlp_embeddings
+            )
 
         for block in self.body:
             branch = block.branch if isinstance(block, ResidualImpl) else block

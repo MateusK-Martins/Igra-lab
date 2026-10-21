@@ -114,6 +114,8 @@ class Model:
         token_mlp_projections = None
         if matrix_definitions:
             first = matrix_definitions[0]
+            if any(block.gate_mode != first.gate_mode for block in matrix_definitions):
+                raise ValueError("Shared TokenMLP tables require a matching gate_mode")
             if any(
                 (block.input_features, block.bottleneck_features, block.init_std)
                 != (first.input_features, first.bottleneck_features, first.init_std)
@@ -126,7 +128,7 @@ class Model:
                 Embedding(first.bottleneck_features, first.init_std).build(
                     vocab_size=vocab_size
                 )
-                for _ in range(2)
+                for _ in range(2 if first.gate_mode == "learned_pair" else 1)
             )
             token_mlp_projections = nn.ModuleList(
                 [

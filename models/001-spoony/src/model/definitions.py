@@ -1,6 +1,6 @@
 import math
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Literal, Protocol
 
 import torch
 from torch import nn
@@ -342,12 +342,13 @@ class GQAAttention(BlockDefinition):
 
 @dataclass(frozen=True)
 class TokenMLP(BlockDefinition):
-    """Shared bottleneck projections around a token-specific tanh matrix."""
+    """Shared bottleneck with learned token gates and optional context gate."""
 
     input_features: int
     bottleneck_features: int
     chunk_size: int = 2048
     init_std: float = 0.02
+    gate_mode: Literal["learned_pair", "context"] = "learned_pair"
     residual: bool = False
 
     @property
@@ -360,6 +361,8 @@ class TokenMLP(BlockDefinition):
         _positive_integer(self.chunk_size, "chunk_size")
         if type(self.residual) is not bool:
             raise ValueError("residual must be a boolean")
+        if self.gate_mode not in ("learned_pair", "context"):
+            raise ValueError("gate_mode must be 'learned_pair' or 'context'")
         if (
             type(self.init_std) not in (int, float)
             or not math.isfinite(self.init_std)
