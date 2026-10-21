@@ -1,3 +1,6 @@
+> Active variant: [All feed-forwards replaced by shared TokenMLP](TOKEN_MLP_ALL_SHARED.md).
+> Notes below describe the inherited architecture and historical results.
+
 # Codename baseline completed — 2026-10-13
 
 Branch `model/001-spoony-lantern`, isolated from the original Spoony working directory.

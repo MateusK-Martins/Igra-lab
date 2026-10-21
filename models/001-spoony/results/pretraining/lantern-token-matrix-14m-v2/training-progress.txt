@@ -1,0 +1,65 @@
+Lantern token-matrix 14M: fresh 1,000-update run; hard process limit 590 seconds.
+update=10/1000 loss=9.2045 tokens=20480 elapsed=4.6s
+update=20/1000 loss=8.9184 tokens=40960 elapsed=8.7s
+update=30/1000 loss=8.1532 tokens=61440 elapsed=12.9s
+update=40/1000 loss=7.4896 tokens=81920 elapsed=17.0s
+update=50/1000 loss=7.0982 tokens=102400 elapsed=21.3s
+update=60/1000 loss=6.5780 tokens=122880 elapsed=25.4s
+update=70/1000 loss=6.2880 tokens=143360 elapsed=29.7s
+update=80/1000 loss=5.8748 tokens=163840 elapsed=34.1s
+update=90/1000 loss=5.7097 tokens=184320 elapsed=38.2s
+update=100/1000 loss=5.4372 tokens=204800 elapsed=42.4s
+validation update=100 loss=5.1970 perplexity=180.74
+update=110/1000 loss=5.2039 tokens=225280 elapsed=48.8s
+update=120/1000 loss=4.8720 tokens=245760 elapsed=53.1s
+update=130/1000 loss=4.6590 tokens=266240 elapsed=57.3s
+update=140/1000 loss=4.5665 tokens=286720 elapsed=61.6s
+update=150/1000 loss=4.5625 tokens=307200 elapsed=65.9s
+update=160/1000 loss=4.4078 tokens=327680 elapsed=70.2s
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/scripts/run_baseline.py", line 97, in <module>
+    main()
+    ~~~~^^
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/scripts/run_baseline.py", line 25, in main
+    train_main()
+    ~~~~~~~~~~^^
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/scripts/train.py", line 92, in main
+    state = train_loop(
+        model=model,
+    ...<13 lines>...
+        checkpoint_settings=manifest,
+    )
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/src/training/loop.py", line 65, in train_loop
+    loss, did_update = train_step(
+                       ~~~~~~~~~~^
+        model=model,
+        ^^^^^^^^^^^^
+    ...<6 lines>...
+        max_grad_norm=config.max_grad_norm,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/src/training/step.py", line 49, in train_step
+    nn.utils.clip_grad_norm_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        model.parameters(),
+        ^^^^^^^^^^^^^^^^^^^
+        max_grad_norm,
+        ^^^^^^^^^^^^^^
+        error_if_nonfinite=not scaler.is_enabled(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/.venv/lib/python3.13/site-packages/torch/nn/utils/clip_grad.py", line 42, in _no_grad_wrapper
+    return func(*args, **kwargs)
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/.venv/lib/python3.13/site-packages/torch/nn/utils/clip_grad.py", line 231, in clip_grad_norm_
+    total_norm = _get_total_norm(grads, norm_type, error_if_nonfinite, foreach)
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/.venv/lib/python3.13/site-packages/torch/nn/utils/clip_grad.py", line 40, in _no_grad_wrapper
+    with torch.no_grad():
+         ~~~~~~~~~~~~~^^
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/.venv/lib/python3.13/site-packages/torch/autograd/grad_mode.py", line 84, in __exit__
+    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
+    
+KeyboardInterrupt

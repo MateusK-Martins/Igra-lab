@@ -1,0 +1,53 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/scripts/run_baseline.py", line 97, in <module>
+    main()
+    ~~~~^^
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/scripts/run_baseline.py", line 25, in main
+    train_main()
+    ~~~~~~~~~~^^
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/scripts/train.py", line 92, in main
+    state = train_loop(
+        model=model,
+    ...<13 lines>...
+        checkpoint_settings=manifest,
+    )
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/src/training/loop.py", line 63, in train_loop
+    loss, did_update = train_step(
+                       ~~~~~~~~~~^
+        model=model,
+        ^^^^^^^^^^^^
+    ...<6 lines>...
+        max_grad_norm=config.max_grad_norm,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/src/training/step.py", line 45, in train_step
+    scaler.scale(weighted_loss).backward()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/.venv/lib/python3.13/site-packages/torch/_tensor.py", line 631, in backward
+    torch.autograd.backward(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        self, gradient, retain_graph, create_graph, inputs=inputs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/.venv/lib/python3.13/site-packages/torch/autograd/__init__.py", line 381, in backward
+    _engine_run_backward(
+    ~~~~~~~~~~~~~~~~~~~~^
+        tensors,
+        ^^^^^^^^
+    ...<5 lines>...
+        accumulate_grad=True,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/mateus/.codex/worktrees/lantern-token-matrix-14m/Igra-lab/models/001-spoony/.venv/lib/python3.13/site-packages/torch/autograd/graph.py", line 869, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        t_outputs, *args, **kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )  # Calls into the C++ engine to run the backward pass
+    ^
+KeyboardInterrupt

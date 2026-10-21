@@ -1,3 +1,6 @@
+> Active variant: [All feed-forwards replaced by shared TokenMLP](TOKEN_MLP_ALL_SHARED.md).
+> Notes below describe the inherited architecture and historical results.
+
 # Lantern: attention baseline
 
 This branch (`model/001-spoony-lantern`) freezes a larger Spoony baseline before an

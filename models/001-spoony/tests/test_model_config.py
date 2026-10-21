@@ -10,8 +10,8 @@ from src.data.tokenizer import ByteLevelBPETokenizer
 from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheStorage
 from src.model.composition import ResidualImpl
-from src.model.feedforward import SwiGLUImpl
 from src.model.stability import RMSNormImpl
+from src.model.token_mlp import TokenMLPImpl
 
 
 @pytest.fixture(autouse=True)
@@ -47,9 +47,13 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
         assert isinstance(attention, ResidualImpl)
         assert isinstance(attention.branch, GQAAttentionImpl)
         assert isinstance(feedforward, ResidualImpl)
-        assert isinstance(feedforward.branch, SwiGLUImpl)
+        assert isinstance(feedforward.branch, TokenMLPImpl)
         assert isinstance(norm1, RMSNormImpl)
         assert isinstance(norm2, RMSNormImpl)
+        assert attention.branch.q_proj.in_features == 384
+        assert attention.branch.q_proj.out_features == 384
+        assert attention.branch.k_proj.out_features == 96
+        assert attention.branch.v_proj.out_features == 96
         assert attention.branch.window_size == 256
         assert attention.branch.dropout == 0
     assert [entry.layer_id for entry in entries] == [
@@ -79,8 +83,9 @@ def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokeni
     second, second_entries = build_model(tokenizer)
     weights = [first.body[index].branch.q_proj.weight for index in range(1, 24, 4)]
     assert len({weight.data_ptr() for weight in weights}) == 6
-    gates = [first.body[index].branch.gate.weight for index in range(2, 24, 4)]
-    assert len({weight.data_ptr() for weight in gates}) == 6
+    assert len(first.token_mlp_embeddings) == 2
+    assert len(first.token_mlp_projections) == 2
+    assert all(not list(first.body[index].parameters()) for index in range(2, 24, 4))
     assert all(
         a.data_ptr() != b.data_ptr()
         for a, b in zip(first.parameters(), second.parameters(), strict=True)

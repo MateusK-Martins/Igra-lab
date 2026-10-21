@@ -1,3 +1,6 @@
+> Active variant: [All feed-forwards replaced by shared TokenMLP](TOKEN_MLP_ALL_SHARED.md).
+> Notes below describe the inherited architecture and historical results.
+
 > **Codename branch:** the active larger TinyStories recipe and comparison
 > protocol are documented in [CODENAME.md](CODENAME.md). The historical
 > Spoony notes below describe earlier configurations.
