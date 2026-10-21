@@ -1,4 +1,4 @@
-Active experiment: [Lantern 30M with full shared TokenMLP](TOKEN_MLP_30M.md).
+Active experiment: [Lantern 30M projection-only TokenMLP ablation](TOKEN_MLP_PROJECTION_ONLY_30M.md).
 
 Current 30M comparison: see [COMPARISON_30M.md](COMPARISON_30M.md).
 

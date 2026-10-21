@@ -1,4 +1,4 @@
-"""Lantern attention with nine shared TokenMLPs; 11,215,872 params at V=8192."""
+"""Lantern attention with nine projection-only TokenMLPs; 10,167,296 params."""
 
 from functools import partial
 
@@ -20,8 +20,6 @@ def build_model(tokenizer: Tokenizer):
         feedforward = TokenMLP(
             input_features=512,
             bottleneck_features=64,
-            chunk_size=2048,
-            init_std=0.02,
             residual=True,
         )
         blocks.extend(

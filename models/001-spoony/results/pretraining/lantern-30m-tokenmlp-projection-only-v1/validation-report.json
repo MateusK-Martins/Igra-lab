@@ -1,0 +1,20 @@
+{
+  "parameters": 10167296,
+  "updates": 6500,
+  "stories": {
+    "loss": 2.371041466208065,
+    "perplexity": 10.70853906017714,
+    "examples": 374
+  },
+  "qa_answers": {
+    "loss": 6.331085275071977,
+    "perplexity": 561.7659337066435,
+    "examples": 1000
+  },
+  "qa_generation": {
+    "exact_match": 0.0,
+    "f1": 0.1713267543859649,
+    "examples": 256
+  },
+  "protocol": "Final checkpoint; QA loss supervises first answer plus EOS; greedy EM/F1 over filtered held-out subset, maximum over references; one seed."
+}

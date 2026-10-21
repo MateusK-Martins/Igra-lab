@@ -43,7 +43,7 @@ def main():
         key=lambda row: row["loss"],
     )
     report = {
-        "branch": "codex/lantern-30m-token-mlp-shared64",
+        "branch": "codex/lantern-30m-tokenmlp-projection-only",
         "training_seconds_including_validation_and_saving": elapsed,
         "gpu": torch.cuda.get_device_name(),
         "peak_allocated_vram_bytes": torch.cuda.max_memory_allocated(),

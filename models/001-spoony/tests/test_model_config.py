@@ -84,7 +84,7 @@ def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokeni
     second, second_entries = build_model(tokenizer)
     weights = [first.body[index].branch.q_proj.weight for index in range(1, 36, 4)]
     assert len({weight.data_ptr() for weight in weights}) == 9
-    assert len(first.token_mlp_embeddings) == 2
+    assert not hasattr(first, "token_mlp_embeddings")
     assert len(first.token_mlp_projections) == 2
     assert all(not list(first.body[index].parameters()) for index in range(2, 36, 4))
     assert all(

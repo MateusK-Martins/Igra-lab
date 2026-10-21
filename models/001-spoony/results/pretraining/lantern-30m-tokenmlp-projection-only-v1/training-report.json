@@ -1,0 +1,115 @@
+{
+  "branch": "codex/lantern-30m-tokenmlp-projection-only",
+  "training_seconds_including_validation_and_saving": 414.7779850730003,
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "peak_allocated_vram_bytes": 1159946240,
+  "training_state": {
+    "updates": 6500,
+    "batches": 6500,
+    "tokens": 26624000,
+    "completed_epochs": 0,
+    "last_loss": 2.279057025909424,
+    "last_validation_loss": 2.371041466208065,
+    "last_validation_perplexity": 10.70853906017714,
+    "batches_in_epoch": 6500
+  },
+  "validation_curve": [
+    {
+      "update": 1000,
+      "loss": 3.165318727493286
+    },
+    {
+      "update": 2000,
+      "loss": 2.8004801273345947
+    },
+    {
+      "update": 3000,
+      "loss": 2.615595817565918
+    },
+    {
+      "update": 4000,
+      "loss": 2.499408006668091
+    },
+    {
+      "update": 5000,
+      "loss": 2.4223062992095947
+    },
+    {
+      "update": 6000,
+      "loss": 2.3816447257995605
+    },
+    {
+      "update": 6500,
+      "loss": 2.3710415363311768
+    }
+  ],
+  "best_saved_validation": {
+    "update": 6500,
+    "loss": 2.3710415363311768
+  },
+  "subset": {
+    "dataset": "roneneldan/TinyStories",
+    "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "selection": "first unique nonempty documents in source order",
+    "splits": {
+      "train": {
+        "documents": 200000,
+        "duplicates_or_empty_skipped": 2495,
+        "sha256": "70ff573e665d303aaead22f9678ec61c30d1c28f09a356868717061457b16b7d",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-train.txt"
+      },
+      "validation": {
+        "documents": 1000,
+        "duplicates_or_empty_skipped": 50,
+        "sha256": "433b2464937353faff56b647bf6374357834faddc39f8620a8350a540afc1ad2",
+        "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-valid.txt"
+      }
+    }
+  },
+  "benchmark": {
+    "scheduler": {
+      "warmup_steps": 200,
+      "total_steps": 6500,
+      "min_lr_ratio": 0.1
+    },
+    "optimizer": {
+      "learning_rate": 0.0003,
+      "betas": [
+        0.9,
+        0.95
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01
+    },
+    "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+    "parameters": 10167296,
+    "vocab_size": 8192,
+    "initial_validation_loss": 9.104134131242883,
+    "validation_seconds": 0.8672816260004765,
+    "measured_updates": 100,
+    "mean_update_seconds": 0.06089491082992026,
+    "p95_update_seconds": 0.061242694999236846,
+    "tokens_per_update": 4096,
+    "peak_allocated_vram_bytes": 1159946240,
+    "benchmark_final_loss": 5.855602264404297,
+    "torch_cpu_threads": 4
+  },
+  "torch_cpu_threads": 4,
+  "seed": 42,
+  "comparison": "Single seed, equal-token baseline; include preparation separately and rebenchmark each architecture for equal-time runs.",
+  "greedy_samples_from_best_saved_checkpoint": [
+    {
+      "prompt": "Once upon a time, there was a little girl named Lily.",
+      "text": "Once upon a time, there was a little girl named Lily. She loved to play outside in the sunshine. One day, she saw a big, scary monster in the sky. She was scared and didn't know what to do.\nLily decided to go inside and find a big, scary monster. She walked up to the monster and said, \"Hello, little girl. I"
+    },
+    {
+      "prompt": "Tom found a small dog outside his house. The dog was",
+      "text": "Tom found a small dog outside his house. The dog was very happy and said, \"Thank you, Tom. You are a good friend.\" Tom smiled and said, \"You are welcome, Tom. I am glad you are safe.\""
+    },
+    {
+      "prompt": "One day, a boy lost his favorite toy. He felt",
+      "text": "One day, a boy lost his favorite toy. He felt sad and wanted to help. He asked his mom, \"Can I help you find your toy?\"\nHis mom said, \"Yes, you can help me find your toy. But you have to be careful and not break it.\"\nThe boy was sad and said, \"I'm sorry, mom. I didn"
+    }
+  ],
+  "best_checkpoint": "checkpoints/step-00006500.pt"
+}

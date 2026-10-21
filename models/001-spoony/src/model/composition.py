@@ -25,16 +25,14 @@ class ResidualImpl(nn.Module):
         x: Tensor,
         *,
         cache: CacheStorage | None = None,
-        token_vectors: tuple[Tensor, Tensor] | None = None,
         token_projections: tuple[nn.Module, nn.Module] | None = None,
     ) -> Tensor:
-        if token_vectors is None:
+        if token_projections is None:
             output = self.branch(x, cache=cache)
         else:
             output = self.branch(
                 x,
                 cache=cache,
-                token_vectors=token_vectors,
                 token_projections=token_projections,
             )
         if output.shape != x.shape:
