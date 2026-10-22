@@ -9,6 +9,7 @@ from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheEntry
 from src.model.feedforward import LinearImpl, SwiGLUImpl
 from src.model.position import PositionRotation
+from src.model.prenorm import PreNormImpl
 from src.model.stability import RMSNormImpl
 
 
@@ -337,3 +338,36 @@ class GQAAttention(BlockDefinition):
             count=0,
             pointer=0,
         )
+
+
+@dataclass(frozen=True)
+class PreNorm(BlockDefinition):
+    """Normalize before the inner branch, with a residual at this wrapper's scope."""
+
+    block: BlockDefinition
+    eps: float = 1e-6
+    residual: bool = True
+
+    @property
+    def input_features(self) -> int:
+        return self.block.input_features
+
+    @property
+    def output_features(self) -> int:
+        return self.block.output_features
+
+    def __post_init__(self) -> None:
+        RMSNorm(self.input_features, self.eps)
+        _positive_integer(self.output_features, "output_features")
+        if type(self.residual) is not bool:
+            raise ValueError("residual must be a boolean")
+        if self.block.residual:
+            raise ValueError("PreNorm inner block must have residual=False")
+
+    def build(self) -> nn.Module:
+        return PreNormImpl(
+            RMSNormImpl(self.input_features, self.eps), self.block.build()
+        )
+
+    def cache(self, layer_id: int) -> CacheEntry | None:
+        return self.block.cache(layer_id)

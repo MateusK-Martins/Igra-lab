@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from contextlib import AbstractContextManager
 from itertools import islice
 
@@ -9,10 +10,15 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
 from src.config.types import CheckpointConfig, LoggingConfig, TrainingConfig
-from src.training.checkpoint import loader_signature, save_checkpoint, training_iterator
+from src.training.checkpoint import (
+    loader_signature,
+    preserve_checkpoint,
+    save_checkpoint,
+    training_iterator,
+)
 from src.training.state import TrainingState
 from src.training.step import train_step
-from src.training.validation import validate
+from src.training.validation import ValidationInterrupted, validate
 
 
 def train_loop(
@@ -31,6 +37,7 @@ def train_loop(
     state: TrainingState | None = None,
     checkpoint_config: CheckpointConfig | None = None,
     checkpoint_settings: dict[str, object] | None = None,
+    stop_requested: Callable[[], str | None] | None = None,
 ) -> TrainingState:
     if type(total_steps) is not int or total_steps <= 0:
         raise ValueError("total_steps must be a positive integer")
@@ -46,6 +53,25 @@ def train_loop(
             )
 
     state = TrainingState() if state is None else state
+
+    def save_stopped_state(reason):
+        if checkpoint_config is None:
+            raise RuntimeError("Safe stop requires checkpoint configuration")
+        path = checkpoint_config.directory / f"step-{state.updates:08d}.pt"
+        save_checkpoint(
+            path,
+            model=model,
+            optimizer=optimizer,
+            scheduler=scheduler,
+            scaler=scaler,
+            state=state,
+            train_loader=train_loader,
+            validation_loader=validation_loader,
+            settings=checkpoint_settings,
+        )
+        preserve_checkpoint(path, checkpoint_config)
+        print(f"Saved safe-stop checkpoint: {path}; reason: {reason}", flush=True)
+        return state
 
     while state.updates < total_steps:
         iterator = training_iterator(train_loader, state)
@@ -96,16 +122,26 @@ def train_loop(
                     flush=True,
                 )
 
+            reason = stop_requested() if stop_requested else None
+            if reason:
+                return save_stopped_state(reason)
+
             if did_update and (
                 state.updates % config.validation_interval == 0
                 or state.updates == total_steps
             ):
-                validation_loss, perplexity = validate(
-                    model=model,
-                    loader=validation_loader,
-                    context=context,
-                    device=device,
-                )
+                try:
+                    validation_loss, perplexity = validate(
+                        model=model,
+                        loader=validation_loader,
+                        context=context,
+                        device=device,
+                        **(
+                            {"stop_requested": stop_requested} if stop_requested else {}
+                        ),
+                    )
+                except ValidationInterrupted:
+                    return save_stopped_state(stop_requested())
 
                 state.last_validation_loss = validation_loss
                 state.last_validation_perplexity = perplexity
@@ -131,6 +167,11 @@ def train_loop(
                     train_loader=train_loader,
                     validation_loader=validation_loader,
                     settings=checkpoint_settings,
+                )
+
+                preserve_checkpoint(
+                    checkpoint_config.directory / f"step-{state.updates:08d}.pt",
+                    checkpoint_config,
                 )
 
             if epoch_finished:

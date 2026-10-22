@@ -1,0 +1,91 @@
+Reading train-00000-of-00041.parquet
+{'train': 10012704, 'validation': 98195}
+{'train': 20149872, 'validation': 197923}
+{'train': 30152283, 'validation': 319480}
+{'train': 40265486, 'validation': 401744}
+{'train': 50381574, 'validation': 496682}
+{'train': 60417801, 'validation': 618111}
+{'train': 70447165, 'validation': 719317}
+{'train': 80734404, 'validation': 817974}
+{'train': 90969013, 'validation': 903281}
+{'train': 100990565, 'validation': 993871}
+{'train': 111215677, 'validation': 1094973}
+{'train': 121243776, 'validation': 1187288}
+{'train': 131363103, 'validation': 1309972}
+{'train': 141419059, 'validation': 1435541}
+{'train': 151579887, 'validation': 1571340}
+{'train': 161738728, 'validation': 1682071}
+Reading train-00001-of-00041.parquet
+{'train': 171977844, 'validation': 1760668}
+{'train': 182076903, 'validation': 1854075}
+{'train': 192158908, 'validation': 1971400}
+{'train': 202267739, 'validation': 2000000}
+{'train': 212315137, 'validation': 2000000}
+{'train': 222366183, 'validation': 2000000}
+{'train': 232503068, 'validation': 2000000}
+{'train': 242676686, 'validation': 2000000}
+{'train': 252811279, 'validation': 2000000}
+{'train': 263004523, 'validation': 2000000}
+{'train': 273036629, 'validation': 2000000}
+{'train': 283153290, 'validation': 2000000}
+{'train': 293265027, 'validation': 2000000}
+Reading train-00002-of-00041.parquet
+{'train': 303375760, 'validation': 2000000}
+{'train': 313425495, 'validation': 2000000}
+{'train': 323482034, 'validation': 2000000}
+{'train': 333672205, 'validation': 2000000}
+{'train': 343833995, 'validation': 2000000}
+{'train': 353999191, 'validation': 2000000}
+{'train': 364138114, 'validation': 2000000}
+{'train': 374166889, 'validation': 2000000}
+{'train': 384241717, 'validation': 2000000}
+{'train': 394473420, 'validation': 2000000}
+{'train': 404483108, 'validation': 2000000}
+{'train': 414550079, 'validation': 2000000}
+{'train': 424646454, 'validation': 2000000}
+Reading train-00003-of-00041.parquet
+{'train': 434747525, 'validation': 2000000}
+{'train': 444787555, 'validation': 2000000}
+{'train': 454867706, 'validation': 2000000}
+{'train': 464897684, 'validation': 2000000}
+{'train': 475059681, 'validation': 2000000}
+{'train': 485263324, 'validation': 2000000}
+{'train': 495328326, 'validation': 2000000}
+{'train': 505417415, 'validation': 2000000}
+{'train': 515632271, 'validation': 2000000}
+{'train': 526135706, 'validation': 2000000}
+{'train': 536252844, 'validation': 2000000}
+{'train': 546436773, 'validation': 2000000}
+{'train': 556591550, 'validation': 2000000}
+Downloading train-00004-of-00041.parquet
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Reading train-00004-of-00041.parquet
+{'train': 566757443, 'validation': 2000000}
+{'train': 576799528, 'validation': 2000000}
+{'train': 586859955, 'validation': 2000000}
+{'train': 597060400, 'validation': 2000000}
+{
+  "dataset": "wikimedia/wikipedia",
+  "revision": "b04c8d1ceb2f5cd4588862100d08de323dccfbaa",
+  "subset": "20231101.en",
+  "selection": "source shard/row order, strip-text SHA256 deduplication; seed42 content-hash 1% validation; no repetition",
+  "tokenizer_train_documents": 20000,
+  "vocab_size": 32768,
+  "tokenizer_sha256": "cc6dd6a41ed33ea342f3f1cc98a9fe7ea937fb75a32f00b908bdc12baf16f49b",
+  "duplicates_skipped": 124,
+  "splits": {
+    "train": {
+      "tokens": 600000000,
+      "articles": 670651,
+      "final_article_truncated": true
+    },
+    "validation": {
+      "tokens": 2000000,
+      "articles": 1869,
+      "final_article_truncated": true
+    }
+  },
+  "token_budget_includes_end_of_document_tokens": true,
+  "raw_final_article": "raw JSONL retains full article; token store truncates only final article to exact budget",
+  "model_training_started": false
+}

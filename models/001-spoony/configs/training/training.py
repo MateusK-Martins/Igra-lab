@@ -8,6 +8,8 @@ training_config = TrainingConfig(
 )
 
 logging_config = LoggingConfig(
-    directory=results_path("pretraining/wikipedia-en-100m/tensorboard"),
+    directory=results_path(
+        "pretraining/lantern30m-llama-vocab32k-wikipedia600m/tensorboard"
+    ),
     interval=25,
 )

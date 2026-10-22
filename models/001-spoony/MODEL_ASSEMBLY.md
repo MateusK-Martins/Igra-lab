@@ -1,3 +1,18 @@
+# Active model: Lantern30M Llama-style
+
+Five repetitions of residual PreNorm(GQAAttention) followed by residual
+PreNorm(SwiGLU); one final RMSNorm. Definitions live in src/model/definitions.py;
+PreNormImpl in src/model/prenorm.py runs the normalized branch. build() returns
+an unwrapped branch and build_block applies the residual exactly once around
+it, preserving the unnormalized skip tensor. Cache definitions and runtime IDs
+are delegated to the inner attention branch. Cache IDs correspond to body
+positions 0,2,4,6,8; each entry has two heads of dimension64.
+
+Active width512/FFN1280/vocab32768; full architecture and parameter accounting
+are in README.md and results/architecture/lantern30m-llama-vocab32k/model-report.json.
+
+## Historical assembly notes (superseded where different)
+
 Current 70M recipe: width 768, nine layers, unbounded causal attention,
 2048-token training context. See [CLOUD_TRAINING.md](CLOUD_TRAINING.md).
 Uncached unbounded attention uses SDPA is_causal=True with no explicit mask;

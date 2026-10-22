@@ -1,12 +1,12 @@
-# Lantern Wikipedia experiment
+# Lantern30M Llama-style model
 
-Current recipe: 70,006,272 parameters, width 768, nine layers, FFN width 2432,
-2048-token context and unbounded causal attention. The shared corpus contains
-600M training tokens plus 2M held-out validation tokens. No QA mixing.
+Completed: 29,890,048-parameter configuration, true pre-norm residual branches,
+final RMSNorm, tied 32K vocabulary, frozen training-only 32K tokenizer,
+2,048-token context retained, CPU/cache/backward tests and CUDA smoke.
 
-The default schedule is one complete pass over all full windows: 36,621
-optimizer updates. See
-[CLOUD_TRAINING.md](CLOUD_TRAINING.md) for the verified execution path.
-Only short benchmark/verification updates have run; no full training run has
-been launched. Assess held-out loss and generated text after training before
-choosing a separate instruction-tuning stage.
+No pretraining launched. Next training work requires retokenizing the corpus
+with the new tokenizer; 8K token IDs and old 70M weights are incompatible.
+
+Full 600M-token training authorized. Active recipe is documented in README.md.
+Preparation retokenizes pinned Wikipedia with 32K BPE. Health monitoring,
+checkpoint mirroring, and 494 tests are verified before launch.

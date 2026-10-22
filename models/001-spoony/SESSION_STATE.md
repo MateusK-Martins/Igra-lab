@@ -203,3 +203,13 @@ fresh training/logging/checkpoint output, exact interrupted/resumed continuation
 with shuffle/dropout, writer cleanup on errors, failed resume without output
 creation, and RunConfig validation. These use a tiny fixture model; convergence
 of the configured model remains untested.
+
+
+## Lantern30M Llama-style vocabulary32K branch
+
+New architecture/tokenizer only, not a trained compressed checkpoint. Width512,
+5 layers, FFN1280, 8Q/2KV heads64, context2048, tied vocab32768; 29,890,048 params.
+PreNorm build returns unwrapped normalized branch; outer residual belongs to
+build_block. 491 tests and actual full-context CUDA backward pass succeeded.
+New tokenizer uses only first20K Wikipedia training documents. Retokenization
+is required; active preparation scripts pin the new corpus separately.

@@ -11,6 +11,7 @@ from src.model.attention import GQAAttentionImpl
 from src.model.cache_storage import CacheStorage
 from src.model.composition import ResidualImpl
 from src.model.feedforward import SwiGLUImpl
+from src.model.prenorm import PreNormImpl
 from src.model.stability import RMSNormImpl
 
 
@@ -41,22 +42,24 @@ def test_config_uses_loaded_tokenizer_without_retraining(tokenizer):
     assert model.embedding.num_embeddings == tokenizer.vocab_size
     assert model.lm_head.out_features == tokenizer.vocab_size
     assert model.lm_head.weight is model.embedding.weight
-    assert len(model.body) == 36
-    for index in range(0, 36, 4):
-        norm1, attention, feedforward, norm2 = model.body[index : index + 4]
+    assert len(model.body) == 11
+    for index in range(0, 10, 2):
+        attention, feedforward = model.body[index : index + 2]
         assert isinstance(attention, ResidualImpl)
-        assert isinstance(attention.branch, GQAAttentionImpl)
+        assert isinstance(attention.branch, PreNormImpl)
+        assert isinstance(attention.branch.norm, RMSNormImpl)
+        assert isinstance(attention.branch.branch, GQAAttentionImpl)
         assert isinstance(feedforward, ResidualImpl)
-        assert isinstance(feedforward.branch, SwiGLUImpl)
-        assert isinstance(norm1, RMSNormImpl)
-        assert isinstance(norm2, RMSNormImpl)
-        assert attention.branch.window_size == 0
-        assert attention.branch.dropout == 0
+        assert isinstance(feedforward.branch, PreNormImpl)
+        assert isinstance(feedforward.branch.branch, SwiGLUImpl)
+        assert attention.branch.branch.window_size == 0
+        assert attention.branch.branch.dropout == 0
+    assert isinstance(model.body[-1], RMSNormImpl)
     assert [entry.layer_id for entry in entries] == [
-        model.body[index].branch.layer_id for index in range(1, 36, 4)
+        model.body[index].branch.branch.layer_id for index in range(0, 10, 2)
     ]
-    assert len({entry.layer_id for entry in entries}) == 9
-    assert all(entry.keys.shape == (0, 2, 0, 96) for entry in entries)
+    assert len({entry.layer_id for entry in entries}) == 5
+    assert all(entry.keys.shape == (0, 2, 0, 64) for entry in entries)
 
 
 def test_config_forward_and_next_token_loss_backward(tokenizer):
@@ -77,10 +80,12 @@ def test_config_forward_and_next_token_loss_backward(tokenizer):
 def test_repeated_builds_and_layers_have_independent_parameters_and_cache(tokenizer):
     first, first_entries = build_model(tokenizer)
     second, second_entries = build_model(tokenizer)
-    weights = [first.body[index].branch.q_proj.weight for index in range(1, 36, 4)]
-    assert len({weight.data_ptr() for weight in weights}) == 9
-    gates = [first.body[index].branch.gate.weight for index in range(2, 36, 4)]
-    assert len({weight.data_ptr() for weight in gates}) == 9
+    weights = [
+        first.body[index].branch.branch.q_proj.weight for index in range(0, 10, 2)
+    ]
+    assert len({weight.data_ptr() for weight in weights}) == 5
+    gates = [first.body[index].branch.branch.gate.weight for index in range(1, 10, 2)]
+    assert len({weight.data_ptr() for weight in gates}) == 5
     assert all(
         a.data_ptr() != b.data_ptr()
         for a, b in zip(first.parameters(), second.parameters(), strict=True)
@@ -115,7 +120,7 @@ def test_config_cached_chunks_match_full_logits_unbounded(tokenizer):
         )
     torch.testing.assert_close(actual, expected, rtol=1e-7, atol=1e-9)
     assert all(entry.count == 517 for entry in entries)
-    assert all(entry.keys.shape == (1, 2, 517, 96) for entry in entries)
+    assert all(entry.keys.shape == (1, 2, 517, 64) for entry in entries)
 
 
 def test_config_state_dict_round_trip_preserves_logits_and_tying(tokenizer):
@@ -135,12 +140,10 @@ def test_configured_embedding_scale_and_initial_next_token_loss():
     import math
     from types import SimpleNamespace
 
-    vocabulary = 8192
+    vocabulary = 32768
     model, _ = build_model(SimpleNamespace(vocab_size=vocabulary))
-    assert sum(parameter.numel() for parameter in model.parameters()) == 70_006_272
-    assert model.embedding.weight.std().item() == pytest.approx(
-        0.016329931618554522, rel=0.02
-    )
+    assert sum(parameter.numel() for parameter in model.parameters()) == 29_890_048
+    assert model.embedding.weight.std().item() == pytest.approx(0.02, rel=0.02)
     tokens = torch.randint(vocabulary, (2, 17))
     with torch.no_grad():
         loss = F.cross_entropy(

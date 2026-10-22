@@ -1,40 +1,58 @@
+"""Llama-style decoder near 30M parameters with a 32K vocabulary."""
+
 from functools import partial
 
 from src.data.tokenizer import Tokenizer
 from src.model.assembler import Model
-from src.model.definitions import *
-from src.model.position import *
+from src.model.definitions import (
+    Embedding,
+    GQAAttention,
+    LMHead,
+    PreNorm,
+    Repeat,
+    RMSNorm,
+    SwiGLU,
+)
+from src.model.position import rope
+
+WIDTH = 512
+LAYERS = 5
+FFN_WIDTH = 1280
+VOCAB_SIZE = 32768
 
 
 def build_model(tokenizer: Tokenizer):
     return Model(
         tokenizer=tokenizer,
-        input=Embedding(output_features=768, init_std=0.016329931618554522),
+        input=Embedding(output_features=WIDTH, init_std=0.02),
         blocks=[
             Repeat(
-                times=9,
+                times=LAYERS,
                 blocks=[
-                    RMSNorm(input_features=768, eps=1e-6),
-                    GQAAttention(
-                        input_features=768,
-                        output_features=768,
-                        num_query_heads=8,
-                        num_kv_heads=2,
-                        head_features=96,
-                        window_size=0,
-                        dropout=0,
-                        position_rotation=partial(rope, base=10000.0),
-                        residual=True,
+                    PreNorm(
+                        GQAAttention(
+                            input_features=WIDTH,
+                            output_features=WIDTH,
+                            num_query_heads=8,
+                            num_kv_heads=2,
+                            head_features=64,
+                            window_size=0,
+                            dropout=0,
+                            position_rotation=partial(rope, base=10000.0),
+                            bias=False,
+                        )
                     ),
-                    SwiGLU(
-                        input_features=768,
-                        hidden_features=2432,
-                        output_features=768,
-                        residual=True,
+                    PreNorm(
+                        SwiGLU(
+                            input_features=WIDTH,
+                            hidden_features=FFN_WIDTH,
+                            output_features=WIDTH,
+                            bias=False,
+                        )
                     ),
-                    RMSNorm(input_features=768, eps=1e-6),
                 ],
-            )
+            ),
+            RMSNorm(input_features=WIDTH, eps=1e-6),
         ],
-        lm_head=LMHead(input_features=768, tie_to_embedding=True),
+        lm_head=LMHead(input_features=WIDTH, tie_to_embedding=True),
     ).assemble()

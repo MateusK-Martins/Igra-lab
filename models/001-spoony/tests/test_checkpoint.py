@@ -305,3 +305,48 @@ def test_checkpoint_requires_explicit_settings(tmp_path):
     args, _ = setup()
     with pytest.raises(ValueError, match="settings"):
         train_loop(**args, checkpoint_config=CheckpointConfig(tmp_path, 1))
+
+
+def test_safety_stop_saves_resumable_state_and_mirrors(tmp_path):
+    from src.training.validation import ValidationInterrupted
+
+    for during_validation in (False, True):
+        args, settings = setup()
+        args["config"] = replace(args["config"], validation_interval=1)
+        config = CheckpointConfig(
+            tmp_path / str(during_validation),
+            1000,
+            keep_last=2,
+            backup_directory=tmp_path / f"backup-{during_validation}",
+        )
+        checks = (
+            iter([None, "GPU too hot"]) if during_validation else iter(["GPU too hot"])
+        )
+        with patch("src.training.loop.validate", side_effect=ValidationInterrupted):
+            state = train_loop(
+                **args,
+                checkpoint_config=config,
+                checkpoint_settings=settings,
+                stop_requested=lambda checks=checks: next(checks),
+            )
+        assert state.updates == 1
+        path = config.directory / "step-00000001.pt"
+        assert path.read_bytes() == (config.backup_directory / path.name).read_bytes()
+        saved = load_checkpoint(path, **components(args, settings))
+        assert saved.updates == 1
+
+
+def test_checkpoint_retention_preserves_newest_two_in_both_locations(tmp_path):
+    from src.training.checkpoint import preserve_checkpoint
+
+    config = CheckpointConfig(tmp_path / "run", 1, 2, tmp_path / "backup")
+    config.directory.mkdir()
+    for step in range(1, 4):
+        path = config.directory / f"step-{step:08d}.pt"
+        path.write_bytes(bytes([step]))
+        preserve_checkpoint(path, config)
+    for directory in (config.directory, config.backup_directory):
+        assert [p.name for p in sorted(directory.glob("*.pt"))] == [
+            "step-00000002.pt",
+            "step-00000003.pt",
+        ]

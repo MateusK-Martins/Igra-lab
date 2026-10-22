@@ -1,0 +1,10 @@
+{
+  "dataset": "wikimedia/wikipedia",
+  "revision": "b04c8d1ceb2f5cd4588862100d08de323dccfbaa",
+  "subset": "20231101.en",
+  "selection": "first 20000 documents from the deduplicated training split of the 600M corpus; no validation text",
+  "documents": 20000,
+  "corpus_sha256": "590b32cefa18fd0bd9d94a5496391a77ef306f40a9c65f92e6386d32388ee70b",
+  "vocabulary": 32768,
+  "tokenizer_sha256": "cc6dd6a41ed33ea342f3f1cc98a9fe7ea937fb75a32f00b908bdc12baf16f49b"
+}

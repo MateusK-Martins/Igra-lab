@@ -1,0 +1,30 @@
+{
+  "parameters": 29890048,
+  "vocabulary": 32768,
+  "layers": 5,
+  "hidden_width": 512,
+  "intermediate_width": 1280,
+  "query_heads": 8,
+  "kv_heads": 2,
+  "head_dimension": 64,
+  "context_length": 2048,
+  "rope_base": 10000,
+  "norm_epsilon": 1e-06,
+  "tied_embeddings": true,
+  "embedding_parameters": 16777216,
+  "body_parameters": 13112832,
+  "cache_entries": 5,
+  "weight_storage_BF16_MiB": 57.0107421875,
+  "kv_cache_BF16_at_2048_batch1_MiB": 5.0,
+  "cuda_smoke": {
+    "batch": 2,
+    "sequence_length": 2048,
+    "loss": 10.502853393554688,
+    "optimizer_updated": true,
+    "all_gradients_finite": true,
+    "peak_allocated_GiB": 2.2205944061279297
+  },
+  "tests_passed": 491,
+  "model_weights_saved": false,
+  "status": "Fresh architecture; no pretraining run launched; CUDA smoke weights discarded"
+}

@@ -1,0 +1,18 @@
+{
+  "tests_passed": 494,
+  "artifact_hashes_verified": true,
+  "parameters": 29890048,
+  "vocabulary": 32768,
+  "seed": 42,
+  "initialization": "fresh random weights; no pretrained checkpoint",
+  "updates": 36621,
+  "health": {
+    "time": 1792684123.899522,
+    "gpu_celsius": 36,
+    "cpu_celsius": 41.0,
+    "gpu_utilization": 18,
+    "gpu_memory_MiB": 12,
+    "free_bytes": 59968827392
+  },
+  "backup_directory": "/home/mateus/Documents/Igra-lab-checkpoints/lantern30m-llama-vocab32k-wikipedia600m"
+}

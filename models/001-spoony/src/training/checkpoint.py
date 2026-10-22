@@ -217,3 +217,26 @@ def load_model_weights(path: Path, *, model: nn.Module, tokenizer_path: Path) ->
     if expected != file_sha256(tokenizer_path):
         raise ValueError("Tokenizer does not match the initialization checkpoint")
     model.load_state_dict(payload["model"])
+
+
+def preserve_checkpoint(path, config):
+    """Mirror the completed atomic checkpoint outside its worktree before retention."""
+    import shutil
+
+    directories = [path.parent]
+    if config.backup_directory is not None:
+        backup = config.backup_directory
+        backup.mkdir(parents=True, exist_ok=True)
+        temporary = backup / (path.name + ".tmp")
+        try:
+            shutil.copyfile(path, temporary)
+            with temporary.open("rb") as file:
+                os.fsync(file.fileno())
+            os.replace(temporary, backup / path.name)
+        finally:
+            temporary.unlink(missing_ok=True)
+        directories.append(backup)
+    if config.keep_last is not None:
+        for directory in directories:
+            for old in sorted(directory.glob("step-*.pt"))[: -config.keep_last]:
+                old.unlink()

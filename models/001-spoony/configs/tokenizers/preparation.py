@@ -5,10 +5,10 @@ from src.config.types import PreparationConfig, TokenizerConfig
 
 preparation_config = PreparationConfig(
     tokenizer=TokenizerConfig(
-        target_vocab_size=8192,
+        target_vocab_size=32768,
         min_frequency=2,
         special_tokens=("<|unk|>", "<|eot|>"),
     ),
-    output_directory=data_path("processed/wikipedia-en-100m"),
+    output_directory=data_path("processed/lantern30m-wikipedia-vocab32k"),
     end_of_document_token="<|eot|>",
 )

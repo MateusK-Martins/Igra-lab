@@ -12,6 +12,7 @@ from configs.data.qa_corpus import qa_config
 from configs.model.model import build_model
 from configs.tokenizers.preparation import preparation_config
 from configs.training.checkpoint import checkpoint_config
+from configs.training.health import health_config
 from configs.training.optimizer import optimizer_config
 from configs.training.precision import precision_config
 from configs.training.run import run_config
@@ -22,6 +23,7 @@ from src.data.dataloader import build_dataloader, build_split_dataloader
 from src.data.tokenizer import ByteLevelBPETokenizer
 from src.sft.data import SFTDataset
 from src.training.checkpoint import load_checkpoint
+from src.training.health import HealthMonitor
 from src.training.logging import build_writer
 from src.training.loop import train_loop
 from src.training.manifest import build_manifest, file_sha256, save_manifest
@@ -29,7 +31,9 @@ from src.training.optimizer import build_optimizer
 from src.training.precision import build_precision
 from src.training.scheduler import build_scheduler
 
-expected_artifacts_path = project_root() / "configs/data/wikipedia-100m-artifacts.json"
+expected_artifacts_path = (
+    project_root() / "configs/data/wikipedia-vocab32k-artifacts.json"
+)
 
 
 def ensure_prepared_data(data_directory):
@@ -84,6 +88,7 @@ def main() -> None:
             train_loader_config,
         )
 
+    torch.manual_seed(42)
     model, _ = build_model(tokenizer)
     model = model.to(device)
 
@@ -102,6 +107,8 @@ def main() -> None:
             "train_loader": train_loader_config,
             "validation_loader": validation_loader_config,
             "device": run_config.device,
+            "seed": 42,
+            "health": health_config,
         },
     )
 
@@ -141,26 +148,32 @@ def main() -> None:
         resume_step=None if state is None else state.updates,
     )
 
-    try:
-        state = train_loop(
-            model=model,
-            train_loader=train_loader,
-            validation_loader=validation_loader,
-            optimizer=optimizer,
-            scheduler=scheduler,
-            context=context,
-            scaler=scaler,
-            device=device,
-            config=training_config,
-            total_steps=scheduler_config.total_steps,
-            writer=writer,
-            logging_config=logging_config,
-            state=state,
-            checkpoint_config=checkpoint_config,
-            checkpoint_settings=manifest,
-        )
-    finally:
-        writer.close()
+    with HealthMonitor(logging_config.directory.parent, health_config) as monitor:
+        try:
+            state = train_loop(
+                model=model,
+                train_loader=train_loader,
+                validation_loader=validation_loader,
+                optimizer=optimizer,
+                scheduler=scheduler,
+                context=context,
+                scaler=scaler,
+                device=device,
+                config=training_config,
+                total_steps=scheduler_config.total_steps,
+                writer=writer,
+                logging_config=logging_config,
+                state=state,
+                checkpoint_config=checkpoint_config,
+                checkpoint_settings=manifest,
+                stop_requested=lambda: monitor.reason,
+            )
+        finally:
+            writer.close()
+
+    if state.updates < scheduler_config.total_steps:
+        print("Training stopped safely; resume with --resume-latest", flush=True)
+        return
 
     from src.training.export import export_model
 
