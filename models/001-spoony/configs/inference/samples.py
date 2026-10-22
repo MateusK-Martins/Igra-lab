@@ -3,8 +3,8 @@
 from configs.data.dataloader import chunking_config
 from src.config.paths import results_path
 
-BUNDLE = results_path("sft/lantern70m-instruct1m-normal/model")
-OUTPUT = results_path("sft/lantern70m-instruct1m-normal/samples.json")
+BUNDLE = results_path("sft/lantern70m-instruct1m-think3-consume/model")
+OUTPUT = results_path("sft/lantern70m-instruct1m-think3-consume/samples.json")
 DEVICE = "cuda"
 SEED = 42
 MAX_NEW_TOKENS = 128

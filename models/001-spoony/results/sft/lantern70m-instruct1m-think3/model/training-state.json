@@ -1,0 +1,11 @@
+{
+  "updates": 1122,
+  "batches": 4485,
+  "tokens": 1299946,
+  "completed_epochs": 1,
+  "last_loss": 0.8495652079582214,
+  "last_validation_loss": 2.733928208626161,
+  "last_validation_perplexity": 15.39323625354966,
+  "batches_in_epoch": 0,
+  "epoch_generator_state": null
+}
