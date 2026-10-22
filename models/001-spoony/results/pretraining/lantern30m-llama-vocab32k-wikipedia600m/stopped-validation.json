@@ -1,0 +1,7 @@
+{
+  "checkpoint": "/home/mateus/.codex/worktrees/lantern30m-llama-vocab32k/Igra-lab/models/001-spoony/results/pretraining/lantern30m-llama-vocab32k-wikipedia600m/checkpoints/step-00007259.pt",
+  "sha256": "2332b628639ca988e4117866f098b2dbb7f34eaf42463201f4803fef0b9febc1",
+  "update": 7259,
+  "validation_loss": 4.059642312956639,
+  "validation_perplexity": 57.953578127213696
+}

@@ -1,0 +1,106 @@
+{
+  "model_sha256": "2332b628639ca988e4117866f098b2dbb7f34eaf42463201f4803fef0b9febc1",
+  "tokenizer_sha256": "cc6dd6a41ed33ea342f3f1cc98a9fe7ea937fb75a32f00b908bdc12baf16f49b",
+  "precision": "bf16",
+  "max_new_tokens": 128,
+  "temperature": 0.8,
+  "top_k": 40,
+  "samples": [
+    {
+      "mode": "greedy",
+      "seed": 42,
+      "prompt": "The Solar System consists of",
+      "continuation": " the following:\n\nThe first of the two sets of the first two sets of the first two sets of the first two sets of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the second set of the",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 43,
+      "prompt": "Photosynthesis is the process by which",
+      "continuation": " the term is the term.\n\nThe term is used in the form of the term, and the term is used in the term.\n\nThe term is used in the term, and is used in the term, in the term, in the term, in the term, in the term, in the term, in the term, in the term, in the term, in the term, in the term, in the term, in the term, in the term, in the term, in the term, in the term, in the term, in the term, in the term, in the term, in the term",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 44,
+      "prompt": "The Roman Empire was",
+      "continuation": " built in the city of the city of St. John the Baptist.\n\nThe town was named after the town of St. John the Baptist, and it was renamed the town of St. John the Baptist.\n\nThe town was named after the town of St. John the Baptist, and it was named after the town of St. John the Baptist.\n\nThe town was named after the town of St. John the Baptist, and it was renamed St. John the Baptist.\n\nThe town was named after the town of St. John the Baptist, and it was renamed St. John the Baptist.\n\nThe",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 45,
+      "prompt": "In mathematics, a prime number is",
+      "continuation": " used in the United States, and the United States.\n\nThe United States has a population of 1,049, of which 1,088 is a household of 1,088,088, of which 1,088 is a household of 1,088,088.\n\nThe United States has a population of 1,088,088,088,088,088,088,088,088,088,088,088,088,088,088,088,088,088,088,088",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 46,
+      "prompt": "The Amazon River is",
+      "continuation": " a small lake in the municipality of the municipality of the municipality of the ,-Berez-de-Berez-de-Berez-de-Berez-de-Berez-de-Berez-de-Berez-de-Berez-de-Berez-de-Berez-de-Berez-de-Berez-de-Berez-de-Berez-de-Berez-de-Berez-de-Berez-de-Berez-de-Berez-",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 47,
+      "prompt": "A computer processor is",
+      "continuation": " a type of the computer system.\n\nThe system is used in the United States, and is used in the United States, and is used in the United States.\n\nThe system is used in the United States, and is used in the United States.\n\nThe system is used in the United States, and is used in the United States.\n\nThe system is used in the United States, and is used in the United States.\n\nThe system is used in the United States, and is used in the United States.\n\nThe system is used in the United States, and is used in the United States",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 42,
+      "prompt": "The Solar System consists of",
+      "continuation": " the following and only one in line 216 at the end of the month and the end of the season, the same day, and the last of the year.\n\nThe following season, all players from the season, however, play the game, with the other teams in the Division of League. After the season, the game was postponed for the season, while the play was not complete.\n\nSeason-by-season\n\nThe game concluded with the end of the season, in the second game of the season, to the quarter of the season.\n\nIn the third game of the season, the players from the",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 43,
+      "prompt": "Photosynthesis is the process by which",
+      "continuation": " the law is the term for the person to pass, and so the term for the case of the person, the person, the figure, the person, the person, the person, the person, the person, the person, the person or the person, the person, the person, the person, the order of law. This is the form of the person, the person, the person, the person, the person, the name of the person, the person, the person, the person, the person, the person, the word, the persons, the person, or the person that the person, the person or the person",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 44,
+      "prompt": "The Roman Empire was",
+      "continuation": " written on a television series called \"The Man of the Night\", which was released in 1984. The show received a critical consensus on the television series Redwood, which is published in 1988.\n\nReferences\n\nExternal links\n\n \"The Man Of the Night\" in the \"Hidden House\".\n \"The Man Of the Night\" in \"The Man \ufffd The Night\" in \"The Man Of the Night\" in \"The Man Of The Night\" in \"The Man Of the Night\" in \"The Man of the Night\" in \"The Man Of The Night\" in \"The Man Of the Night\" in \"The Man",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 45,
+      "prompt": "In mathematics, a prime number is",
+      "continuation": " used in the English language in English and English, in the English language in English. These include the Scottish language in English, Latin, and Arabic and in English. The English language is also used in English and English as the language in French.\n\nHistory\n\n\nThe language was first mentioned in the 13175 Dukes of London in the 1316s. The name of the English language is derived from the Greek Latin word meaning \"the word used in the French\" (from the English word meaning \"the word meaning \"a word meaning\") or \"a word word meaning\". In the 13th century, it was",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 46,
+      "prompt": "The Amazon River is",
+      "continuation": " the first of the group to be released (and also the first of the last two chapters being published in the original version of the series), the title of the series will be created by the original title name.\n\nThe series was cancelled in 2004 and replaced with the previous series.\n\nReception\n\nIn 2007, the series was nominated for the New York Comic Book-nominated, and ran for the New York Comic Book-nominated.\n\nSee also\n List of American novels\n List of American novels\n List of American novels\n List of American novels by age\n List of American novels\n List of American novels by",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 47,
+      "prompt": "A computer processor is",
+      "continuation": " used, the most-known of all his military career in the state, the world's largest naval history.\n\nAs a member of the Royal Navy, he was awarded the Military Medal of Honor (MPD), the Military Order of the United States and the Military Order of the Navy.\n\nEarly life and career\nBorn in Hubb, Michigan, he grew up in Mouth, Indiana, graduating from college in 1969. He was married to a former Russian-American businessman who worked and worked in the theater. His parents died in 1991, and his wife, two daughters, died in 1994. His grandfather, Dr.",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    }
+  ]
+}
