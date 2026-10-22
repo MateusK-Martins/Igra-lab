@@ -10,7 +10,7 @@ from src.data.serialization import TokenStore
 
 
 def build_dataloader(
-    dataset: StoredTokenSequenceDataset, config: DataLoaderConfig
+    dataset: StoredTokenSequenceDataset, config: DataLoaderConfig, *, collate_fn=None
 ) -> DataLoader[tuple[Tensor, Tensor]]:
     generator = torch.Generator()
     generator.manual_seed(config.seed)
@@ -23,6 +23,7 @@ def build_dataloader(
         pin_memory=config.pin_memory,
         drop_last=config.drop_last,
         generator=generator,
+        collate_fn=collate_fn,
     )
 
 

@@ -7,11 +7,13 @@ from configs.sft.precision import precision_config
 from configs.sft.run import initialization_config, run_config
 from configs.sft.scheduler import scheduler_config
 from configs.sft.training import checkpoint_config, logging_config, training_config
+from configs.training.health import health_config
 from src.config.paths import project_root
 from src.data.dataloader import build_dataloader
 from src.data.tokenizer import ByteLevelBPETokenizer
-from src.sft.data import SFTDataset
+from src.sft.data import SFTDataset, collate_instructions
 from src.training.checkpoint import load_checkpoint, load_model_weights
+from src.training.health import HealthMonitor
 from src.training.logging import build_writer
 from src.training.loop import train_loop
 from src.training.manifest import build_artifact_manifest, file_sha256, save_manifest
@@ -21,16 +23,25 @@ from src.training.scheduler import build_scheduler
 
 
 def main() -> None:
+    torch.set_num_threads(4)
+    torch.manual_seed(42)
+    if run_config.resume_from is None and any(
+        checkpoint_config.directory.glob("step-*.pt")
+    ):
+        raise FileExistsError("Existing checkpoints; configure resume_from")
     device = torch.device(run_config.device)
     context, scaler = build_precision(device, precision_config)
 
     tokenizer = ByteLevelBPETokenizer.load(data_config.tokenizer_path)
     train_loader = build_dataloader(
-        SFTDataset(data_config.train_path, tokenizer, data_config), train_loader_config
+        SFTDataset(data_config.train_path, tokenizer, data_config),
+        train_loader_config,
+        collate_fn=collate_instructions,
     )
     validation_loader = build_dataloader(
         SFTDataset(data_config.validation_path, tokenizer, data_config),
         validation_loader_config,
+        collate_fn=collate_instructions,
     )
 
     model, _ = build_model(tokenizer)
@@ -103,26 +114,41 @@ def main() -> None:
         resume_step=None if state is None else state.updates,
     )
 
-    try:
-        state = train_loop(
-            model=model,
-            train_loader=train_loader,
-            validation_loader=validation_loader,
-            optimizer=optimizer,
-            scheduler=scheduler,
-            context=context,
-            scaler=scaler,
-            device=device,
-            config=training_config,
-            total_steps=scheduler_config.total_steps,
-            writer=writer,
-            logging_config=logging_config,
-            state=state,
-            checkpoint_config=checkpoint_config,
-            checkpoint_settings=manifest,
-        )
-    finally:
-        writer.close()
+    with HealthMonitor(logging_config.directory.parent, health_config) as monitor:
+        try:
+            state = train_loop(
+                model=model,
+                train_loader=train_loader,
+                validation_loader=validation_loader,
+                optimizer=optimizer,
+                scheduler=scheduler,
+                context=context,
+                scaler=scaler,
+                device=device,
+                config=training_config,
+                total_steps=scheduler_config.total_steps,
+                writer=writer,
+                logging_config=logging_config,
+                state=state,
+                checkpoint_config=checkpoint_config,
+                checkpoint_settings=manifest,
+                stop_requested=lambda: monitor.reason,
+            )
+        finally:
+            writer.close()
+    if state.updates < scheduler_config.total_steps:
+        print("SFT stopped safely", flush=True)
+        return
+    from src.training.export import export_model
+
+    export_model(
+        logging_config.directory.parent / "model",
+        model=model,
+        tokenizer_path=data_config.tokenizer_path,
+        manifest=manifest,
+        state=state,
+    )
+    print("SFT complete", flush=True)
 
 
 if __name__ == "__main__":

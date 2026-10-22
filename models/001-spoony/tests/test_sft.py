@@ -308,3 +308,14 @@ def test_configured_model_accepts_sft_and_right_padding_is_causally_isolated(sft
     loss.backward()
     assert torch.isfinite(loss)
     assert model.embedding.weight.grad is not None
+
+
+def test_collation_removes_only_trailing_unsupervised_padding():
+    from src.sft.data import collate_instructions
+
+    first = (torch.tensor([1, 2, 3, 9, 9]), torch.tensor([-100, 3, 9, -100, -100]))
+    second = (torch.tensor([4, 5, 6, 7, 9]), torch.tensor([-100, -100, 7, 9, -100]))
+    inputs, targets = collate_instructions([first, second])
+    assert inputs.shape == targets.shape == (2, 4)
+    torch.testing.assert_close(targets, torch.stack([first[1], second[1]])[:, :4])
+    assert (targets != -100).sum().item() == 4

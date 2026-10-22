@@ -1,0 +1,30 @@
+{
+  "updates": 1182,
+  "batches": 4727,
+  "tokens": 1335724,
+  "completed_epochs": 1,
+  "last_loss": 2.3538177013397217,
+  "last_validation_loss": 2.6148702330738605,
+  "last_validation_perplexity": 13.665442940304802,
+  "batches_in_epoch": 0,
+  "epoch_generator_state": null,
+  "data": {
+    "dataset": "javi22/simple-instruct-dataset",
+    "revision": "46281e385a92468e8c037f81c8945907249f5719",
+    "counts": {
+      "train": {
+        "examples": 9453,
+        "tokens": 999849,
+        "response_targets": 683627
+      },
+      "validation": {
+        "examples": 839,
+        "tokens": 99979,
+        "response_targets": 67034
+      }
+    },
+    "steps": 1182,
+    "initial_checkpoint": "/home/mateus/.codex/worktrees/lantern-70m-wikipedia-600m/Igra-lab/models/001-spoony/results/pretraining/wikipedia-en-600m/checkpoints/step-00036621.pt"
+  },
+  "note": "training_state.tokens counts padded compute positions; data counts report actual unpadded corpus tokens"
+}

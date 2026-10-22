@@ -3,19 +3,22 @@
 from configs.data.dataloader import chunking_config
 from src.config.paths import results_path
 
-BUNDLE = results_path("pretraining/wikipedia-en-600m/model")
-OUTPUT = results_path("pretraining/wikipedia-en-600m/samples.json")
+BUNDLE = results_path("sft/lantern70m-instruct1m-normal/model")
+OUTPUT = results_path("sft/lantern70m-instruct1m-normal/samples.json")
 DEVICE = "cuda"
 SEED = 42
 MAX_NEW_TOKENS = 128
 CONTEXT_LENGTH = chunking_config.context_length
 TEMPERATURE = 0.8
 TOP_K = 40
-PROMPTS = (
-    "The Solar System consists of",
-    "Photosynthesis is the process by which",
-    "The Roman Empire was",
-    "In mathematics, a prime number is",
-    "The Amazon River is",
-    "A computer processor is",
+PROMPTS = tuple(
+    "User: " + instruction + "\nAssistant: "
+    for instruction in (
+        "What is the capital of France?",
+        "What is 7 plus 5?",
+        "Explain photosynthesis in one sentence.",
+        "Write a short story about a lost robot.",
+        "Pretend you are a pirate. Introduce yourself.",
+        "List three fruits.",
+    )
 )

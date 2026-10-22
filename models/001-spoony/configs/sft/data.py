@@ -2,12 +2,12 @@ from src.config.paths import data_path
 from src.config.types import DataLoaderConfig
 from src.sft.config import SFTDataConfig
 
-# Supply independent JSONL files before running SFT. Keep the pretrained tokenizer.
+DIRECTORY = data_path("raw/sft/simple-instruct-1m")
 data_config = SFTDataConfig(
-    train_path=data_path("raw/sft/train.jsonl"),
-    validation_path=data_path("raw/sft/validation.jsonl"),
-    tokenizer_path=data_path("processed/shakespeare/tokenizer.json"),
-    context_length=128,
+    DIRECTORY / "train.jsonl",
+    DIRECTORY / "validation.jsonl",
+    DIRECTORY / "tokenizer.json",
+    2048,
 )
-train_loader_config = DataLoaderConfig(8, True, 0, True, False, 42)
-validation_loader_config = DataLoaderConfig(8, False, 0, True, False, 42)
+train_loader_config = DataLoaderConfig(2, True, 0, True, False, 42)
+validation_loader_config = DataLoaderConfig(2, False, 0, True, False, 42)

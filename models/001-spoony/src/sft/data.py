@@ -63,3 +63,10 @@ class SFTDataset(Dataset[tuple[Tensor, Tensor]]):
     def __getitem__(self, index: int) -> tuple[Tensor, Tensor]:
         inputs, targets = self.examples[index]
         return inputs.clone(), targets.clone()
+
+
+def collate_instructions(examples):
+    inputs, targets = zip(*examples, strict=True)
+    targets = torch.stack(targets)
+    last = (targets != IGNORE_INDEX).nonzero()[:, 1].max().item() + 1
+    return torch.stack(inputs)[:, :last], targets[:, :last]
