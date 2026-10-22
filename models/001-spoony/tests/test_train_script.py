@@ -48,6 +48,24 @@ def configured_script(tmp_path, monkeypatch):
     tokenizer.save(data / "tokenizer.json")
     from src.training.manifest import file_sha256
 
+    initial_path = tmp_path / "initial.pt"
+    with torch.random.fork_rng():
+        torch.manual_seed(42)
+        initial_model = TinyModel(tokenizer.vocab_size)
+    torch.save(
+        {
+            "format_version": 1,
+            "model": initial_model.state_dict(),
+            "settings": {
+                "artifacts": {"tokenizer.json": file_sha256(data / "tokenizer.json")}
+            },
+        },
+        initial_path,
+    )
+    monkeypatch.setattr(train, "checkpoint_path", initial_path)
+
+    from src.training.manifest import file_sha256
+
     for split in ("train", "validation"):
         TokenStore(data / split).write_documents(
             [("doc", list(range(1, 26)))],
@@ -284,23 +302,11 @@ def test_preflight_rejects_changed_token_bytes(configured_script):
     content = bytearray(path.read_bytes())
     content[0] ^= 1
     path.write_bytes(content)
-    with pytest.raises(ValueError, match="pinned Wikipedia artifact"):
+    with pytest.raises(ValueError, match="pinned TinyStories artifact"):
         train.main()
     assert not writers
 
 
-def test_missing_data_invokes_preparation_and_verifies_artifacts(
-    configured_script, monkeypatch
-):
-    import shutil
-
-    from scripts import prepare_wikipedia
-
-    root, _, _, _ = configured_script
-    data = root / "data"
-    cached = root / "cached-data"
-    data.rename(cached)
-    prepare = MagicMock(side_effect=lambda: shutil.copytree(cached, data))
-    monkeypatch.setattr(prepare_wikipedia, "main", prepare)
-    train.ensure_prepared_data(data)
-    prepare.assert_called_once_with()
+def test_missing_data_requires_the_pinned_tinystories_slice(tmp_path):
+    with pytest.raises(FileNotFoundError, match="TinyStories"):
+        train.ensure_prepared_data(tmp_path / "missing")

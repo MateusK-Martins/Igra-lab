@@ -1,0 +1,57 @@
+{
+  "updates": 61,
+  "batches": 244,
+  "tokens": 999424,
+  "completed_epochs": 1,
+  "last_loss": 2.2168073654174805,
+  "last_validation_loss": 2.088917831579844,
+  "last_validation_perplexity": 8.076170656802926,
+  "batches_in_epoch": 0,
+  "epoch_generator_state": null,
+  "before": {
+    "initial_checkpoint_sha256": "347a11dbc6bc0f8d241d22d9113e65078455b38d3bd6de548251f168fb7ba239",
+    "parameters": 70006272,
+    "tokenizer_vocab": 8192,
+    "before_validation_loss": 2.6750183502833047,
+    "before_validation_perplexity": 14.512616147765296
+  },
+  "data": {
+    "source_directory": "/home/mateus/.codex/worktrees/tide-lantern-earlyexit-3to1-14m/Igra-lab/models/001-spoony/data/raw/codename-tinystories",
+    "source_subset": {
+      "dataset": "roneneldan/TinyStories",
+      "revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+      "selection": "first unique nonempty documents in source order",
+      "splits": {
+        "train": {
+          "documents": 30000,
+          "duplicates_or_empty_skipped": 0,
+          "sha256": "69a5f3422b4c51f98ca0692a3514822a6527999dc59c624baaefb1f8f04e65d3",
+          "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-train.txt"
+        },
+        "validation": {
+          "documents": 256,
+          "duplicates_or_empty_skipped": 0,
+          "sha256": "ab09f4248a55ca51d899ba51ce90d96a2c990d52a821338aa1743a525fda7d4a",
+          "source_url": "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/f54c09fd23315a6f9c86f9dc80f725de7d8f9c64/TinyStories-valid.txt"
+        }
+      }
+    },
+    "counts": {
+      "train": {
+        "tokens": 1000000,
+        "stories": 4013
+      },
+      "validation": {
+        "tokens": 50000,
+        "stories": 209
+      }
+    },
+    "tokenizer": "unchanged stage-1 tokenizer, 8192 tokens",
+    "initial_checkpoint": "/home/mateus/.codex/worktrees/lantern70m-sft1m-normal/Igra-lab/models/001-spoony/results/sft/lantern70m-instruct1m-normal/checkpoints/step-00001182.pt",
+    "initial_checkpoint_sha256": "347a11dbc6bc0f8d241d22d9113e65078455b38d3bd6de548251f168fb7ba239",
+    "format": "plain story text plus EOT; no instruction wrapper or think markers",
+    "selection": "source order, strip-text SHA256 deduplication across both splits, truncate last story to budget"
+  },
+  "final_checkpoint_sha256": "c4970e32cabf723cef3fde73170cfdb2c4c44e123f92f190c72bf91cb8c4ec6b",
+  "backup_identical": true
+}

@@ -1,0 +1,106 @@
+{
+  "model_sha256": "3c7ab43d968acbd7fc8d6c802f617b515e1c89d77a4d2f9beb2c910f76915167",
+  "tokenizer_sha256": "1d40abc4915bc2a585c3a52595a2565275a2cae2015476ff51d6aef40f617729",
+  "precision": "bf16",
+  "max_new_tokens": 128,
+  "temperature": 0.8,
+  "top_k": 40,
+  "samples": [
+    {
+      "mode": "greedy",
+      "seed": 42,
+      "prompt": "Once upon a time, there was a little rabbit who",
+      "continuation": " lived in a small house. He was very proud of himself and he was very proud of himself. He was very proud of himself and he was very proud of himself.\nOne day, he was very proud of himself. He was very proud of himself and he was proud of himself. He was proud of himself and he was proud of himself. He was proud of himself and he was proud of himself.",
+      "generated_tokens": 93,
+      "stopped_on_eot": true
+    },
+    {
+      "mode": "greedy",
+      "seed": 43,
+      "prompt": "Lily found a shiny key in the garden. She",
+      "continuation": " was so excited to see the key. She was so excited to see the key.\n\nThe key was so excited! She was so excited! She was so excited! She was so excited! She was so excited! She was so excited! She was so excited! She was so excited! She was so excited! She was so excited! She was so excited! She was so excited! She was so excited! She was so excited! She was so excited! She was so excited! She was so excited! She was so exc",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 44,
+      "prompt": "One day, a small robot lost its way. It",
+      "continuation": " was a big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big,",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 45,
+      "prompt": "Tom wanted to help his friend, but",
+      "continuation": " he was too late. He was so happy and he was so happy.\nHe was so happy and he was so happy. He was so happy and he was so happy. He was so happy and he was so happy.",
+      "generated_tokens": 54,
+      "stopped_on_eot": true
+    },
+    {
+      "mode": "greedy",
+      "seed": 46,
+      "prompt": "The little bird was afraid to fly. Then",
+      "continuation": ", the little bird was so excited!\nThe little bird was so happy! It was afraid and it was so happy! It was so excited! The little bird was so happy! The little bird was so happy! It was so happy! It was so happy! It was so happy! It was so happy! It was so happy! It was so happy! It was so happy! It was so happy! It was so happy! It was so happy! It was so happy! It was so happy",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 47,
+      "prompt": "User: Tell me a short story about a kind dragon.\nAssistant: ",
+      "continuation": "Once upon a time, there was a little girl named Lily. She was very happy and loved to play with her. She was very excited and she was very happy. She was very happy and loved to play with her. She was very happy and loved to play with her.\nLily was very happy and loved to play with her. She was very happy and loved to play with her. She was very happy and loved to play with her. She was very happy and loved to play with her. She",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 42,
+      "prompt": "Once upon a time, there was a little rabbit who",
+      "continuation": " lived in a small village. The rabbit was very kind and sad. She was happy to be the best friend.\n\nOne day, the rabbit had a big gag and she had a big ticket. She was so excited! She gave her bucket to the rabbit and gave her a big wedge. The rabbit asked, \"Do you want to help you?!\"\nThe rabbit came out and asked the rabbit. The rabbit said, \"Let's go, to the bigger village!\" The ra",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 43,
+      "prompt": "Lily found a shiny key in the garden. She",
+      "continuation": " took her to the garden and looked around her.\n\nOne day, they went inside and said, \"Get so big!\" But then, they were very happy.\nWhen they arrived at the garden, a smile came up. \nAt the garden, the kitchen smiled and said, \"Why are you here?\" \nThe smile was a pink. The kitchen smiled and said, \"Would we have a shiny key?\" \nThey said, \"Who are you now here?\" \nSudden",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 44,
+      "prompt": "One day, a small robot lost its way. It",
+      "continuation": " was not so tired. The robot had a great time and it had not been so much fun at it.",
+      "generated_tokens": 24,
+      "stopped_on_eot": true
+    },
+    {
+      "mode": "top_k",
+      "seed": 45,
+      "prompt": "Tom wanted to help his friend, but",
+      "continuation": " he was too scared, and he took the kitchen to the home. His friend, Candie, helped him make the kitcheny. He sang this to the family and the kitcheny was always happy. He decided to try to keep the kitcheny and give it to their friend.\nWith the kitcheny, Tom decided to play with his friend. He went to the kitchen to play with his friends. When he arrived, he picked up the kitcheny and the kitcheny. He made his friend's wonderful bag",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 46,
+      "prompt": "The little bird was afraid to fly. Then",
+      "continuation": " the bird was ready to fly it and run away.\n\"Yes, The bird wants to fly. We will go the daylight, get some help. Did the bird fly?\"\nThe bird was happy and didn't like the bird. It was not nice to fly. The bird wiped it and flew away.\n\"Yes, The bird wants to fly,\" said the bird. The bird wished to fly from the bird's home.\n\"Thank you,\" said the bird.\n\"No,",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 47,
+      "prompt": "User: Tell me a short story about a kind dragon.\nAssistant: ",
+      "continuation": "\"I'm sorry, but I can't do it to you!\"\n\"But the dragon is still here!\"\n\"I'm sorry, but I can't do it!\"\nSuddenly, a little girl came out. She was ready to be careful. She was very happy and frightened. She went to the bathroom to look for something. She saw it and wondered what it was.\nInside the bathroom, she woke up. She wanted to help it and found a new dragon. She tried to help",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    }
+  ]
+}

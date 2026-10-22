@@ -1,0 +1,11 @@
+{"time": 1792680530.1186593, "gpu_celsius": 38, "cpu_celsius": 50.0, "gpu_utilization": 0, "gpu_memory_MiB": 442, "free_bytes": 9184759808}
+{"time": 1792680535.1481876, "gpu_celsius": 50, "cpu_celsius": 53.0, "gpu_utilization": 100, "gpu_memory_MiB": 3514, "free_bytes": 9184743424}
+{"time": 1792680540.180163, "gpu_celsius": 52, "cpu_celsius": 50.0, "gpu_utilization": 100, "gpu_memory_MiB": 3514, "free_bytes": 9184743424}
+{"time": 1792680545.210322, "gpu_celsius": 54, "cpu_celsius": 50.0, "gpu_utilization": 100, "gpu_memory_MiB": 3514, "free_bytes": 9184743424}
+{"time": 1792680550.236791, "gpu_celsius": 49, "cpu_celsius": 52.0, "gpu_utilization": 19, "gpu_memory_MiB": 3514, "free_bytes": 9025404928}
+{"time": 1792680555.271801, "gpu_celsius": 56, "cpu_celsius": 54.0, "gpu_utilization": 100, "gpu_memory_MiB": 3514, "free_bytes": 7504302080}
+{"time": 1792680560.3020782, "gpu_celsius": 57, "cpu_celsius": 53.0, "gpu_utilization": 100, "gpu_memory_MiB": 3514, "free_bytes": 7504306176}
+{"time": 1792680565.3425815, "gpu_celsius": 58, "cpu_celsius": 54.0, "gpu_utilization": 100, "gpu_memory_MiB": 3514, "free_bytes": 7504306176}
+{"time": 1792680570.3765233, "gpu_celsius": 59, "cpu_celsius": 58.0, "gpu_utilization": 100, "gpu_memory_MiB": 3514, "free_bytes": 7504306176}
+{"time": 1792680575.4047363, "gpu_celsius": 58, "cpu_celsius": 63.0, "gpu_utilization": 100, "gpu_memory_MiB": 3514, "free_bytes": 7504302080}
+{"time": 1792680580.4307582, "gpu_celsius": 59, "cpu_celsius": 59.0, "gpu_utilization": 100, "gpu_memory_MiB": 3514, "free_bytes": 7504293888}

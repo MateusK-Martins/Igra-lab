@@ -1,10 +1,13 @@
-from configs.training.health import checkpoint_backup_directory
+from pathlib import Path
+
 from src.config.paths import results_path
 from src.config.types import CheckpointConfig
 
 checkpoint_config = CheckpointConfig(
-    directory=results_path("pretraining/wikipedia-en-600m/checkpoints"),
-    interval=1000,
-    keep_last=2,
-    backup_directory=checkpoint_backup_directory,
+    results_path("finetuning/lantern70m-instruct-tinystories1m/checkpoints"),
+    25,
+    keep_last=1,
+    backup_directory=Path(
+        "/home/mateus/Documents/Igra-lab-checkpoints/lantern70m-instruct-tinystories1m"
+    ),
 )

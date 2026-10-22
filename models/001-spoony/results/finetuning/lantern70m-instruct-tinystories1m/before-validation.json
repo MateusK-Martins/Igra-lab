@@ -1,0 +1,7 @@
+{
+  "initial_checkpoint_sha256": "347a11dbc6bc0f8d241d22d9113e65078455b38d3bd6de548251f168fb7ba239",
+  "parameters": 70006272,
+  "tokenizer_vocab": 8192,
+  "before_validation_loss": 2.6750183502833047,
+  "before_validation_perplexity": 14.512616147765296
+}

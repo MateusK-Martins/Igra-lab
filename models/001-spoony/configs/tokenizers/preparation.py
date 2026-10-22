@@ -9,6 +9,6 @@ preparation_config = PreparationConfig(
         min_frequency=2,
         special_tokens=("<|unk|>", "<|eot|>"),
     ),
-    output_directory=data_path("processed/wikipedia-en-600m"),
+    output_directory=data_path("processed/tinystories-1m"),
     end_of_document_token="<|eot|>",
 )

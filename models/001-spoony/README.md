@@ -1,11 +1,12 @@
-# Lantern 70M 1M-token normal instruction SFT
+# Normal-instruction Lantern70M -> 1M TinyStories tokens
 
-Stage 1 starts from the completed 600M Wikipedia checkpoint, with the original
-8192-token vocabulary. Response-only supervision on javi22/simple-instruct-dataset,
-pinned revision 46281e385a92468e8c037f81c8945907249f5719.
-Train counts: {'examples': 9453, 'tokens': 999849, 'response_targets': 683627}. Validation: {'examples': 839, 'tokens': 99979, 'response_targets': 67034}.
-One epoch, 1182 updates, seed42, BF16, context2048, batch2/accumulation4,
-AdamW3e-5, 30-step warmup and cosine decay. Padding trimmed at collation.
-Health watchdog and mirrored resumable checkpoints enabled.
-Stage 2 must initialize from this stage's final trained weights, adding a new
-<think> token and three supervised markers before each answer.
+Initialize from the normal 1M-instruction SFT checkpoint, not the think model.
+Retain original 8192-token tokenizer and 70,006,272 parameters. Plain TinyStories
+text + EOT, packed 2048-token causal LM windows with supervision at every position.
+1,000,000 stored train tokens; 999,424 usable targets, 61 updates. Independent
+50,000-token validation slice. Source order; hash deduplication across splits.
+AdamW3e-5, BF16, batch2/accumulation4, seed42, 5-step warmup/cosine.
+Existing device-health save-and-stop monitor is enabled. Atomic periodic/final
+checkpoints are mirrored outside the worktree; retain latest one in each place.
+See data/processed/tinystories-1m/preparation-report.json for dataset provenance.
+Run `.venv/bin/python -m scripts.train`, or `--resume-latest` for interruptions.

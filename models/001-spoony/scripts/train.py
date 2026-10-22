@@ -13,6 +13,7 @@ from configs.model.model import build_model
 from configs.tokenizers.preparation import preparation_config
 from configs.training.checkpoint import checkpoint_config
 from configs.training.health import health_config
+from configs.training.initialization import checkpoint_path
 from configs.training.optimizer import optimizer_config
 from configs.training.precision import precision_config
 from configs.training.run import run_config
@@ -22,7 +23,7 @@ from src.config.paths import project_root
 from src.data.dataloader import build_dataloader, build_split_dataloader
 from src.data.tokenizer import ByteLevelBPETokenizer
 from src.sft.data import SFTDataset
-from src.training.checkpoint import load_checkpoint
+from src.training.checkpoint import load_checkpoint, load_model_weights
 from src.training.health import HealthMonitor
 from src.training.logging import build_writer
 from src.training.loop import train_loop
@@ -31,21 +32,18 @@ from src.training.optimizer import build_optimizer
 from src.training.precision import build_precision
 from src.training.scheduler import build_scheduler
 
-expected_artifacts_path = project_root() / "configs/data/wikipedia-artifacts.json"
+expected_artifacts_path = project_root() / "configs/data/tinystories1m-artifacts.json"
 
 
 def ensure_prepared_data(data_directory):
     if not data_directory.exists():
-        from scripts.prepare_wikipedia import main as prepare
-
-        print("Preparing pinned Wikipedia data before training", flush=True)
-        prepare()
+        raise FileNotFoundError("Prepare the pinned TinyStories slice first")
     expected = json.loads(expected_artifacts_path.read_text())
     for relative, digest in expected.items():
         path = data_directory / relative
         if not path.is_file() or file_sha256(path) != digest:
             raise ValueError(
-                f"Prepared data does not match pinned Wikipedia artifact: {relative}"
+                f"Prepared data does not match pinned TinyStories artifact: {relative}"
             )
 
 
@@ -88,6 +86,12 @@ def main() -> None:
 
     torch.manual_seed(42)
     model, _ = build_model(tokenizer)
+    if run_config.resume_from is None:
+        load_model_weights(
+            checkpoint_path,
+            model=model,
+            tokenizer_path=data_directory / "tokenizer.json",
+        )
     model = model.to(device)
 
     optimizer = build_optimizer(model, optimizer_config)
@@ -107,6 +111,8 @@ def main() -> None:
             "device": run_config.device,
             "seed": 42,
             "health": health_config,
+            "stage": "tinystories_finetuning",
+            "initial_checkpoint_sha256": file_sha256(checkpoint_path),
         },
     )
 
@@ -194,7 +200,7 @@ if __name__ == "__main__":
     from pathlib import Path
 
     parser = argparse.ArgumentParser(
-        description="Prepare pinned Wikipedia data and train the configured model."
+        description="Fine-tune the instruction model on the pinned TinyStories slice."
     )
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--resume", type=Path)

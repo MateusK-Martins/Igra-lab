@@ -1,0 +1,14 @@
+update 5/61 tokens=81920 loss=2.66625 lr=3e-05
+update 10/61 tokens=163840 loss=2.51450 lr=2.95e-05
+update 15/61 tokens=245760 loss=2.45207 lr=2.79e-05
+update 20/61 tokens=327680 loss=2.39390 lr=2.55e-05
+update 25/61 tokens=409600 loss=2.33549 lr=2.24e-05
+update 30/61 tokens=491520 loss=2.29477 lr=1.88e-05
+update 35/61 tokens=573440 loss=2.28418 lr=1.5e-05
+update 40/61 tokens=655360 loss=2.23914 lr=1.13e-05
+update 45/61 tokens=737280 loss=2.23812 lr=8.08e-06
+update 50/61 tokens=819200 loss=2.27418 lr=5.49e-06
+update 55/61 tokens=901120 loss=2.30571 lr=3.76e-06
+update 60/61 tokens=983040 loss=2.31667 lr=3.02e-06
+update 61/61 tokens=999424 loss=2.21681 lr=3e-06
+Training complete. Model: /home/mateus/.codex/worktrees/lantern70m-instruct-tinystories1m/Igra-lab/models/001-spoony/results/finetuning/lantern70m-instruct-tinystories1m/model
