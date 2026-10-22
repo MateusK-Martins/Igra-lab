@@ -1,0 +1,25 @@
+{
+  "dataset": "wikimedia/wikipedia",
+  "revision": "b04c8d1ceb2f5cd4588862100d08de323dccfbaa",
+  "subset": "20231101.en",
+  "selection": "source shard/row order, strip-text SHA256 deduplication; seed42 content-hash 1% validation; no repetition",
+  "tokenizer_train_documents": 20000,
+  "vocab_size": 8192,
+  "tokenizer_sha256": "1d40abc4915bc2a585c3a52595a2565275a2cae2015476ff51d6aef40f617729",
+  "duplicates_skipped": 97,
+  "splits": {
+    "train": {
+      "tokens": 600000000,
+      "articles": 550016,
+      "final_article_truncated": true
+    },
+    "validation": {
+      "tokens": 2000000,
+      "articles": 1530,
+      "final_article_truncated": true
+    }
+  },
+  "token_budget_includes_end_of_document_tokens": true,
+  "raw_final_article": "raw JSONL retains full article; token store truncates only final article to exact budget",
+  "model_training_started": false
+}

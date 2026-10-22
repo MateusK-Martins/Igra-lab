@@ -1,4 +1,5 @@
 import math
+from collections.abc import Callable
 from contextlib import AbstractContextManager
 
 import torch
@@ -8,12 +9,17 @@ from torch.utils.data import DataLoader
 from src.training.loss import next_token_loss, supervised_token_count
 
 
+class ValidationInterrupted(RuntimeError):
+    pass
+
+
 @torch.no_grad()
 def validate(
     model: nn.Module,
     loader: DataLoader,
     context: AbstractContextManager,
     device: torch.device,
+    stop_requested: Callable[[], str | None] | None = None,
 ) -> tuple[float, float]:
     was_training = model.training
     model.eval()
@@ -23,6 +29,8 @@ def validate(
 
     try:
         for inputs, targets in loader:
+            if stop_requested and stop_requested():
+                raise ValidationInterrupted("Stop requested during validation")
             tokens = supervised_token_count(targets)
             if tokens == 0:
                 continue

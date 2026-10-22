@@ -1,0 +1,7 @@
+{
+  "checkpoint": "step-00036621.pt",
+  "sha256": "191d89969baa87f3d98f2f6e0b6cf00b81f4efee5e5667058e5ae8ac7d78da84",
+  "backup_matches": true,
+  "updates": 36621,
+  "full_training_state": true
+}

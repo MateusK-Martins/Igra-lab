@@ -3,8 +3,8 @@
 from configs.data.dataloader import chunking_config
 from src.config.paths import results_path
 
-BUNDLE = results_path("pretraining/wikipedia-en-100m/model")
-OUTPUT = results_path("pretraining/wikipedia-en-100m/samples.json")
+BUNDLE = results_path("pretraining/wikipedia-en-600m/model")
+OUTPUT = results_path("pretraining/wikipedia-en-600m/samples.json")
 DEVICE = "cuda"
 SEED = 42
 MAX_NEW_TOKENS = 128

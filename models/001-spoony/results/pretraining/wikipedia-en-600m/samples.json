@@ -1,0 +1,106 @@
+{
+  "model_sha256": "8f9cc87b54ba22da63173ab883e5012ff1461d1c7893dc05f2caf72985c1216d",
+  "tokenizer_sha256": "1d40abc4915bc2a585c3a52595a2565275a2cae2015476ff51d6aef40f617729",
+  "precision": "bf16",
+  "max_new_tokens": 128,
+  "temperature": 0.8,
+  "top_k": 40,
+  "samples": [
+    {
+      "mode": "greedy",
+      "seed": 42,
+      "prompt": "The Solar System consists of",
+      "continuation": " a single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-sided, single-",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 43,
+      "prompt": "Photosynthesis is the process by which",
+      "continuation": " the photosynthesis of the photosynthesis of the photosynthesis of the photosynthesis of the photosynthesis of the photosynthesis of the photosynthesis of the photosynthesis of the photosynthesis of the photosynthesis of the photosynthesis of the photosynthesis of the photosynthesis of the photosynthesis of the photosynthesis of the photosynthesis of the photosynthesis of the photosynthesis of the phot",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 44,
+      "prompt": "The Roman Empire was",
+      "continuation": " established in the Roman Empire. The Roman Empire was a part of the Roman Empire, and the Roman Empire was a part of the Roman Empire.\n\nThe Roman Empire was a part of the Roman Empire, and its territory was part of the Roman Empire. The Roman Empire was a part of the Roman Empire, and its territory was part of the Roman Empire. The Roman Empire was a part of the Roman Empire, and its territory was part of the Roman Empire. The Roman Empire was a part of the Roman Empire, and its territory was part of the Roman Empire.\n\nThe Roman Empire was a part of the Roman Empire,",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 45,
+      "prompt": "In mathematics, a prime number is",
+      "continuation": " the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of points in the number of",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 46,
+      "prompt": "The Amazon River is",
+      "continuation": " a tributary of the River Thames, which flows into the River Thames at the mouth of the river.\n\nThe river is a tributary of the River Thames, which flows into the River Thames at the mouth of the river.\n\nThe river is a tributary of the River Thames, which flows into the River Thames at the mouth of the river.\n\nThe river is a tributary of the River Thames, which flows into the River Thames at the mouth of the river.\n\nThe river is a tributary of the River Th",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "greedy",
+      "seed": 47,
+      "prompt": "A computer processor is",
+      "continuation": " used to process the processor's output.\n\nThe processor is used to process the processor's output, and the processor's output is used to process the processor's output. The processor's output is used to process the processor's output, and the processor's output is used to process the processor's output.\n\nThe processor's output is used to process the processor's output, and the processor's output is used to process the processor's output. The processor's output is used to process the processor's output, and the processor's output is used to",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 42,
+      "prompt": "The Solar System consists of",
+      "continuation": " a single pin, called a sitting sitting sitting-type, or a ribbon-pin, or a pin-sitting sitting-type. A sitting sitting sitting sitting sitting-type is a pin-sitting sitting sitting-type. It is not a sitting sitting sitting sitting sitting-type but a pin-sitting sitting sitting-type.\n\nIt is similar to the Solar System for Solar System, although its routing is often used to connect the Solar System",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 43,
+      "prompt": "Photosynthesis is the process by which",
+      "continuation": " the acetyl group of the group can be identified. The acetyl group, known as the acetyl group, with a specialized organic group, is a group of the compounds.\n\nSoftware\nSoftware is used primarily for commercial applications like automotive stores and for commercial applications like caramel. Software is currently used in commercial applications such as the Adobe ReadTrace Linux and the Alto-Software Linux.\n\nSoftware is not available in the same manner as the Acetyl-S",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 44,
+      "prompt": "The Roman Empire was",
+      "continuation": " reunited between the Roman and Roman governors of Italy.\n\nIn 959, the Roman and Roman governors were reunited together with the Roman governor of the same name. During this period, the Roman-Born Roman Empire was divided between Rome and the Holy Roman Empire and Rome was divided between the Roman-Roman and the Roman empire until the end of the reign of Roman emperor Constantine the Great.\n\nIn 968, the Roman emperor Constantine the Great launched a raid of Rome that killed the emperor's sons, which would lead to his death. A Roman army was sent against Rome and the",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 45,
+      "prompt": "In mathematics, a prime number is",
+      "continuation": " the number of the second-generation of the number of the third-generation of the number of non-inverted cipher types. The number of elemental cipher type types is a prime number; the number of elements in C, and the number of elemental cipher type types and the number of elemental ciphers.\n\nIn order to achieve this, the number of elemental ciphers on the C, the number of elemental ciphers on the C, and the number of elemental ciphers in the C, the number of elements in the C",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    },
+    {
+      "mode": "top_k",
+      "seed": 46,
+      "prompt": "The Amazon River is",
+      "continuation": " the largest in the Great Plains of Arizona and the largest in the Northeast.\n\nThe river was first described in 1866 as the Rio Alto River, and was established by Governor Charles H. Hurst in 1867.\n\nSee also\n\nReferences\n\nFurther reading\n\nWorks cited\n\nExternal links\n\nRivers of Tucson, Arizona\nRivers of Sacramento County, Arizona\nSanta Clara River\nRivers of Arizona",
+      "generated_tokens": 103,
+      "stopped_on_eot": true
+    },
+    {
+      "mode": "top_k",
+      "seed": 47,
+      "prompt": "A computer processor is",
+      "continuation": " the device of the \"single tracker\" that is designed to provide an electronic system, and is thus designed to interrupt the input of the device.\n\nThe computer system is designed to compensate for this effect, but can also be used to make a program that is too truly correct, and can be either a machine that is capable of interfering with the user's perceived \"compensation\". It can also be used to make a program that reduces the efficiency of a machine, and to make a program that gives it a better performance.\n\nProcessor\n",
+      "generated_tokens": 128,
+      "stopped_on_eot": false
+    }
+  ]
+}

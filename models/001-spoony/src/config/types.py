@@ -178,12 +178,22 @@ class LoggingConfig:
 class CheckpointConfig:
     directory: Path
     interval: int
+    keep_last: int | None = None
+    backup_directory: Path | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.directory, Path):
             raise ConfigError("directory must be a Path")
         if type(self.interval) is not int or self.interval <= 0:
             raise ConfigError("interval must be a positive integer")
+        if self.keep_last is not None and (
+            type(self.keep_last) is not int or self.keep_last <= 0
+        ):
+            raise ConfigError("keep_last must be positive")
+        if self.backup_directory is not None and not isinstance(
+            self.backup_directory, Path
+        ):
+            raise ConfigError("backup_directory must be a Path")
 
 
 @dataclass(frozen=True)

@@ -1,0 +1,17 @@
+{
+  "tests_passed": 491,
+  "ruff": "passed",
+  "original_architecture_parameters": 70006272,
+  "source_branch": "codex/lantern-70m-wikipedia",
+  "data_tokens": 600000000,
+  "target_updates": 36621,
+  "backup_directory": "/home/mateus/Documents/Igra-lab-checkpoints/lantern-70m-wikipedia-600m",
+  "health": {
+    "time": 1792647197.6929975,
+    "gpu_celsius": 42,
+    "cpu_celsius": 59.0,
+    "gpu_utilization": 20,
+    "gpu_memory_MiB": 12,
+    "free_bytes": 24557064192
+  }
+}
